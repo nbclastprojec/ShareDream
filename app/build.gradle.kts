@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.sharedream"
+    namespace = "com.dreamteam.sharedream"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.sharedream"
+        applicationId = "com.dreamteam.sharedream"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

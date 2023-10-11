@@ -1,4 +1,4 @@
-package com.example.sharedream
+package com.dreamteam.sharedream
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.example.sharedream
+package com.dreamteam.sharedream
 
 import org.junit.Test
 
