@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -16,11 +14,11 @@
         android:orientation="vertical"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/likepage_image"
+        app:layout_constraintStart_toEndOf="@+id/tradepage_image"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/likeepage_tittle"
+            android:id="@+id/tradepage_tittle"
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:fontFamily="@font/bbing"
@@ -30,7 +28,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/likepage_subtittle"
+            android:id="@+id/tradepage_subtittle"
             android:layout_width="253dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bbing"
@@ -39,7 +37,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/likepage_category"
+            android:id="@+id/tradepage_category"
             android:layout_width="253dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bbing"
@@ -48,7 +46,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/likepage_date"
+            android:id="@+id/tradepage_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bbing"
@@ -57,7 +55,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/likepage_image"
+        android:id="@+id/tradepage_image"
         android:layout_width="106dp"
         android:layout_height="115dp"
         android:layout_marginStart="20dp"
@@ -77,13 +75,4 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-
-    <ImageView
-        android:id="@+id/likeimage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/likepage_image"
-        app:layout_constraintEnd_toEndOf="@+id/likepage_image"
-        app:srcCompat="@drawable/fullheart" />
 </androidx.constraintlayout.widget.ConstraintLayout>

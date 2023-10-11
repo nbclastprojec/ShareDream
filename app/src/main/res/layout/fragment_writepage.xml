@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,13 +14,13 @@
         app:layout_constraintTop_toBottomOf="@+id/bar1">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/likepage_recycleView"
+            android:id="@+id/writepage_recycleView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </ScrollView>
 
     <ImageView
-        android:id="@+id/backButton_likepage"
+        android:id="@+id/backButton_writepage"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
@@ -31,13 +30,13 @@
         app:srcCompat="@drawable/clamp" />
 
     <TextView
-        android:id="@+id/likepage_tittle"
+        android:id="@+id/writepage_tittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/bbing"
-        android:text="관심목록"
+        android:text="내가 쓴 글"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -51,5 +50,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/likepage_tittle" />
+        app:layout_constraintTop_toBottomOf="@+id/writepage_tittle" />
 </androidx.constraintlayout.widget.ConstraintLayout>
