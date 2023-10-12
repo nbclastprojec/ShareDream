@@ -29,8 +29,5 @@ import com.google.android.material.tabs.TabLayoutMediator
                 viewPager,
                 { tab, position -> tab.text = tabTitles[position] }).attach()
 
-            binding.btnHome.setOnClickListener {
-
-            }
         }
     }
