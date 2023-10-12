@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="272dp"
+        android:layout_height="119dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/likepage_image"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/like_tittle"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:fontFamily="@font/bbing"
+            android:gravity="right"
+            android:text="필요 없어진 간석기 교환 합니다."
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/like_subtittle"
+            android:layout_width="253dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bbing"
+            android:gravity="right"
+            android:text="청동도끼 사용해서 이제 필요 없어요 :)"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/like_category"
+            android:layout_width="253dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bbing"
+            android:gravity="right"
+            android:text="카테고리 : 도구"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/like_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bbing"
+            android:gravity="right"
+            android:text="2023.10.11" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/like_image"
+        android:layout_width="106dp"
+        android:layout_height="115dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/gan" />
+
+    <View
+        android:id="@+id/bar1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:background="#D9D9D9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+
+    <ImageView
+        android:id="@+id/likeimage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/like_image"
+        app:layout_constraintEnd_toEndOf="@+id/like_image"
+        app:srcCompat="@drawable/fullheart" />
+</androidx.constraintlayout.widget.ConstraintLayout>
