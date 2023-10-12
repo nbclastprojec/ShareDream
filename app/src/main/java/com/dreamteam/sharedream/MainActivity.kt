@@ -7,8 +7,6 @@ import com.dreamteam.sharedream.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-class MainActivity : AppCompatActivity() {
-
     class MainActivity : AppCompatActivity() {
         private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
@@ -25,11 +23,15 @@ class MainActivity : AppCompatActivity() {
 
             val tabTitles = listOf("교환하기", "내소식")
 
+
             TabLayoutMediator(
                 tabLayout,
                 viewPager,
                 { tab, position -> tab.text = tabTitles[position] }).attach()
 
+            binding.btnHome.setOnClickListener {
+
+            }
+
         }
     }
-}

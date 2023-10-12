@@ -184,7 +184,7 @@
                 android:layout_weight="9"
                 android:textSize="18sp"
                 android:text="이용약관 동의"
-                android:textColor="@color/white0" />
+                android:textColor="@color/white" />
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -220,7 +220,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:text="이용약관"
-                android:textColor="@color/white0" />
+                android:textColor="@color/white" />
             <ImageView
                 android:id="@+id/imageView33"
                 android:layout_width="20dp"
@@ -239,7 +239,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/loginbtn"
             android:text="가입하기"
-            android:textColor="@color/white0"
+            android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

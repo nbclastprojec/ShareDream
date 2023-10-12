@@ -49,6 +49,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="12dp"
-        android:background="@color/gray700"
+        android:background="@color/gray900"
         app:layout_constraintTop_toBottomOf="@+id/txt_value" />
 </androidx.constraintlayout.widget.ConstraintLayout>
