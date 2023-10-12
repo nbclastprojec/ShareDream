@@ -69,13 +69,13 @@
 
     <EditText
         android:id="@+id/profile_id"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_width="301dp"
+        android:layout_height="42dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/rounded"
         android:fontFamily="@font/bbing"
         android:gravity="center"
-        android:text="나의 닉네임"
+        android:hint="나의 닉네임"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_image" />
@@ -88,26 +88,40 @@
         android:background="@drawable/rounded"
         android:fontFamily="@font/bbing"
         android:gravity="center"
-        android:text="나의 주소"
+        android:hint="나의 주소"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_id" />
 
     <EditText
-        android:id="@+id/profile_text"
+        android:id="@+id/profile_number"
         android:layout_width="300dp"
-        android:layout_height="305dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded"
+        android:fontFamily="@font/bbing"
+        android:gravity="center"
+        android:hint="나의 전화번호"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_address" />
+
+    <EditText
+        android:id="@+id/profile_text"
+        android:layout_width="301dp"
+        android:layout_height="260dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/rounded"
         android:fontFamily="@font/bbing"
         android:gravity="start"
+        android:hint="안녕하세요"
         android:padding="10dp"
-        android:text="안녕하세용"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_address" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_number" />
 
     <Button
         android:id="@+id/completeButton"
