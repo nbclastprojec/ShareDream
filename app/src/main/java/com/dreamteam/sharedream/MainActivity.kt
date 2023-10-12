@@ -32,6 +32,5 @@ import com.google.android.material.tabs.TabLayoutMediator
             binding.btnHome.setOnClickListener {
 
             }
-
         }
     }
