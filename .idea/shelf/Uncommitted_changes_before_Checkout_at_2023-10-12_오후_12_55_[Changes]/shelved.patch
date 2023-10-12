@@ -1,0 +1,550 @@
+Index: app/src/main/res/layout/fragment_signup.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".Fragment_signup\">\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n\r\n        <ImageView\r\n            android:id=\"@+id/imageView\"\r\n            android:layout_width=\"72dp\"\r\n            android:layout_height=\"58dp\"\r\n            android:src=\"@drawable/trade\"\r\n            app:layout_constraintBottom_toBottomOf=\"@+id/textView\"\r\n            app:layout_constraintEnd_toStartOf=\"@+id/textView\"\r\n            app:layout_constraintTop_toTopOf=\"@+id/textView\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"47dp\"\r\n            android:text=\"회원가입\"\r\n            android:textSize=\"28sp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/edit_email\"\r\n            android:layout_width=\"320dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:background=\"@drawable/login_editbox\"\r\n            android:ems=\"10\"\r\n            android:inputType=\"text\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView6\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/eidt_nickname\"\r\n            android:layout_width=\"320dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:background=\"@drawable/login_editbox\"\r\n            android:ems=\"10\"\r\n            android:inputType=\"text\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView2\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/edit_password\"\r\n            android:layout_width=\"320dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:background=\"@drawable/login_editbox\"\r\n            android:ems=\"10\"\r\n            android:inputType=\"textPassword\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView4\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/edit_phoneNumber\"\r\n            android:layout_width=\"320dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:background=\"@drawable/login_editbox\"\r\n            android:ems=\"10\"\r\n            android:inputType=\"text\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView7\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/edit_passwordCheck\"\r\n            android:layout_width=\"320dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:background=\"@drawable/login_editbox\"\r\n            android:ems=\"10\"\r\n            android:inputType=\"textPassword\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView5\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView2\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:text=\"닉네임\"\r\n            android:textSize=\"13sp\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/edit_email\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView4\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:text=\"비밀번호\"\r\n            android:textSize=\"13sp\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/eidt_nickname\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView5\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:text=\"비밀번호 확인\"\r\n            android:textSize=\"13sp\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/edit_password\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView6\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginTop=\"20dp\"\r\n            android:text=\"이메일\"\r\n            android:textSize=\"13sp\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView7\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:text=\"전화번호\"\r\n            android:textSize=\"13sp\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/edit_passwordCheck\" />\r\n\r\n        <LinearLayout\r\n            android:id=\"@+id/allAgree\"\r\n            android:layout_width=\"294dp\"\r\n            android:layout_height=\"45dp\"\r\n            android:layout_marginTop=\"20dp\"\r\n            android:background=\"@drawable/checkboxline\"\r\n            android:orientation=\"horizontal\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/edit_phoneNumber\">\r\n\r\n            <CheckBox\r\n                android:id=\"@+id/checkBox\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"1\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/textView8\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"5\"\r\n                android:text=\"모두 동의\"\r\n                android:textSize=\"18sp\" />\r\n        </LinearLayout>\r\n\r\n        <LinearLayout\r\n            android:id=\"@+id/agree_1\"\r\n            android:layout_width=\"294dp\"\r\n            android:layout_height=\"45dp\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:background=\"@drawable/agreeboxline\"\r\n            android:orientation=\"horizontal\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintHorizontal_bias=\"0.495\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/allAgree\">\r\n\r\n            <TextView\r\n                android:id=\"@+id/textView9\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_gravity=\"center\"\r\n                android:layout_marginLeft=\"10dp\"\r\n                android:layout_weight=\"9\"\r\n                android:textSize=\"18sp\"\r\n                android:text=\"이용약관 동의\"\r\n                android:textColor=\"@color/white0\" />\r\n\r\n            <ImageView\r\n                android:id=\"@+id/imageView3\"\r\n                android:layout_width=\"20dp\"\r\n                android:layout_height=\"20dp\"\r\n                android:layout_gravity=\"center\"\r\n                android:layout_weight=\"1\"\r\n                android:rotationX=\"0\"\r\n                android:rotationY=\"180\"\r\n                android:src=\"@drawable/arrow\" />\r\n        </LinearLayout>\r\n\r\n\r\n        <LinearLayout\r\n            android:id=\"@+id/agree_2\"\r\n            android:layout_width=\"294dp\"\r\n            android:layout_height=\"45dp\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:background=\"@drawable/agreeboxline\"\r\n\r\n            android:orientation=\"horizontal\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintHorizontal_bias=\"0.504\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/agree_1\">\r\n\r\n            <TextView\r\n                android:id=\"@+id/textView10\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"9\"\r\n                android:textSize=\"18sp\"\r\n                android:layout_gravity=\"center\"\r\n                android:layout_marginLeft=\"10dp\"\r\n                android:text=\"이용약관\"\r\n                android:textColor=\"@color/white0\" />\r\n            <ImageView\r\n                android:id=\"@+id/imageView33\"\r\n                android:layout_width=\"20dp\"\r\n                android:layout_height=\"20dp\"\r\n                android:layout_gravity=\"center\"\r\n                android:layout_weight=\"1\"\r\n                android:rotationX=\"0\"\r\n                android:rotationY=\"180\"\r\n                android:src=\"@drawable/arrow\" />\r\n        </LinearLayout>\r\n\r\n        <Button\r\n            android:id=\"@+id/btn_signup\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"20dp\"\r\n            android:background=\"@drawable/loginbtn\"\r\n            android:text=\"가입하기\"\r\n            android:textColor=\"@color/white0\"\r\n            android:textSize=\"20sp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/agree_2\" />\r\n\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_signup.xml b/app/src/main/res/layout/fragment_signup.xml
+--- a/app/src/main/res/layout/fragment_signup.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/layout/fragment_signup.xml	(date 1697082444595)
+@@ -184,7 +184,7 @@
+                 android:layout_weight="9"
+                 android:textSize="18sp"
+                 android:text="이용약관 동의"
+-                android:textColor="@color/white0" />
++                android:textColor="@color/white" />
+ 
+             <ImageView
+                 android:id="@+id/imageView3"
+@@ -220,7 +220,7 @@
+                 android:layout_gravity="center"
+                 android:layout_marginLeft="10dp"
+                 android:text="이용약관"
+-                android:textColor="@color/white0" />
++                android:textColor="@color/white" />
+             <ImageView
+                 android:id="@+id/imageView33"
+                 android:layout_width="20dp"
+@@ -239,7 +239,7 @@
+             android:layout_marginTop="20dp"
+             android:background="@drawable/loginbtn"
+             android:text="가입하기"
+-            android:textColor="@color/white0"
++            android:textColor="@color/white"
+             android:textSize="20sp"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+Index: app/src/main/java/com/dreamteam/sharedream/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.dreamteam.sharedream\r\n\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.os.Bundle\r\nimport androidx.viewpager2.widget.ViewPager2\r\nimport com.dreamteam.sharedream.databinding.ActivityMainBinding\r\nimport com.google.android.material.tabs.TabLayout\r\nimport com.google.android.material.tabs.TabLayoutMediator\r\n\r\nclass MainActivity : AppCompatActivity() {\r\n\r\n    class MainActivity : AppCompatActivity() {\r\n        private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }\r\n\r\n        override fun onCreate(savedInstanceState: Bundle?) {\r\n            super.onCreate(savedInstanceState)\r\n            setContentView(binding.root)\r\n\r\n            val viewPager: ViewPager2 = binding.viewPager\r\n            val tabLayout: TabLayout = binding.tabLayout\r\n\r\n\r\n            val viewpagerFragmentAdapter = ViewPagerAdapter(this)\r\n            viewPager.adapter = viewpagerFragmentAdapter\r\n\r\n            val tabTitles = listOf(\"교환하기\", \"내소식\")\r\n\r\n            TabLayoutMediator(\r\n                tabLayout,\r\n                viewPager,\r\n                { tab, position -> tab.text = tabTitles[position] }).attach()\r\n\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/dreamteam/sharedream/MainActivity.kt b/app/src/main/java/com/dreamteam/sharedream/MainActivity.kt
+--- a/app/src/main/java/com/dreamteam/sharedream/MainActivity.kt	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/java/com/dreamteam/sharedream/MainActivity.kt	(date 1697082894542)
+@@ -7,8 +7,6 @@
+ import com.google.android.material.tabs.TabLayout
+ import com.google.android.material.tabs.TabLayoutMediator
+ 
+-class MainActivity : AppCompatActivity() {
+-
+     class MainActivity : AppCompatActivity() {
+         private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+ 
+@@ -25,11 +23,15 @@
+ 
+             val tabTitles = listOf("교환하기", "내소식")
+ 
++
+             TabLayoutMediator(
+                 tabLayout,
+                 viewPager,
+                 { tab, position -> tab.text = tabTitles[position] }).attach()
+ 
+-        }
+-    }
+-}
+\ No newline at end of file
++            binding.btnHome.setOnClickListener {
++
++            }
++
++        }
++    }
+\ No newline at end of file
+Index: app/src/main/res/drawable/loginbox_first.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<shape xmlns:android=\"http://schemas.android.com/apk/res/android\" android:shape=\"rectangle\">\r\n    <stroke android:width=\"2dp\"/>\r\n    <corners android:radius=\"10dp\"/>\r\n    <size android:width=\"266dp\" android:height=\"350dp\"/>\r\n    <solid android:color=\"@color/white0\"/>\r\n\r\n</shape>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/loginbox_first.xml b/app/src/main/res/drawable/loginbox_first.xml
+--- a/app/src/main/res/drawable/loginbox_first.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/drawable/loginbox_first.xml	(date 1697082444716)
+@@ -3,6 +3,6 @@
+     <stroke android:width="2dp"/>
+     <corners android:radius="10dp"/>
+     <size android:width="266dp" android:height="350dp"/>
+-    <solid android:color="@color/white0"/>
++    <solid android:color="@color/white"/>
+ 
+ </shape>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".MainActivity\">\r\n\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView13\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"5dp\"\r\n        android:layout_marginTop=\"5dp\"\r\n        android:text=\"바꿔\"\r\n        android:textStyle=\"bold\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n    <ImageView\r\n        android:id=\"@+id/imageView5\"\r\n        android:layout_width=\"28dp\"\r\n        android:layout_height=\"27dp\"\r\n        android:src=\"@drawable/trade\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/textView13\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/textView13\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView14\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"드림\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/imageView5\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/imageView5\" />\r\n\r\n    <EditText\r\n        android:id=\"@+id/editTextText\"\r\n        android:layout_width=\"280dp\"\r\n        android:layout_height=\"25dp\"\r\n        android:background=\"@drawable/edit_searchbox\"\r\n        android:layout_marginLeft=\"5dp\"\r\n        android:inputType=\"text\"\r\n        app:layout_constraintBottom_toBottomOf=\"@+id/textView14\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/textView14\" />\r\n\r\n    <ImageView\r\n        android:id=\"@+id/imageView7\"\r\n        android:layout_width=\"15dp\"\r\n        android:layout_height=\"15dp\"\r\n        android:layout_marginEnd=\"10dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"@+id/editTextText\"\r\n        app:layout_constraintEnd_toEndOf=\"@+id/editTextText\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/editTextText\"\r\n        app:srcCompat=\"@drawable/btn_search\" />\r\n\r\n    <ImageView\r\n        android:id=\"@+id/imageView8\"\r\n        android:layout_width=\"25dp\"\r\n        android:layout_height=\"25dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"@+id/editTextText\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/editTextText\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/editTextText\"\r\n        app:srcCompat=\"@drawable/btn_home\" />\r\n\r\n    <View\r\n        android:id=\"@+id/view\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"1dp\"\r\n        android:layout_marginTop=\"15dp\"\r\n        android:background=\"@color/gray700\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/viewPager\" />\r\n\r\n    <com.google.android.material.tabs.TabLayout\r\n        android:id=\"@+id/tabLayout\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/view\">\r\n\r\n\r\n        <com.google.android.material.tabs.TabItem\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"\"/>\r\n\r\n        <com.google.android.material.tabs.TabItem\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"\"/>\r\n    </com.google.android.material.tabs.TabLayout>\r\n\r\n\r\n    <View\r\n        android:id=\"@+id/viewww\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"1dp\"\r\n        android:background=\"@color/gray700\"\r\n\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/tabLayout\" />\r\n\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"0dp\"\r\n        android:layout_marginTop=\"5dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/viewww\" />\r\n\r\n    <androidx.viewpager2.widget.ViewPager2\r\n        android:id=\"@+id/viewPager\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"0dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/editTextText\" >\r\n\r\n    </androidx.viewpager2.widget.ViewPager2>\r\n\r\n\r\n\r\n\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml
+--- a/app/src/main/res/layout/activity_main.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/layout/activity_main.xml	(date 1697082595026)
+@@ -1,5 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<androidx.constraintlayout.widget.ConstraintLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+@@ -14,6 +15,7 @@
+         android:layout_marginStart="5dp"
+         android:layout_marginTop="5dp"
+         android:text="바꿔"
++        android:textColor="@color/black"
+         android:textStyle="bold"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
+@@ -55,7 +57,7 @@
+         app:srcCompat="@drawable/btn_search" />
+ 
+     <ImageView
+-        android:id="@+id/imageView8"
++        android:id="@+id/btn_home"
+         android:layout_width="25dp"
+         android:layout_height="25dp"
+         app:layout_constraintBottom_toBottomOf="@+id/editTextText"
+@@ -68,30 +70,32 @@
+         android:id="@+id/view"
+         android:layout_width="match_parent"
+         android:layout_height="1dp"
+-        android:layout_marginTop="15dp"
+-        android:background="@color/gray700"
++        android:background="@color/gray900"
++        android:layout_marginTop="10dp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="@+id/viewPager" />
++        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+ 
+     <com.google.android.material.tabs.TabLayout
+         android:id="@+id/tabLayout"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
++        app:tabSelectedTextColor="@color/red"
++        app:tabIndicatorColor="@color/red"
++        app:tabIndicatorHeight="3dp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/view">
+-
++        app:layout_constraintTop_toTopOf="@+id/view">
+ 
+         <com.google.android.material.tabs.TabItem
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+-            android:text=""/>
++            android:text="asdf" />
+ 
+         <com.google.android.material.tabs.TabItem
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+-            android:text=""/>
++            android:text="asdfa" />
+     </com.google.android.material.tabs.TabLayout>
+ 
+ 
+@@ -99,20 +103,11 @@
+         android:id="@+id/viewww"
+         android:layout_width="match_parent"
+         android:layout_height="1dp"
+-        android:background="@color/gray700"
+-
++        android:background="@color/gray900"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+ 
+-    <androidx.recyclerview.widget.RecyclerView
+-        android:layout_width="match_parent"
+-        android:layout_height="0dp"
+-        android:layout_marginTop="5dp"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/viewww" />
+ 
+     <androidx.viewpager2.widget.ViewPager2
+         android:id="@+id/viewPager"
+@@ -121,7 +116,7 @@
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/editTextText" >
++        app:layout_constraintTop_toBottomOf="@+id/viewww">
+ 
+     </androidx.viewpager2.widget.ViewPager2>
+ 
+Index: app/src/main/res/layout/fragment_edit.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".Fragment_edit\">\r\n\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView12\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:textSize=\"20dp\"\r\n            android:text=\"글쓰기\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView15\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginRight=\"15dp\"\r\n            android:text=\"완료\"\r\n            app:layout_constraintBottom_toBottomOf=\"@+id/textView12\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintTop_toTopOf=\"@+id/textView12\" />\r\n\r\n        <View\r\n            android:id=\"@+id/view\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\"\r\n            android:layout_marginTop=\"15dp\"\r\n            android:background=\"@color/gray700\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView12\" />\r\n\r\n        <View\r\n            android:id=\"@+id/view10\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\"\r\n            android:layout_marginTop=\"20dp\"\r\n            android:background=\"@color/gray700\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/constraintLayout\" />\r\n\r\n        <View\r\n            android:id=\"@+id/view11\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\"\r\n            android:background=\"@color/gray700\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            android:layout_marginTop=\"15dp\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView16\" />\r\n\r\n        <View\r\n            android:id=\"@+id/view12\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\"\r\n            android:background=\"@color/gray700\"\r\n            android:layout_marginTop=\"15dp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView17\" />\r\n\r\n        <View\r\n            android:id=\"@+id/view13\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\"\r\n            android:layout_marginTop=\"15dp\"\r\n            android:background=\"@color/gray700\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView18\" />\r\n\r\n        <View\r\n            android:id=\"@+id/view14\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\"\r\n            android:background=\"@color/gray700\"\r\n            android:layout_marginTop=\"15dp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView19\" />\r\n\r\n        <View\r\n            android:id=\"@+id/view15\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\"\r\n            android:layout_marginTop=\"15dp\"\r\n            android:background=\"@color/gray700\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView20\" />\r\n\r\n        <androidx.constraintlayout.widget.ConstraintLayout\r\n            android:id=\"@+id/constraintLayout\"\r\n            android:layout_width=\"60dp\"\r\n            android:layout_height=\"60dp\"\r\n            android:layout_margin=\"20dp\"\r\n            android:background=\"@drawable/btn_camera\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/view\">\r\n\r\n            <ImageView\r\n                android:id=\"@+id/imageView9\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:src=\"@drawable/camera\"\r\n                app:layout_constraintEnd_toEndOf=\"parent\"\r\n                app:layout_constraintStart_toStartOf=\"parent\"\r\n                app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n        </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView16\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"글 제목\"\r\n            android:textSize=\"16sp\"\r\n            android:layout_marginTop=\"15dp\"\r\n            android:layout_marginLeft=\"13dp\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/view10\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView17\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"값어치\"\r\n            android:textSize=\"16sp\"\r\n            android:layout_marginTop=\"15dp\"\r\n            android:layout_marginLeft=\"13dp\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/view11\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView18\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:textSize=\"16sp\"\r\n            android:layout_marginTop=\"15dp\"\r\n            android:layout_marginLeft=\"13dp\"\r\n            android:text=\"카테고리\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/view12\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView19\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"지역\"\r\n            android:textSize=\"16sp\"\r\n            android:layout_marginTop=\"15dp\"\r\n            android:layout_marginLeft=\"13dp\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/view13\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView20\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"기간설정\"\r\n            android:textSize=\"16sp\"\r\n            android:layout_marginTop=\"15dp\"\r\n            android:layout_marginLeft=\"13dp\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/view14\" />\r\n\r\n        <androidx.constraintlayout.widget.ConstraintLayout\r\n            android:layout_width=\"409dp\"\r\n            android:layout_height=\"240dp\"\r\n            app:layout_constraintBottom_toBottomOf=\"parent\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/view15\">\r\n\r\n            <EditText\r\n                android:id=\"@+id/editTextText2\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:layout_marginLeft=\"15dp\"\r\n                android:ems=\"10\"\r\n                android:hint=\"상세정보를 입력해주세요.\"\r\n                android:textSize=\"16sp\"\r\n                android:inputType=\"text\"\r\n                app:layout_constraintBottom_toBottomOf=\"parent\"\r\n                app:layout_constraintEnd_toEndOf=\"parent\"\r\n                app:layout_constraintStart_toStartOf=\"parent\"\r\n                app:layout_constraintTop_toTopOf=\"parent\" />\r\n        </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n        <ImageView\r\n            android:id=\"@+id/imageView10\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginLeft=\"15dp\"\r\n            android:src=\"@drawable/xx\"\r\n            app:layout_constraintBottom_toBottomOf=\"@+id/textView12\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toTopOf=\"@+id/textView12\" />\r\n\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_edit.xml b/app/src/main/res/layout/fragment_edit.xml
+--- a/app/src/main/res/layout/fragment_edit.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/layout/fragment_edit.xml	(date 1697082444708)
+@@ -38,7 +38,7 @@
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:layout_marginTop="15dp"
+-            android:background="@color/gray700"
++            android:background="@color/gray900"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/textView12" />
+@@ -48,7 +48,7 @@
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:layout_marginTop="20dp"
+-            android:background="@color/gray700"
++            android:background="@color/gray900"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+@@ -57,7 +57,7 @@
+             android:id="@+id/view11"
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+-            android:background="@color/gray700"
++            android:background="@color/gray900"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             android:layout_marginTop="15dp"
+@@ -67,7 +67,7 @@
+             android:id="@+id/view12"
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+-            android:background="@color/gray700"
++            android:background="@color/gray900"
+             android:layout_marginTop="15dp"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+@@ -78,7 +78,7 @@
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:layout_marginTop="15dp"
+-            android:background="@color/gray700"
++            android:background="@color/gray900"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/textView18" />
+@@ -87,7 +87,7 @@
+             android:id="@+id/view14"
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+-            android:background="@color/gray700"
++            android:background="@color/gray900"
+             android:layout_marginTop="15dp"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+@@ -98,7 +98,7 @@
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:layout_marginTop="15dp"
+-            android:background="@color/gray700"
++            android:background="@color/gray900"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/textView20" />
+Index: app/src/main/res/drawable/login_editbox.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<selector xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n    <item\r\n        android:start = \"2dp\"\r\n        android:end=\"2dp\"\r\n        android:top=\"2dp\"\r\n        android:bottom=\"2dp\">\r\n        <shape android:shape=\"rectangle\">\r\n            <stroke android:width=\"2dp\"\r\n                android:color = \"@color/black0\"/>\r\n            <corners\r\n                android:bottomLeftRadius=\"10dp\"\r\n                android:bottomRightRadius=\"10dp\"\r\n                android:topLeftRadius=\"10dp\"\r\n                android:topRightRadius=\"10dp\" />\r\n        </shape>\r\n\r\n\r\n    </item>\r\n\r\n</selector>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/login_editbox.xml b/app/src/main/res/drawable/login_editbox.xml
+--- a/app/src/main/res/drawable/login_editbox.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/drawable/login_editbox.xml	(date 1697082444684)
+@@ -7,7 +7,7 @@
+         android:bottom="2dp">
+         <shape android:shape="rectangle">
+             <stroke android:width="2dp"
+-                android:color = "@color/black0"/>
++                android:color = "@color/black"/>
+             <corners
+                 android:bottomLeftRadius="10dp"
+                 android:bottomRightRadius="10dp"
+Index: app/src/main/res/layout/fragment_login.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".Fragment_login\">\r\n\r\n<androidx.constraintlayout.widget.ConstraintLayout\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\">\r\n\r\n    <ImageView\r\n        android:id=\"@+id/imageView\"\r\n        android:layout_width=\"72dp\"\r\n        android:layout_height=\"58dp\"\r\n        android:src=\"@drawable/trade\"\r\n        app:layout_constraintBottom_toBottomOf=\"@+id/textView\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/textView\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/textView\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"47dp\"\r\n        android:text=\"회원가입\"\r\n        android:textSize=\"28sp\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n    <TextView\r\n        android:id=\"@+id/textView6\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"30dp\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:text=\"이메일\"\r\n        android:textSize=\"13sp\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/textView\" />\r\n    <EditText\r\n        android:id=\"@+id/edit_email\"\r\n        android:layout_width=\"320dp\"\r\n        android:layout_height=\"40dp\"\r\n        android:background=\"@drawable/login_editbox\"\r\n        android:ems=\"10\"\r\n        android:inputType=\"text\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/textView6\" />\r\n    <TextView\r\n        android:id=\"@+id/textView4\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"비밀번호\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:layout_marginStart=\"30dp\"\r\n        android:textSize=\"13sp\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/edit_email\" />\r\n    <EditText\r\n        android:id=\"@+id/edit_password\"\r\n        android:layout_width=\"320dp\"\r\n        android:layout_height=\"40dp\"\r\n        android:background=\"@drawable/login_editbox\"\r\n        android:ems=\"10\"\r\n        android:inputType=\"textPassword\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/textView4\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/btn_login\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"@drawable/loginbtn\"\r\n        android:text=\"Button\"\r\n        android:layout_marginBottom=\"80dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/tv_findID\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"@string/find\"\r\n        android:textSize=\"18sp\"\r\n        android:layout_marginTop=\"15dp\"\r\n        android:textColor=\"@color/gray700\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/edit_password\" />\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_login.xml b/app/src/main/res/layout/fragment_login.xml
+--- a/app/src/main/res/layout/fragment_login.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/layout/fragment_login.xml	(date 1697082444669)
+@@ -88,7 +88,7 @@
+         android:text="@string/find"
+         android:textSize="18sp"
+         android:layout_marginTop="15dp"
+-        android:textColor="@color/gray700"
++        android:textColor="@color/gray900"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/edit_password" />
+Index: app/src/main/res/layout/fragment_login_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".Fragment_login_main\">\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n\r\n        <ImageView\r\n            android:id=\"@+id/imageView4\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginEnd=\"29dp\"\r\n            android:layout_marginBottom=\"38dp\"\r\n            android:src=\"@drawable/loginbox_first\"\r\n            app:layout_constraintBottom_toBottomOf=\"@+id/imageView2\"\r\n            app:layout_constraintEnd_toEndOf=\"@+id/imageView2\" />\r\n\r\n        <ImageView\r\n            android:id=\"@+id/imageView2\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"68dp\"\r\n            android:src=\"@drawable/loginbox_first\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/tv_signup\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"@string/sign_up\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:textColor=\"@color/gray700\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/btn_login\" />\r\n\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView3\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"나에게 \\n필요없는 물건\\n너에게\\n필요있는 물건\\n바꿔드림.\"\r\n            android:textColor=\"@color/black0\"\r\n            android:textSize=\"36sp\"\r\n            app:layout_constraintBottom_toBottomOf=\"@+id/imageView2\"\r\n            app:layout_constraintEnd_toEndOf=\"@+id/imageView2\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/imageView2\"\r\n            app:layout_constraintTop_toTopOf=\"@+id/imageView2\" />\r\n\r\n        <Button\r\n            android:id=\"@+id/btn_googleLogin\"\r\n            android:layout_width=\"294dp\"\r\n            android:layout_height=\"50dp\"\r\n            android:layout_marginTop=\"80dp\"\r\n            android:background=\"@drawable/loginbtn_2\"\r\n            android:text=\"구글로 로그인하기\"\r\n            android:textSize=\"20sp\"\r\n            android:drawableLeft=\"@drawable/btn_google\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/imageView2\" />\r\n\r\n        <Button\r\n            android:id=\"@+id/btn_login\"\r\n            android:layout_width=\"294dp\"\r\n            android:layout_height=\"50dp\"\r\n            android:layout_marginTop=\"11dp\"\r\n            android:background=\"@drawable/loginbtn\"\r\n            android:text=\"로그인 하기\"\r\n            android:textSize=\"20sp\"\r\n            android:textColor=\"@color/white0\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/btn_googleLogin\" />\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_login_main.xml b/app/src/main/res/layout/fragment_login_main.xml
+--- a/app/src/main/res/layout/fragment_login_main.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/layout/fragment_login_main.xml	(date 1697082444586)
+@@ -37,7 +37,7 @@
+             android:layout_height="wrap_content"
+             android:text="@string/sign_up"
+             android:layout_marginTop="10dp"
+-            android:textColor="@color/gray700"
++            android:textColor="@color/gray900"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+@@ -48,7 +48,7 @@
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="나에게 \n필요없는 물건\n너에게\n필요있는 물건\n바꿔드림."
+-            android:textColor="@color/black0"
++            android:textColor="@color/black"
+             android:textSize="36sp"
+             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+             app:layout_constraintEnd_toEndOf="@+id/imageView2"
+@@ -76,7 +76,7 @@
+             android:background="@drawable/loginbtn"
+             android:text="로그인 하기"
+             android:textSize="20sp"
+-            android:textColor="@color/white0"
++            android:textColor="@color/white"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/btn_googleLogin" />
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<resources>\r\n    <color name=\"black0\">#FF000000</color>\r\n    <color name=\"white0\">#FFFFFFFF</color>\r\n    <color name=\"red0\">#FF0000</color>\r\n    <color name=\"gray700\">#727272</color>\r\n    <color name=\"gray900\">#D9D9D9</color>\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/colors.xml b/app/src/main/res/values/colors.xml
+--- a/app/src/main/res/values/colors.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/values/colors.xml	(date 1697082444615)
+@@ -1,8 +1,8 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <color name="black0">#FF000000</color>
+-    <color name="white0">#FFFFFFFF</color>
+-    <color name="red0">#FF0000</color>
++    <color name="black">#FF000000</color>
++    <color name="white">#FFFFFFFF</color>
++    <color name="red">#FF0000</color>
+     <color name="gray700">#727272</color>
+     <color name="gray900">#D9D9D9</color>
+ </resources>
+\ No newline at end of file
+Index: app/src/main/res/layout/trade_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\">\r\n\r\n\r\n    <ImageView\r\n        android:id=\"@+id/image_trade\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:layout_marginLeft=\"10dp\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        tools:srcCompat=\"@tools:sample/avatars\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/txt_tradeTitle\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textSize=\"20sp\"\r\n        android:layout_marginLeft=\"10dp\"\r\n        android:text=\"TextView\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/image_trade\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/image_trade\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/txt_category\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textSize=\"12sp\"\r\n        android:text=\"희망교환물품 : 의류\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/txt_tradeTitle\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/txt_tradeTitle\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/txt_value\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"TextView\"\r\n        app:layout_constraintBottom_toBottomOf=\"@+id/image_trade\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/txt_tradeTitle\" />\r\n\r\n    <View\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"1dp\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        android:layout_marginTop=\"12dp\"\r\n        android:background=\"@color/gray700\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/txt_value\" />\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/trade_item.xml b/app/src/main/res/layout/trade_item.xml
+--- a/app/src/main/res/layout/trade_item.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/layout/trade_item.xml	(date 1697082444629)
+@@ -49,6 +49,6 @@
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         android:layout_marginTop="12dp"
+-        android:background="@color/gray700"
++        android:background="@color/gray900"
+         app:layout_constraintTop_toBottomOf="@+id/txt_value" />
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/myalarm.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\">\r\n\r\n\r\n    <ImageView\r\n        android:id=\"@+id/image_trade\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:layout_marginLeft=\"10dp\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        tools:srcCompat=\"@tools:sample/avatars\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/txt_tradeTitle\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textSize=\"20sp\"\r\n        android:layout_marginLeft=\"10dp\"\r\n        android:text=\"TextView\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/image_trade\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/image_trade\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/txt_category\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textSize=\"12sp\"\r\n        android:text=\"희망교환물품 : 의류\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/txt_tradeTitle\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/txt_tradeTitle\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/txt_value\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"TextView\"\r\n        app:layout_constraintBottom_toBottomOf=\"@+id/image_trade\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/txt_tradeTitle\" />\r\n\r\n    <View\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"1dp\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        android:layout_marginTop=\"12dp\"\r\n        android:background=\"@color/gray700\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/txt_value\" />\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/myalarm.xml b/app/src/main/res/layout/myalarm.xml
+--- a/app/src/main/res/layout/myalarm.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/layout/myalarm.xml	(date 1697082444652)
+@@ -49,6 +49,6 @@
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         android:layout_marginTop="12dp"
+-        android:background="@color/gray700"
++        android:background="@color/gray900"
+         app:layout_constraintTop_toBottomOf="@+id/txt_value" />
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/drawable/agreeboxline.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<shape xmlns:android=\"http://schemas.android.com/apk/res/android\" android:shape=\"rectangle\">\r\n    <solid android:color=\"@color/red0\"/>\r\n\r\n    <stroke android:width=\"2dp\"/>\r\n</shape>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/agreeboxline.xml b/app/src/main/res/drawable/agreeboxline.xml
+--- a/app/src/main/res/drawable/agreeboxline.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/drawable/agreeboxline.xml	(date 1697082444676)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+-    <solid android:color="@color/red0"/>
++    <solid android:color="@color/red"/>
+ 
+     <stroke android:width="2dp"/>
+ </shape>
+\ No newline at end of file
+Index: app/src/main/res/drawable/checkboxline.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<shape xmlns:android=\"http://schemas.android.com/apk/res/android\" android:shape=\"rectangle\">\r\n    <solid android:color=\"@color/white0\"/>\r\n\r\n    <stroke android:width=\"2dp\"/>\r\n</shape>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/checkboxline.xml b/app/src/main/res/drawable/checkboxline.xml
+--- a/app/src/main/res/drawable/checkboxline.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/drawable/checkboxline.xml	(date 1697082444661)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+-    <solid android:color="@color/white0"/>
++    <solid android:color="@color/white"/>
+ 
+     <stroke android:width="2dp"/>
+ </shape>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_alarm.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".Fragment_alarm\">\r\n\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n\r\n        <EditText\r\n            android:id=\"@+id/editTextText3\"\r\n            android:layout_width=\"300dp\"\r\n            android:layout_height=\"30dp\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:ems=\"10\"\r\n            android:background=\"@drawable/edit_searchbox\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n        <View\r\n            android:id=\"@+id/view\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\"\r\n            android:background=\"@color/gray700\"\r\n            android:layout_marginTop=\"20dp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/editTextText3\" />\r\n\r\n        <androidx.recyclerview.widget.RecyclerView\r\n            android:layout_width=\"409dp\"\r\n            android:layout_height=\"668dp\"\r\n            android:layout_marginTop=\"15dp\"\r\n            app:layout_constraintBottom_toBottomOf=\"parent\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/view\" />\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_alarm.xml b/app/src/main/res/layout/fragment_alarm.xml
+--- a/app/src/main/res/layout/fragment_alarm.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/layout/fragment_alarm.xml	(date 1697082444622)
+@@ -27,7 +27,7 @@
+             android:id="@+id/view"
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+-            android:background="@color/gray700"
++            android:background="@color/gray900"
+             android:layout_marginTop="20dp"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+Index: app/src/main/res/layout/test_layout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/test_layout.xml b/app/src/main/res/layout/test_layout.xml
+new file mode 100644
+--- /dev/null	(date 1697081753933)
++++ b/app/src/main/res/layout/test_layout.xml	(date 1697081753933)
+@@ -0,0 +1,17 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent">
++
++    <TextView
++        android:id="@+id/textView11"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="TextView"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/drawable/loginbtn_2.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<shape xmlns:android=\"http://schemas.android.com/apk/res/android\" android:shape=\"rectangle\">\r\n    <solid android:color=\"@color/white0\"/>\r\n    <corners android:radius=\"30dp\"/>\r\n    <size android:width=\"294dp\" android:height=\"50dp\"/>\r\n    <stroke android:width=\"1dp\"/>\r\n</shape>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/loginbtn_2.xml b/app/src/main/res/drawable/loginbtn_2.xml
+--- a/app/src/main/res/drawable/loginbtn_2.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/drawable/loginbtn_2.xml	(date 1697082444692)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+-    <solid android:color="@color/white0"/>
++    <solid android:color="@color/white"/>
+     <corners android:radius="30dp"/>
+     <size android:width="294dp" android:height="50dp"/>
+     <stroke android:width="1dp"/>
+Index: app/src/main/res/drawable/loginbtn.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<shape xmlns:android=\"http://schemas.android.com/apk/res/android\" android:shape=\"rectangle\">\r\n    <solid android:color=\"@color/red0\"/>\r\n    <corners\r\n    android:bottomRightRadius=\"30dp\"\r\n    android:bottomLeftRadius=\"30dp\"\r\n    android:topLeftRadius=\"30dp\"\r\n    android:topRightRadius=\"30dp\"/>\r\n    <size android:width=\"294dp\" android:height=\"50dp\"/>\r\n    <stroke android:width=\"2dp\"/>\r\n</shape>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/loginbtn.xml b/app/src/main/res/drawable/loginbtn.xml
+--- a/app/src/main/res/drawable/loginbtn.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/drawable/loginbtn.xml	(date 1697082444637)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+-    <solid android:color="@color/red0"/>
++    <solid android:color="@color/red"/>
+     <corners
+     android:bottomRightRadius="30dp"
+     android:bottomLeftRadius="30dp"
+Index: app/src/main/res/drawable/btn_camera.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<shape xmlns:android=\"http://schemas.android.com/apk/res/android\" android:shape=\"rectangle\">\r\n    <corners android:radius=\"5dp\"/>\r\n    <stroke android:width=\"1dp\"\r\n        android:color=\"@color/gray700\"/>\r\n</shape>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/btn_camera.xml b/app/src/main/res/drawable/btn_camera.xml
+--- a/app/src/main/res/drawable/btn_camera.xml	(revision cb94ab705adfc7caaaf3ee16b6c0f15799b81606)
++++ b/app/src/main/res/drawable/btn_camera.xml	(date 1697082444645)
+@@ -2,5 +2,5 @@
+ <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+     <corners android:radius="5dp"/>
+     <stroke android:width="1dp"
+-        android:color="@color/gray700"/>
++        android:color="@color/gray900"/>
+ </shape>
+\ No newline at end of file
