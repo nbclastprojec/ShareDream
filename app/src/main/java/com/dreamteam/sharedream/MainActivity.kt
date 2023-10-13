@@ -23,11 +23,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 
             val tabTitles = listOf("교환하기", "내소식")
 
-
             TabLayoutMediator(
                 tabLayout,
                 viewPager,
                 { tab, position -> tab.text = tabTitles[position] }).attach()
-
         }
     }
