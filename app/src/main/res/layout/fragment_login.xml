@@ -75,7 +75,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/loginbtn"
-        android:text="Button"
+        android:text="로그인"
+        android:gravity="center"
+        android:textSize="23sp"
+        android:textColor="@color/white"
         android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -85,13 +88,34 @@
         android:id="@+id/tv_findID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/find"
-        android:textSize="18sp"
         android:layout_marginTop="15dp"
-        android:textColor="@color/gray900"
+        android:layout_marginRight="80dp"
+        android:text="@string/find_id"
+        android:textColor="@color/gray700"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_password" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="/"
+        android:textColor="@color/gray700"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_findID"
+        app:layout_constraintTop_toTopOf="@+id/tv_findID" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/find_password"
+        android:textColor="@color/gray700"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintTop_toTopOf="@+id/tv_findID" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
