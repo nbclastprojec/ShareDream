@@ -1,59 +1,75 @@
 package com.dreamteam.sharedream
 
+import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.dreamteam.sharedream.databinding.FragmentEditBinding
+import com.dreamteam.sharedream.model.HomeData
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [EditFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class EditFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentEditBinding
+    val db = Firebase.firestore
+    private lateinit var mContext: Context
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit, container, false)
+        binding = FragmentEditBinding.inflate(inflater, container, false)
+        return (binding.root)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Fragment_edit.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EditFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mContext = requireContext()
+        FirebaseApp.initializeApp(mContext)
+
+        binding.btnComplete.setOnClickListener {
+
+            val title = binding.title.toString()
+            val value = binding.value.toString()
+            val category = binding.category.toString()
+            val city = binding.city.toString()
+            val during = binding.during.toString()
+            val image = binding.camera.toString()
+            val mainText = binding.mainText.toString()
+
+            val edit = hashMapOf(
+                "title" to title,
+                "value" to value,
+                "category" to category,
+                "city" to city,
+                "during" to during,
+                "image" to image,
+                "mainText" to mainText
+            )
+            Toast.makeText(context, "send text", Toast.LENGTH_SHORT).show()
+
+            db.collection("Post")
+                .add(edit)
+                .addOnSuccessListener { documentReference ->
+
+                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                 }
-            }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding document", e)
+                }
+
+        }
     }
 }

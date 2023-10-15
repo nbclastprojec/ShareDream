@@ -27,5 +27,11 @@ import com.google.android.material.tabs.TabLayoutMediator
                 tabLayout,
                 viewPager,
                 { tab, position -> tab.text = tabTitles[position] }).attach()
+
+            binding.floatingActionButton.setOnClickListener {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.edit_frag, EditFragment())
+                    .commit()
+            }
         }
     }
