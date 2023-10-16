@@ -63,7 +63,6 @@ class EditFragment : Fragment() {
             db.collection("Post")
                 .add(edit)
                 .addOnSuccessListener { documentReference ->
-
                     Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                 }
                 .addOnFailureListener { e ->

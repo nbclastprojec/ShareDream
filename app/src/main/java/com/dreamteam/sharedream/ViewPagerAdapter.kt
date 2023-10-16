@@ -8,7 +8,7 @@ import com.dreamteam.sharedream.home.HomeFragment
 class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
 
-    val fragments = listOf<Fragment>(HomeFragment(), AlarmFragment(),EditFragment())
+    val fragments = listOf<Fragment>(HomeFragment(), AlarmFragment())
 
     override fun getItemCount(): Int {
         return fragments.size

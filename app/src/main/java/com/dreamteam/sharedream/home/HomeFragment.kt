@@ -42,5 +42,6 @@ class HomeFragment : Fragment() {
         adapter.notifyDataSetChanged()
 
 
+
     }
 }
