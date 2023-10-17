@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.dreamteam.sharedream"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.dreamteam.sharedream"
@@ -49,6 +49,11 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation ("com.google.firebase:firebase-database-ktx")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.3")
+    implementation ("com.github.bumptech.glide:glide:4.9.0")
 
 
     implementation ("com.github.bumptech.glide:glide:4.12.0")
@@ -66,4 +71,6 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    implementation ("de.hdodenhof:circleimageview:3.1.0") //Circle ImageView
 }
