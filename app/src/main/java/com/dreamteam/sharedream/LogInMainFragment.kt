@@ -1,59 +1,93 @@
 package com.dreamteam.sharedream
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.dreamteam.sharedream.databinding.FragmentLoginMainBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [LogInMainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class LogInMainFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding:FragmentLoginMainBinding
+    private lateinit var auth:FirebaseAuth
+    private lateinit var googleSignInAccount: GoogleSignInClient
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        auth=FirebaseAuth.getInstance()
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login_main, container, false)
+        binding=FragmentLoginMainBinding.inflate(inflater,container,false)
+
+
+        binding.btnLogin.setOnClickListener {
+            val loginFragment=LoginFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,loginFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+        }
+
+            val gso=GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+            googleSignInAccount= GoogleSignIn.getClient(requireContext(),gso)
+
+        binding.btnGoogleLogin.setOnClickListener {
+            val intent=googleSignInAccount.signInIntent
+            startActivityForResult(intent,200)
+            val homeFragment=HomeFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,homeFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+
+
+
+
+
+
+
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment logInPageFrag.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LogInMainFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onActivityResult(requestCode:Int,resultCode:Int, data: Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==200){
+            val task=GoogleSignIn.getSignedInAccountFromIntent(data)
+            val account= task.getResult(ApiException::class.java)
+            val credential=
+                GoogleAuthProvider.getCredential(account.idToken,null)
+            FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener {task ->
+                if (task.isSuccessful){
+                    Toast.makeText(requireContext(),"구글 로그인 성공",Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(requireContext(),task.exception?.message,Toast.LENGTH_SHORT).show()
                 }
             }
+        }
     }
+
+
 }

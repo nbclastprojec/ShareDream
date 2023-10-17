@@ -5,55 +5,120 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.dreamteam.sharedream.databinding.FragmentSignupBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SignUpFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding:FragmentSignupBinding
+    private lateinit var auth: FirebaseAuth
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_signup, container, false)
+       binding= FragmentSignupBinding.inflate(inflater,container,false)
+        auth = FirebaseAuth.getInstance() //
+
+
+
+        binding.btnSignup.setOnClickListener {
+            val loginFragment=LoginFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            val email=binding.editEmail.text.toString()
+            val password=binding.editPassword.text.toString()
+            val passwordCheck=binding.editPasswordCheck.text.toString()
+            val number=binding.editPhoneNumber.text.toString()
+            if(check()){
+                auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
+                    if(it.isSuccessful){
+
+                        val user=auth.currentUser
+                        val uid=user?.uid
+                        val firestore=FirebaseFirestore.getInstance()
+                        val userCollection=firestore.collection("??")
+                        val userDocument = userCollection.document(uid?:"")
+
+                        val userData= hashMapOf(
+                            "email" to email,
+                            "number" to number
+                        )
+
+                        userDocument.set(userData).addOnSuccessListener {
+                            Toast.makeText(requireContext(),"회원가입 성공",Toast.LENGTH_SHORT).show()
+                            transaction.replace(R.id.fragment_container,loginFragment)
+                            transaction.addToBackStack(null)
+                            transaction.commit()
+                            auth.signOut()
+
+
+                        }
+                            .addOnFailureListener { e->
+
+                                Toast.makeText(requireContext(),"회원가입 실패",Toast.LENGTH_SHORT).show()
+
+                            }
+
+
+                    }
+                }
+
+            }
+        }
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Fragment_signup.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignUpFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun check():Boolean {
+        val email = binding.editEmail.text.toString()
+        val password = binding.editPassword.text.toString()
+        val passwordCk=binding.editPasswordCheck.text.toString()
+        if (email.isEmpty()) {
+            binding.editEmail.error = "이메일을 입력해주세요."
+            return false
+        } else if (password.isEmpty()) {
+            binding.editPassword.error = "비밀번호를 입력해주세요."
+            return false
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email)
+                .matches()
+        ) {   //android.util.Patterns.EMAIL_ADDRESS == 안드로이드에서 제공하는 기본 이메일 형식패턴
+            binding.editEmail.error = "이메일 형식이 아닙니다."
+            return false
+        } else if (!special(password)) {
+            binding.editPassword.error = "최소 하나 이상의 특수문자를 입력해 주세요."
+            return false
+        } else if (password!=passwordCk){
+            binding.editPasswordCheck.error="비밀번호와 똑같이 입력해 주세요."
+            return false
+
+        } else if (!phone(password)){
+            binding.editPassword.error="핸드폰 번호는 숫자로만 이루어져야 합니다."
+            return false
+
+        } else {
+            Toast.makeText(requireContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+            return true
+
+        }
+    }
+
+
+
+
+    fun special(text:String):Boolean{
+        val specialWord= setOf('!','@','#','$','%','^','&','*','(',')','_','-','<','>','=','+','?')//특수문자
+        return text.any{it in specialWord//비밀번호 중 하나(any)라도 문자 안에 특수문자(speacialWord)가 포함되어있으면 true반환
+        }
+
+    }
+    fun phone(text: String):Boolean{
+       return text.all {it.isDigit()}
     }
 }
