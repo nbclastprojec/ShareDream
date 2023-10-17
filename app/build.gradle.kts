@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.dreamteam.sharedream"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.dreamteam.sharedream"
@@ -48,6 +48,11 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation ("com.google.firebase:firebase-database-ktx")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.3")
+    implementation ("com.github.bumptech.glide:glide:4.9.0")
 
 
     implementation("androidx.core:core-ktx:1.9.0")

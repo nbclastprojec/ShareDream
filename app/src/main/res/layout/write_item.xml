@@ -45,13 +45,36 @@
             android:text="카테고리 : 도구"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/write_date"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/bbing"
-            android:gravity="right"
-            android:text="2023.10.11" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/bmdh"
+                android:gravity="center"
+                android:text="값어치 : " />
+
+            <TextView
+                android:id="@+id/write_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/bbing"
+                android:text="1,000원 " />
+
+            <TextView
+                android:id="@+id/write_page_date"
+                android:layout_width="128dp"
+                android:layout_height="27dp"
+                android:fontFamily="@font/bbing"
+                android:gravity="right"
+                android:text="2023.10.11" />
+        </LinearLayout>
     </LinearLayout>
 
     <ImageView
