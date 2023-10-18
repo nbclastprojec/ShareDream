@@ -17,11 +17,12 @@
 
     <TextView
         android:id="@+id/textView10"
-        android:layout_width="47dp"
-        android:layout_height="25dp"
+        android:layout_width="53dp"
+        android:layout_height="30dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="7dp"
         android:fontFamily="@font/bbing"
+        android:gravity="center"
         android:text="값어치"
         android:textColor="@color/black"
         android:textSize="12sp"
@@ -59,6 +60,7 @@
         android:layout_height="25dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="4dp"
+        android:gravity="center"
         android:text="5,000 원"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -135,12 +137,12 @@
         android:layout_width="191dp"
         android:layout_height="30dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/bbing"
         android:text="나뭇잎 마을 고인돌 옆"
         android:textColor="#000000"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/detail_image"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/detail_id" />
 
     <TextView
@@ -148,13 +150,13 @@
         android:layout_width="133dp"
         android:layout_height="26dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/bbing"
         android:text="아이디"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/detail_image"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <ImageView
@@ -166,15 +168,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/v" />
 
-    <ImageView
-        android:id="@+id/detail_image"
-        android:layout_width="61dp"
-        android:layout_height="72dp"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
+        app:cardCornerRadius="80dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:srcCompat="@drawable/shape_circle" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" >
+
+    <ImageView
+        android:id="@+id/datail_profile"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/example" />
+
+    </androidx.cardview.widget.CardView>
+
 
     <View
         android:id="@+id/view"
