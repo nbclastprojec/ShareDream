@@ -50,15 +50,18 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation ("com.google.firebase:firebase-database-ktx")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel:2.4.0")
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.3")
-    implementation ("com.github.bumptech.glide:glide:4.9.0")
 
 
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 
+
+    implementation ("androidx.fragment:fragment-ktx:1.6.1")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

@@ -5,16 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:clickable="true"
-    tools:context=".EditFragment">
-
+    tools:context=".home.Edit.EditFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/edit_frag"
-        >
-
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textView12"
@@ -132,7 +127,7 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="글 제목"
+            android:hint="글 제목"
             android:textSize="16sp"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="13dp"
@@ -143,7 +138,7 @@
             android:id="@+id/value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="값어치"
+            android:hint="값어치"
             android:textSize="16sp"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="13dp"
@@ -157,7 +152,7 @@
             android:textSize="16sp"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="13dp"
-            android:text="카테고리"
+            android:hint="카테고리"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view12" />
 
@@ -165,7 +160,7 @@
             android:id="@+id/city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="지역"
+            android:hint="지역"
             android:textSize="16sp"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="13dp"
@@ -176,37 +171,36 @@
             android:id="@+id/during"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="기간설정"
+            android:hint="기간설정"
             android:textSize="16sp"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="13dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view14" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="409dp"
-            android:layout_height="240dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+
+        <EditText
+            android:id="@+id/mainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:ems="10"
+            android:hint="상세정보를 입력해주세요."
+            android:inputType="text"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view15">
+            app:layout_constraintTop_toBottomOf="@+id/view15" />
 
-            <EditText
-                android:id="@+id/mainText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:ems="10"
-                android:hint="상세정보를 입력해주세요."
-                android:textSize="16sp"
-                android:inputType="text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:src="@drawable/clamp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView12" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
