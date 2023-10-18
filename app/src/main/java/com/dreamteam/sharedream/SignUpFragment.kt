@@ -1,59 +1,122 @@
 package com.dreamteam.sharedream
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.dreamteam.sharedream.databinding.FragmentSignupBinding
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.delay
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SignUpFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var auth : FirebaseAuth
+    private lateinit var db: FirebaseDatabase
+    private var _binding: FragmentSignupBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentSignupBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_signup, container, false)
+
+        db = Firebase.database
+        auth = Firebase.auth
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Fragment_signup.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignUpFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.agree1.setOnClickListener {
+            auth?.signOut()
+        }
+        binding.agree2.setOnClickListener {
+            Log.d("xxxx", " 약관 버튼 클릭")
+            Log.d("xxxx", " 1. ${auth.currentUser?.uid}")
+            val data = Firebase.database
+            val testA = data.reference.child("test").child("")
+
+            testA.setValue("Test2")
+        }
+        binding.btnSignup.setOnClickListener {
+            Log.d("xxxx", " signUp btn clicked")
+            val signUpEmail = binding.editEmail.text.toString()
+            val signUpPassword = binding.editPassword.text.toString()
+            val signUpNickname = binding.editNickname.text.toString()
+            if (signUpEmail.contains("@") && signUpEmail.contains(".com")) {
+                if (signUpNickname.length >= 2) {
+                    createAccount(signUpEmail, signUpPassword)
+
+                } else {
+                    Toast.makeText(requireContext(), " 닉네임은 2글자 이상이어야 합니다.", Toast.LENGTH_SHORT)
+                        .show()
                 }
+
+            } else {
+                Toast.makeText(requireContext(), "이메일 형식이 올바르지 않습니다.", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun createAccount(email: String, password: String) {
+        if (email.isNotEmpty() && password.isNotEmpty()) {
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(requireActivity()) { task ->
+                    if (task.isSuccessful){
+                        Log.d("xxxx", " tast.isSuccessful ")
+                        val signUpEmail = binding.editEmail.text.toString()
+                        val signUpPassword = binding.editPassword.text.toString()
+                        val signUpNickname = binding.editNickname.text.toString()
+
+                        val firebaseUser: FirebaseUser? = task.result?.user
+                        if (firebaseUser != null){
+                            Log.d("xxxx", " firebaseUser != null /  ${ task.result?.user?.uid}")
+                            val userId = firebaseUser?.uid
+                            val reference = db.reference.child("Users").child(userId!!)
+                            val hashMap: HashMap<String, Any> = HashMap()
+                            hashMap["id"] = userId
+                            hashMap["nickname"] = signUpNickname
+                            hashMap["email"] = signUpEmail
+                            hashMap["pw"] = signUpPassword
+                            hashMap["profile"] =
+                                "https://source.android.com/static/docs/setup/images/Android_symbol_green_RGB.png?hl=ko"
+
+                            reference.setValue(hashMap).addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    val intent = Intent(activity, MainActivity::class.java)
+                                    startActivity(intent)
+                                    requireActivity().finish()
+                                    Log.d("xxxx", " referce addOnComplete Successful ")
+                                } else {
+                                    Toast.makeText(requireContext(), "계정 생성 실패", Toast.LENGTH_SHORT).show()
+                                    Log.d("xxxx", "referce addOnComplete Fail")
+                                }
+                            }
+                        }
+                    }
+                }
+            Log.d("xxxx", "createAccount Successful")
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
