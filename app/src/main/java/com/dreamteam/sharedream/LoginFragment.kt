@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,14 +53,14 @@ class LoginFragment : Fragment() {
             val transaction=requireActivity().supportFragmentManager.beginTransaction()
             val email = binding.editEmail.text.toString()
             val password= binding.editPassword.text.toString()
-            if(check()){
-                auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
-                    if(it.isSuccessful){
-                        transaction.replace(R.id.fragment_container,homeFragment)
-                        transaction.addToBackStack(null)
-                        transaction.commit()
+            if (check()) {
+                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val intent = Intent(activity, MainActivity::class.java)
+                        startActivity(intent)
+                    } else {
 
-
+                        Toast.makeText(requireContext(), "로그인 실패: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -87,7 +88,7 @@ class LoginFragment : Fragment() {
             binding.editPassword.error = "최소 하나 이상의 특수문자를 입력해 주세요."
             return false
         } else {
-            Toast.makeText(requireContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+
             return true
 
         }
