@@ -31,33 +31,30 @@ class SignUpFragment : Fragment() {
 
 
         binding.btnSignup.setOnClickListener {
-            val loginFragment=LoginFragment()
-            val transaction=requireActivity().supportFragmentManager.beginTransaction()
             val email=binding.editEmail.text.toString()
             val password=binding.editPassword.text.toString()
-            val passwordCheck=binding.editPasswordCheck.text.toString()
+            val nickname=binding.niclName.text.toString()
             val number=binding.editPhoneNumber.text.toString()
+            val user=auth.currentUser
+            val uid=user?.uid
+            val firestore=FirebaseFirestore.getInstance()
+            val userCollection=firestore.collection("UserData")
+            val userDocument = userCollection.document(uid?:"vCi5OvWi8tj91J6mQRV0")
             if(check()){
                 auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
                     if(it.isSuccessful){
 
-                        val user=auth.currentUser
-                        val uid=user?.uid
-                        val firestore=FirebaseFirestore.getInstance()
-                        val userCollection=firestore.collection("??")
-                        val userDocument = userCollection.document(uid?:"")
+
 
                         val userData= hashMapOf(
                             "email" to email,
-                            "number" to number
+                            "number" to number,
+                            "nickName" to nickname
                         )
 
                         userDocument.set(userData).addOnSuccessListener {
                             Toast.makeText(requireContext(),"회원가입 성공",Toast.LENGTH_SHORT).show()
-                            transaction.replace(R.id.fragment_container,loginFragment)
-                            transaction.addToBackStack(null)
-                            transaction.commit()
-                            auth.signOut()
+
 
 
                         }
@@ -80,6 +77,7 @@ class SignUpFragment : Fragment() {
         val email = binding.editEmail.text.toString()
         val password = binding.editPassword.text.toString()
         val passwordCk=binding.editPasswordCheck.text.toString()
+        val number=binding.editPhoneNumber.text.toString()
         if (email.isEmpty()) {
             binding.editEmail.error = "이메일을 입력해주세요."
             return false
@@ -98,12 +96,19 @@ class SignUpFragment : Fragment() {
             binding.editPasswordCheck.error="비밀번호와 똑같이 입력해 주세요."
             return false
 
-        } else if (!phone(password)){
+        } else if (!phone(number)){
             binding.editPassword.error="핸드폰 번호는 숫자로만 이루어져야 합니다."
             return false
 
         } else {
             Toast.makeText(requireContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+            auth.signOut()
+            val loginFragment=LoginFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,loginFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
             return true
 
         }

@@ -36,27 +36,8 @@ class MainActivity : AppCompatActivity() {
                 viewPager,
                 { tab, position -> tab.text = tabTitles[position] }).attach()
 
-            supportActionBar?.hide()
-            Handler(Looper.getMainLooper()).postDelayed({
-                auth = Firebase.auth
 
-                val user=auth.currentUser
 
-                if(user != null){
-                    val intent= Intent(this@MainActivity,LogInActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-                else {
-                    val intent= Intent(this@MainActivity,LogInActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-
-                val intent = Intent(this, LogInActivity::class.java)
-                startActivity(intent)
-                finish()
-            },3000)
         }
     }
 

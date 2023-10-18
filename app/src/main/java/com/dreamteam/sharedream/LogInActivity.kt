@@ -8,5 +8,12 @@ class LogInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        val loginFragment = LogInMainFragment()
+        fragmentTransaction.replace(R.id.fragment_container, loginFragment)
+        fragmentTransaction.commit()
     }
 }

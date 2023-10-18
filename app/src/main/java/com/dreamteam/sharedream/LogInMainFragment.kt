@@ -46,7 +46,7 @@ class LogInMainFragment : Fragment() {
         }
 
             val gso=GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                //.requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
             googleSignInAccount= GoogleSignIn.getClient(requireContext(),gso)
@@ -60,6 +60,16 @@ class LogInMainFragment : Fragment() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
+
+        binding.tvSignup.setOnClickListener {
+            val signUpFragment=SignUpFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,signUpFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+
 
 
 

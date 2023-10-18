@@ -30,6 +30,22 @@ class LoginFragment : Fragment() {
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
+        binding.findPassword.setOnClickListener {
+            val findPasswordFragment=FindPasswordFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,findPasswordFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+        binding.tvFindID.setOnClickListener {
+            val findIdFragment=FindIdFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,findIdFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
 
         binding.btnLogin.setOnClickListener {
             val homeFragment= HomeFragment()
