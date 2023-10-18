@@ -52,7 +52,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.3")
-    implementation ("com.github.bumptech.glide:glide:4.9.0")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 
 
     implementation("androidx.core:core-ktx:1.9.0")

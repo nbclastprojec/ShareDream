@@ -33,7 +33,7 @@ class SignUpFragment : Fragment() {
         binding.btnSignup.setOnClickListener {
             val email=binding.editEmail.text.toString()
             val password=binding.editPassword.text.toString()
-            val nickname=binding.niclName.text.toString()
+            val nickname=binding.nickname.text.toString()
             val number=binding.editPhoneNumber.text.toString()
             val user=auth.currentUser
             val uid=user?.uid
