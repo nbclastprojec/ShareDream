@@ -21,7 +21,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".MainActivity"
@@ -30,7 +29,8 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="sharedream.page.link" android:pathPrefix="/KPo2" />
+                <data android:scheme="https" android:host="sharedream.com" android:pathPrefix="/test11" />
+                <data android:scheme="http" android:host="sharedream.com/test11" />
 
             </intent-filter>
         </activity>
