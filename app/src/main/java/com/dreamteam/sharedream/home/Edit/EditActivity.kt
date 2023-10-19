@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat
 class EditActivity : AppCompatActivity() {
     private val binding by lazy { ActivityEditBinding.inflate(layoutInflater) }
     val db = Firebase.firestore
-    private lateinit var uri: Uri
     private var uriList = ArrayList<Uri>()
     private val maxNumber = 10
     lateinit var adapter: EditImageAdapter
@@ -68,6 +67,7 @@ class EditActivity : AppCompatActivity() {
                 }
             }
 
+
             val title = binding.title.text.toString()
             val value = binding.value.text.toString().toInt()
             val category = binding.category.text.toString()
@@ -98,8 +98,11 @@ class EditActivity : AppCompatActivity() {
             binding.btnBack.setOnClickListener {
                 finish()
             }
+
         }
+
     }
+
 
     // 이미지 선택 화면을 호출하고 선택한 이미지를 처리ㅁㄴ
     @SuppressLint("NotifyDataSetChanged")
@@ -138,7 +141,7 @@ class EditActivity : AppCompatActivity() {
         }
 
     //textView를 카운팅해주기
-    private fun printCount() {
+    fun printCount() {
         val text = "${uriList.count()}/${maxNumber}"
         binding.imageCount.text = text
     }

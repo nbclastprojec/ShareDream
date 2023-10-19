@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.home.Edit
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,6 +12,35 @@ import com.dreamteam.sharedream.databinding.EditImageItemBinding
 
 class EditImageAdapter(val context: EditActivity, val items: ArrayList<Uri>) :
     RecyclerView.Adapter<EditImageAdapter.ViewHolder>() {
+    val maxNumber = 10
+
+    fun printCount(): String {
+        return "${items.size}/${maxNumber}"
+    }
+    // onItemClickListener 인터페이스 선언하기
+    interface onItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    // onItemClickListener 참조 변수 선언하기
+    private lateinit var itemClickListener: onItemClickListener
+
+    // onItemClickListener 등록 메서드
+    fun setItemClickListener(itemClickListener: onItemClickListener) {
+        this.itemClickListener = itemClickListener
+    }
+
+    init {
+        itemClickListener = object : onItemClickListener{
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onItemClick(position: Int) {
+                items.removeAt(position)
+                    notifyDataSetChanged()
+                context.printCount()
+            }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = EditImageItemBinding.inflate(inflater, parent, false)
@@ -18,7 +48,7 @@ class EditImageAdapter(val context: EditActivity, val items: ArrayList<Uri>) :
     }
 
     override fun getItemCount(): Int {
-        return items.count()
+        return items.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -31,9 +61,17 @@ class EditImageAdapter(val context: EditActivity, val items: ArrayList<Uri>) :
 
         fun bindItem(item: Uri) {
             val imageArea = binding.editImage
+            val delete = binding.btnDelete
+
+            // ViewHolder에서 delete 버튼을 눌렀을 때 Listener에 onItemClick 등록하기
+            delete.setOnClickListener {
+                val position = adapterPosition
+                itemClickListener.onItemClick(position)
+            }
             Glide.with(context)
                 .load(item)
                 .into(imageArea)
         }
+
     }
 }
