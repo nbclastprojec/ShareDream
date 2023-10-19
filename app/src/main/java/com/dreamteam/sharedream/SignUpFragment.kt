@@ -54,14 +54,24 @@ class SignUpFragment : Fragment() {
 
             testA.setValue("Test2")
         }
+
+        fun isEmailValid(email: String): Boolean {
+            val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+            return email.matches(emailPattern.toRegex())
+        }
         binding.btnSignup.setOnClickListener {
             Log.d("xxxx", " signUp btn clicked")
             val signUpEmail = binding.editEmail.text.toString()
             val signUpPassword = binding.editPassword.text.toString()
             val signUpNickname = binding.editNickname.text.toString()
-            if (signUpEmail.contains("@") && signUpEmail.contains(".com")) {
+            if (isEmailValid(signUpEmail)) {
                 if (signUpNickname.length >= 2) {
-                    createAccount(signUpEmail, signUpPassword)
+                    if (signUpPassword.length > 5) {
+                        createAccount(signUpEmail, signUpPassword)
+                    } else {
+                        Toast.makeText(requireContext(), "비밀번호는 6글자 이상이어야 합니다", Toast.LENGTH_SHORT)
+                            .show()
+                    }
 
                 } else {
                     Toast.makeText(requireContext(), " 닉네임은 2글자 이상이어야 합니다.", Toast.LENGTH_SHORT)
