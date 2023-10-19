@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="47dp"
-        android:text="회원가입"
+        android:text="바꿔드림"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
-        android:text="이메일"
+        android:text="전화번호"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -108,7 +108,7 @@
         app:layout_constraintTop_toTopOf="@+id/tv_findID" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/find_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/find_password"
