@@ -2,6 +2,7 @@ package com.dreamteam.sharedream
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +28,7 @@ class LoginFragment : Fragment() {
 
         auth = Firebase.auth
 
+
     }
 
     override fun onCreateView(
@@ -36,8 +38,28 @@ class LoginFragment : Fragment() {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
 
-        binding.logoImageView.setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.login_frame_layout,SignUpFragment()).commit()
+        binding.btnLogin.setOnClickListener {
+            val email: String = binding.editEmail.text.toString()
+            val password : String = binding.editPassword.text.toString()
+
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
+                Toast.makeText(requireContext(),"이메일과 비밀번호는 필수 입력사항 입니다",Toast.LENGTH_SHORT).show()
+            } else {
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            startActivity(Intent(requireActivity(),MainActivity::class.java))
+                            requireActivity().finish()
+                        } else {
+                            Toast.makeText(requireActivity(),"입력하신 정보와 일치하는 회원 정보가 없습니다",Toast.LENGTH_SHORT).show()
+                            binding.editPassword.text.clear()
+                        }
+                    }
+            }
+        }
+
+        binding.btnSignUp.setOnClickListener {
+            parentFragmentManager.beginTransaction().replace(R.id.login_frame_layout,SignUpFragment()).addToBackStack(null).commit()
         }
 
 
