@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.dreamteam.sharedream.databinding.FragmentLoginMainBinding
+import com.dreamteam.sharedream.home.HomeFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -54,7 +55,7 @@ class LogInMainFragment : Fragment() {
         binding.btnGoogleLogin.setOnClickListener {
             val intent=googleSignInAccount.signInIntent
             startActivityForResult(intent,200)
-            val homeFragment=HomeFragment()
+            val homeFragment= HomeFragment()
             val transaction=requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container,homeFragment)
             transaction.addToBackStack(null)
