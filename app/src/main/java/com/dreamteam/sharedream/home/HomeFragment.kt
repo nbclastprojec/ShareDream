@@ -37,13 +37,10 @@ class HomeFragment : Fragment() {
         homeAdapter.postDataFromFirestore()
         Log.d("HomeFrag onResume", "nyh backbtnsuc??")
 
-        // LiveData를 관찰하여 RecyclerView를 다시 로드합니다.
         viewModel.refreshData.observe(viewLifecycleOwner) { refresh ->
             if (refresh) {
-                // RecyclerView를 갱신하는 작업을 여기에서 수행
                 homeAdapter.postDataFromFirestore()
 
-                // 갱신이 완료되면 ViewModel에서 값을 초기화합니다.
                 viewModel.onRefreshComplete()
             }
         }
@@ -57,17 +54,6 @@ class HomeFragment : Fragment() {
         mContext = requireContext()
         homeAdapter = HomeAdapter(mContext)
 
-
-        // LiveData를 관찰하여 RecyclerView를 다시 로드합니다.
-        viewModel.refreshData.observe(viewLifecycleOwner) { refresh ->
-            if (refresh) {
-                // RecyclerView를 갱신하는 작업을 여기에서 수행
-                homeAdapter.postDataFromFirestore()
-
-                // 갱신이 완료되면 ViewModel에서 값을 초기화합니다.
-                viewModel.onRefreshComplete()
-            }
-        }
 
         binding.homeRecycle.layoutManager =
             LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)

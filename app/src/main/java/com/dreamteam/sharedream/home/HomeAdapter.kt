@@ -1,18 +1,26 @@
 package com.dreamteam.sharedream.home
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.databinding.WriteItemBinding
 import com.dreamteam.sharedream.model.PostData
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class HomeAdapter(private val context: Context):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var homeDataItem: ArrayList<PostData> = ArrayList()
+
     fun postDataFromFirestore() {
 
         val fireStore = FirebaseFirestore.getInstance()
@@ -38,6 +46,18 @@ class HomeAdapter(private val context: Context):
                 Log.e("FirestoreAdapter", "Error getting documents: $e")
             }
     }
+    private fun imageDownload() {
+        val storage = Firebase.storage
+        val storageRef = storage.getReference("image")
+        val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+        val mountainRef = storageRef.child("${fileName}.png")
+
+        val downloadTask = mountainRef.downloadUrl
+        downloadTask.addOnSuccessListener { uri ->
+
+        }
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -52,10 +72,20 @@ class HomeAdapter(private val context: Context):
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val homeItem = homeDataItem[position]
         val homeHolder = holder as HomeHolder
+        val storage = Firebase.storage
+        val storageRef = storage.getReference("image")
+        val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+        val mountainRef = storageRef.child("${fileName}.png")
+        val downloadTask = mountainRef.downloadUrl
 
-//        Glide.with(context)
-//            .load(homeItem.image)
-//            .into(homeHolder.image)
+        downloadTask.addOnSuccessListener { uri ->
+
+            Glide.with(context)
+                .load(homeItem.image.toUri())
+                .into(homeHolder.image)
+        }.addOnFailureListener {
+            Log.e("HomeAdpate", "nyh imageDownload fail")
+        }
 
         homeHolder.title.text = homeItem.title
         homeHolder.subtitle.text = homeItem.mainText
@@ -71,5 +101,6 @@ class HomeAdapter(private val context: Context):
         val subtitle = binding.writeSubtittle
         val value = binding.writePrice
         val category = binding.writeCategory
+        val image = binding.writeImage
     }
 }
