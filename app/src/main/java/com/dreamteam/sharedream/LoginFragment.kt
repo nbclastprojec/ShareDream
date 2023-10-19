@@ -19,11 +19,7 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
-
-
-
-
-    }
+            }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,8 +45,6 @@ class LoginFragment : Fragment() {
 
 
         binding.btnLogin.setOnClickListener {
-            val homeFragment= HomeFragment()
-            val transaction=requireActivity().supportFragmentManager.beginTransaction()
             val email = binding.editEmail.text.toString()
             val password= binding.editPassword.text.toString()
             if (check()) {
@@ -64,7 +58,6 @@ class LoginFragment : Fragment() {
                     }
                 }
             }
-
         }
         return binding.root
     }
