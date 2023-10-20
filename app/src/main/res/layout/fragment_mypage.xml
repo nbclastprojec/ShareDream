@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true">
 
 
     <ImageView
@@ -298,12 +300,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_tittle" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/mypage_image"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_marginStart="28dp"
         android:layout_marginTop="16dp"
+        android:background="@drawable/shape_circle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bar1"
         app:srcCompat="@drawable/shape_circle" />

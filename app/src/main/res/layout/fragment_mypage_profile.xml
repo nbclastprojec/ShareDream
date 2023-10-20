@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    >
 
     <View
         android:id="@+id/bar1"
@@ -38,15 +41,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="110dp"
         android:layout_height="118dp"
         android:layout_marginTop="20dp"
+        android:background="@drawable/shape_circle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bar1"
-        app:srcCompat="@drawable/shape_circle" />
+        app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -57,7 +61,7 @@
         app:srcCompat="@drawable/circle_white" />
 
     <ImageButton
-        android:id="@+id/imageView4"
+        android:id="@+id/btn_profile_img_edit"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@color/white"
@@ -68,7 +72,7 @@
         app:srcCompat="@drawable/pencil" />
 
     <EditText
-        android:id="@+id/profile_id"
+        android:id="@+id/profile_nickname"
         android:layout_width="301dp"
         android:layout_height="42dp"
         android:layout_marginTop="20dp"
@@ -92,9 +96,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_id" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_nickname" />
 
-    <EditText
+    <TextView
         android:id="@+id/profile_number"
         android:layout_width="300dp"
         android:layout_height="40dp"

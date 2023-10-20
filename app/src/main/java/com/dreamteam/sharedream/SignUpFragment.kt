@@ -93,6 +93,7 @@ class SignUpFragment : Fragment() {
                         val signUpEmail = binding.editEmail.text.toString()
                         val signUpPassword = binding.editPassword.text.toString()
                         val signUpNickname = binding.editNickname.text.toString()
+                        val signUpNumber = binding.editPhoneNumber.text.toString()
 
                         val firebaseUser: FirebaseUser? = task.result?.user
                         if (firebaseUser != null){
@@ -104,9 +105,9 @@ class SignUpFragment : Fragment() {
                             hashMap["nickname"] = signUpNickname
                             hashMap["email"] = signUpEmail
                             hashMap["pw"] = signUpPassword
-                            hashMap["profile"] =
-                                "https://source.android.com/static/docs/setup/images/Android_symbol_green_RGB.png?hl=ko"
-
+                            hashMap["address"] = "선택 지역 없음"
+                            hashMap["phone"] = signUpNumber
+                            hashMap["intro"] = "소개말이 아직 작성되지 않았습니다."
                             reference.setValue(hashMap).addOnCompleteListener {
                                 if (it.isSuccessful) {
                                     val intent = Intent(activity, MainActivity::class.java)
