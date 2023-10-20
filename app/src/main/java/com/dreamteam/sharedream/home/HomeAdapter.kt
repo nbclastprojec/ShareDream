@@ -1,12 +1,11 @@
 package com.dreamteam.sharedream.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.databinding.WriteItemBinding
@@ -23,6 +22,7 @@ class HomeAdapter(private val context: Context):
     private var homeDataItem: ArrayList<PostData> = ArrayList()
     private var filteredDataItem: List<PostData> = ArrayList()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun postDataFromFirestore() {
 
         val fireStore = FirebaseFirestore.getInstance()
@@ -41,6 +41,7 @@ class HomeAdapter(private val context: Context):
                 }
                 homeDataItem.clear()
                 homeDataItem.addAll(newData)
+                //filterByCategory을 처음에 가져와서 여기서 써줘야 돌아간다!!
                 filterByCategory("")
                 notifyDataSetChanged()
             }
@@ -67,11 +68,13 @@ class HomeAdapter(private val context: Context):
         return HomeHolder(binding)
     }
 
+    //필터 된 데이터 List를 Default로 Count학
     override fun getItemCount(): Int {
         return filteredDataItem.size
     }
 
 
+    //선택되지 않았을 땐 전체데이터 설정, else는 filter
     fun filterByCategory(category: String) {
         if (category.isEmpty()) {
             Log.d("nyh", "filterByCategory: ${filteredDataItem.size}")
@@ -106,10 +109,6 @@ class HomeAdapter(private val context: Context):
         homeHolder.value.text = homeItem.value.toString()
 
     }
-
-
-
-    // 카테고리 필터링 메서드
 
 
     inner class HomeHolder(val binding : WriteItemBinding):

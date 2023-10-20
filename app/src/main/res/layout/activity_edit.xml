@@ -115,7 +115,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view11" />
 
-        <EditText
+        <TextView
             android:id="@+id/category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -217,7 +217,7 @@
             app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/cloths_chip"
+                android:id="@+id/cloths_chip1"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:checkable="true"
@@ -225,7 +225,7 @@
                 android:textSize="12sp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/machine_chip"
+                android:id="@+id/machine_chip1"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:checkable="true"
@@ -234,7 +234,7 @@
 
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/sport_chip"
+                android:id="@+id/sport_chip1"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:checkable="true"
@@ -242,7 +242,7 @@
                 android:textSize="12sp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/art_chip"
+                android:id="@+id/art_chip1"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:checkable="true"
@@ -250,7 +250,7 @@
                 android:textSize="12sp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/book_chip"
+                android:id="@+id/book_chip1"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:checkable="true"
@@ -258,7 +258,7 @@
                 android:textSize="12sp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/beauty_chip"
+                android:id="@+id/beauty_chip1"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:checkable="true"
@@ -266,7 +266,7 @@
                 android:textSize="12sp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/toy_chip"
+                android:id="@+id/toy_chip1"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:checkable="true"

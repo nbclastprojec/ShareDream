@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -45,22 +46,6 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
                 viewModel.onRefreshComplete()
             }
         }
-        viewModel.refreshData.observe(viewLifecycleOwner){ refresh ->
-            if(refresh){
-                homeAdapter.filterByCategory(selectedCategory)
-                Log.d("nyh", "onResume: $selectedCategory")
-                viewModel.onRefreshComplete()
-
-            }
-
-        }
-
-        binding.btnFilter.setOnClickListener {
-            val filterDialogFragment = CategoryDialogFragment()
-            filterDialogFragment.setCategorySelectionListener(this) // 리스너 설정
-            Log.d("HomeFrag", "nyh 왜안되냐고ㅡㅡ")
-            filterDialogFragment.show(childFragmentManager, "filter_dialog_tag")
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,21 +62,23 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
         binding.btnFilter.setOnClickListener {
             val filterDialogFragment = CategoryDialogFragment()
+            //다이얼로그에있는 리스너를 달아준다
             filterDialogFragment.setCategorySelectionListener(this)
             filterDialogFragment.show(childFragmentManager, "filter_dialog_tag")
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCategorySelected(category: String) {
         selectedCategory = category
 
+        // 선택된 카테고리로 항목을 filter한다
         if (category.isNotEmpty()) {
             homeAdapter.filterByCategory(category)
             Log.d("HomeFrag", "nyh category = $category")
         } else {
             Log.d("nyh", "onCategorySelected: gg")
         }
-
         homeAdapter.notifyDataSetChanged()
     }
 }

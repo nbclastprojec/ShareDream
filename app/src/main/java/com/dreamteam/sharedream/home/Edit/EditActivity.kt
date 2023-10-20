@@ -90,15 +90,15 @@ class EditActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val category = binding.category.text.toString()
-                when (binding.chipgroup.checkedChipId) {
-                R.id.cloths_chip -> "의류"
-                R.id.machine_chip -> "가전제품"
-                R.id.sport_chip -> "스포츠"
-                R.id.art_chip -> "예술"
-                R.id.book_chip -> "독서"
-                R.id.beauty_chip -> "뷰티"
-                R.id.toy_chip -> "문구"
+            var category: String
+            when (binding.chipgroup.checkedChipId) {
+                    R.id.cloths_chip1 -> category = "의류"
+                    R.id.machine_chip1 -> category = "가전제품"
+                    R.id.sport_chip1 -> category = "스포츠"
+                    R.id.art_chip1 -> category = "예술"
+                    R.id.book_chip1 -> category = "독서"
+                    R.id.beauty_chip1 -> category = "뷰티"
+                    R.id.toy_chip1 -> category = "문구"
                 else -> {
                     Toast.makeText(
                         this,
@@ -108,7 +108,7 @@ class EditActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
             }
-
+            Log.d("nyh", "onCreate: category는 $category")
             val edit = hashMapOf(
                 "title" to title,
                 "value" to value,

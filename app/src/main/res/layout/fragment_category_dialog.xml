@@ -85,20 +85,5 @@
             android:textSize="12sp" />
     </com.google.android.material.chip.ChipGroup>
 
-    <Button
-        android:id="@+id/agree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="확인"
-        app:layout_constraintStart_toStartOf="@+id/chipgroup"
-        app:layout_constraintTop_toBottomOf="@+id/chipgroup" />
-
-    <Button
-        android:id="@+id/cancle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="취소"
-        app:layout_constraintEnd_toEndOf="@+id/chipgroup"
-        app:layout_constraintTop_toBottomOf="@+id/chipgroup" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

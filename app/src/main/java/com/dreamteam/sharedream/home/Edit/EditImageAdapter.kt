@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.EditImageItemBinding
 
 class EditImageAdapter(val context: EditActivity, val items: ArrayList<Uri>) :
@@ -23,7 +21,7 @@ class EditImageAdapter(val context: EditActivity, val items: ArrayList<Uri>) :
     // onItemClickListener 참조 변수 선언하기
     private var itemClickListener: onItemClickListener
 
-    // onItemClickListener 등록 메서드
+
 
     init {
         itemClickListener = object : onItemClickListener{
