@@ -12,23 +12,18 @@ import com.dreamteam.sharedream.databinding.EditImageItemBinding
 
 class EditImageAdapter(val context: EditActivity, val items: ArrayList<Uri>) :
     RecyclerView.Adapter<EditImageAdapter.ViewHolder>() {
-    val maxNumber = 10
 
-    fun printCount(): String {
-        return "${items.size}/${maxNumber}"
-    }
+
+
     // onItemClickListener 인터페이스 선언하기
     interface onItemClickListener {
         fun onItemClick(position: Int)
     }
 
     // onItemClickListener 참조 변수 선언하기
-    private lateinit var itemClickListener: onItemClickListener
+    private var itemClickListener: onItemClickListener
 
     // onItemClickListener 등록 메서드
-    fun setItemClickListener(itemClickListener: onItemClickListener) {
-        this.itemClickListener = itemClickListener
-    }
 
     init {
         itemClickListener = object : onItemClickListener{

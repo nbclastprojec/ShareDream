@@ -5,7 +5,8 @@ import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.net.toUri
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.databinding.WriteItemBinding
@@ -20,6 +21,7 @@ class HomeAdapter(private val context: Context):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var homeDataItem: ArrayList<PostData> = ArrayList()
+    private var filteredDataItem: List<PostData> = ArrayList()
 
     fun postDataFromFirestore() {
 
@@ -39,6 +41,7 @@ class HomeAdapter(private val context: Context):
                 }
                 homeDataItem.clear()
                 homeDataItem.addAll(newData)
+                filterByCategory("")
                 notifyDataSetChanged()
             }
             .addOnFailureListener { e ->
@@ -51,7 +54,6 @@ class HomeAdapter(private val context: Context):
 //        val storageRef = storage.getReference("image")
 //        val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
 //        val mountainRef = storageRef.child("${fileName}.png")
-//
 //        val downloadTask = mountainRef.downloadUrl
 //        downloadTask.addOnSuccessListener { uri ->
 //
@@ -66,7 +68,18 @@ class HomeAdapter(private val context: Context):
     }
 
     override fun getItemCount(): Int {
-        return homeDataItem.size
+        return filteredDataItem.size
+    }
+
+
+    fun filterByCategory(category: String) {
+        if (category.isEmpty()) {
+            Log.d("nyh", "filterByCategory: ${filteredDataItem.size}")
+            filteredDataItem = homeDataItem // 전체 데이터 표시
+        } else {
+            filteredDataItem = homeDataItem.filter { it.category == category }
+        }
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -94,6 +107,11 @@ class HomeAdapter(private val context: Context):
 
     }
 
+
+
+    // 카테고리 필터링 메서드
+
+
     inner class HomeHolder(val binding : WriteItemBinding):
         RecyclerView.ViewHolder(binding.root) {
 
@@ -103,4 +121,7 @@ class HomeAdapter(private val context: Context):
         val category = binding.writeCategory
         val image = binding.writeImage
     }
+
+
 }
+

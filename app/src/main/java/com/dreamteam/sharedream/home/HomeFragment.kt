@@ -1,6 +1,5 @@
 package com.dreamteam.sharedream.home
 
-
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -13,11 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import com.dreamteam.sharedream.home.Edit.HomeViewModel
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var mContext: Context
     private lateinit var homeAdapter: HomeAdapter
     private val viewModel: HomeViewModel by viewModels()
+    private var selectedCategory: String = ""
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -29,20 +30,36 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return (binding.root)
+        return binding.root
     }
 
     override fun onResume() {
         super.onResume()
+
         homeAdapter.postDataFromFirestore()
         Log.d("HomeFrag onResume", "nyh backbtnsuc??")
 
         viewModel.refreshData.observe(viewLifecycleOwner) { refresh ->
             if (refresh) {
                 homeAdapter.postDataFromFirestore()
-
                 viewModel.onRefreshComplete()
             }
+        }
+        viewModel.refreshData.observe(viewLifecycleOwner){ refresh ->
+            if(refresh){
+                homeAdapter.filterByCategory(selectedCategory)
+                Log.d("nyh", "onResume: $selectedCategory")
+                viewModel.onRefreshComplete()
+
+            }
+
+        }
+
+        binding.btnFilter.setOnClickListener {
+            val filterDialogFragment = CategoryDialogFragment()
+            filterDialogFragment.setCategorySelectionListener(this) // 리스너 설정
+            Log.d("HomeFrag", "nyh 왜안되냐고ㅡㅡ")
+            filterDialogFragment.show(childFragmentManager, "filter_dialog_tag")
         }
     }
 
@@ -54,10 +71,27 @@ class HomeFragment : Fragment() {
         mContext = requireContext()
         homeAdapter = HomeAdapter(mContext)
 
-
         binding.homeRecycle.layoutManager =
             LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         binding.homeRecycle.adapter = homeAdapter
 
+        binding.btnFilter.setOnClickListener {
+            val filterDialogFragment = CategoryDialogFragment()
+            filterDialogFragment.setCategorySelectionListener(this)
+            filterDialogFragment.show(childFragmentManager, "filter_dialog_tag")
+        }
+    }
+
+    override fun onCategorySelected(category: String) {
+        selectedCategory = category
+
+        if (category.isNotEmpty()) {
+            homeAdapter.filterByCategory(category)
+            Log.d("HomeFrag", "nyh category = $category")
+        } else {
+            Log.d("nyh", "onCategorySelected: gg")
+        }
+
+        homeAdapter.notifyDataSetChanged()
     }
 }

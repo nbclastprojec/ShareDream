@@ -11,7 +11,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
+import com.dreamteam.sharedream.model.PostData
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -24,8 +27,11 @@ class EditActivity : AppCompatActivity() {
     private var uriList = ArrayList<Uri>()
     private val maxNumber = 10
     lateinit var adapter: EditImageAdapter
+    private lateinit var auth: FirebaseAuth
+    private val postData = PostData()
 
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -55,6 +61,7 @@ class EditActivity : AppCompatActivity() {
             registerForActivityResult.launch(intent)
         }
 
+
         binding.btnComplete.setOnClickListener {
             for (i in 0 until uriList.count()) {
                 //uriList에 i만큼 imageUplod
@@ -67,20 +74,46 @@ class EditActivity : AppCompatActivity() {
                 }
             }
 
-
             val title = binding.title.text.toString()
-            val value = binding.value.text.toString().toInt()
-            val category = binding.category.text.toString()
             val city = binding.city.text.toString()
-            val during = binding.during.text.toString()
             val mainText = binding.mainText.text.toString()
+
+            val valueStr = binding.value.text.toString()
+            val value = valueStr.toIntOrNull()
+
+            if (value == null) {
+                Toast.makeText(
+                    this,
+                    "값어치를 올바르게 입력해주세요.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+
+            val category = binding.category.text.toString()
+                when (binding.chipgroup.checkedChipId) {
+                R.id.cloths_chip -> "의류"
+                R.id.machine_chip -> "가전제품"
+                R.id.sport_chip -> "스포츠"
+                R.id.art_chip -> "예술"
+                R.id.book_chip -> "독서"
+                R.id.beauty_chip -> "뷰티"
+                R.id.toy_chip -> "문구"
+                else -> {
+                    Toast.makeText(
+                        this,
+                        "카테고리를 선택 해 주세요",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
+                }
+            }
 
             val edit = hashMapOf(
                 "title" to title,
                 "value" to value,
                 "category" to category,
                 "city" to city,
-                "during" to during,
                 "mainText" to mainText
             )
 
@@ -158,10 +191,11 @@ class EditActivity : AppCompatActivity() {
         }
         val storage = Firebase.storage
         // storage 참조
-        val storageRef = storage.getReference("image")
+
         // filename이 같으면 안되므로 기존 패턴 뒤에 count까지 붙여준다
         val fileName = SimpleDateFormat("yyyyMMddHHmmss_${count}").format(java.util.Date())
-        val mountainsRef = storageRef.child("${fileName}.png")
+        //ui로 이미지 분리저장if
+        val mountainsRef = storage.reference.child("image").child(auth.uid!!).child(fileName)
         val uploadTask = mountainsRef.putFile(uri)
 
         uploadTask.addOnSuccessListener { task ->

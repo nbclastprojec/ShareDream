@@ -20,7 +20,6 @@ class SignUpFragment : Fragment() {
 
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,8 +42,6 @@ class SignUpFragment : Fragment() {
             if(check()){
                 auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
                     if(it.isSuccessful){
-
-
 
                         val userData= hashMapOf(
                             "email" to email,
