@@ -92,13 +92,13 @@ class EditActivity : AppCompatActivity() {
 
             var category: String
             when (binding.chipgroup.checkedChipId) {
-                    R.id.cloths_chip1 -> category = "의류"
-                    R.id.machine_chip1 -> category = "가전제품"
-                    R.id.sport_chip1 -> category = "스포츠"
-                    R.id.art_chip1 -> category = "예술"
-                    R.id.book_chip1 -> category = "독서"
-                    R.id.beauty_chip1 -> category = "뷰티"
-                    R.id.toy_chip1 -> category = "문구"
+                R.id.cloths_chip1 -> category = "의류"
+                R.id.machine_chip1 -> category = "가전제품"
+                R.id.sport_chip1 -> category = "스포츠"
+                R.id.art_chip1 -> category = "예술"
+                R.id.book_chip1 -> category = "독서"
+                R.id.beauty_chip1 -> category = "뷰티"
+                R.id.toy_chip1 -> category = "문구"
                 else -> {
                     Toast.makeText(
                         this,
@@ -114,7 +114,8 @@ class EditActivity : AppCompatActivity() {
                 "value" to value,
                 "category" to category,
                 "city" to city,
-                "mainText" to mainText
+                "mainText" to mainText,
+                "uid" to auth.currentUser?.uid
             )
 
             db.collection("Post")
@@ -183,6 +184,8 @@ class EditActivity : AppCompatActivity() {
     // 파일을 가리키는 참조를 생성한 후 putFile에 이미지 파일 uri를 넣어 파일을 업로드한다.
     @SuppressLint("SimpleDateFormat")
     private fun imageUpload(uri: Uri?, count: Int) {
+        auth = FirebaseAuth.getInstance()
+
 
         if (uri == null) {
             Log.e(TAG, "URI is null. Image upload failed.")
@@ -197,11 +200,27 @@ class EditActivity : AppCompatActivity() {
         //ui로 이미지 분리저장if
         val mountainsRef = storage.reference.child("image").child(auth.uid!!).child(fileName)
         val uploadTask = mountainsRef.putFile(uri)
+        var imageUri: Uri?
 
-        uploadTask.addOnSuccessListener { task ->
-            Toast.makeText(this, "사진 업로드 성공", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener {
-            Toast.makeText(this, "사진 업로드 실패", Toast.LENGTH_SHORT).show();
+        uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                throw task.exception!!
+            }
+            // 이미지 다운로드 URL을 가져와서 이미지 URI로 변환
+            mountainsRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                imageUri = task.result // 이미지 URI를 설정
+                postData.image = imageUri.toString() // 이미지 URL을 PostData에 저장
+                Log.d("ImageUploadPath", "$mountainsRef")
+
+                Toast.makeText(this, "사진 업로드 성공", Toast.LENGTH_SHORT).show()
+            } else {
+                // 업로드 실패 시 처리
+                val error = task.exception
+                Log.e(TAG, "이미지 업로드 실패: $error")
+                Toast.makeText(this, "사진 업로드 실패", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

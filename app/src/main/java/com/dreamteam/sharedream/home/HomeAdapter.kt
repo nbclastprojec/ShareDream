@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.databinding.WriteItemBinding
 import com.dreamteam.sharedream.model.PostData
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -39,6 +40,7 @@ class HomeAdapter(private val context: Context):
                         newData.add(postData)
                     }
                 }
+                imageDownload(newData)
                 homeDataItem.clear()
                 homeDataItem.addAll(newData)
                 //filterByCategory을 처음에 가져와서 여기서 써줘야 돌아간다!!
@@ -50,17 +52,35 @@ class HomeAdapter(private val context: Context):
                 Log.e("FirestoreAdapter", "Error getting documents: $e")
             }
     }
-//    private fun imageDownload() {
-//        val storage = Firebase.storage
-//        val storageRef = storage.getReference("image")
-//        val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
-//        val mountainRef = storageRef.child("${fileName}.png")
-//        val downloadTask = mountainRef.downloadUrl
-//        downloadTask.addOnSuccessListener { uri ->
-//
-//        }
-//
-//    }
+    private fun imageDownload(dataList: List<PostData>) {
+        val auth = FirebaseAuth.getInstance()
+        val storage = Firebase.storage
+        val imageUrls = mutableMapOf<String, String>()
+
+        for (postData in dataList) {
+            if (postData.image != null && postData.image.isNotEmpty()) {
+                val imageReference = storage.reference.child("image").child(auth.uid!!).child(postData.image)
+
+                imageReference.downloadUrl.addOnFailureListener { uri ->
+                    imageUrls[postData.image] = uri.toString()
+
+                    if (imageUrls.size == dataList.size) {
+                        for (data in dataList) {
+                            data.image = imageUrls[data.image].toString()
+                        }
+                        homeDataItem.clear()
+                        homeDataItem.addAll(dataList)
+                        filterByCategory("")
+                        notifyDataSetChanged()
+                        Log.d("nyh", "imageDownload: $imageUrls")
+                        Log.d("nyh", "imageDownload imageReference: $imageReference")
+                    }
+                }.addOnFailureListener {
+                    Log.d("nyh", "imageDownload: $imageUrls")
+                }
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -75,6 +95,7 @@ class HomeAdapter(private val context: Context):
 
 
     //선택되지 않았을 땐 전체데이터 설정, else는 filter
+    @SuppressLint("NotifyDataSetChanged")
     fun filterByCategory(category: String) {
         if (category.isEmpty()) {
             Log.d("nyh", "filterByCategory: ${filteredDataItem.size}")
@@ -92,22 +113,22 @@ class HomeAdapter(private val context: Context):
         val storageRef = storage.getReference("image")
         val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
         val mountainRef = storageRef.child("${fileName}.png")
-//        val downloadTask = mountainRef.downloadUrl
+        val downloadTask = mountainRef.downloadUrl
 
-//        downloadTask.addOnSuccessListener { uri ->
-//
-//            Glide.with(context)
-//                .load(homeItem.image.toUri())
-//                .into(homeHolder.image)
-//        }.addOnFailureListener {
-//            Log.e("HomeAdpate", "nyh imageDownload fail")
-//        }
+        downloadTask.addOnSuccessListener { uri ->
+
+            Glide.with(context)
+                .load(Uri.parse(homeItem.image))
+                .into(homeHolder.image)
+        }.addOnFailureListener {
+            Log.e("HomeAdpate", "nyh Glade imageDownload fail")
+        }
 
         homeHolder.title.text = homeItem.title
         homeHolder.subtitle.text = homeItem.mainText
         homeHolder.category.text = homeItem.category
         homeHolder.value.text = homeItem.value.toString()
-
+        Log.d("nyh", "onBindViewHolder: $homeItem")
     }
 
 
