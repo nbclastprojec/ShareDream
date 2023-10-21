@@ -49,6 +49,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation ("com.google.firebase:firebase-dynamic-links-ktx")
@@ -56,6 +57,9 @@ dependencies {
 
     // circleImageView
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    // Coil
+    implementation("io.coil-kt:coil:2.4.0")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

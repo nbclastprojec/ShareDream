@@ -147,19 +147,15 @@ class MyPageEditFragment : Fragment() {
 
     private fun imageUpload() {
 
-
         val uploadTask = storage.reference.child("images").child("${auth.currentUser!!.uid}")
             .putFile(photoUri!!)
-
-
         uploadTask.addOnSuccessListener {
+            // 파일 저장 성공 시 이벤트
             Log.d("xxxx", " img upload successful ")
-            Log.d("xxxx", " img upload successful img : ${it}")
         }.addOnFailureListener {
+            // 파일 저장 실패 시 이벤트
             Log.d("xxxx", " img upload failure : $it ")
         }
-
-
     }
 
     private fun getTime(): String {
