@@ -19,7 +19,13 @@ import java.util.Date
 class HomeAdapter(private val context: Context):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+
     private var homeDataItem: ArrayList<PostData> = ArrayList()
+    private var itemClickListener: ((String) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (String) -> Unit) {
+        itemClickListener = listener
+    }
 
     fun postDataFromFirestore() {
 
@@ -69,6 +75,7 @@ class HomeAdapter(private val context: Context):
         return homeDataItem.size
     }
 
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val homeItem = homeDataItem[position]
         val homeHolder = holder as HomeHolder
@@ -91,6 +98,9 @@ class HomeAdapter(private val context: Context):
         homeHolder.subtitle.text = homeItem.mainText
         homeHolder.category.text = homeItem.category
         homeHolder.value.text = homeItem.value.toString()
+        homeHolder.itemView.setOnClickListener {
+            itemClickListener?.invoke(homeItem.id)
+        }
 
     }
 
@@ -103,4 +113,5 @@ class HomeAdapter(private val context: Context):
         val category = binding.writeCategory
         val image = binding.writeImage
     }
+
 }

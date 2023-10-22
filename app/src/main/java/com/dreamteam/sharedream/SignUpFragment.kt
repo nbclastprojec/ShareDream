@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,35 +22,47 @@ class SignUpFragment : Fragment() {
 
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding= FragmentSignupBinding.inflate(inflater,container,false)
-        auth = FirebaseAuth.getInstance() //
+        auth = FirebaseAuth.getInstance()
 
+
+        binding.agree1.setOnClickListener{
+            val agreeDialog=AgreeFragment()
+            agreeDialog.show(requireActivity().supportFragmentManager,"Agree1")
+        }
+        binding.agree2.setOnClickListener{
+            val agreeDialog=PersonalAgree()
+            agreeDialog.show(requireActivity().supportFragmentManager,"Agree2")
+        }
 
 
         binding.btnSignup.setOnClickListener {
             val email=binding.editEmail.text.toString()
             val password=binding.editPassword.text.toString()
-            val nickname=binding.nickname.text.toString()
+            val id=binding.eidtId.text.toString()
             val number=binding.editPhoneNumber.text.toString()
-            val user=auth.currentUser
-            val uid=user?.uid
-            val firestore=FirebaseFirestore.getInstance()
-            val userCollection=firestore.collection("UserData")
-            val userDocument = userCollection.document(uid?:"vCi5OvWi8tj91J6mQRV0")
+
             if(check()){
                 auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
                     if(it.isSuccessful){
+                        val user=auth.currentUser
+                        val uid=user?.uid
+                        val firestore=FirebaseFirestore.getInstance()
+                        val userCollection=firestore.collection("UserData")
+                        val userDocument = userCollection.document(uid?:"")
 
 
 
                         val userData= hashMapOf(
                             "email" to email,
                             "number" to number,
-                            "nickName" to nickname
+                            "id" to id,
+                            "password" to password
                         )
 
                         userDocument.set(userData).addOnSuccessListener {
@@ -70,10 +83,13 @@ class SignUpFragment : Fragment() {
 
             }
         }
+
+
         return binding.root
     }
 
     private fun check():Boolean {
+        val checkbox=binding.checkBox
         val email = binding.editEmail.text.toString()
         val password = binding.editPassword.text.toString()
         val passwordCk=binding.editPasswordCheck.text.toString()
@@ -100,7 +116,11 @@ class SignUpFragment : Fragment() {
             binding.editPassword.error="핸드폰 번호는 숫자로만 이루어져야 합니다."
             return false
 
-        } else {
+
+        } else if (!checkbox.isChecked) {
+            Toast.makeText(requireContext(),"약관동의를 체크해주세요.",Toast.LENGTH_SHORT).show()
+            return false
+        }else {
             Toast.makeText(requireContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
             auth.signOut()
             val loginFragment=LoginFragment()
@@ -127,3 +147,6 @@ class SignUpFragment : Fragment() {
         return text.all {it.isDigit()}
     }
 }
+
+
+
