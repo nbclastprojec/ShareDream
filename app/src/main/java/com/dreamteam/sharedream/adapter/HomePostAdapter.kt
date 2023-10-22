@@ -35,7 +35,7 @@ class HomePostAdapter(private val postClick: PostClick) :
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price
-            postImg.load(positionItem.img)
+            postImg.load(positionItem.imgs)
         }
     }
 

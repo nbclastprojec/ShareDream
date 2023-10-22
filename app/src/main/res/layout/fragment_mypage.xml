@@ -100,7 +100,7 @@
         android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/tradepage_button2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView14" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_btn_feed" />
 
     <TextView
         android:id="@+id/tradepage_button2"
@@ -141,7 +141,7 @@
         app:srcCompat="@drawable/circle" />
 
     <ImageView
-        android:id="@+id/imageView14"
+        android:id="@+id/mypage_btn_feed"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="60dp"

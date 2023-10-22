@@ -37,7 +37,7 @@ class EditFragment : Fragment() {
     private var db = Firebase.firestore
     private lateinit var storage: FirebaseStorage
 
-    private var uris: List<Uri>? = null
+    private var uris: MutableList<Uri>? = mutableListOf()
     private var imgs: MutableList<String> = mutableListOf()
 
     private lateinit var writePostImgAdapter: WritePostImageAdapter
@@ -86,7 +86,7 @@ class EditFragment : Fragment() {
     private val pickMultipleMedia =
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uriList ->
             if (uriList.isNotEmpty()) {
-                uris = uriList
+                uris!!.addAll(uriList)
                 Log.d("xxxx", "Edit Frag Number of items selected : ${uriList.size} ")
                 writePostImgAdapter.submitList(uriList)
                 writePostImgAdapter.notifyDataSetChanged()
@@ -112,14 +112,14 @@ class EditFragment : Fragment() {
             postAddress,
             postDeadline,
             postDesc,
-            postImg
+            postImg,
         )
-
 
         db.collection("Posts")
             .add(post)
             .addOnSuccessListener {
                 Log.d("xxxx", "postUpload: added with : ${it}")
+                requireActivity().supportFragmentManager.beginTransaction().replace(R.id.main_frame_layout,HomeFragment()).commit()
             }
     }
 

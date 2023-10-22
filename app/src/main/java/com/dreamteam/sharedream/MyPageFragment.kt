@@ -100,6 +100,12 @@ class MyPageFragment : Fragment() {
                 .replace(R.id.main_frame_layout, MyPageEditFragment()).commit()
         }
 
+        // 내가 쓴 글로 이동
+        binding.mypageBtnFeed.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_frame_layout, MyPostFeedFragment()).commit()
+        }
+
         // 로그아웃 버튼
         binding.logoutButton.setOnClickListener {
             var builder = AlertDialog.Builder(requireContext())
