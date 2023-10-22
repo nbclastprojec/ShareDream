@@ -35,12 +35,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
-        android:text="전화번호"
+        android:text="아이디"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
     <EditText
-        android:id="@+id/edit_email"
+        android:id="@+id/edit_id"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:background="@drawable/login_editbox"
@@ -58,7 +58,7 @@
         android:layout_marginStart="30dp"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_email" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_id" />
     <EditText
         android:id="@+id/edit_password"
         android:layout_width="320dp"

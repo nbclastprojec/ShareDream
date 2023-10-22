@@ -1,6 +1,7 @@
 package com.dreamteam.sharedream.model
 
 data class PostData(
+    val id:String,
     val title: String,
     val value: Int,
     val category: String,
@@ -8,5 +9,5 @@ data class PostData(
     val mainText: String,
     val image: String
 ) {
-    constructor() : this("", 0, "", "", "","")
+    constructor() : this("","", 0, "", "", "","")
 }

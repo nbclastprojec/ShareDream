@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="72dp"
+            android:layout_height="58dp"
+            android:src="@drawable/trade"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toStartOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="47dp"
+            android:text="아이디 찾기"
+            android:textSize="28sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="20dp"
+            android:text="이메일"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전화번호"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@+id/edit_number"
+            app:layout_constraintEnd_toEndOf="@+id/edit_number"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/edit_number"
+            app:layout_constraintTop_toBottomOf="@+id/edit_email" />
+
+        <EditText
+            android:id="@+id/edit_email"
+            android:layout_width="320dp"
+            android:layout_height="40dp"
+            android:background="@drawable/login_editbox"
+            android:ems="10"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+
+        <EditText
+            android:id="@+id/edit_number"
+            android:layout_width="320dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/login_editbox"
+            android:ems="10"
+
+
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="@+id/edit_email"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/edit_email"
+            app:layout_constraintTop_toBottomOf="@+id/edit_email"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        <ImageView
+            android:id="@+id/passwordFindBorder"
+            android:layout_width="312dp"
+            android:layout_height="256dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="46dp"
+            android:layout_marginEnd="53dp"
+            android:layout_marginBottom="40dp"
+            android:src="@drawable/send_email_box"
+            app:layout_constraintBottom_toTopOf="@+id/btn_find_id"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_number" />
+
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="이메일,전화번호를 적어주세요!"
+            app:layout_constraintEnd_toEndOf="@+id/passwordFindBorder"
+            app:layout_constraintHorizontal_bias="0.514"
+            app:layout_constraintStart_toStartOf="@+id/passwordFindBorder"
+            app:layout_constraintTop_toTopOf="@+id/passwordFindBorder" />
+
+        <View
+            android:id="@+id/view5"
+            android:layout_width="312dp"
+            android:layout_height="7px"
+            android:layout_marginTop="5dp"
+            android:background="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/passwordFindBorder"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/passwordFindBorder"
+            app:layout_constraintTop_toBottomOf="@+id/text_view" />
+
+        <Button
+            android:id="@+id/btn_find_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/loginbtn"
+            android:text="아이디 찾기"
+            android:gravity="center"
+            android:textSize="23sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/passwordFindSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전화번호와 이메일을 적어주세요!\n대상확인 후 일치하는 아이디를 찾아드릴게요!    "
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/passwordFindBorder"
+            app:layout_constraintEnd_toEndOf="@+id/passwordFindBorder"
+            app:layout_constraintHorizontal_bias="0.56"
+            app:layout_constraintStart_toStartOf="@+id/passwordFindBorder"
+            app:layout_constraintTop_toBottomOf="@+id/view5"
+            app:layout_constraintVertical_bias="0.171"
+            tools:ignore="TextSizeCheck" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
