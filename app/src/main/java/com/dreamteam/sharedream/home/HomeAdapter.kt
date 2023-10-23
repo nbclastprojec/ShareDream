@@ -1,13 +1,19 @@
 package com.dreamteam.sharedream.home
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.dreamteam.sharedream.DetailFrameActivity
+import com.dreamteam.sharedream.DetailPageFragment
+import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.WriteItemBinding
 import com.dreamteam.sharedream.model.PostData
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,7 +36,7 @@ class HomeAdapter(private val context: Context):
     fun postDataFromFirestore() {
 
         val fireStore = FirebaseFirestore.getInstance()
-        fireStore.collection("Post").get()
+        fireStore.collection("Posts").get()
             .addOnSuccessListener { result ->
 
                 Log.d("postDataFromFirestore", "nyh postDataFromFirestore suc: $result")
@@ -100,6 +106,13 @@ class HomeAdapter(private val context: Context):
         homeHolder.value.text = homeItem.value.toString()
         homeHolder.itemView.setOnClickListener {
             itemClickListener?.invoke(homeItem.id)
+
+
+            val sendValue = homeItem.value.toString()
+            val intent = Intent(context, DetailFrameActivity::class.java)
+            intent.putExtra("value", sendValue)
+            context.startActivity(intent)
+            Log.d("document12","documentId:$sendValue")
         }
 
     }

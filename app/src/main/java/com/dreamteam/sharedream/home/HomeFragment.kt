@@ -2,6 +2,7 @@ package com.dreamteam.sharedream.home
 
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dreamteam.sharedream.DetailFrameActivity
+import com.dreamteam.sharedream.DetailPageFragment
+import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import com.dreamteam.sharedream.home.Edit.HomeViewModel
 
@@ -59,5 +63,11 @@ class HomeFragment : Fragment() {
             LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         binding.homeRecycle.adapter = homeAdapter
 
+        homeAdapter.setOnItemClickListener {
+            val intent= Intent(requireContext(),DetailFrameActivity::class.java)
+            startActivity(intent)
+
+
     }
+}
 }

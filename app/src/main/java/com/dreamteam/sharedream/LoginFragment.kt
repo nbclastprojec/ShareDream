@@ -54,7 +54,7 @@ class LoginFragment : Fragment() {
             val password = binding.editPassword.text.toString()
 
             if (check()) {
-                findEmail(id, password)
+                findEmail(id)
                     .addOnCompleteListener { Task ->
                         if (Task.isSuccessful) {
                             val email = Task.result
@@ -122,11 +122,11 @@ class LoginFragment : Fragment() {
         }
     }
 
-    fun findEmail(id: String, password: String): Task<String> {
+    fun findEmail(id: String): Task<String> {
         val db = FirebaseFirestore.getInstance()
         val ud = db.collection("UserData")
 
-        val query: Query = ud.whereEqualTo("id", id).whereEqualTo("password", password)
+        val query: Query = ud.whereEqualTo("id", id)
 
         return query.get().continueWith { task ->
             if (task.isSuccessful) {
