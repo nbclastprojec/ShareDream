@@ -1,7 +1,11 @@
 package com.dreamteam.sharedream
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,17 +22,24 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
+import java.io.File
+import java.io.FileOutputStream
 
 
 class SignUpFragment : Fragment() {
     private lateinit var binding:FragmentSignupBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var storage : FirebaseStorage
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-
-
+        storage = Firebase.storage
+    }
 
 
     override fun onCreateView(
@@ -142,6 +153,7 @@ class SignUpFragment : Fragment() {
 
         }
 
+
     }
     private fun createAccount(){
         auth.createUserWithEmailAndPassword(binding.editEmail.text.toString(),binding.editPassword.text.toString()).addOnCompleteListener {
@@ -153,18 +165,18 @@ class SignUpFragment : Fragment() {
                 val userDocument = userCollection.document(uid?:"")
 
 
-
                 val userData= hashMapOf(
                     "email" to binding.editEmail.text.toString(),
                     "number" to binding.editPhoneNumber.text.toString(),
                     "id" to binding.eidtId.text.toString(),
+                    "nickname" to "",
+                    "intro" to "",
                 )
 
                 userDocument.set(userData).addOnSuccessListener {
                     Toast.makeText(requireContext(),"회원가입 성공",Toast.LENGTH_SHORT).show()
 
-
-
+                    imageUpload()
                 }
                     .addOnFailureListener { e->
 
@@ -176,8 +188,39 @@ class SignUpFragment : Fragment() {
             }
         }
     }
+    private fun imageUpload() {
+
+        val defaultImageUri: Uri = drawableToUri(requireContext(), R.drawable.profile_circle)
+        Log.d("xxxx", "imageUpload uid : ${auth.currentUser!!.uid} uri : $defaultImageUri")
+        val uploadTask = storage.reference.child("ProfileImg").child("${auth.currentUser!!.uid}")
+            .putFile(defaultImageUri!!)
+        uploadTask.addOnSuccessListener {
+            // 파일 저장 성공 시 이벤트
+            Log.d("xxxx", " img upload successful ")
+        }.addOnFailureListener {
+            // 파일 저장 실패 시 이벤트
+            Log.d("xxxx", " img upload failure : $it ")
+        }
+    }
 
 
+    fun drawableToUri(context: Context, drawableId: Int): Uri {
+        val resources = context.resources
+        val drawable = resources.getDrawable(drawableId, null)
+        val bitmap = (drawable as BitmapDrawable).bitmap
+
+        // 비트맵을 파일로 저장하고 해당 파일의 URI 생성
+        val file = File(context.cacheDir, "temp_image.png")
+        file.createNewFile()
+
+        val outputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+
+        outputStream.flush()
+        outputStream.close()
+
+        return Uri.fromFile(file)
+    }
 }
 
 
