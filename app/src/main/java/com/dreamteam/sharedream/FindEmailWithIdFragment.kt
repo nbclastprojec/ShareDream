@@ -69,7 +69,7 @@ class FindEmailWithIdFragment : Fragment() {
                             findEmailDialogFragment.arguments = bundle
                             findEmailDialogFragment.show(requireActivity().supportFragmentManager, "IdSend")
                         } else {
-                            Log.d("FindEmailWithIdFragment", "No 'id' field found in the document.")
+                            Log.d("FindEmailWithIdFragment", "일치하는 아이디가 없어요.")
                         }
                     } else {
                         Log.d("FindEmailWithIdFragment", "No matching user found.")
