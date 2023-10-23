@@ -42,6 +42,8 @@ class SeachFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //어댑터 초기화!해야됨!
+
         searchadapter = SeachAdapter(mContext)
         val searchEdit = binding.editTextText
 
@@ -49,14 +51,7 @@ class SeachFragment : Fragment() {
             LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         binding.searchRecycler.adapter = searchadapter
 
-        binding.btnSearch.setOnClickListener {
-            val query = searchEdit.text.toString()
-            Log.d("nyh", "onCreateView: searchbtnClick qurye = $query")
-            if (query.isNotEmpty()) {
-                searchTitle(query)
-            }
-        }
-
+        // 검색어 필수 메서드
         searchEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
@@ -65,6 +60,7 @@ class SeachFragment : Fragment() {
             }
 
             override fun afterTextChanged(p0: Editable?) {
+                //검색어 입력 후 searchTitle 실행
                 val query = p0.toString()
                 if (query.isNotEmpty()) {
                     searchTitle(query)
@@ -73,17 +69,18 @@ class SeachFragment : Fragment() {
                     Log.d("nyh", "afterTextChanged else: $p0 // $query")
                 }
             }
-
         })
-
     }
 
     private fun searchTitle(title: String) {
         val postCollection = firestore.collection("Post")
+        //query 객체 만들고 get으로 가져오기
         postCollection.whereEqualTo("title", title)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val searchList = mutableListOf<PostData>()
+
+                //for문으로 data를 searchList에 넣어주고 adapter로 전달하기
 
                 for (i in querySnapshot.documents) {
                     val data = i.toObject(PostData::class.java)
@@ -99,6 +96,5 @@ class SeachFragment : Fragment() {
                 Log.d("nyh", "searchTitle fail : $exception")
             }
     }
-
 
 }

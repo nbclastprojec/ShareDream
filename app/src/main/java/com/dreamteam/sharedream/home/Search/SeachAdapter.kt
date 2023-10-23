@@ -16,10 +16,8 @@ class SeachAdapter(private val context: Context) :
 
     private var searchDataItem: List<PostData> = ArrayList()
 
-    init {
-        searchDataItem = ArrayList()
-    }
 
+    // 외부에서 데이터 설정하는 함수
     fun setData(data: List<PostData>){
         searchDataItem = ArrayList(data)
         Log.d("nyh", "setDataSearchAdpater: $data")
