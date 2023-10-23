@@ -7,12 +7,17 @@ import com.dreamteam.sharedream.model.PostData
 
 class HomeViewModel : ViewModel() {
 
-    private val _refreshData = MutableLiveData<Boolean>()
+    private val _refreshData = MutableLiveData<Boolean>()//새로고침
 
     val refreshData: MutableLiveData<Boolean>
         get() = _refreshData
 
+    fun refreshRecyclerView() {
+        _refreshData.value = true//새로고침중
+    }
+
+
     fun onRefreshComplete() {
-        _refreshData.value = false
+        _refreshData.value = false//새로고침완료
     }
 }

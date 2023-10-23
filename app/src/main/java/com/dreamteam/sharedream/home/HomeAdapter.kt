@@ -2,12 +2,19 @@ package com.dreamteam.sharedream.home
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.dreamteam.sharedream.DetailFrameActivity
+import com.dreamteam.sharedream.DetailPageFragment
+import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.WriteItemBinding
 import com.dreamteam.sharedream.model.PostData
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +29,10 @@ class HomeAdapter(private val context: Context) :
 
     private var homeDataItem: ArrayList<PostData> = ArrayList()
     private var filteredDataItem: List<PostData> = ArrayList()
+    private var itemClickListener: ((String) -> Unit)? = null
+    fun setOnItemClickListener(listener: (String) -> Unit) {
+        itemClickListener = listener
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun postDataFromFirestore() {
@@ -107,6 +118,17 @@ class HomeAdapter(private val context: Context) :
         homeHolder.subtitle.text = homeItem.mainText
         homeHolder.category.text = homeItem.category
         homeHolder.value.text = homeItem.value.toString()
+
+        homeHolder.itemView.setOnClickListener {
+
+
+            val sendValue = homeItem.value.toString()
+            val intent = Intent(context, DetailFrameActivity::class.java)
+            intent.putExtra("value", sendValue)
+            context.startActivity(intent)
+            Log.d("document12","documentId:$sendValue")
+        }
+
         Log.d("nyh", "onBindViewHolder: $homeItem")
     }
 
