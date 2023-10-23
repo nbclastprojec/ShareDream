@@ -17,7 +17,7 @@ import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import com.dreamteam.sharedream.home.Edit.HomeViewModel
 
-class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListener {
+class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var mContext: Context
     private lateinit var homeAdapter: HomeAdapter
@@ -77,19 +77,20 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
             filterDialogFragment.show(childFragmentManager, "filter_dialog_tag")
         }
     }
+
+
+}
     @SuppressLint("NotifyDataSetChanged")
     override fun onCategorySelected(category: String) {
         selectedCategory = category
-
-        // 선택된 카테고리로 항목을 filter한다
         if (category.isNotEmpty()) {
             homeAdapter.filterByCategory(category)
             Log.d("HomeFrag", "nyh category = $category")
-        } else {
+        }else {
             Log.d("nyh", "onCategorySelected: gg")
         }
         homeAdapter.notifyDataSetChanged()
-
     }
-}
+
+
 }

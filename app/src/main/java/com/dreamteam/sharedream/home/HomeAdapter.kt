@@ -29,12 +29,16 @@ class HomeAdapter(private val context: Context) :
 
     private var homeDataItem: ArrayList<PostData> = ArrayList()
     private var filteredDataItem: List<PostData> = ArrayList()
+    private var itemClickListener: ((String) -> Unit)? = null
+    fun setOnItemClickListener(listener: (String) -> Unit) {
+        itemClickListener = listener
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun postDataFromFirestore() {
 
         val fireStore = FirebaseFirestore.getInstance()
-        fireStore.collection("Posts").get()
+        fireStore.collection("Post").get()
             .addOnSuccessListener { result ->
 
                 Log.d("postDataFromFirestore", "nyh postDataFromFirestore suc: $result")
@@ -116,7 +120,6 @@ class HomeAdapter(private val context: Context) :
         homeHolder.value.text = homeItem.value.toString()
 
         homeHolder.itemView.setOnClickListener {
-            itemClickListener?.invoke(homeItem.id)
 
 
             val sendValue = homeItem.value.toString()
