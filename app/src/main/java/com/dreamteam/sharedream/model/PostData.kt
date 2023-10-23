@@ -1,15 +1,13 @@
 package com.dreamteam.sharedream.model
 
-import java.sql.Timestamp
-
 data class PostData(
+    val id:String,
     val title: String,
     val value: Int,
     val category: String,
     val during: String,
     val mainText: String,
-    var image: String,
-    val date:Timestamp
+    val image: String
 ) {
-    constructor() : this("", 0, "", "", "","",Timestamp(System.currentTimeMillis()))
+    constructor() : this("","", 0, "", "", "","")
 }
