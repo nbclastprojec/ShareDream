@@ -73,15 +73,18 @@ class HomeAdapter(private val context: Context) :
     fun filterByCategory(category: String) {
         if (category.isEmpty()) {
             Log.d("nyh", "filterByCategory: ${filteredDataItem.size}")
+            Log.d("nyh", "filterByCategory: ${filteredDataItem}")
             filteredDataItem = homeDataItem // 전체 데이터 표시
         } else {
             filteredDataItem = homeDataItem.filter { it.category == category }
+            Log.d("nyh", "filterByCategory else: ${filteredDataItem.size}")
+            Log.d("nyh", "filterByCategory else : ${filteredDataItem}")
         }
         notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val homeItem = homeDataItem[position]
+        val homeItem = filteredDataItem[position]
         val homeHolder = holder as HomeHolder
         val storage = Firebase.storage
         val fileName = homeItem.image

@@ -28,7 +28,7 @@ class EditActivity : AppCompatActivity() {
     private val maxNumber = 10
     lateinit var adapter: EditImageAdapter
     private lateinit var auth: FirebaseAuth
-    private val postData = PostData()
+    private var postData = PostData()
     private var imageUploadCount = 0
     private var totalImages = 0
 
@@ -161,7 +161,7 @@ class EditActivity : AppCompatActivity() {
 
         // 이미지 업로드 완료 시 데이터 넣기
         val onComplete: (String) -> Unit = { fileName ->
-            val edit = hashMapOf(
+            var edit = hashMapOf(
                 "title" to title,
                 "value" to value,
                 "category" to category,

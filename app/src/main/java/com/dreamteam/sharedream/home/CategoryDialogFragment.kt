@@ -37,6 +37,7 @@ class CategoryDialogFragment : DialogFragment() {
             val selectedCategory = selectedChip.text.toString()
             //selected된 값 전달
             categorySelectionListener?.onCategorySelected(selectedCategory)
+            Log.d("nyh", "onViewCreated: $selectedCategory")
             dismiss()
         }
     }
@@ -44,5 +45,6 @@ class CategoryDialogFragment : DialogFragment() {
     //home으로 기능 내보내기
     fun setCategorySelectionListener(listener: CategorySelectionListener) {
         categorySelectionListener = listener
+        Log.d("nyh", "setCategorySelectionListener: $listener")
     }
 }
