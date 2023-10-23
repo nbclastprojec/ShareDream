@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    >
 
     <View
         android:id="@+id/bar1"
@@ -60,7 +63,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/btnProfileImgEdit"
         android:layout_width="30dp"
         android:layout_height="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
@@ -72,10 +75,10 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-        app:layout_constraintEnd_toEndOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        app:layout_constraintBottom_toBottomOf="@+id/btnProfileImgEdit"
+        app:layout_constraintEnd_toEndOf="@+id/btnProfileImgEdit"
+        app:layout_constraintStart_toStartOf="@+id/btnProfileImgEdit"
+        app:layout_constraintTop_toTopOf="@+id/btnProfileImgEdit"
         app:srcCompat="@drawable/pencil" />
 
     <EditText

@@ -55,5 +55,9 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, EditActivity::class.java)
             startActivity(intent)
         }
+
+        binding.btnMypage.setOnClickListener {
+            supportFragmentManager.beginTransaction().add(R.id.frag_edit,MyPageFragment()).addToBackStack(null).commit()
+        }
     }
 }
