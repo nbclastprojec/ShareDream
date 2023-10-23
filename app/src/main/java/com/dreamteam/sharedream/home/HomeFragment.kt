@@ -2,6 +2,7 @@ package com.dreamteam.sharedream.home
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,9 +11,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dreamteam.sharedream.DetailFrameActivity
+import com.dreamteam.sharedream.DetailPageFragment
+import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 
-class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListener {
+class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var mContext: Context
     private lateinit var homeAdapter: HomeAdapter
@@ -59,6 +63,12 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
             LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         binding.homeRecycle.adapter = homeAdapter
 
+
+        homeAdapter.setOnItemClickListener {
+            val intent= Intent(requireContext(),DetailFrameActivity::class.java)
+            startActivity(intent)
+
+
         binding.btnFilter.setOnClickListener {
             val filterDialogFragment = CategoryDialogFragment()
             //다이얼로그에있는 리스너를 달아준다
@@ -67,17 +77,19 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
         }
     }
 
+
+}
     @SuppressLint("NotifyDataSetChanged")
     override fun onCategorySelected(category: String) {
         selectedCategory = category
-
-        // 선택된 카테고리로 항목을 filter한다
         if (category.isNotEmpty()) {
             homeAdapter.filterByCategory(category)
             Log.d("HomeFrag", "nyh category = $category")
-        } else {
+        }else {
             Log.d("nyh", "onCategorySelected: gg")
         }
         homeAdapter.notifyDataSetChanged()
     }
+
+
 }
