@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "578483592134",
+    "firebase_url": "https://sharedream-7c146-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "sharedream-7c146",
     "storage_bucket": "sharedream-7c146.appspot.com"
   },
@@ -12,7 +13,40 @@
           "package_name": "com.dreamteam.sharedream"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "578483592134-b7bqscok3c67oieon96nh951lbcgjc02.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dreamteam.sharedream",
+            "certificate_hash": "6c681de19b36c02973835dc5330e969e19ef10b6"
+          }
+        },
+        {
+          "client_id": "578483592134-hgs3jic2cj19u5k77k8pdstnh0t590ao.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dreamteam.sharedream",
+            "certificate_hash": "e56ba7f44899286a637f0afae1f19c6f311cdeba"
+          }
+        },
+        {
+          "client_id": "578483592134-ihsp157ui88kopjkuva1c02n5psluvoe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dreamteam.sharedream",
+            "certificate_hash": "1d1843382b737e97e4f967d4913f9f6817af2e64"
+          }
+        },
+        {
+          "client_id": "578483592134-ttv4ofcou46hsq0f8pjpgervgmgb4kl2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dreamteam.sharedream",
+            "certificate_hash": "cdcc41d39eff0c3b5f2cc0b6878adcad317a161c"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA6HxgO0YX9ZMIsU7IAqrrNg7a10X4R6oc"

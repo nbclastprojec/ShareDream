@@ -17,7 +17,7 @@ import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class HomeAdapter(private val context: Context):
+class HomeAdapter(private val context: Context) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var homeDataItem: ArrayList<PostData> = ArrayList()
@@ -35,12 +35,15 @@ class HomeAdapter(private val context: Context):
                 val newData = mutableListOf<PostData>()
                 for (i in result) {
                     if (i.exists()) {
-                        Log.d("postDataFromFirestore", "nyh postDataFromFirestore suc: ${newData.size}, $newData")
+                        Log.d(
+                            "postDataFromFirestore",
+                            "nyh postDataFromFirestore suc: ${newData.size}, $newData"
+                        )
                         val postData = i.toObject(PostData::class.java)
                         newData.add(postData)
                     }
                 }
-                imageDownload(newData)
+
                 homeDataItem.clear()
                 homeDataItem.addAll(newData)
                 //filterByCategory을 처음에 가져와서 여기서 써줘야 돌아간다!!
@@ -52,39 +55,10 @@ class HomeAdapter(private val context: Context):
                 Log.e("FirestoreAdapter", "Error getting documents: $e")
             }
     }
-    private fun imageDownload(dataList: List<PostData>) {
-        val auth = FirebaseAuth.getInstance()
-        val storage = Firebase.storage
-        val imageUrls = mutableMapOf<String, String>()
-
-        for (postData in dataList) {
-            if (postData.image != null && postData.image.isNotEmpty()) {
-                val imageReference = storage.reference.child("image").child(auth.uid!!).child(postData.image)
-
-                imageReference.downloadUrl.addOnFailureListener { uri ->
-                    imageUrls[postData.image] = uri.toString()
-
-                    if (imageUrls.size == dataList.size) {
-                        for (data in dataList) {
-                            data.image = imageUrls[data.image].toString()
-                        }
-                        homeDataItem.clear()
-                        homeDataItem.addAll(dataList)
-                        filterByCategory("")
-                        notifyDataSetChanged()
-                        Log.d("nyh", "imageDownload: $imageUrls")
-                        Log.d("nyh", "imageDownload imageReference: $imageReference")
-                    }
-                }.addOnFailureListener {
-                    Log.d("nyh", "imageDownload: $imageUrls")
-                }
-            }
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = WriteItemBinding.inflate(inflater,parent,false)
+        val binding = WriteItemBinding.inflate(inflater, parent, false)
         return HomeHolder(binding)
     }
 
@@ -110,18 +84,20 @@ class HomeAdapter(private val context: Context):
         val homeItem = homeDataItem[position]
         val homeHolder = holder as HomeHolder
         val storage = Firebase.storage
-        val storageRef = storage.getReference("image")
-        val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
-        val mountainRef = storageRef.child("${fileName}.png")
-        val downloadTask = mountainRef.downloadUrl
+        val fileName = homeItem.image
+        val storageRef = storage.getReference("image").child(fileName)
+        val downloadTask = storageRef.downloadUrl
 
         downloadTask.addOnSuccessListener { uri ->
 
             Glide.with(context)
-                .load(Uri.parse(homeItem.image))
+                .load(uri)
                 .into(homeHolder.image)
         }.addOnFailureListener {
-            Log.e("HomeAdpate", "nyh Glade imageDownload fail")
+            Log.e("HomeAdpate", "nyh Glade imageDownload fail homeitem.image =  ${homeItem.image}")
+            Log.e("HomeAdpate", "nyh Glade imageDownload fail it =  $it")
+            Log.d("nyh", "onBindViewHolder: $storageRef")
+            Log.d("nyh", "onBindViewHolder: $fileName")
         }
 
         homeHolder.title.text = homeItem.title
@@ -132,16 +108,13 @@ class HomeAdapter(private val context: Context):
     }
 
 
-    inner class HomeHolder(val binding : WriteItemBinding):
+    inner class HomeHolder(val binding: WriteItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        val title  = binding.writeTittle
+        val title = binding.writeTittle
         val subtitle = binding.writeSubtittle
         val value = binding.writePrice
         val category = binding.writeCategory
         val image = binding.writeImage
     }
-
-
 }
-
