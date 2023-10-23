@@ -9,12 +9,8 @@ class HomeViewModel : ViewModel() {
 
     private val _refreshData = MutableLiveData<Boolean>()
 
-    val refreshData: LiveData<Boolean>
+    val refreshData: MutableLiveData<Boolean>
         get() = _refreshData
-
-    fun refreshRecyclerView() {
-        _refreshData.value = true
-    }
 
     fun onRefreshComplete() {
         _refreshData.value = false

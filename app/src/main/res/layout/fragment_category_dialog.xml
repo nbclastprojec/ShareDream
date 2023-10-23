@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipgroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/cloths_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:checkable="true"
+            android:text="의류"
+            android:textSize="12sp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/machine_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:checkable="true"
+            android:text="가전제품"
+            android:textSize="12sp" />
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/sport_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:checkable="true"
+            android:text="스포츠"
+            android:textSize="12sp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/art_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:checkable="true"
+            android:text="예술"
+            android:textSize="12sp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/book_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:checkable="true"
+            android:text="독서"
+            android:textSize="12sp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/beauty_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:checkable="true"
+            android:text="뷰티"
+            android:textSize="12sp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/toy_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:checkable="true"
+            android:text="문구"
+            android:textSize="12sp" />
+    </com.google.android.material.chip.ChipGroup>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
