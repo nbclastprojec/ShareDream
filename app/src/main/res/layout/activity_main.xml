@@ -9,7 +9,7 @@
 
 
     <FrameLayout
-        android:id="@+id/frag_edit"
+        android:id="@+id/frag_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,8 +50,8 @@
                 app:layout_constraintStart_toEndOf="@+id/imageView5"
                 app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
-            <EditText
-                android:id="@+id/editTextText"
+            <View
+                android:id="@+id/editTextSearchView"
                 android:layout_width="280dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="5dp"
@@ -65,19 +65,19 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginEnd="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/editTextText"
-                app:layout_constraintEnd_toEndOf="@+id/editTextText"
-                app:layout_constraintTop_toTopOf="@+id/editTextText"
+                app:layout_constraintBottom_toBottomOf="@+id/editTextSearchView"
+                app:layout_constraintEnd_toEndOf="@+id/editTextSearchView"
+                app:layout_constraintTop_toTopOf="@+id/editTextSearchView"
                 app:srcCompat="@drawable/btn_search" />
 
             <ImageView
                 android:id="@+id/btn_home"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                app:layout_constraintBottom_toBottomOf="@+id/editTextText"
+                app:layout_constraintBottom_toBottomOf="@+id/editTextSearchView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/editTextText"
-                app:layout_constraintTop_toTopOf="@+id/editTextText"
+                app:layout_constraintStart_toEndOf="@+id/editTextSearchView"
+                app:layout_constraintTop_toTopOf="@+id/editTextSearchView"
                 app:srcCompat="@drawable/btn_home" />
 
             <View
@@ -88,8 +88,7 @@
                 android:background="@color/gray900"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText" />
-
+                app:layout_constraintTop_toBottomOf="@+id/editTextSearchView" />
 
 
             <com.google.android.material.tabs.TabLayout
@@ -146,7 +145,7 @@
                 android:layout_marginBottom="2dp"
                 android:text="Button"
                 app:layout_constraintBottom_toTopOf="@+id/tabLayout"
-                app:layout_constraintEnd_toStartOf="@+id/editTextText"
+                app:layout_constraintEnd_toStartOf="@+id/editTextSearchView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
