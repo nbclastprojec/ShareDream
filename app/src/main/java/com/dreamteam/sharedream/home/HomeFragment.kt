@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
-import com.dreamteam.sharedream.home.Edit.HomeViewModel
 
 class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListener {
     private lateinit var binding: FragmentHomeBinding
