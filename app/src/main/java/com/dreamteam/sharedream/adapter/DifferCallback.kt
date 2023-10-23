@@ -11,7 +11,7 @@ object DifferCallback {
         }
 
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
-            return oldItem.deadline == newItem.deadline
+            return oldItem.uploadDate == newItem.uploadDate
         }
     }
 

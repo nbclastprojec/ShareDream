@@ -10,13 +10,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/post_feed_rcv"
         android:layout_width="411dp"
-        android:layout_height="655dp"
-        android:layout_marginTop="20dp"
-        tools:listitem="@layout/rcv_item_post"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bar1">
+        app:layout_constraintTop_toBottomOf="@+id/writepage_title"
+        tools:listitem="@layout/rcv_item_post">
 
     </androidx.recyclerview.widget.RecyclerView>
 

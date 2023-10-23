@@ -54,8 +54,8 @@ class MyPostFeedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.writepageTitle.setOnClickListener {
-            downloadPostInfo()
+        binding.backButtonWritepage.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.main_frame_layout,MyPageFragment()).commit()
         }
 
     }
@@ -83,6 +83,7 @@ class MyPostFeedFragment : Fragment() {
                                 document.data?.get("deadline") as String,
                                 document.data?.get("desc") as String,
                                 document.data?.get("imgs") as List<String>,
+                                document.data?.get("uploadDate") as String,
 //                                document.data?.get("thumbnail") as Uri
                             )
                         )
@@ -101,7 +102,7 @@ class MyPostFeedFragment : Fragment() {
     }
 
     private fun setupRcv() {
-        myPostFeedAdapter = MyPostFeedAdapter(binding.root,object : PostClick {
+        myPostFeedAdapter = MyPostFeedAdapter(object : PostClick {
             override fun postClick(post: Post) {
                 Log.d("xxxx", "postClick: ")
             }
@@ -115,5 +116,7 @@ class MyPostFeedFragment : Fragment() {
             adapter = myPostFeedAdapter
             addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
         }
+
+        downloadPostInfo()
     }
 }

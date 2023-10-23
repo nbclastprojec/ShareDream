@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -7,11 +8,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.databinding.RcvItemPostBinding
 import com.dreamteam.sharedream.model.Post
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 
 class HomePostAdapter(private val postClick: PostClick) :
     ListAdapter<Post, HomePostAdapter.HomePostRcvViewHolder>(DifferCallback.differCallback) {
+
+    private val storage = Firebase.storage
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomePostRcvViewHolder {
         return HomePostRcvViewHolder(
@@ -35,8 +42,9 @@ class HomePostAdapter(private val postClick: PostClick) :
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price
-            postImg.load(positionItem.imgs)
         }
+
+        holder.bind(positionItem.imgs.first())
     }
 
     inner class HomePostRcvViewHolder(binding: RcvItemPostBinding) :
@@ -46,5 +54,17 @@ class HomePostAdapter(private val postClick: PostClick) :
         val postPrice: TextView = binding.postPrice
         val postCategory: TextView = binding.postCategory
         val postImg: ImageView = binding.postImg
+
+        fun bind(imagePath : String) {
+            storage.reference.child("post").child("$imagePath").downloadUrl.addOnSuccessListener { uri ->
+                Glide.with(itemView)
+                    .load(uri)
+                    .into(postImg)
+            }.addOnFailureListener {
+                Log.d("xxxx", " adapter bind Failure $it")
+            }
+
+
+        }
     }
 }

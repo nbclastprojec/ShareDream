@@ -97,13 +97,13 @@ class MyPageFragment : Fragment() {
         // 내정보 수정 페이지로 이동
         binding.mypageEditButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.main_frame_layout, MyPageEditFragment()).commit()
+                .replace(R.id.main_frame_layout, MyPageEditFragment()).addToBackStack("myPageEdit").commit()
         }
 
         // 내가 쓴 글로 이동
         binding.mypageBtnFeed.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.main_frame_layout, MyPostFeedFragment()).commit()
+                .replace(R.id.main_frame_layout, MyPostFeedFragment()).addToBackStack(null).commit()
         }
 
         // 로그아웃 버튼
@@ -129,7 +129,8 @@ class MyPageFragment : Fragment() {
         }
 
         binding.backButtonMypage.setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.main_frame_layout,MyPageFragment())
+            parentFragmentManager.beginTransaction().remove(this).commit()
+//            parentFragmentManager.popBackStack()
         }
 
     }

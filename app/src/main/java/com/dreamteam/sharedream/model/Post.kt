@@ -9,4 +9,5 @@ data class Post(
     val deadline : String,
     val desc : String,
     val imgs : List<String>,
+    val uploadDate : String,
 )

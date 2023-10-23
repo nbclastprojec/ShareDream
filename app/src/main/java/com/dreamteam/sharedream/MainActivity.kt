@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             { tab, position -> tab.text = tabTitles[position] }).attach()
 
         binding.btnHome.setOnClickListener {
-            supportFragmentManager.beginTransaction().replace(R.id.main_frame_layout,MyPageFragment()).addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().add(R.id.main_frame_layout,MyPageFragment()).addToBackStack(null).commit()
         }
 
     }

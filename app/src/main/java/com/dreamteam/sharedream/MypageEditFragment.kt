@@ -117,7 +117,8 @@ class MyPageEditFragment : Fragment() {
         binding.backButtonProfile.setOnClickListener {
             val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
-            parentFragmentManager.beginTransaction().replace(R.id.main_frame_layout, MyPageFragment()).commit()
+//            parentFragmentManager.beginTransaction().remove(R.id.main_frame_layout, MyPageFragment()).commit()
+            parentFragmentManager.popBackStack()
         }
     }
 

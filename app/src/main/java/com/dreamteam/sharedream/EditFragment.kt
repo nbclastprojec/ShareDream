@@ -1,5 +1,7 @@
 package com.dreamteam.sharedream
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +40,7 @@ class EditFragment : Fragment() {
     private var db = Firebase.firestore
     private lateinit var storage: FirebaseStorage
 
-    private var uris: MutableList<Uri>? = mutableListOf()
+    private var uris: MutableList<Uri> = mutableListOf()
     private var imgs: MutableList<String> = mutableListOf()
 
     private lateinit var writePostImgAdapter: WritePostImageAdapter
@@ -68,7 +71,14 @@ class EditFragment : Fragment() {
 
         // 이미지 선택
         binding.writeBtnAddImg.setOnClickListener {
+            uris = mutableListOf()
             pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+//
+//            val intent = Intent(Intent.ACTION_PICK)
+//            intent.type = "image/*"
+//
+//            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+//            activityResult.launch(intent)
         }
 
         // 게시글 작성 완료
@@ -76,26 +86,48 @@ class EditFragment : Fragment() {
             imageUpload()
         }
 
-        binding.editFragMenuTitme.setOnClickListener {
-            Log.d("xxxx", " title 클릭 ")
-            postUpload()
+        binding.writeBtnBackspace.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
 
+    }
+
+    private val activityResult : ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ){
+        if (it.resultCode == RESULT_OK) {
+            if (it.data!!.clipData != null){
+                val count = it.data!!.clipData!!.itemCount
+
+                for (i in 0 until count) {
+                    uris.add(it.data!!.clipData!!.getItemAt(i).uri)
+                }
+             }
+            else {
+                it.data!!.data?.let { singleUri -> uris.add(singleUri) }
+             }
+        }
+        writePostImgAdapter.submitList(uris)
+        writePostImgAdapter.notifyDataSetChanged()
     }
 
     private val pickMultipleMedia =
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uriList ->
             if (uriList.isNotEmpty()) {
-                uris!!.addAll(uriList)
-                Log.d("xxxx", "Edit Frag Number of items selected : ${uriList.size} ")
-                writePostImgAdapter.submitList(uriList)
+                uriList.forEach {uri ->
+                    Log.d("xxxx", "Selected URI: $uri")
+                }
+                uris = uriList.toMutableList()
+
+                Log.d("xxxx", "Edit Frag Number of items selected : ${uris} ")
+                writePostImgAdapter.submitList(uris)
                 writePostImgAdapter.notifyDataSetChanged()
             } else {
                 Log.d("xxxx", "Edit Frag No media selected: ")
             }
         }
 
-    private fun postUpload() {
+    private fun postUpload(time: String) {
         val postUid = auth.currentUser!!.uid
         val postTitle = binding.writeTitle.text.toString()
         val postPrice = binding.writePrice.text.toString()
@@ -103,7 +135,7 @@ class EditFragment : Fragment() {
         val postAddress = binding.writeAddress.text.toString()
         val postDeadline = binding.writeDeadline.text.toString()
         val postDesc = binding.writeDesc.text.toString()
-        val postImg: List<String> = imgs.toList()
+        val postImg: List<String> = imgs.toList().reversed()
         val post: Post = Post(
             postUid,
             postTitle,
@@ -113,13 +145,16 @@ class EditFragment : Fragment() {
             postDeadline,
             postDesc,
             postImg,
+            time
         )
 
         db.collection("Posts")
             .add(post)
             .addOnSuccessListener {
                 Log.d("xxxx", "postUpload: added with : ${it}")
-                requireActivity().supportFragmentManager.beginTransaction().replace(R.id.main_frame_layout,HomeFragment()).commit()
+                requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+
+
             }
     }
 
@@ -127,8 +162,8 @@ class EditFragment : Fragment() {
 
         val time = getTime()
         uris?.let { uris ->
-            for (i in uris.indices) {
-                val uri = uris[i]
+            for (i in uris) {
+                val uri = i
                 val fileName = "${time}_$i"
 
                 imgs.add(fileName)
@@ -139,7 +174,7 @@ class EditFragment : Fragment() {
                     Log.d("xxxx", " Edit Frag imageUpload Failure : $it ")
                 }
             }
-            postUpload()
+            postUpload(time)
         }
         Log.d("xxxx", " Edit Frag Post Info Img : $imgs ")
         Log.d("xxxx", "Edit Frag Post Info uris : $uris")
@@ -163,7 +198,7 @@ class EditFragment : Fragment() {
     private fun getTime(): String {
         val currentDateTime = Calendar.getInstance().time
         val dateFormat =
-            SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA).format(currentDateTime)
+            SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS", Locale.KOREA).format(currentDateTime)
 
         return dateFormat
     }

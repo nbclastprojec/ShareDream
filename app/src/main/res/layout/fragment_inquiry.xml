@@ -11,11 +11,12 @@
         android:layout_width="60dp"
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/button2"
         android:fontFamily="@font/bbing"
         android:text="취소"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
-        tools:layout_editor_absoluteX="266dp" />
+        app:layout_constraintEnd_toStartOf="@+id/help_sendButton"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
     <TextView
         android:id="@+id/help_tittle"
@@ -159,12 +160,12 @@
         android:id="@+id/help_sendButton"
         android:layout_width="60dp"
         android:layout_height="30dp"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="15dp"
         android:background="@drawable/button2"
         android:fontFamily="@font/bbing"
         android:text="보내기"
-        app:layout_constraintStart_toEndOf="@+id/help_cancelButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
     <ScrollView

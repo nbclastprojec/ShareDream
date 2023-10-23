@@ -9,15 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.databinding.RcvItemPostBinding
 import com.dreamteam.sharedream.model.Post
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 
-class MyPostFeedAdapter(itemView: View, private val postClick: PostClick) :
+class MyPostFeedAdapter(private val postClick: PostClick) :
     ListAdapter<Post, MyPostFeedAdapter.MyPostFeedRcvViewHolder>(DifferCallback.differCallback) {
 
     private val storage = Firebase.storage
@@ -34,7 +32,6 @@ class MyPostFeedAdapter(itemView: View, private val postClick: PostClick) :
                 Glide.with(itemView)
                     .load(uri)
                     .into(postImg)
-                Log.d("xxxx", " adapter bind: $uri")
             }.addOnFailureListener {
                 Log.d("xxxx", " adapter bind Failure $it")
             }
@@ -66,9 +63,7 @@ class MyPostFeedAdapter(itemView: View, private val postClick: PostClick) :
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price
-//            postImg.load(positionItem.thumbnail)
+            bind(positionItem.imgs.first())
         }
-        holder.bind(positionItem.imgs.last())
-        Log.d("xxxx", "onBindViewHolder: ${positionItem.imgs.last()}")
     }
 }
