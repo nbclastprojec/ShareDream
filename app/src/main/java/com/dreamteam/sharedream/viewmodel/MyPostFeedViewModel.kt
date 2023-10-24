@@ -1,4 +1,4 @@
-package com.dreamteam.sharedream.view
+package com.dreamteam.sharedream.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -19,6 +19,7 @@ class MyPostFeedViewModel : ViewModel() {
     private val _postFeedResult = MutableLiveData<MutableList<PostData>>()
     val postFeedResult: LiveData<MutableList<PostData>> get() = _postFeedResult
 
+    var currentPost = MutableLiveData<PostData>()
     fun postFeedDownload() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -41,6 +42,7 @@ class MyPostFeedViewModel : ViewModel() {
                                         // todo img 리스트로 변경하여 여러 이미지 저장
                                         document.data?.get("image") as String,
                                         " ",
+                                        listOf()
                                     )
                                 )
                             }
