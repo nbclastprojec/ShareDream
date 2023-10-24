@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
 
+
         }
 
         TabLayoutMediator(
@@ -58,10 +59,14 @@ class MainActivity : AppCompatActivity() {
         binding.editTextSearchView.setOnClickListener {
 
             supportFragmentManager.beginTransaction()
-                .replace(R.id.frag_search,SeachFragment())
+                .replace(R.id.frag_edit,SeachFragment())
                 .addToBackStack(null)
                 .commit()
 
+        }
+
+        binding.btnMypage.setOnClickListener {
+            supportFragmentManager.beginTransaction().add(R.id.frag_edit,MyPageFragment()).addToBackStack(null).commit()
         }
     }
 }

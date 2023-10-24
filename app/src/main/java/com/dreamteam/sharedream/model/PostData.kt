@@ -7,7 +7,9 @@ data class PostData(
     val category: String,
     val during: String,
     val mainText: String,
-    var image: String
-) {
-    constructor() : this("","", 0, "", "", "","")
+    var image: String,
+    var uploadDate : String,
+)
+{
+    constructor() : this("","", 0, "", "", "","","")
 }

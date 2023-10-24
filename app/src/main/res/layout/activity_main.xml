@@ -9,7 +9,7 @@
 
 
     <FrameLayout
-        android:id="@+id/frag_search"
+        android:id="@+id/frag_edit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -71,7 +71,7 @@
                 app:srcCompat="@drawable/btn_search" />
 
             <ImageView
-                android:id="@+id/btn_home"
+                android:id="@+id/btn_mypage"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 app:layout_constraintBottom_toBottomOf="@+id/editTextSearchView"

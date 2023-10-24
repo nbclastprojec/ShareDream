@@ -3,8 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    >
 
+    <TextView
+        android:id="@+id/btn_delete_account"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="190dp"
+        android:fontFamily="@font/bbing"
+        android:gravity="center_vertical"
+        android:paddingStart="42dp"
+        android:text="회원탈퇴"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/logout_icon3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/logout_icon3"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signout" />
+
+    <ImageView
+        android:id="@+id/logout_icon3"
+        android:layout_width="28dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signout"
+        app:srcCompat="@drawable/outimage" />
 
     <ImageView
         android:id="@+id/imageView18"
@@ -16,40 +45,49 @@
         app:srcCompat="@drawable/add" />
 
     <TextView
-        android:id="@+id/logout_button"
-        android:layout_width="50dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="25dp"
+        android:id="@+id/btn_signout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="190dp"
         android:fontFamily="@font/bbing"
+        android:gravity="center_vertical"
+        android:paddingStart="42dp"
         android:text="로그아웃"
         android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/logout_icon"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/help_button" />
+        app:layout_constraintTop_toTopOf="@+id/logout_icon" />
+
 
     <ImageView
         android:id="@+id/logout_icon"
         android:layout_width="28dp"
         android:layout_height="31dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/help_iconButton"
+        app:layout_constraintTop_toBottomOf="@+id/btn_inquiry"
         app:srcCompat="@drawable/outimage" />
 
     <TextView
-        android:id="@+id/help_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="25dp"
+        android:id="@+id/btn_inquiry"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="190dp"
         android:fontFamily="@font/bbing"
+        android:gravity="center_vertical"
+        android:paddingStart="42dp"
         android:text="1:1 문의"
         android:textColor="@color/black"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/help_iconButton"
-        app:layout_constraintTop_toBottomOf="@+id/view4" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/help_iconButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/help_iconButton" />
 
     <ImageView
         android:id="@+id/help_iconButton"
@@ -84,7 +122,7 @@
         android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView15" />
+        app:layout_constraintTop_toBottomOf="@+id/my_rental_history" />
 
     <TextView
         android:id="@+id/tradepage_button3"
@@ -98,7 +136,7 @@
         android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/tradepage_button2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView14" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_my_post_feed" />
 
     <TextView
         android:id="@+id/tradepage_button2"
@@ -112,7 +150,7 @@
         android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/tradepage_button"
-        app:layout_constraintTop_toBottomOf="@+id/imageView12" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_my_favorite_list" />
 
     <TextView
         android:id="@+id/tradepage_button"
@@ -126,30 +164,30 @@
         android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tradeImage" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_my_trade_history" />
 
     <ImageView
-        android:id="@+id/imageView12"
+        android:id="@+id/btn_my_favorite_list"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="60dp"
         android:layout_marginTop="30dp"
-        app:layout_constraintStart_toEndOf="@+id/tradeImage"
+        app:layout_constraintStart_toEndOf="@+id/btn_my_trade_history"
         app:layout_constraintTop_toBottomOf="@+id/view3"
         app:srcCompat="@drawable/circle" />
 
     <ImageView
-        android:id="@+id/imageView14"
+        android:id="@+id/btn_my_post_feed"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="60dp"
         android:layout_marginTop="30dp"
-        app:layout_constraintStart_toEndOf="@+id/imageView12"
+        app:layout_constraintStart_toEndOf="@+id/btn_my_favorite_list"
         app:layout_constraintTop_toBottomOf="@+id/view3"
         app:srcCompat="@drawable/circle" />
 
     <ImageView
-        android:id="@+id/tradeImage"
+        android:id="@+id/btn_my_trade_history"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="40dp"
@@ -159,7 +197,7 @@
         app:srcCompat="@drawable/circle" />
 
     <ImageView
-        android:id="@+id/imageView15"
+        android:id="@+id/my_rental_history"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="40dp"
@@ -176,7 +214,7 @@
         android:layout_marginEnd="20dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_explain">
+        app:layout_constraintTop_toBottomOf="@+id/mypage_intro">
 
         <ImageView
             android:id="@+id/imageView9"
@@ -229,28 +267,35 @@
         />
 
     <TextView
-        android:id="@+id/mypage_explain"
+        android:id="@+id/mypage_intro"
         android:layout_width="260dp"
         android:layout_height="54dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/bbing"
+        android:maxLines="3"
         android:text="나의 설명 나의 설명 나의 설명 나의 설명"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/mypage_id" />
 
     <TextView
         android:id="@+id/mypage_id"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="60dp"
         android:fontFamily="@font/bbing"
         android:text="나의 아이디"
+        android:maxLines="1"
+        android:ellipsize="marquee"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/imageView8"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/bar1" />
 
