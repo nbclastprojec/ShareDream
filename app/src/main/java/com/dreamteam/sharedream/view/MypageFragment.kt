@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.databinding.FragmentMypageBinding
 import com.dreamteam.sharedream.view.MyPostFeedFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +36,8 @@ class MyPageFragment : Fragment() {
 
     private lateinit var db: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
+
+    private var util = Util()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,29 +78,18 @@ class MyPageFragment : Fragment() {
 
         // 로그아웃 버튼
         binding.btnSignout.setOnClickListener {
-            var builder = AlertDialog.Builder(requireContext())
-                .setTitle("로그아웃")
-                .setMessage("로그아웃 하시겠습니까?")
-
-            val listener = object : DialogInterface.OnClickListener{
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    when(which){
-                        DialogInterface.BUTTON_POSITIVE ->
-                            signOut()
-                        DialogInterface.BUTTON_NEGATIVE ->
-                            return
-                    }
-                }
-            }
-            builder.setPositiveButton("확인",listener)
-            builder.setNegativeButton("취소",listener)
-
-            builder.show()
+            signOut()
         }
 
+        // 뒤로가기 버튼
         binding.backButtonMypage.setOnClickListener {
             parentFragmentManager.beginTransaction().remove(this).commit()
 
+        }
+
+        // 회원 탈퇴 버튼
+        binding.btnDeleteAccount.setOnClickListener {
+            deleteUserAccount()
         }
 
     }
@@ -133,13 +125,28 @@ class MyPageFragment : Fragment() {
             }.addOnFailureListener {
 
             }
+    }
 
+    private fun deleteUserAccount (){
+
+        util.showDialog(requireContext(),"회원 탈퇴","회원 탈퇴 시 기존 정보를 다시 복구할 수 없습니다.") {
+            auth.signOut()
+            startActivity(Intent(activity,LogInActivity::class.java))
+            requireActivity().finish()}
+        auth.currentUser!!.delete()
+        startActivity(Intent(activity,LogInActivity::class.java))
+        requireActivity().finish()
     }
 
     private fun signOut() {
-        auth.signOut()
-        startActivity(Intent(activity,LogInActivity::class.java))
-        requireActivity().finish()
+
+
+        util.showDialog(requireContext(),"로그아웃 ","로그아웃 하시겠습니까?") {
+            auth.signOut()
+            startActivity(Intent(activity,LogInActivity::class.java))
+            requireActivity().finish()}
+
+
     }
 
     override fun onDestroyView() {

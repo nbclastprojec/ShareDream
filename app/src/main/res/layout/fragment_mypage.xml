@@ -8,6 +8,32 @@
     android:clickable="true"
     >
 
+    <TextView
+        android:id="@+id/btn_delete_account"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="190dp"
+        android:fontFamily="@font/bbing"
+        android:gravity="center_vertical"
+        android:paddingStart="42dp"
+        android:text="회원탈퇴"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/logout_icon3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/logout_icon3"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signout" />
+
+    <ImageView
+        android:id="@+id/logout_icon3"
+        android:layout_width="28dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signout"
+        app:srcCompat="@drawable/outimage" />
 
     <ImageView
         android:id="@+id/imageView18"
@@ -35,14 +61,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/logout_icon" />
 
+
     <ImageView
         android:id="@+id/logout_icon"
         android:layout_width="28dp"
         android:layout_height="31dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/help_iconButton"
+        app:layout_constraintTop_toBottomOf="@+id/btn_inquiry"
         app:srcCompat="@drawable/outimage" />
 
     <TextView
@@ -243,25 +270,32 @@
         android:id="@+id/mypage_intro"
         android:layout_width="260dp"
         android:layout_height="54dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/bbing"
+        android:maxLines="3"
         android:text="나의 설명 나의 설명 나의 설명 나의 설명"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/mypage_id" />
 
     <TextView
         android:id="@+id/mypage_id"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="60dp"
         android:fontFamily="@font/bbing"
         android:text="나의 아이디"
+        android:maxLines="1"
+        android:ellipsize="marquee"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/imageView8"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/bar1" />
 
