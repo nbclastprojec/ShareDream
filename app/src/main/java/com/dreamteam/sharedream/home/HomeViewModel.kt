@@ -1,4 +1,4 @@
-package com.dreamteam.sharedream.home.Edit
+package com.dreamteam.sharedream.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

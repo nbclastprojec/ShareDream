@@ -15,7 +15,6 @@ import com.dreamteam.sharedream.DetailFrameActivity
 import com.dreamteam.sharedream.DetailPageFragment
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
-import com.dreamteam.sharedream.home.Edit.HomeViewModel
 
 class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener {
     private lateinit var binding: FragmentHomeBinding

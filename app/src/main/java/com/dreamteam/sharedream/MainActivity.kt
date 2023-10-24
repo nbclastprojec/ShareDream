@@ -11,6 +11,7 @@ import com.dreamteam.sharedream.home.Edit.EditActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.dreamteam.sharedream.home.HomeAdapter
+import com.dreamteam.sharedream.home.Search.SeachFragment
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -54,6 +55,14 @@ class MainActivity : AppCompatActivity() {
             Log.d("MainActivity","nyh floatingbtn clicked")
             val intent = Intent(this, EditActivity::class.java)
             startActivity(intent)
+        }
+        binding.editTextSearchView.setOnClickListener {
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frag_edit,SeachFragment())
+                .addToBackStack(null)
+                .commit()
+
         }
 
         binding.btnMypage.setOnClickListener {

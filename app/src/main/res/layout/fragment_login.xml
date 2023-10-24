@@ -65,6 +65,7 @@
         android:layout_height="40dp"
         android:background="@drawable/login_editbox"
         android:ems="10"
+        android:fontFamily="@font/bbing"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
