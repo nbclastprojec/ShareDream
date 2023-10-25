@@ -25,6 +25,7 @@ class DetailPageFragment:Fragment(){
         binding=FragmentDetailpageBinding.inflate(inflater,container,false)
         val value = arguments?.getString("SendDetail")
        Log.d("document123","sendValue:$value")
+
         return binding.root
     }
 

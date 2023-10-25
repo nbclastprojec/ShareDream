@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.dreamteam.sharedream.databinding.FragmentLoginMainBinding
 import com.dreamteam.sharedream.home.HomeFragment
+import com.dreamteam.sharedream.home.Search.SeachFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.log
 
 
@@ -91,6 +93,7 @@ class LogInMainFragment : Fragment() {
             try{
                 val account=task.getResult(ApiException::class.java)
                 Log.d("googleLogin","googleWithFireBaseLogin:"+account.id)
+                Toast.makeText(requireContext(),account.id+"계정으로 로그인합니다.",Toast.LENGTH_SHORT).show()
                 googleLogIn(account.idToken!!)
 
             }
@@ -105,9 +108,13 @@ class LogInMainFragment : Fragment() {
         val credential=GoogleAuthProvider.getCredential(idToken,null)
         auth?.signInWithCredential(credential)?.addOnCompleteListener(requireActivity()) { task ->
         if (task.isSuccessful){
+
             Log.d("google1","로그인성공")
             val user= auth!!.currentUser
-            loginIntent()
+            checkUserDocument(user?.uid)
+
+
+
 
         }
             else{
@@ -119,10 +126,32 @@ class LogInMainFragment : Fragment() {
     }
 
     private fun loginIntent(){
-        val loginFragment=LoginFragment()
-        val transaction=requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, loginFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        val intent = Intent(requireContext(),MainActivity::class.java)
+        startActivity(intent)
+    }
+    private fun checkUserDocument(uid: String?) {
+        val db = FirebaseFirestore.getInstance()
+        val userCollection = db.collection("UserData")
+        val document = userCollection.document(uid!!)
+
+        document.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val documentSnapshot = task.result
+                if (documentSnapshot.exists()) {
+                    loginIntent()
+                } else {
+
+                    val inputUserData = InputUserData()
+                    val transaction=requireActivity().supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.fragment_container,inputUserData)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+
+
+                }
+            } else {
+                Log.e("FirestoreError", "Firestore 문서 확인 실패", task.exception)
+            }
+        }
     }
 }
