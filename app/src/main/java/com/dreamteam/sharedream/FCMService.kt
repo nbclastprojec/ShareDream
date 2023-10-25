@@ -38,7 +38,6 @@ class FCMService : FirebaseMessagingService() {
         // remoteMessage.notification?.body!! 여기에 내용이 저장되있음
         // Log.d(TAG, "Notification Message Body: " + remoteMessage.notification?.body!!)
 
-
         val data = remoteMessage.data
         val notificationTitle = data["title"]
         val notificationBody = data["body"]
