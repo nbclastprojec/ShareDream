@@ -9,10 +9,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.model.Post
@@ -69,20 +71,32 @@ class EditFragment : Fragment() {
         binding.camera.setOnClickListener {
             uris = mutableListOf()
             pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-
         }
 
         // 게시글 작성 완료
         binding.btnComplete.setOnClickListener {
-            imageUpload()
+            if (binding.imageCount.text == "0/10" ){
+                Toast.makeText(requireContext()," 이미지는 1장 이상 업로드 해야합니다. ", Toast.LENGTH_SHORT).show()
+                Log.d("xxxx", " Upload Failure ")
+            } else if (
+                binding.title.text.isEmpty() || binding.city.text.isEmpty() || binding.mainText.text.isEmpty() || binding.value.text.isEmpty()
+            ) {
+                Toast.makeText(requireContext()," 모든 입력 가능란은 필수 입력사항 입니다.",Toast.LENGTH_SHORT).show()
+            }
+            else {
+                imageUpload()
+            }
+
         }
 
+        // 뒤로가기 버튼
         binding.btnBack.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
     }
 
+    // 이미지 선택 기능
     private val pickMultipleMedia =
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uriList ->
             if (uriList.isNotEmpty()) {
@@ -93,24 +107,39 @@ class EditFragment : Fragment() {
 
                 Log.d("xxxx", "Edit Frag Number of items selected : ${uris} ")
                 writePostImgAdapter.submitList(uris)
+                binding.imageCount.text = "${uris.size}/10"
                 writePostImgAdapter.notifyDataSetChanged()
             } else {
                 Log.d("xxxx", "Edit Frag No media selected: ")
             }
         }
 
-    private fun postUpload(time: String) {
+    // 게시글 업로드 기능 - downloadUserInfo()에서 실행
+    private fun postUpload(userNickname: String) {
+        var category: String
+        when (binding.chipgroup.checkedChipId) {
+            R.id.cloths_chip1 -> category = "의류"
+            R.id.machine_chip1 -> category = "가전제품"
+            R.id.sport_chip1 -> category = "스포츠"
+            R.id.art_chip1 -> category = "예술"
+            R.id.book_chip1 -> category = "독서"
+            R.id.beauty_chip1 -> category = "뷰티"
+            R.id.toy_chip1 -> category = "문구"
+            else -> {
+                Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+
         val postUid = auth.currentUser!!.uid
         val postTitle = binding.title.text.toString()
         val postPrice = binding.value.text.toString()
-        val postCategory = binding.category.text.toString()
+        val postCategory = category
         val postAddress = binding.city.text.toString()
         //todo 기한 추가 - 임시로 city 값 넣어둠
         val postDeadline = binding.city.text.toString()
         val postDesc = binding.mainText.text.toString()
         val postImg: List<String> = imgs.toList()
-        //todo 닉네임 추가
-        val nickname = "닉네임입니다"
         val postLikeUsers = listOf<String>()
         val post: Post = Post(
             postUid,
@@ -121,7 +150,7 @@ class EditFragment : Fragment() {
             postDeadline,
             postDesc,
             postImg,
-            nickname,
+            userNickname,
             postLikeUsers
 
         )
@@ -136,6 +165,7 @@ class EditFragment : Fragment() {
             }
     }
 
+    // 선택한 이미지 Storage에 업로드
     private fun imageUpload() {
 
         val time = getTime()
@@ -146,16 +176,30 @@ class EditFragment : Fragment() {
 
                 imgs.add(fileName)
 
-                storage.reference.child("post").child("${time}_$i").putFile(uri).addOnSuccessListener {
-                }.addOnFailureListener {
-
+                storage.reference.child("post").child("${time}_$i").putFile(uri)
+                    .addOnSuccessListener {
+                        // 추후에 필요한 기능 추가
+                }
+                    .addOnFailureListener {
                     Log.d("xxxx", " Edit Frag imageUpload Failure : $it ")
                 }
             }
-            postUpload(time)
+            downloadUserInfo()
         }
         Log.d("xxxx", " Edit Frag Post Info Img : $imgs ")
         Log.d("xxxx", "Edit Frag Post Info uris : $uris")
+    }
+
+    // 유저 정보에서 닉네임을 가져와 게시글에 적용 - 게시글 받아올 때마다 유저데이터를 호출하는 것보다 업로드할 때 한번만 호출하는 것이 좋아보임.
+    private fun downloadUserInfo(){
+
+        db.collection("UserData").document("${auth.currentUser!!.uid}")
+            .get()
+            .addOnSuccessListener {
+            var nickname = it.data?.get("nickname") as String
+                postUpload(nickname)
+
+            }
     }
 
     private fun setupRcv() {

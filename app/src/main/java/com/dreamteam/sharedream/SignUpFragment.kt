@@ -169,8 +169,8 @@ class SignUpFragment : Fragment() {
                     "email" to binding.editEmail.text.toString(),
                     "number" to binding.editPhoneNumber.text.toString(),
                     "id" to binding.eidtId.text.toString(),
-                    "nickname" to "",
-                    "intro" to "",
+                    "nickname" to "닉네임 설정 필요",
+                    "intro" to "자기소개가 아직 입력되지 않았습니다.",
                 )
 
                 userDocument.set(userData).addOnSuccessListener {
