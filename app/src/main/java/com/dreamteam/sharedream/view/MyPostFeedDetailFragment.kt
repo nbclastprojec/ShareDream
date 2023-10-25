@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
+import coil.load
 import com.dreamteam.sharedream.databinding.FragmentMyPostFeedDetailBinding
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
@@ -27,14 +28,20 @@ class MyPostFeedDetailFragment : Fragment() {
 
         val imgs = mutableListOf<String>()
         myPostFeedViewModel.currentPost.observe(viewLifecycleOwner) {
-            binding.detailId.text = it.uid
+            binding.detailId.text = it.nickname
             binding.detailAddress.text = it.address
             binding.detailpageTitle.text = it.title
             binding.detailpageCategory.text = it.category
             binding.detailpageExplain.text = it.desc
             binding.detailMoney.text = "${it.price} 원"
+            binding.detailTvLikeCount.text = "${it.likeUsers.size}"
+
             imgs.addAll(it.imgs)
 
+        }
+
+        myPostFeedViewModel.currentPostProfileImg.observe(viewLifecycleOwner){
+            binding.datailProfile.load(it)
         }
 
         // Viewpager 적용

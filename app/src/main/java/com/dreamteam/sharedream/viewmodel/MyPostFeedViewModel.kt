@@ -25,20 +25,22 @@ class MyPostFeedViewModel : ViewModel() {
     private val _postFeedResult = MutableLiveData<MutableList<Post>>()
     val postFeedResult: LiveData<MutableList<Post>> get() = _postFeedResult
 
-    // 내가 쓴 글 목록 Rcv 클릭한 아이템 정보 받아오기
+    // 게시글 목록 Rcv 클릭한 아이템 정보 받아오기
     var currentPost = MutableLiveData<Post>()
-
-    // 디테일 정보 LiveData
-    private val _postDetailResult = MutableLiveData<MutableList<Post>>()
-    val postDetail : LiveData<MutableList<Post>> get() = _postDetailResult
+    // 게시글 목록 Rcv 클릭한 아이템 작성자 프로필 이미지 가져오기
+    private val _currentPostProfileImg = MutableLiveData<Uri>()
+    val currentPostProfileImg : LiveData<Uri> get() = _currentPostProfileImg
 
     // Home Frag 게시글 정보 LiveData
     private val _postResult = MutableLiveData<MutableList<Post>>()
     val postResult: LiveData<MutableList<Post>> get() = _postResult
+
+    // todo Home Frag 게시글 대표 이미지 별도로 추가할 수 있도록 수정할 예정 - 이미지를 띄우는 속도가 너무 느림.
     private val _postUriResult = MutableLiveData<MutableList<Uri>>()
     val postUriResult : LiveData<MutableList<Uri>> get() = _postUriResult
 
 
+    // 게시글 디테일 아이템 사진들 불러오기
     fun testA () {
         val uris = mutableListOf<Uri>()
         // 빈 리스트로 초기화
@@ -74,7 +76,7 @@ class MyPostFeedViewModel : ViewModel() {
                             val postDocumentSnapshot = querySnapshot.documents
 
                             for ( document in postDocumentSnapshot){
-                                //변경 실패 코드
+                                //변경 실패 코드 todo Home Frag 게시글 대표 이미지 별도로 추가할 수 있도록 수정할 예정 2
 //                                document.toObject<Post>()?.let {post->
 //                                    val imgUris = mutableListOf<Uri>()
 //                                    for (index in post.imgs.indices) {
@@ -97,7 +99,7 @@ class MyPostFeedViewModel : ViewModel() {
 //                                                        likeUsers = post.likeUsers
 //                                                    )
 //                                                    postRcvList.add(postRcv)
-////                                                    Log.d("xxxx", "postDownload RcvList: ${postRcvList}")
+//                                                    Log.d("xxxx", "postDownload RcvList: ${postRcvList}")
 //                                                }
 //                                            }
 //                                    }
@@ -131,12 +133,13 @@ class MyPostFeedViewModel : ViewModel() {
         }
     }
 
-    // 내가 쓴 글 목록 받아오기 - CurrentUser.uid, whereEqualTo
+    // 내가 쓴 글 목록 받아오기 - CurrentUser.uid, whereEqualTo todo
     fun postFeedDownload() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 db.collection("Posts")
                     .whereEqualTo("uid", auth.currentUser!!.uid)
+                    .orderBy("imgs",Query.Direction.DESCENDING)
                     .get()
                     .addOnSuccessListener { querySnapshot ->
                         if (!querySnapshot.isEmpty) {
@@ -151,6 +154,9 @@ class MyPostFeedViewModel : ViewModel() {
                             Log.d("xxxx", "postFeedDownload: $rcvList")
                         }
                     }
+                    .addOnFailureListener {
+                        Log.d("xxxx", "postFeedDownload Failure : $it ")
+                    }
 
             }catch (e: Exception){
                 Log.d("xxxx", " postFeedDownload Failure = $e ")
@@ -158,4 +164,10 @@ class MyPostFeedViewModel : ViewModel() {
         }
     }
 
+    fun getCurrentPostProfileImg(uid : String){
+        storage.reference.child("ProfileImg").child("$uid").downloadUrl
+            .addOnSuccessListener {
+                _currentPostProfileImg.value = it
+            }
+    }
 }
