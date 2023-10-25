@@ -65,31 +65,28 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
 
         homeAdapter.setOnItemClickListener {
-            val intent= Intent(requireContext(),DetailFrameActivity::class.java)
+            val intent = Intent(requireContext(), DetailFrameActivity::class.java)
             startActivity(intent)
-
-
-            binding.btnFilter.setOnClickListener {
-                val filterDialogFragment = CategoryDialogFragment()
-                //다이얼로그에있는 리스너를 달아준다
-                filterDialogFragment.setCategorySelectionListener(this)
-                filterDialogFragment.show(childFragmentManager, "filter_dialog_tag")
-            }
         }
 
 
+        binding.btnFilter.setOnClickListener {
+            val filterDialogFragment = CategoryDialogFragment()
+            //다이얼로그에있는 리스너를 달아준다
+            filterDialogFragment.setCategorySelectionListener(this)
+            filterDialogFragment.show(childFragmentManager, "filter_dialog_tag")
+        }
     }
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onCategorySelected(category: String) {
         selectedCategory = category
         if (category.isNotEmpty()) {
             homeAdapter.filterByCategory(category)
             Log.d("HomeFrag", "nyh category = $category")
-        }else {
+        } else {
             Log.d("nyh", "onCategorySelected: gg")
         }
         homeAdapter.notifyDataSetChanged()
     }
-
-
 }

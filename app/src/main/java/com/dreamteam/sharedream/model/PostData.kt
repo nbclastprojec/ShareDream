@@ -9,7 +9,8 @@ data class PostData(
     val mainText: String,
     var image: String,
     var uploadDate : String,
+    var token : String
 )
 {
-    constructor() : this("","", 0, "", "", "","","")
+    constructor() : this("","", 0, "", "", "","","","")
 }

@@ -28,12 +28,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //FCM설정, Token값 가져오기
-        FCMService().getFirebaseToken()
+        //FCMService().getFirebaseToken()
         //PostNotification 대응
         checkAppPushNotification()
+
         //사용 안하면 삭제하기
         //DynamicLink 수신확인
-        initDynamicLink()
+//        initDynamicLink()
 
 
         homeAdapter = HomeAdapter(this)
@@ -57,6 +58,16 @@ class MainActivity : AppCompatActivity() {
 //            finish()
 //
 //        }
+        if (intent.hasExtra("open_fragment")) {
+            val fragmentToOpen = intent.getStringExtra("open_fragment")
+            if(fragmentToOpen == "alarm_fragment") {
+                val transaction = supportFragmentManager.beginTransaction()
+                val alarmFragment = AlarmFragment()
+                val alarmFragmentIndex = 1
+                viewPager.setCurrentItem(alarmFragmentIndex, true)
+                transaction.replace(R.id.viewPager, alarmFragment)
+            }
+        }
 
         TabLayoutMediator(
             tabLayout,
@@ -105,17 +116,17 @@ class MainActivity : AppCompatActivity() {
 
 
     /** DynamicLink */
-    private fun initDynamicLink() {
-        val dynamicLinkData = intent.extras
-        if (dynamicLinkData != null) {
-            var dataStr = "DynamicLink 수신받은 값\n"
-            for (key in dynamicLinkData.keySet()) {
-                dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
-            }
-
-            binding.textView13.text = dataStr
-        }
-    }
+//    private fun initDynamicLink() {
+//        val dynamicLinkData = intent.extras
+//        if (dynamicLinkData != null) {
+//            var dataStr = "DynamicLink 수신받은 값\n"
+//            for (key in dynamicLinkData.keySet()) {
+//                dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
+//            }
+//
+//            binding.textView13.text = dataStr
+//        }
+//    }
     override fun onNewIntent(intent: Intent?) {
         Log.e("YMC", "nyh MainActivity onNewIntent")
         super.onNewIntent(intent)

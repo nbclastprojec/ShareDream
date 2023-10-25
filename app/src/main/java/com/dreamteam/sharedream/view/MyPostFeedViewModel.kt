@@ -41,6 +41,7 @@ class MyPostFeedViewModel : ViewModel() {
                                         // todo img 리스트로 변경하여 여러 이미지 저장
                                         document.data?.get("image") as String,
                                         " ",
+                                        ""
                                     )
                                 )
                             }

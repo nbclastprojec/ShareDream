@@ -18,6 +18,7 @@ import com.dreamteam.sharedream.model.PostData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
 
@@ -32,6 +33,7 @@ class EditActivity : AppCompatActivity() {
     private var postData = PostData()
     private var imageUploadCount = 0
     private var totalImages = 0
+    var token: String? = null
 
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,12 +42,14 @@ class EditActivity : AppCompatActivity() {
 
         adapter = EditImageAdapter(this, uriList)
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         // 이미지 선택 버튼 클릭 시
         binding.imageView9.setOnClickListener {
             if (uriList.count() == maxNumber) {
-                Toast.makeText(this, "이미지는 최대 $maxNumber 개까지 첨부할 수 있습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "이미지는 최대 $maxNumber 개까지 첨부할 수 있습니다.", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
@@ -58,7 +62,7 @@ class EditActivity : AppCompatActivity() {
 
         binding.btnComplete.setOnClickListener {
 
-           // uriList에 값 들어오면 uploadAta실행
+            // uriList에 값 들어오면 uploadAta실행
             if (uriList.isNotEmpty()) {
                 uploadData()
             } else {
@@ -68,31 +72,36 @@ class EditActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private val registerForActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        when (result.resultCode) {
-            RESULT_OK -> {
-                val clipData = result.data?.clipData
-                if (clipData != null) {
-                    val clipDataSize = clipData.itemCount
-                    val selectableCount = maxNumber - uriList.count()
-                    if (clipDataSize > selectableCount) {
-                        Toast.makeText(this, "이미지는 최대 $selectableCount 개까지 첨부할 수 있습니다.", Toast.LENGTH_SHORT).show()
+    private val registerForActivityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                RESULT_OK -> {
+                    val clipData = result.data?.clipData
+                    if (clipData != null) {
+                        val clipDataSize = clipData.itemCount
+                        val selectableCount = maxNumber - uriList.count()
+                        if (clipDataSize > selectableCount) {
+                            Toast.makeText(
+                                this,
+                                "이미지는 최대 $selectableCount 개까지 첨부할 수 있습니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            for (i in 0 until clipDataSize) {
+                                uriList.add(clipData.getItemAt(i).uri)
+                            }
+                        }
                     } else {
-                        for (i in 0 until clipDataSize) {
-                            uriList.add(clipData.getItemAt(i).uri)
+                        val uri = result?.data?.data
+                        if (uri != null) {
+                            uriList.add(uri)
                         }
                     }
-                } else {
-                    val uri = result?.data?.data
-                    if (uri != null) {
-                        uriList.add(uri)
-                    }
+                    adapter.notifyDataSetChanged()
+                    printCount()
                 }
-                adapter.notifyDataSetChanged()
-                printCount()
             }
         }
-    }
 
     //카운트 하기
     fun printCount() {
@@ -160,6 +169,11 @@ class EditActivity : AppCompatActivity() {
                 return
             }
         }
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                token = task.result
+            }
+        }
 
         // 이미지 업로드 완료 시 데이터 넣기
         val onComplete: (String) -> Unit = { fileName ->
@@ -172,6 +186,7 @@ class EditActivity : AppCompatActivity() {
                 "mainText" to mainText,
                 "uid" to auth.currentUser?.uid,
                 "image" to fileName,
+                "token" to token
             )
 
             db.collection("Post")
