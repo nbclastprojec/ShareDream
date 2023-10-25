@@ -61,25 +61,27 @@
 
     </androidx.cardview.widget.CardView>
 
-
-    <ImageView
-        android:id="@+id/btnProfileImgEdit"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:cardCornerRadius="80dp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
-        app:layout_constraintStart_toEndOf="@+id/cardView"
-        app:srcCompat="@drawable/circle_white" />
+        app:layout_constraintStart_toEndOf="@+id/cardView">
 
-    <ImageButton
-        android:id="@+id/imageView4"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/btnProfileImgEdit"
-        app:layout_constraintEnd_toEndOf="@+id/btnProfileImgEdit"
-        app:layout_constraintStart_toStartOf="@+id/btnProfileImgEdit"
-        app:layout_constraintTop_toTopOf="@+id/btnProfileImgEdit"
-        app:srcCompat="@drawable/pencil" />
+        <ImageView
+            android:id="@+id/btnProfileImgEdit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            app:layout_constraintBottom_toBottomOf="@+id/cardView"
+            app:layout_constraintStart_toEndOf="@+id/cardView"
+            app:srcCompat="@drawable/pencil" />
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
 
     <EditText
         android:id="@+id/profile_id"

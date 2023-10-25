@@ -62,6 +62,9 @@ dependencies {
 
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 
+    // Coil
+    implementation("io.coil-kt:coil:2.4.0")
+
 
     implementation ("androidx.fragment:fragment-ktx:1.6.1")
 

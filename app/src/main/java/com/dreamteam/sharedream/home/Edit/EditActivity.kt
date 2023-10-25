@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.model.PostData
 import com.google.firebase.auth.FirebaseAuth
@@ -184,7 +185,7 @@ class EditActivity : AppCompatActivity() {
                 "category" to category,
                 "city" to city,
                 "mainText" to mainText,
-                "uid" to auth.currentUser?.uid,
+                "uid" to Constants.currentUserUid,
                 "image" to fileName,
                 "token" to token
             )

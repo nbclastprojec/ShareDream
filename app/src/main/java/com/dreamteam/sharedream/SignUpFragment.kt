@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.FragmentSignupBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -169,8 +170,8 @@ class SignUpFragment : Fragment() {
                     "email" to binding.editEmail.text.toString(),
                     "number" to binding.editPhoneNumber.text.toString(),
                     "id" to binding.eidtId.text.toString(),
-                    "nickname" to "",
-                    "intro" to "",
+                    "nickname" to "닉네임 설정 필요",
+                    "intro" to "자기소개가 아직 입력되지 않았습니다.",
                 )
 
                 userDocument.set(userData).addOnSuccessListener {
@@ -191,8 +192,8 @@ class SignUpFragment : Fragment() {
     private fun imageUpload() {
 
         val defaultImageUri: Uri = drawableToUri(requireContext(), R.drawable.profile_circle)
-        Log.d("xxxx", "imageUpload uid : ${auth.currentUser!!.uid} uri : $defaultImageUri")
-        val uploadTask = storage.reference.child("ProfileImg").child("${auth.currentUser!!.uid}")
+        Log.d("xxxx", "imageUpload uid : ${Constants.currentUserUid} uri : $defaultImageUri")
+        val uploadTask = storage.reference.child("ProfileImg").child("${Constants.currentUserUid}")
             .putFile(defaultImageUri!!)
         uploadTask.addOnSuccessListener {
             // 파일 저장 성공 시 이벤트
