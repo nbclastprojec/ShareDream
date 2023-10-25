@@ -94,7 +94,7 @@ class HomeFragment : Fragment() {
         homePostAdapter = HomePostAdapter(object : PostClick {
             override fun postClick(post: Post) {
                 myPostFeedViewModel.currentPost.value = post
-                myPostFeedViewModel.getCurrentPostProfileImg(post.uid)
+                myPostFeedViewModel.getCurrentProfileImg(post.uid)
                 parentFragmentManager.beginTransaction().add(R.id.frag_edit,
                     MyPostFeedDetailFragment()
                 ).addToBackStack(null).commit()

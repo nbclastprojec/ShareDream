@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.model.Post
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
@@ -27,9 +28,9 @@ class MyPostFeedViewModel : ViewModel() {
 
     // 게시글 목록 Rcv 클릭한 아이템 정보 받아오기
     var currentPost = MutableLiveData<Post>()
-    // 게시글 목록 Rcv 클릭한 아이템 작성자 프로필 이미지 가져오기
-    private val _currentPostProfileImg = MutableLiveData<Uri>()
-    val currentPostProfileImg : LiveData<Uri> get() = _currentPostProfileImg
+    // 게시글 목록 Rcv 클릭한 아이템 작성자 프로필 이미지 가져오기 / 마이 페이지 프로필 이미지와 같은 단일 프로필 이미지 로딩
+    private val _currentProfileImg = MutableLiveData<Uri>()
+    val currentProfileImg : LiveData<Uri> get() = _currentProfileImg
 
     // Home Frag 게시글 정보 LiveData
     private val _postResult = MutableLiveData<MutableList<Post>>()
@@ -133,12 +134,12 @@ class MyPostFeedViewModel : ViewModel() {
         }
     }
 
-    // 내가 쓴 글 목록 받아오기 - CurrentUser.uid, whereEqualTo todo
+    // 내가 쓴 글 목록 받아오기 -  whereEqualTo, orderBy
     fun postFeedDownload() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 db.collection("Posts")
-                    .whereEqualTo("uid", auth.currentUser!!.uid)
+                    .whereEqualTo("uid", Constants.currentUserUid)
                     .orderBy("imgs",Query.Direction.DESCENDING)
                     .get()
                     .addOnSuccessListener { querySnapshot ->
@@ -164,10 +165,43 @@ class MyPostFeedViewModel : ViewModel() {
         }
     }
 
-    fun getCurrentPostProfileImg(uid : String){
+    // 단일 프로필 이미지 불러오기
+    fun getCurrentProfileImg(uid : String){
         storage.reference.child("ProfileImg").child("$uid").downloadUrl
             .addOnSuccessListener {
-                _currentPostProfileImg.value = it
+                _currentProfileImg.value = it
             }
+    }
+
+    // 좋아요 버튼 클릭 이벤트
+    fun addFavoritePost(uid: String,postPath: String){
+        db.collection("Posts").whereArrayContains("imgs", postPath)
+            .get()
+            .addOnSuccessListener {querySnapshot ->
+                Log.d("xxxx", "addFavoritePost: 첫번째는 성공 $querySnapshot")
+                if (!querySnapshot.isEmpty) {
+
+                    val documentSnap = querySnapshot.documents[0]
+                    Log.d("xxxx", "addFavoritePost documentSanp : $documentSnap")
+                    val likeList : MutableList<String> = mutableListOf()
+
+                    likeList.addAll(documentSnap.data?.get("likeUsers") as List<String>)
+                    Log.d("xxxx", " Before add LikeUsers List : $likeList")
+
+                    if (likeList.contains(uid)){
+                        //todo 이미 좋아요한 유저 이벤트 처리, 본인 게시물 좋아요 버튼 이벤트 처리.
+                        Log.d("xxxx", "addFavoritePost: 이미 좋아요한 UID")
+                    } else {
+                        likeList.add(uid)
+                        documentSnap.reference.update("likeUsers",likeList).addOnSuccessListener {
+                                Log.d("xxxx", " 좋아요 버튼 클릭 Successful, 좋아요 List에 UID 추가 " )
+                            }
+                            .addOnFailureListener {
+                                Log.d("xxxx", " 좋아요 버튼 클릭 Failure 좋아요 List에 추가 X = $it ")
+                            }
+                        }
+                    }
+                }
+
     }
 }

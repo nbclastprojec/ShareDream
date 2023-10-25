@@ -9,24 +9,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.ActivityMainBinding
-import com.dreamteam.sharedream.home.Edit.EditActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.dreamteam.sharedream.home.HomeAdapter
 import com.dreamteam.sharedream.home.Search.SeachFragment
-import com.dreamteam.sharedream.viewmodel.PostViewModel
-import com.dreamteam.sharedream.viewmodel.PostViewModelProvider
-import com.google.firebase.BuildConfig
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var homeAdapter: HomeAdapter
-    private lateinit var auth: FirebaseAuth
-    private lateinit var postViewModel: PostViewModel
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     init {
-        auth = FirebaseAuth.getInstance()
         Constants.currentUserUid = auth.currentUser!!.uid
     }
 
@@ -41,11 +35,6 @@ class MainActivity : AppCompatActivity() {
         val viewPager: ViewPager2 = binding.viewPager
         val tabLayout: TabLayout = binding.tabLayout
 
-
-
-        // shared ViewModel
-        val factory = PostViewModelProvider(this)
-        postViewModel = ViewModelProvider(this, factory)[PostViewModel::class.java]
 
 
         val viewpagerFragmentAdapter = ViewPagerAdapter(this)

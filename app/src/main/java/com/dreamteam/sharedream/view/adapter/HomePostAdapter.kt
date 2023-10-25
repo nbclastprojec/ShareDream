@@ -55,8 +55,28 @@ class HomePostAdapter(private val postClick: PostClick) :
         val postCategory: TextView = binding.writeCategory
         val postImg: ImageView = binding.writeImage
 
+        var imagePath: String? = null
         fun bind(imagePath : String) {
 
+            if (this.imagePath != imagePath){
+                //todo 글라이드 캐싱 추가 예정
+//                storage.reference.child("post").child("$imagePath").downloadUrl.addOnSuccessListener { uri ->
+//                 캐싱 - rcv 자체적인 캐시 or 페이징?
+//                    Log.d("xxxx", "bind: storage download uri after img - $imagePath")
+//                    Glide.with(itemView)
+//                        .load(uri)
+//                        .into(postImg)
+//                    this.imagePath = imagePath
+//                }
+//                    .addOnFailureListener {
+//                        Log.d("xxxx", " adapter bind Failure $it")
+//                    }
+//            } else {
+//                Glide.with(itemView)
+//                    .load(uri)
+//                    .into(postImg)
+//                this.imagePath = imagePath
+//            }
             Log.d("xxxx", "bind: storage download uri before img - ${imagePath}")
             storage.reference.child("post").child("$imagePath").downloadUrl.addOnSuccessListener { uri ->
 //                 캐싱 - rcv 자체적인 캐시 or 페이징?
@@ -64,9 +84,12 @@ class HomePostAdapter(private val postClick: PostClick) :
                 Glide.with(itemView)
                     .load(uri)
                     .into(postImg)
+                this.imagePath = imagePath
             }
             .addOnFailureListener {
                 Log.d("xxxx", " adapter bind Failure $it")
+            }
+
             }
         }
     }
