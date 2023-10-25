@@ -1,12 +1,15 @@
-package com.dreamteam.sharedream
+package com.dreamteam.sharedream.view
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.dreamteam.sharedream.databinding.FragmentMyPostFeedDetailBinding
+import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 
 class MyPostFeedDetailFragment : Fragment() {
@@ -21,15 +24,23 @@ class MyPostFeedDetailFragment : Fragment() {
     ): View? {
         _binding = FragmentMyPostFeedDetailBinding.inflate(inflater, container, false)
 
+
+        val imgs = mutableListOf<String>()
         myPostFeedViewModel.currentPost.observe(viewLifecycleOwner) {
-            binding.detailId.text = it.id
-            binding.detailAddress.text = it.title
-            binding.detailpageName.text = it.title
+            binding.detailId.text = it.uid
+            binding.detailAddress.text = it.address
+            binding.detailpageTitle.text = it.title
             binding.detailpageCategory.text = it.category
-            binding.detailpageExplain.text = it.mainText
-            binding.detailMoney.text = "${it.value} 원"
+            binding.detailpageExplain.text = it.desc
+            binding.detailMoney.text = "${it.price} 원"
+            imgs.addAll(it.imgs)
+
         }
 
+        // Viewpager 적용
+        val viewPager: ViewPager2 = binding.detailImgViewpager
+        val adapter = DetailBannerImgAdapter(imgs)
+        viewPager.adapter = adapter
 
         return binding.root
     }

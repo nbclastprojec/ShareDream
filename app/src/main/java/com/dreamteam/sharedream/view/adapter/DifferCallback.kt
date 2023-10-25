@@ -2,16 +2,16 @@ package com.dreamteam.sharedream.adapter
 
 import android.net.Uri
 import androidx.recyclerview.widget.DiffUtil
-import com.dreamteam.sharedream.model.PostData
+import com.dreamteam.sharedream.model.Post
 
 object DifferCallback {
-    val differCallback = object : DiffUtil.ItemCallback<PostData>(){
-        override fun areItemsTheSame(oldItem: PostData, newItem: PostData): Boolean {
+    val differCallback = object : DiffUtil.ItemCallback<Post>(){
+        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: PostData, newItem: PostData): Boolean {
-            return oldItem.image == newItem.image
+        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+            return oldItem == newItem
         }
     }
 
@@ -28,7 +28,7 @@ object DifferCallback {
 }
 
 interface PostClick {
-    fun postClick(post: PostData)
+    fun postClick(post: Post)
 }
 
 interface ImgClick {

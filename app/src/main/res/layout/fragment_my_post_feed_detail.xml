@@ -8,6 +8,15 @@
     android:clickable="true"
     >
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/detail_img_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <View
         android:id="@+id/view9"
         android:layout_width="match_parent"
@@ -40,7 +49,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/detail_img_viewpager"
         app:srcCompat="@drawable/like" />
 
     <TextView
@@ -139,7 +148,7 @@
         android:text="45분전"
         android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/detailpage_category"
-        app:layout_constraintTop_toBottomOf="@+id/detailpage_name" />
+        app:layout_constraintTop_toBottomOf="@+id/detailpage_title" />
 
     <TextView
         android:id="@+id/detailpage_category"
@@ -153,10 +162,10 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailpage_name" />
+        app:layout_constraintTop_toBottomOf="@+id/detailpage_title" />
 
     <TextView
-        android:id="@+id/detailpage_name"
+        android:id="@+id/detailpage_title"
         android:layout_width="0dp"
         android:layout_height="26dp"
         android:layout_marginStart="16dp"
@@ -201,17 +210,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/detail_like"
         app:layout_constraintStart_toEndOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="0dp"
-        android:layout_height="240dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/v" />
-
+        app:layout_constraintTop_toBottomOf="@+id/detail_img_viewpager" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -225,7 +224,7 @@
         app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3">
+        app:layout_constraintTop_toBottomOf="@+id/detail_img_viewpager">
 
         <ImageView
             android:id="@+id/datail_profile"
