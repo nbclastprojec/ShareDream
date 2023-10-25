@@ -14,8 +14,12 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import coil.load
 import com.bumptech.glide.Glide
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.FragmentMypageEditProfileBinding
+import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,6 +37,8 @@ class MyPageEditFragment : Fragment() {
 
     private var _binding: FragmentMypageEditProfileBinding? = null
     private val binding get() = _binding!!
+
+    private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +71,9 @@ class MyPageEditFragment : Fragment() {
 
         binding.profileId
         binding.completeButton.setOnClickListener {
-            if (photoUri != null) {
+            if (binding.profileId.text.isEmpty() || binding.profileText.text.isEmpty()) {
+                Toast.makeText(requireContext()," 변경할 닉네임, 자기소개를 입력해주세요",Toast.LENGTH_SHORT).show()
+            } else if (photoUri != null) {
                 val nickname = binding.profileId.text.toString()
                 val intro = binding.profileText.text.toString()
                 imageUpload()
@@ -85,9 +93,13 @@ class MyPageEditFragment : Fragment() {
             parentFragmentManager.popBackStack()
 
         }
+
+        myPostFeedViewModel.currentProfileImg.observe(viewLifecycleOwner){
+            binding.profileImage.load(it)
+        }
     }
     private fun downloadProfileImg(){
-        val downloadTask = storage.reference.child("ProfileImg").child("${auth.currentUser!!.uid}")
+        val downloadTask = storage.reference.child("ProfileImg").child("${Constants.currentUserUid}}")
             .downloadUrl
         downloadTask.addOnSuccessListener {
             photoUri = it
@@ -119,7 +131,7 @@ class MyPageEditFragment : Fragment() {
 
     private fun profileUpload(nickname: String, intro: String) {
         db.collection("UserData")
-            .document(auth.currentUser!!.uid)
+            .document(Constants.currentUserUid!!)
             .update(
                 "nickname", "${binding.profileId.text}",
                 "intro", "${binding.profileText.text}"
@@ -128,7 +140,7 @@ class MyPageEditFragment : Fragment() {
 
     private fun imageUpload() {
 
-        val uploadTask = storage.reference.child("ProfileImg").child("${auth.currentUser!!.uid}")
+        val uploadTask = storage.reference.child("ProfileImg").child("${Constants.currentUserUid}}")
             .putFile(photoUri!!)
         uploadTask.addOnSuccessListener {
             // 파일 저장 성공 시 이벤트

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import androidx.appcompat.app.AlertDialog
 
-class Util {
+object Util {
 
     fun showDialog(context: Context, setTitle: String, setMessage: String, completion: () -> Unit) {
         val builder = AlertDialog.Builder(context)
