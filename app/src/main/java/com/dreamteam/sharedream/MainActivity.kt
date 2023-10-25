@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.ActivityMainBinding
 import com.dreamteam.sharedream.home.Edit.EditActivity
 import com.google.android.material.tabs.TabLayout
@@ -24,18 +25,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var postViewModel: PostViewModel
 
+    init {
+        auth = FirebaseAuth.getInstance()
+        Constants.currentUserUid = auth.currentUser!!.uid
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-
+        Log.d("xxxx", "MainACtivityOnCreate: ${Constants.currentUserUid} ")
         Log.isLoggable("Glide", Log.DEBUG)
 
         homeAdapter = HomeAdapter(this)
         val viewPager: ViewPager2 = binding.viewPager
         val tabLayout: TabLayout = binding.tabLayout
 
-        auth = FirebaseAuth.getInstance()
+
 
         // shared ViewModel
         val factory = PostViewModelProvider(this)

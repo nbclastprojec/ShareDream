@@ -15,6 +15,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.model.Post
@@ -131,7 +132,7 @@ class EditFragment : Fragment() {
             }
         }
 
-        val postUid = auth.currentUser!!.uid
+        val postUid = Constants.currentUserUid!!
         val postTitle = binding.title.text.toString()
         val postPrice = binding.value.text.toString()
         val postCategory = category
@@ -193,7 +194,7 @@ class EditFragment : Fragment() {
     // 유저 정보에서 닉네임을 가져와 게시글에 적용 - 게시글 받아올 때마다 유저데이터를 호출하는 것보다 업로드할 때 한번만 호출하는 것이 좋아보임.
     private fun downloadUserInfo(){
 
-        db.collection("UserData").document("${auth.currentUser!!.uid}")
+        db.collection("UserData").document("${Constants.currentUserUid!!}")
             .get()
             .addOnSuccessListener {
             var nickname = it.data?.get("nickname") as String

@@ -93,7 +93,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/gan" />
+        app:srcCompat="@drawable/loading2" />
 
     <View
         android:id="@+id/bar1"

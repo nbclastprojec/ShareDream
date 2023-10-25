@@ -9,10 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.databinding.FragmentMypageBinding
 import com.dreamteam.sharedream.view.MyPostFeedFragment
+import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -37,7 +40,8 @@ class MyPageFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
 
-    private var util = Util()
+
+    private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +70,7 @@ class MyPageFragment : Fragment() {
 
         // 내정보 수정 페이지로 이동
         binding.mypageEditButton.setOnClickListener {
+            myPostFeedViewModel.getCurrentProfileImg(Constants.currentUserUid!!)
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frag_edit, MyPageEditFragment()).addToBackStack("myPageEdit").commit()
         }
@@ -94,7 +99,7 @@ class MyPageFragment : Fragment() {
 
     }
     private fun downloadProfileImg() {
-        val downloadTask = storage.reference.child("ProfileImg").child("${auth.currentUser!!.uid}")
+        val downloadTask = storage.reference.child("ProfileImg").child("${Constants.currentUserUid}")
             .downloadUrl
         downloadTask.addOnSuccessListener{
             Log.d("xxxx", "downloadTask Successful uri : $it")
@@ -110,7 +115,7 @@ class MyPageFragment : Fragment() {
 
     fun downloadProfileInfo(){
         db.collection("UserData")
-            .document("${auth.currentUser!!.uid}")
+            .document("${Constants.currentUserUid}")
             .get()
             .addOnSuccessListener{
                 val nickname = it.data?.get("nickname") as String
@@ -129,7 +134,7 @@ class MyPageFragment : Fragment() {
 
     private fun deleteUserAccount (){
 
-        util.showDialog(requireContext(),"회원 탈퇴","회원 탈퇴 시 기존 정보를 다시 복구할 수 없습니다.") {
+        Util.showDialog(requireContext(),"회원 탈퇴","회원 탈퇴 시 기존 정보를 다시 복구할 수 없습니다.") {
             auth.signOut()
             startActivity(Intent(activity,LogInActivity::class.java))
             requireActivity().finish()}
@@ -141,7 +146,7 @@ class MyPageFragment : Fragment() {
     private fun signOut() {
 
 
-        util.showDialog(requireContext(),"로그아웃 ","로그아웃 하시겠습니까?") {
+        Util.showDialog(requireContext(),"로그아웃 ","로그아웃 하시겠습니까?") {
             auth.signOut()
             startActivity(Intent(activity,LogInActivity::class.java))
             requireActivity().finish()}
