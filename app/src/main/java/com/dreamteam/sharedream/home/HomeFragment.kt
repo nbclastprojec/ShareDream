@@ -16,7 +16,7 @@ import com.dreamteam.sharedream.DetailPageFragment
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 
-class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener {
+class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var mContext: Context
     private lateinit var homeAdapter: HomeAdapter
@@ -69,16 +69,16 @@ class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener
             startActivity(intent)
 
 
-        binding.btnFilter.setOnClickListener {
-            val filterDialogFragment = CategoryDialogFragment()
-            //다이얼로그에있는 리스너를 달아준다
-            filterDialogFragment.setCategorySelectionListener(this)
-            filterDialogFragment.show(childFragmentManager, "filter_dialog_tag")
+            binding.btnFilter.setOnClickListener {
+                val filterDialogFragment = CategoryDialogFragment()
+                //다이얼로그에있는 리스너를 달아준다
+                filterDialogFragment.setCategorySelectionListener(this)
+                filterDialogFragment.show(childFragmentManager, "filter_dialog_tag")
+            }
         }
+
+
     }
-
-
-}
     @SuppressLint("NotifyDataSetChanged")
     override fun onCategorySelected(category: String) {
         selectedCategory = category

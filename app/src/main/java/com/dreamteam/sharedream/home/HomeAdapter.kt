@@ -3,26 +3,18 @@ package com.dreamteam.sharedream.home
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.DetailFrameActivity
-import com.dreamteam.sharedream.DetailPageFragment
-import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.WriteItemBinding
 import com.dreamteam.sharedream.model.PostData
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.text.SimpleDateFormat
-import java.util.Date
+
 
 class HomeAdapter(private val context: Context) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -103,7 +95,6 @@ class HomeAdapter(private val context: Context) :
         val downloadTask = storageRef.downloadUrl
 
         downloadTask.addOnSuccessListener { uri ->
-
             Glide.with(context)
                 .load(uri)
                 .into(homeHolder.image)

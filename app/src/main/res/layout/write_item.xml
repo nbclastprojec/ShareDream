@@ -7,14 +7,15 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="272dp"
-        android:layout_height="119dp"
+        android:layout_height="110dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
+        android:gravity="left"
         android:orientation="vertical"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/write_image"
+        app:layout_constraintStart_toEndOf="@+id/cardview"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -22,9 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:fontFamily="@font/bbing"
-            android:gravity="right"
+            android:gravity="left"
             android:text="필요 없어진 간석기 교환 합니다."
-            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
@@ -32,7 +34,7 @@
             android:layout_width="253dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bbing"
-            android:gravity="right"
+            android:gravity="left"
             android:text="청동도끼 사용해서 이제 필요 없어요 :)"
             android:textSize="14sp" />
 
@@ -41,7 +43,7 @@
             android:layout_width="253dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bbing"
-            android:gravity="right"
+            android:gravity="left"
             android:text="카테고리 : 도구"
             android:textSize="14sp" />
 
@@ -77,16 +79,23 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/write_image"
-        android:layout_width="106dp"
-        android:layout_height="115dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="105dp"
+        android:layout_height="105dp"
+        android:id="@+id/cardview"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:scaleType="centerCrop"
+        app:cardCornerRadius="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/gan" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/write_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/gan"/>
+    </androidx.cardview.widget.CardView>
 
     <View
         android:id="@+id/bar1"

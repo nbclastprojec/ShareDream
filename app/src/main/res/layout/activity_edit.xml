@@ -71,16 +71,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/value" />
 
-        <View
-            android:id="@+id/view13"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="15dp"
-            android:background="@color/gray900"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/category" />
-
 
         <View
             android:id="@+id/view15"
@@ -99,8 +89,10 @@
             android:layout_height="wrap_content"
             android:hint="글 제목"
             android:textSize="16sp"
+            android:textAlignment="center"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="13dp"
+            android:background="@drawable/edit_searchbox"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view10" />
 
@@ -109,6 +101,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="값어치"
+            android:textAlignment="center"
+            android:background="@drawable/edit_searchbox"
             android:textSize="16sp"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="13dp"
@@ -121,6 +115,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:layout_marginTop="15dp"
+            android:textAlignment="center"
             android:layout_marginLeft="13dp"
             android:hint="카테고리"
             app:layout_constraintStart_toStartOf="parent"
@@ -132,7 +127,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:background="@drawable/edit_searchbox"
             android:hint="지역"
+            android:textAlignment="center"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chipgroup" />
@@ -144,6 +141,8 @@
             android:layout_marginLeft="15dp"
             android:ems="10"
             android:hint="상세정보를 입력해주세요."
+            android:textAlignment="center"
+            android:background="@drawable/edit_searchbox"
             android:inputType="text"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -210,10 +209,10 @@
             android:id="@+id/chipgroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view13"
+            app:layout_constraintTop_toBottomOf="@+id/category"
             app:singleSelection="true">
 
             <com.google.android.material.chip.Chip

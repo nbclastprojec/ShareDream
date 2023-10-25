@@ -1,15 +1,16 @@
 package com.dreamteam.sharedream.home.Edit
 
+import android.R.id
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
@@ -107,6 +108,7 @@ class EditActivity : AppCompatActivity() {
             return
         }
 
+
         val storage = Firebase.storage
         val fileName = SimpleDateFormat("yyyyMMddHHmmssSSS_${count}").format(java.util.Date())
         val mountainsRef = storage.reference.child("image").child(fileName)
@@ -161,6 +163,7 @@ class EditActivity : AppCompatActivity() {
 
         // 이미지 업로드 완료 시 데이터 넣기
         val onComplete: (String) -> Unit = { fileName ->
+
             var edit = hashMapOf(
                 "title" to title,
                 "value" to value,

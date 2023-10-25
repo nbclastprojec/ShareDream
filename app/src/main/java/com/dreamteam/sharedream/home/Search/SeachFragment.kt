@@ -45,7 +45,7 @@ class SeachFragment : Fragment() {
         //어댑터 초기화!해야됨!
 
         searchadapter = SeachAdapter(mContext)
-        val searchEdit = binding.editTextText
+        val searchEdit = binding.editTextSearch
 
         binding.searchRecycler.layoutManager =
             LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
