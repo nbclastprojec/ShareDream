@@ -7,7 +7,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chattingroom_recycleview"
+        android:id="@+id/chatfragment_recyclerview"
         android:layout_width="398dp"
         android:layout_height="292dp"
         android:layout_marginLeft="10dp"

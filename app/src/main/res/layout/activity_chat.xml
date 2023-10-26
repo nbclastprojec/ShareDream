@@ -52,16 +52,16 @@
     <EditText
 
         android:id="@+id/chattext"
-        android:hint="메세지를 입력하세요."
-        android:padding="10dp"
-        android:fontFamily="@font/bbing"
-        android:gravity="center_vertical"
-        android:textColorHint="#D9D9D9"
-        android:layout_width="345dp"
-        android:layout_height="45dp"
+        android:layout_width="328dp"
+        android:layout_height="42dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="10dp"
         android:background="@drawable/loginbtn_2"
+        android:fontFamily="@font/bbing"
+        android:gravity="center_vertical"
+        android:hint="메세지를 입력하세요."
+        android:padding="10dp"
+        android:textColorHint="#D9D9D9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chat_recycleView" />
@@ -72,23 +72,26 @@
         android:layout_height="45dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toEndOf="@+id/chattext" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="417dp"
-        android:layout_height="70dp"
+        android:layout_width="394dp"
+        android:layout_height="69dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat"
-        android:gravity="center">
+        app:layout_constraintTop_toBottomOf="@+id/chat">
 
 
         <androidx.cardview.widget.CardView
@@ -96,8 +99,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:cardCornerRadius="10dp"
             android:layout_marginLeft="10dp"
+            app:cardCornerRadius="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">>
 

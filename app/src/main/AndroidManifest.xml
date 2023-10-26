@@ -17,6 +17,9 @@
             android:name=".DetailFrameActivity"
             android:exported="false" />
         <activity
+            android:name=".chat.MessageActivity"
+            android:exported="false" />
+        <activity
             android:name=".DetailContainer"
             android:exported="false" />
         <activity
