@@ -1,23 +1,22 @@
 package com.dreamteam.sharedream
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.ActivityMainBinding
-import com.dreamteam.sharedream.home.Edit.EditActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.dreamteam.sharedream.home.HomeAdapter
 import com.dreamteam.sharedream.home.Search.SeachFragment
+import com.dreamteam.sharedream.home.alarm.AlarmFragment
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         Constants.currentUserUid = auth.currentUser!!.uid
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         Log.isLoggable("Glide", Log.DEBUG)
 
         //FCM설정, Token값 가져오기
-        //FCMService().getFirebaseToken()
+        FCMService().getFirebaseToken()
         //PostNotification 대응
         checkAppPushNotification()
 

@@ -17,6 +17,7 @@ import com.dreamteam.sharedream.adapter.DifferCallback
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.databinding.WriteItemBinding
 import com.dreamteam.sharedream.model.Post
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
@@ -24,11 +25,17 @@ import com.google.firebase.storage.ktx.storage
 import java.util.UUID
 
 
-class HomePostAdapter(private val context: Context, private val postClick: PostClick, private val allPosts: List<Post>) :
+@Suppress("DEPRECATION")
+class HomePostAdapter(
+    private val context: Context,
+    private val postClick: PostClick,
+    private val allPosts: List<Post>
+) :
     ListAdapter<Post, HomePostAdapter.HomePostRcvViewHolder>(DifferCallback.differCallback) {
 
     private val storage = Firebase.storage
     private val allItems = allPosts
+    private var db = Firebase.firestore
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomePostRcvViewHolder {
         return HomePostRcvViewHolder(
@@ -44,37 +51,60 @@ class HomePostAdapter(private val context: Context, private val postClick: PostC
     override fun onBindViewHolder(holder: HomePostRcvViewHolder, position: Int) {
         val post = currentList[position]
         val allpost = allPosts[position]
-         holder.postheart.setOnClickListener {
-                    // 알림 제목과 내용 설정
-                    val notificationTitle = allpost.title
-                    val notificationBody = "눌렀습니다"
-                    val uniqueMessageId = UUID.randomUUID().toString()
+        holder.postheart.setOnClickListener {
+            // 알림 제목과 내용 설정
 
-                    // FCM 알림에 추가할 데이터 설정
-                    val data = mutableMapOf<String, String>()
-                    data["key1"] = "value1"
-                    data["key2"] = "value2"
-                    FirebaseMessaging.getInstance().isAutoInitEnabled = true
+            val nickname = allpost.nickname
+            val notificationTitle = "$nickname 님이 ${allpost.title}글을 좋아합니다."
+            val notificationBody = "얼른 가서 확인 해 보세요!"
+            val uniqueMessageId = UUID.randomUUID().toString()
 
-                    // FCM 알림을 보내기 위한 데이터 설정
+            // FCM 알림에 추가할 데이터 설정
+            val data = mutableMapOf<String, String>()
+            data["key1"] = "value1"
+            data["key2"] = "value2"
+            FirebaseMessaging.getInstance().isAutoInitEnabled = true
 
-
-                    val token = allpost.token
-
-                    val message = RemoteMessage.Builder(token)
-                        .setMessageId(uniqueMessageId)
-                        .setData(data) // 데이터 추가
-                        .addData("title", notificationTitle) // 알림 제목
-                        .addData("body", notificationBody)
-        //                        o.setT("cMXusJ_PMYJI1PLYFZKzOb:APA91bGCjRm5XELaDHs3kipLW2HrJDNFiwpsQ-cITbIM4FnM5AsJmZqqQs_cyJ93l-qImTtO20gdr62Q2jpeWWETObgDZwMtdhvgSBjYqUdkhYUPmHA-LOr4K9mTKpqbiTzQzQ7j_uzk")
-                        .build()
-                    FirebaseMessaging.getInstance().send(message)
-                    // FCMService의 sendNonotification 함수 호출
-                    val fcmService = FCMService()
-                    fcmService.sendNonotification(context, notificationTitle, notificationBody, data)
+            // FCM 알림을 보내기 위한 데이터 설정
 
 
+            val token = post.token
+            Log.d("nyh", "onBindViewHolder: $token")
+
+            val message = RemoteMessage.Builder(token)
+                .setMessageId(uniqueMessageId)
+                .setData(data) // 데이터 추가
+                .addData("title", notificationTitle) // 알림 제목
+                .addData("body", notificationBody)
+                .build()
+            FirebaseMessaging.getInstance().send(message)
+            // FCMService의 sendNonotification 함수 호출
+            val fcmService = FCMService()
+            fcmService.sendNonotification(context, notificationTitle, notificationBody, data)
+
+            val alarmPost = Post(
+                uid = post.uid, // 랜덤 UID 생성 또는 고유한 ID 생성 방법을 사용
+                title = post.title,
+                price = post.price,
+                category = post.category,
+                address = post.address,
+                deadline = post.deadline,
+                desc = post.desc,
+                imgs = post.imgs,
+                nickname = post.nickname,
+                likeUsers = post.likeUsers,
+                token = post.token // 알림을 받을 대상의 토큰
+            )
+
+            db.collection("AlarmPost")
+                .add(alarmPost)
+                .addOnSuccessListener { documentReference ->
+                    Log.d("nyh", "DocumentSnapshot ${documentReference}")
                 }
+                .addOnFailureListener { e ->
+                    Log.w("nyh", "Error adding document", e)
+                }
+        }
         holder.itemView.setOnClickListener {
             postClick?.postClick(post)
         }
@@ -97,7 +127,7 @@ class HomePostAdapter(private val context: Context, private val postClick: PostC
         val postPrice: TextView = binding.writePrice
         val postCategory: TextView = binding.writeCategory
         val postImg: ImageView = binding.writeImage
-        val postheart:ImageView = binding.btnHeart
+        val postheart: ImageView = binding.btnHeart
 
 
         fun bind(imagePath: String) {
@@ -125,17 +155,18 @@ class HomePostAdapter(private val context: Context, private val postClick: PostC
             storage.reference.child("post")
                 .child("$imagePath").downloadUrl.addOnSuccessListener { uri ->
 //                 캐싱 - rcv 자체적인 캐시 or 페이징?
-                Log.d("xxxx", "bind: storage download uri after img - $imagePath")
-                Glide.with(itemView)
-                    .load(uri)
-                    .into(postImg)
+                    Log.d("xxxx", "bind: storage download uri after img - $imagePath")
+                    Glide.with(itemView)
+                        .load(uri)
+                        .into(postImg)
 
-            }
+                }
                 .addOnFailureListener {
                     Log.d("xxxx", " adapter bind Failure $it")
                 }
         }
     }
+
     @SuppressLint("NotifyDataSetChanged")
     fun onCategorySelected(category: String) {
 

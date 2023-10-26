@@ -143,18 +143,18 @@ class FCMService : FirebaseMessagingService() {
     //Token 가져오기
     fun getFirebaseToken() {
         //비동기 방식
-//        FirebaseMessaging.getInstance().token.addOnSuccessListener {
-//            Log.d("nyh", "getFirebaseToken: token =$it")
-//        }
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Log.d("nyh", "getFirebaseToken: token =$it")
+        }
         //동기방식
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.d(TAG, "Fetching FCM registration token failed ${task.exception}")
-                return@OnCompleteListener
-            }
-            var deviceToken = task.result
-            Log.e(TAG, "token=${deviceToken}")
-        })
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+//            if (!task.isSuccessful) {
+//                Log.d(TAG, "Fetching FCM registration token failed ${task.exception}")
+//                return@OnCompleteListener
+//            }
+//            var deviceToken = task.result
+//            Log.e(TAG, "token=${deviceToken}")
+//        })
     }
 
 }

@@ -136,6 +136,7 @@ class EditFragment : Fragment() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 token = task.result
+                Log.d("nyh", "postUpload: $token")
 
 
                 val postUid = Constants.currentUserUid!!
