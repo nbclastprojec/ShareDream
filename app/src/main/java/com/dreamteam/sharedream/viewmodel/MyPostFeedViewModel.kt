@@ -28,6 +28,10 @@ class MyPostFeedViewModel : ViewModel() {
 
     // 게시글 목록 Rcv 클릭한 아이템 정보 받아오기
     var currentPost = MutableLiveData<Post>()
+
+    // 게시글 디테일 페이지에서 수정 페이지로 이동 시 필요한 데이터
+//    var currentPostEditDefault = MutableList<>
+
     // 게시글 목록 Rcv 클릭한 아이템 작성자 프로필 이미지 가져오기 / 마이 페이지 프로필 이미지와 같은 단일 프로필 이미지 로딩
     private val _currentProfileImg = MutableLiveData<Uri>()
     val currentProfileImg : LiveData<Uri> get() = _currentProfileImg

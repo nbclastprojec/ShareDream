@@ -63,7 +63,7 @@ class MyPostFeedFragment: Fragment() {
                 myPostFeedViewModel.currentPost.value = post
                 myPostFeedViewModel.testA()
                 parentFragmentManager.beginTransaction().add(R.id.frag_edit,
-                    MyPostFeedDetailFragment()
+                    PostDetailFragment()
                 ).addToBackStack(null).commit()
                 Log.d("xxxx", " myPostFeed Item Click = $post ")
             }

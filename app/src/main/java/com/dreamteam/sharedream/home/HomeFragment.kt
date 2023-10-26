@@ -1,6 +1,5 @@
 package com.dreamteam.sharedream.home
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -13,13 +12,12 @@ import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.home.Edit.EditFragment
 import com.dreamteam.sharedream.model.Post
-import com.dreamteam.sharedream.view.MyPostFeedDetailFragment
+import com.dreamteam.sharedream.view.PostDetailFragment
 import com.dreamteam.sharedream.view.adapter.HomePostAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -140,7 +138,7 @@ class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener
                     myPostFeedViewModel.getCurrentProfileImg(post.uid)
                     parentFragmentManager.beginTransaction().add(
                         R.id.frag_edit,
-                        MyPostFeedDetailFragment()
+                        PostDetailFragment()
                     ).addToBackStack(null).commit()
                     Log.d("xxxx", " myPostFeed Item Click = $post ")
                 }
