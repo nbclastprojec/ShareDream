@@ -7,37 +7,38 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="272dp"
-        android:layout_height="119dp"
+        android:layout_height="110dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
+        android:gravity="left"
         android:orientation="vertical"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/write_image"
+        app:layout_constraintStart_toEndOf="@+id/cardview"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/write_tittle"
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            android:fontFamily="@font/bbing"
-            android:gravity="right"
-            android:text="필요 없어진 간석기 교환 합니다."
-            android:maxLines="1"
             android:ellipsize="marquee"
-            android:textSize="16sp"
+            android:fontFamily="@font/bbing"
+            android:gravity="left"
+            android:maxLines="1"
+            android:text="필요 없어진 간석기 교환 합니다."
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/write_subtittle"
             android:layout_width="253dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/bbing"
-            android:gravity="right"
-            android:text="청동도끼 사용해서 이제 필요 없어요 :)"
-            android:maxLines="1"
             android:ellipsize="marquee"
+            android:fontFamily="@font/bbing"
+            android:gravity="left"
+            android:maxLines="1"
+            android:text="청동도끼 사용해서 이제 필요 없어요 :)"
             android:textSize="14sp" />
 
         <TextView
@@ -45,7 +46,7 @@
             android:layout_width="253dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bbing"
-            android:gravity="right"
+            android:gravity="left"
             android:text="카테고리 : 도구"
             android:textSize="14sp" />
 
@@ -68,10 +69,10 @@
                 android:layout_width="110dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:fontFamily="@font/bbing"
-                android:maxLines="1"
                 android:ellipsize="marquee"
+                android:fontFamily="@font/bbing"
+                android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="60,000,000원 " />
 
             <TextView
@@ -84,16 +85,33 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/write_image"
-        android:layout_width="106dp"
-        android:layout_height="115dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="105dp"
+        android:layout_height="105dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:scaleType="centerCrop"
+        app:cardCornerRadius="15dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+        android:id="@+id/write_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/loading2" />
+
+        <ImageView
+            android:id="@+id/btn_heart"
+            android:layout_width="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right"
+            app:srcCompat="@drawable/mypage_heart" />
+    </androidx.cardview.widget.CardView>
 
     <View
         android:id="@+id/bar1"

@@ -1,18 +1,19 @@
 package com.dreamteam.sharedream.model
 
 data class Post(
-    val uid : String,
-    val title : String,
-    val price : String,
-    val category : String,
-    val address : String,
-    val deadline : String,
-    val desc : String,
-    var imgs : List<String>,
-    val nickname : String,
-    val likeUsers : List<String>,
+    val uid: String,
+    val title: String,
+    val price: String,
+    val category: String,
+    val address: String,
+    val deadline: String,
+    val desc: String,
+    var imgs: List<String>,
+    val nickname: String,
+    val likeUsers: List<String>,
+    val token: String
 
 )
 {
-    constructor() : this("","", "", "", "", "","", listOf(),"", listOf())
+    constructor() : this("","", "", "", "", "","", listOf(),"", listOf(),"")
 }

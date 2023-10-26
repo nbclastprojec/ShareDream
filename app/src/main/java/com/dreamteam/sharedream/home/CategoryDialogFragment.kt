@@ -36,8 +36,9 @@ class CategoryDialogFragment : DialogFragment() {
             val selectedChip = view.findViewById<Chip>(checkedId)
             val selectedCategory = selectedChip.text.toString()
             //selected된 값 전달
-            categorySelectionListener?.onCategorySelected(selectedCategory)
-            Log.d("nyh", "onViewCreated: $selectedCategory")
+            val homeFragment = parentFragment as HomeFragment
+            homeFragment.onCategorySelected(selectedCategory)
+
             dismiss()
         }
     }
