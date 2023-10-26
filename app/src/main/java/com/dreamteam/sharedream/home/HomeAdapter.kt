@@ -38,7 +38,7 @@ class HomeAdapter(private val context: Context) :
     fun postDataFromFirestore() {
 
         val fireStore = FirebaseFirestore.getInstance()
-        fireStore.collection("Post").get()
+        fireStore.collection("Posts").get()
             .addOnSuccessListener { result ->
 
                 Log.d("postDataFromFirestore", "nyh postDataFromFirestore suc: $result")
@@ -94,6 +94,7 @@ class HomeAdapter(private val context: Context) :
         notifyDataSetChanged()
     }
 
+    @SuppressLint("SuspiciousIndentation")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val homeItem = filteredDataItem[position]
@@ -104,37 +105,37 @@ class HomeAdapter(private val context: Context) :
         val downloadTask = storageRef.downloadUrl
 
 
-        holder.button.setOnClickListener {
-            // 알림 제목과 내용 설정
-            val notificationTitle = homeItem.title
-            val notificationBody = "눌렀습니다"
-            val uniqueMessageId = UUID.randomUUID().toString()
-
-            // FCM 알림에 추가할 데이터 설정
-            val data = mutableMapOf<String, String>()
-            data["key1"] = "value1"
-            data["key2"] = "value2"
-            FirebaseMessaging.getInstance().isAutoInitEnabled = true
-
-            // FCM 알림을 보내기 위한 데이터 설정
-
-
-            val token = homeItem.token
-
-            val message = RemoteMessage.Builder(token)
-                .setMessageId(uniqueMessageId)
-                .setData(data) // 데이터 추가
-                .addData("title", notificationTitle) // 알림 제목
-                .addData("body", notificationBody)
-//                        o.setT("cMXusJ_PMYJI1PLYFZKzOb:APA91bGCjRm5XELaDHs3kipLW2HrJDNFiwpsQ-cITbIM4FnM5AsJmZqqQs_cyJ93l-qImTtO20gdr62Q2jpeWWETObgDZwMtdhvgSBjYqUdkhYUPmHA-LOr4K9mTKpqbiTzQzQ7j_uzk")
-                .build()
-            FirebaseMessaging.getInstance().send(message)
-            // FCMService의 sendNonotification 함수 호출
-            val fcmService = FCMService()
-            fcmService.sendNonotification(context, notificationTitle, notificationBody, data)
-
-
-        }
+       // holder.button.setOnClickListener {
+        //            // 알림 제목과 내용 설정
+        //            val notificationTitle = homeItem.title
+        //            val notificationBody = "눌렀습니다"
+        //            val uniqueMessageId = UUID.randomUUID().toString()
+        //
+        //            // FCM 알림에 추가할 데이터 설정
+        //            val data = mutableMapOf<String, String>()
+        //            data["key1"] = "value1"
+        //            data["key2"] = "value2"
+        //            FirebaseMessaging.getInstance().isAutoInitEnabled = true
+        //
+        //            // FCM 알림을 보내기 위한 데이터 설정
+        //
+        //
+        //            val token = homeItem.token
+        //
+        //            val message = RemoteMessage.Builder(token)
+        //                .setMessageId(uniqueMessageId)
+        //                .setData(data) // 데이터 추가
+        //                .addData("title", notificationTitle) // 알림 제목
+        //                .addData("body", notificationBody)
+        ////                        o.setT("cMXusJ_PMYJI1PLYFZKzOb:APA91bGCjRm5XELaDHs3kipLW2HrJDNFiwpsQ-cITbIM4FnM5AsJmZqqQs_cyJ93l-qImTtO20gdr62Q2jpeWWETObgDZwMtdhvgSBjYqUdkhYUPmHA-LOr4K9mTKpqbiTzQzQ7j_uzk")
+        //                .build()
+        //            FirebaseMessaging.getInstance().send(message)
+        //            // FCMService의 sendNonotification 함수 호출
+        //            val fcmService = FCMService()
+        //            fcmService.sendNonotification(context, notificationTitle, notificationBody, data)
+        //
+        //
+        //        }
 
 
             downloadTask.addOnSuccessListener { uri ->
@@ -178,6 +179,6 @@ class HomeAdapter(private val context: Context) :
             val value = binding.writePrice
             val category = binding.writeCategory
             val image = binding.writeImage
-            val button = binding.btnLike
+            //val button = binding.btnLike
         }
     }

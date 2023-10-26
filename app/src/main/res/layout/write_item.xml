@@ -103,6 +103,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/loading2" />
 
+        <ImageView
+            android:id="@+id/btn_heart"
+            android:layout_width="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right"
+            app:srcCompat="@drawable/mypage_heart" />
+    </androidx.cardview.widget.CardView>
+
     <View
         android:id="@+id/bar1"
         android:layout_width="match_parent"

@@ -51,59 +51,44 @@ class MainActivity : AppCompatActivity() {
         val tabLayout: TabLayout = binding.tabLayout
 
 
-
         val viewpagerFragmentAdapter = ViewPagerAdapter(this)
         viewPager.adapter = viewpagerFragmentAdapter
 
         val tabTitles = listOf("교환하기", "내소식")
-        binding.button.setOnClickListener {
 
-            auth.signOut()
-            Toast.makeText(this, "로그아웃", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, LogInActivity::class.java)
-            startActivity(intent)
-            finish()
-
-
-//        binding.button.setOnClickListener {
-//
-//            auth.signOut()
-//            Toast.makeText(this,"로그아웃",Toast.LENGTH_SHORT).show()
-//            val intent=Intent(this,LogInActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//
-//        }
-        if (intent.hasExtra("open_fragment")) {
-            val fragmentToOpen = intent.getStringExtra("open_fragment")
-            if(fragmentToOpen == "alarm_fragment") {
-                val transaction = supportFragmentManager.beginTransaction()
-                val alarmFragment = AlarmFragment()
-                val alarmFragmentIndex = 1
-                viewPager.setCurrentItem(alarmFragmentIndex, true)
-                transaction.replace(R.id.viewPager, alarmFragment)
+            if (intent.hasExtra("open_fragment")) {
+                val fragmentToOpen = intent.getStringExtra("open_fragment")
+                if (fragmentToOpen == "alarm_fragment") {
+                    val transaction = supportFragmentManager.beginTransaction()
+                    val alarmFragment = AlarmFragment()
+                    val alarmFragmentIndex = 1
+                    viewPager.setCurrentItem(alarmFragmentIndex, true)
+                    transaction.replace(R.id.viewPager, alarmFragment)
+                }
             }
-        }
 
-        TabLayoutMediator(
-            tabLayout,
-            viewPager,
-            { tab, position -> tab.text = tabTitles[position] }).attach()
+            TabLayoutMediator(
+                tabLayout,
+                viewPager,
+                { tab, position -> tab.text = tabTitles[position] }).attach()
 
 
-        binding.editTextSearchView.setOnClickListener {
+            binding.editTextSearchView.setOnClickListener {
 
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.frag_edit, SeachFragment())
-                .addToBackStack(null)
-                .commit()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frag_edit, SeachFragment())
+                    .addToBackStack(null)
+                    .commit()
 
-        }
-    }
+            }
+
+
 
         binding.btnMypage.setOnClickListener {
             supportFragmentManager.beginTransaction().add(R.id.frag_edit, MyPageFragment())
                 .addToBackStack(null).commit()
+        }
+    }
     //android 13 postnotification
     private fun checkAppPushNotification(){
 
@@ -128,7 +113,6 @@ class MainActivity : AppCompatActivity() {
             checkAppPushNotification()
         }
     }
-
 
     /** DynamicLink */
 //    private fun initDynamicLink() {
