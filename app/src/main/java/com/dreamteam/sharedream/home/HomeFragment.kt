@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.home.Edit.EditFragment
-import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.PostDetailFragment
 import com.dreamteam.sharedream.view.adapter.HomePostAdapter
@@ -85,7 +84,7 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
 
         binding.homeBtnRefreshList.setOnClickListener {
-            myPostFeedViewModel.postDownload()
+            myPostFeedViewModel.downloadHomePostRcv()
         }
 
         binding.floatingActionButton.setOnClickListener {
@@ -110,7 +109,7 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
         setupRcv()
 
-        myPostFeedViewModel.postDownload()
+        myPostFeedViewModel.downloadHomePostRcv()
 
 //        db.collection("Posts").addSnapshotListener { querySnapshot, exception ->
 //            if (exception != null) {
@@ -130,7 +129,7 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 ////            homePostAdapter.submitList(rcvList)
 //        }
 
-        // todo Home Frag 게시글 LiveData Observe
+
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) {
             rcvList = it
 
@@ -147,7 +146,7 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
             homePostAdapter = HomePostAdapter(requireContext(), object : PostClick {
                 override fun postClick(post: PostRcv) {
                     myPostFeedViewModel.currentPost.value = post
-                    myPostFeedViewModel.getCurrentProfileImg(post.uid)
+                    myPostFeedViewModel.downloadCurrentProfileImg(post.uid)
                     parentFragmentManager.beginTransaction().add(
                         R.id.frag_edit,
                         PostDetailFragment()

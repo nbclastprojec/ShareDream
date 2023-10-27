@@ -24,7 +24,7 @@ class PostDetailFragment : Fragment() {
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
 
-    private val postInfo = mutableListOf<PostRcv>()
+    private val currentPostInfo = mutableListOf<PostRcv>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,8 +42,8 @@ class PostDetailFragment : Fragment() {
             binding.detailMoney.text = "${it.price} 원"
             binding.detailTvLikeCount.text = "${it.likeUsers.size}"
 
-            postInfo.add(it)
-            Log.d("xxxx", " detail Page PostInfo : $postInfo")
+            currentPostInfo.add(it)
+            Log.d("xxxx", " detail Page PostInfo : $currentPostInfo")
             imgs.addAll(it.imgs)
 
             // 수정 버튼 visibility
@@ -88,22 +88,27 @@ class PostDetailFragment : Fragment() {
                 binding.detailLike.setImageResource(R.drawable.like)
             }
         }
-        // 수정 버튼 클릭 이벤트
+
+        // 게시물 수정 버튼 클릭 이벤트
         binding.detailBtnEditPost.setOnClickListener {
+            myPostFeedViewModel.currentPostToEditPage.postValue(currentPostInfo[0])
+//            myPostFeedViewModel.downloadEditPostDefault(currentPostInfo[0].timestamp)
             parentFragmentManager.beginTransaction().replace(R.id.frag_edit,PostEditFragment()).addToBackStack(null).commit()
 
         }
 
-        // 좋아요 버튼 클릭 이벤트
+        // 관심 목록 추가 버튼 클릭 이벤트
         binding.detailBtnAddFavorite.setOnClickListener {
             Util.showDialog(requireContext(),"관심 목록에 추가","내 관심 목록에 추가하시겠습니까?"){
-                myPostFeedViewModel.addOrSubFavoritePost(Constants.currentUserUid!!,postInfo[0].timestamp)
-                Log.d("xxxx", " detail like btn clicked, post timestamp  =  ${postInfo[0].timestamp}")
+                myPostFeedViewModel.addOrSubFavoritePost(Constants.currentUserUid!!,currentPostInfo[0].timestamp)
+                Log.d("xxxx", " detail like btn clicked, post timestamp  =  ${currentPostInfo[0].timestamp}")
             }
         }
+
+        // 관심 목록 제거 버튼 클릭 이벤트
         binding.detailBtnSubFavorite.setOnClickListener {
             Util.showDialog(requireContext(),"관심 목록에서 제거","내 관심 목록에서 게시글의 아이템을 제거하시겠습니까?"){
-                myPostFeedViewModel.addOrSubFavoritePost(Constants.currentUserUid!!,postInfo[0].timestamp)
+                myPostFeedViewModel.addOrSubFavoritePost(Constants.currentUserUid!!,currentPostInfo[0].timestamp)
             }
         }
 

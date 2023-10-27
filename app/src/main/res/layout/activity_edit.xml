@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".home.Edit.EditActivity">
+    android:clickable="true"
+    tools:context=".home.Edit.EditActivity"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/btn_complete"
+            android:id="@+id/edit_btn_complete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -33,7 +35,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView12" />
 
         <ImageView
-            android:id="@+id/btn_back"
+            android:id="@+id/edit_btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -77,7 +79,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/view">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/camera"
+                        android:id="@+id/edit_btn_select_img"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_margin="20dp"
@@ -123,7 +125,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
                 <EditText
-                    android:id="@+id/title"
+                    android:id="@+id/edit_tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -146,10 +148,10 @@
                     android:background="@color/gray900"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_tv_title" />
 
                 <EditText
-                    android:id="@+id/value"
+                    android:id="@+id/edit_etv_price"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -173,11 +175,11 @@
                     android:background="@color/gray900"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/value" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_etv_price" />
 
 
                 <TextView
-                    android:id="@+id/category"
+                    android:id="@+id/edit_tv_category"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -198,10 +200,10 @@
                     android:background="@color/gray900"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/category" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_tv_category" />
 
                 <EditText
-                    android:id="@+id/city"
+                    android:id="@+id/edit_etv_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -222,7 +224,7 @@
                     android:background="@color/gray900"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/city" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_etv_address" />
 
 
                 <com.google.android.material.chip.ChipGroup
@@ -296,7 +298,7 @@
                 </com.google.android.material.chip.ChipGroup>
 
                 <EditText
-                    android:id="@+id/mainText"
+                    android:id="@+id/edit_etv_desc"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:layout_marginStart="16dp"
@@ -305,7 +307,7 @@
                     android:layout_marginBottom="1dp"
                     android:ems="10"
                     android:gravity="start"
-                    android:hint="상세정보를 입력해주세요."
+                    android:hint="상세정보를 입력해주세요1111."
                     android:textColorHint="@color/hint_color"
                     android:inputType="textMultiLine"
                     android:maxLines="20"
@@ -313,7 +315,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/city" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_etv_address" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

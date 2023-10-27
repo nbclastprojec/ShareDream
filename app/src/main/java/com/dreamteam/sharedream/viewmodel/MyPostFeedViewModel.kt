@@ -21,6 +21,9 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class MyPostFeedViewModel : ViewModel() {
     private val db = Firebase.firestore
@@ -38,8 +41,6 @@ class MyPostFeedViewModel : ViewModel() {
     private val _likeUsersCount = MutableLiveData<MutableList<String>>()
     val likeUsersCount : LiveData<MutableList<String>> get() = _likeUsersCount
 
-    // 게시글 디테일 페이지에서 수정 페이지로 이동 시 필요한 데이터
-//    var currentPostEditDefault = MutableList<>
 
     // 게시글 목록 Rcv 클릭한 아이템 작성자 프로필 이미지 가져오기 / 마이 페이지 프로필 이미지와 같은 단일 프로필 이미지 로딩
     private val _currentProfileImg = MutableLiveData<Uri>()
@@ -53,9 +54,58 @@ class MyPostFeedViewModel : ViewModel() {
     private val _postUriResult = MutableLiveData<MutableList<Uri>>()
     val postUriResult : LiveData<MutableList<Uri>> get() = _postUriResult
 
+    // 수정 페이지 이동 시 기존에 작성 되어 있던 정보 불러오기
+    var currentPostToEditPage = MutableLiveData<PostRcv>()
+
+    // 포스트 수정된 DB 업로드
+    // 선택한 이미지 Storage에 업로드
+    fun uploadEditPost(uris : MutableList<Uri>, post : Post) {
+        val imgs : MutableList<String> = mutableListOf()
+        fun getTime(): String {
+            val currentDateTime = Calendar.getInstance().time
+            val dateFormat =
+                SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS", Locale.KOREA).format(currentDateTime)
+
+            return dateFormat
+        }
+        val time = getTime()
+        uris?.let { uris ->
+            for (i in uris.indices) {
+                val uri = uris[i]
+                val fileName = "${time}_$i"
+
+                imgs.add(fileName)
+
+                storage.reference.child("post").child("${time}_$i").putFile(uri)
+                    .addOnSuccessListener {
+                        // 추후에 필요한 기능 추가
+                    }
+                    .addOnFailureListener {
+                        Log.d("xxxx", " Edit Frag imageUpload Failure : $it ")
+                    }
+            }
+            post.imgs = imgs
+            db.collection("Posts").whereEqualTo("timestamp",post.timestamp).get()
+                .addOnSuccessListener {querySnapshot ->
+                    Log.d("xxxx", "uploadEditPost: 해당 게시글 $querySnapshot")
+                    if (!querySnapshot.isEmpty){
+                        querySnapshot.documents[0].reference.set(post)
+                            .addOnSuccessListener {
+                            Log.d("xxxx", "imageUpload: 게시글 수정 완료 ") 
+                            }
+                            .addOnFailureListener {
+                                Log.d("xxxx", "uploadEditPost: 게시글 수정 실패 $it")
+                            }
+                    }
+                }
+                .addOnFailureListener {
+                    Log.d("xxxx", "uploadEditPost: 초장부터 실패 $it")
+                }
+        }
+    }
 
     // 게시글 디테일 아이템 사진들 불러오기
-    fun getDetailImgs () {
+    fun downloadDetailImgs () {
         val uris = mutableListOf<Uri>()
         // 빈 리스트로 초기화
         _postUriResult.value = uris
@@ -76,8 +126,9 @@ class MyPostFeedViewModel : ViewModel() {
             Log.d("xxxx", "postUriResult: ${_postUriResult.value} ")
         }
     }
+
     // Home Frag 게시글 정보 받아오기
-    fun postDownload(){
+    fun downloadHomePostRcv(){
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 db.collection("Posts")
@@ -88,7 +139,7 @@ class MyPostFeedViewModel : ViewModel() {
                             val postRcvList = mutableListOf<PostRcv>()
                             for ( document in querySnapshot.documents){
                                 document.toObject<Post>()?.let { post ->
-                                    PostRcvConvertUri(post,querySnapshot, postRcvList,_postResult)
+                                    convertPostToPostRcv(post,querySnapshot, postRcvList,_postResult)
                                 }
                             }
                         }
@@ -100,8 +151,9 @@ class MyPostFeedViewModel : ViewModel() {
         }
     }
 
-    private fun PostRcvConvertUri (post: Post, querySnapshot: QuerySnapshot, postRcvList:MutableList<PostRcv>,
-                                   resultLiveData: MutableLiveData<MutableList<PostRcv>>) {
+    // Post Model 형식 -> PostRcv 형식으로 변환
+    private fun convertPostToPostRcv (post: Post, querySnapshot: QuerySnapshot, postRcvList:MutableList<PostRcv>,
+                                      resultLiveData: MutableLiveData<MutableList<PostRcv>>) {
         val postImgUris: List<String> = post.imgs
         val postImgList: MutableList<Uri> = mutableListOf()
 
@@ -147,24 +199,19 @@ class MyPostFeedViewModel : ViewModel() {
 
                     if (postRcvList.size == querySnapshot.size()) {
                         resultLiveData.postValue(postRcvList)
-                        Log.d("xxxx", " 설마 되겠어?")
-                        Log.d(
-                            "xxxx",
-                            " 설마 있겠어 1: ${postRcvList[0].imgs}, 2: ${postRcvList[1].imgs}"
-                        )
                     }
                 }
             }
     }
 
 
-        // 내가 쓴 글 목록 받아오기 -  whereEqualTo, orderBy
+    // 내가 쓴 글 목록 받아오기 -  whereEqualTo, orderBy
     fun postFeedDownload() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 db.collection("Posts")
                     .whereEqualTo("uid", Constants.currentUserUid)
-                    .orderBy("imgs",Query.Direction.DESCENDING)
+                    .orderBy("timestamp",Query.Direction.DESCENDING)
                     .get()
                     .addOnSuccessListener { querySnapshot ->
                         if (!querySnapshot.isEmpty) {
@@ -172,7 +219,7 @@ class MyPostFeedViewModel : ViewModel() {
                             val postRcvList : MutableList<PostRcv> = mutableListOf()
                             for (document in documentSnapshot) {
                                 document.toObject<Post>()?.let {
-                                    PostRcvConvertUri(it,querySnapshot,postRcvList,_postFeedResult)
+                                    convertPostToPostRcv(it,querySnapshot,postRcvList,_postFeedResult)
                                 }
                             }
                             Log.d("xxxx", "postFeedDownload: $postRcvList")
@@ -189,7 +236,7 @@ class MyPostFeedViewModel : ViewModel() {
     }
 
     // 단일 프로필 이미지 불러오기
-    fun getCurrentProfileImg(uid : String){
+    fun downloadCurrentProfileImg(uid : String){
         storage.reference.child("ProfileImg").child("$uid").downloadUrl
             .addOnSuccessListener {
                 _currentProfileImg.value = it

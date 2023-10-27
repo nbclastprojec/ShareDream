@@ -47,7 +47,6 @@ class MyPageEditFragment : Fragment() {
         db = Firebase.firestore
         storage = Firebase.storage
 
-
     }
 
     override fun onCreateView(
@@ -65,6 +64,8 @@ class MyPageEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.profileId.text = Constants.currentUserInfo?.nickname?:"닉네임이 설정되지 않았습니다 재접속해주세요"
+        binding.profileText.setText(Constants.currentUserInfo?.intro?:"자기소개가 설정되지 않았습니다.")
         binding.btnProfileImgEdit.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
@@ -72,7 +73,7 @@ class MyPageEditFragment : Fragment() {
         binding.profileId
         binding.completeButton.setOnClickListener {
             if (binding.profileId.text.isEmpty() || binding.profileText.text.isEmpty()) {
-                Toast.makeText(requireContext()," 변경할 닉네임, 자기소개를 입력해주세요",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext()," 변경할 자기소개를 입력해주세요",Toast.LENGTH_SHORT).show()
             } else if (photoUri != null) {
                 val nickname = binding.profileId.text.toString()
                 val intro = binding.profileText.text.toString()
@@ -88,7 +89,6 @@ class MyPageEditFragment : Fragment() {
             val inputMethodManager =
                 requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
-//            parentFragmentManager.beginTransaction().remove(R.id.main_frame_layout, MyPageFragment()).commit()
             Toast.makeText(this.context,"회원정보가 수정되었습니다",Toast.LENGTH_SHORT).show()
             parentFragmentManager.popBackStack()
 

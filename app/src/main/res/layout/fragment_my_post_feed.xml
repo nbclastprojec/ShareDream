@@ -7,7 +7,23 @@
     android:background="@color/white"
     android:clickable="true">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/my_post_feed_img_notify_notfound"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/my_post_feed_not_found"
+            android:visibility="visible"
+            />
+
+    </FrameLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_post_feed_rcv"
         android:layout_width="match_parent"
@@ -17,6 +33,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bar1"
         tools:listitem="@layout/write_item"/>
+
 
     <ImageView
         android:id="@+id/backButton_writepage"

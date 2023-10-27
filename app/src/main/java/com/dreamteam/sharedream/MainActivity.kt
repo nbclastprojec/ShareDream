@@ -18,15 +18,27 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.dreamteam.sharedream.home.HomeAdapter
 import com.dreamteam.sharedream.home.Search.SeachFragment
+import com.dreamteam.sharedream.model.UserData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var homeAdapter: HomeAdapter
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val auth: FirebaseAuth = Firebase.auth
+    private val db : FirebaseFirestore = Firebase.firestore
 
     init {
         Constants.currentUserUid = auth.currentUser!!.uid
+        db.collection("UserData").document("${auth.currentUser!!.uid}")
+            .get()
+            .addOnSuccessListener {
+                Constants.currentUserInfo = it.toObject<UserData>()
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +97,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.btnMypage.setOnClickListener {
+            Log.d("xxxx", " MainActivity Mypage Btn Click ${Constants.currentUserInfo}")
             supportFragmentManager.beginTransaction().add(R.id.frag_edit, MyPageFragment())
                 .addToBackStack(null).commit()
         }

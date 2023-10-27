@@ -17,11 +17,11 @@ import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.MyPostFeedAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 
-class MyPostFeedFragment: Fragment() {
-    private var _binding : FragmentMyPostFeedBinding? = null
+class MyPostFeedFragment : Fragment() {
+    private var _binding: FragmentMyPostFeedBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var myPostFeedAdapter : MyPostFeedAdapter
+    private lateinit var myPostFeedAdapter: MyPostFeedAdapter
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -29,7 +29,7 @@ class MyPostFeedFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMyPostFeedBinding.inflate(inflater,container, false)
+        _binding = FragmentMyPostFeedBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -42,11 +42,14 @@ class MyPostFeedFragment: Fragment() {
         setupRcv()
         myPostFeedViewModel.postFeedDownload()
 
-        myPostFeedViewModel.postFeedResult.observe(viewLifecycleOwner){
-            val rcvList : MutableList<PostRcv> = it
+        myPostFeedViewModel.postFeedResult.observe(viewLifecycleOwner) {
+            val rcvList: MutableList<PostRcv> = it
 
             // todo 글 작성 기능 완료 후 - 내가 쓴 글 _ 작성된 글이 없을 때 예외처리
             myPostFeedAdapter.submitList(rcvList)
+            if (rcvList.isNotEmpty()) {
+                binding.myPostFeedImgNotifyNotfound.visibility = View.GONE
+            }
             Log.d("xxxx", " submitList : $rcvList")
             myPostFeedAdapter.notifyDataSetChanged()
         }
@@ -58,11 +61,12 @@ class MyPostFeedFragment: Fragment() {
     }
 
     private fun setupRcv() {
-        myPostFeedAdapter = MyPostFeedAdapter(object : PostClick{
+        myPostFeedAdapter = MyPostFeedAdapter(object : PostClick {
             override fun postClick(post: PostRcv) {
                 myPostFeedViewModel.currentPost.value = post
-                myPostFeedViewModel.getDetailImgs()
-                parentFragmentManager.beginTransaction().add(R.id.frag_edit,
+//                myPostFeedViewModel.downloadDetailImgs()
+                parentFragmentManager.beginTransaction().add(
+                    R.id.frag_edit,
                     PostDetailFragment()
                 ).addToBackStack(null).commit()
                 Log.d("xxxx", " myPostFeed Item Click = $post ")
@@ -72,9 +76,9 @@ class MyPostFeedFragment: Fragment() {
         binding.myPostFeedRcv.apply {
             setHasFixedSize(true)
             layoutManager =
-                LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = myPostFeedAdapter
-            addItemDecoration(DividerItemDecoration(context,LinearLayout.VERTICAL))
+            addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
         }
 
     }
