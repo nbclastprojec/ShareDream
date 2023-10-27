@@ -1,6 +1,7 @@
 package com.dreamteam.sharedream.model
 
 import android.net.Uri
+import com.google.firebase.Timestamp
 
 data class PostRcv(
 
@@ -13,7 +14,9 @@ data class PostRcv(
     val desc: String,
     var imgs: List<Uri>,
     val nickname: String,
-    val likeUsers: List<String>,
-    val token: String
+    var likeUsers: List<String>,
+    val token: String,
+    val timestamp: Timestamp,
+    val state : String,
 
 )

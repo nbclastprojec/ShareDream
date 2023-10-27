@@ -17,6 +17,7 @@ import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -160,7 +161,9 @@ class EditFragment : Fragment() {
                     postImg,
                     userNickname,
                     postLikeUsers,
-                    token
+                    token,
+                    Timestamp.now(),
+                    "교환 가능"
 
                 )
 

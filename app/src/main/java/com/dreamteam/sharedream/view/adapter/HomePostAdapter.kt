@@ -2,6 +2,7 @@ package com.dreamteam.sharedream.view.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,12 +12,14 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.FCMService
 import com.dreamteam.sharedream.adapter.DifferCallback
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.databinding.WriteItemBinding
 import com.dreamteam.sharedream.model.Post
+import com.dreamteam.sharedream.model.PostRcv
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
@@ -24,8 +27,8 @@ import com.google.firebase.storage.ktx.storage
 import java.util.UUID
 
 
-class HomePostAdapter(private val context: Context, private val postClick: PostClick, private val allPosts: List<Post>) :
-    ListAdapter<Post, HomePostAdapter.HomePostRcvViewHolder>(DifferCallback.differCallback) {
+class HomePostAdapter(private val context: Context, private val postClick: PostClick, private val allPosts: List<PostRcv>) :
+    ListAdapter<PostRcv, HomePostAdapter.HomePostRcvViewHolder>(DifferCallback.differCallback) {
 
     private val storage = Firebase.storage
     private val allItems = allPosts
@@ -100,7 +103,9 @@ class HomePostAdapter(private val context: Context, private val postClick: PostC
         val postheart:ImageView = binding.btnHeart
 
 
-        fun bind(imagePath: String) {
+        fun bind(imagePath: Uri) {
+        postImg.load(imagePath)
+        }
 
 
             //todo 글라이드 캐싱 추가 예정
@@ -121,20 +126,20 @@ class HomePostAdapter(private val context: Context, private val postClick: PostC
 //                    .into(postImg)
 //                this.imagePath = imagePath
 //            }
-            Log.d("xxxx", "bind: storage download uri before img - ${imagePath}")
-            storage.reference.child("post")
-                .child("$imagePath").downloadUrl.addOnSuccessListener { uri ->
-//                 캐싱 - rcv 자체적인 캐시 or 페이징?
-                Log.d("xxxx", "bind: storage download uri after img - $imagePath")
-                Glide.with(itemView)
-                    .load(uri)
-                    .into(postImg)
-
-            }
-                .addOnFailureListener {
-                    Log.d("xxxx", " adapter bind Failure $it")
-                }
-        }
+//            Log.d("xxxx", "bind: storage download uri before img - ${imagePath}")
+//            storage.reference.child("post")
+//                .child("$imagePath").downloadUrl.addOnSuccessListener { uri ->
+////                 캐싱 - rcv 자체적인 캐시 or 페이징?
+//                Log.d("xxxx", "bind: storage download uri after img - $imagePath")
+//                Glide.with(itemView)
+//                    .load(uri)
+//                    .into(postImg)
+//
+//            }
+//                .addOnFailureListener {
+//                    Log.d("xxxx", " adapter bind Failure $it")
+//                }
+//        }
     }
     @SuppressLint("NotifyDataSetChanged")
     fun onCategorySelected(category: String) {

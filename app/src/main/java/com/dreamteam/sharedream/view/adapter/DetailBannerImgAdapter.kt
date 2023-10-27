@@ -14,7 +14,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 
-class DetailBannerImgAdapter(private val uris : List<String>) :
+class DetailBannerImgAdapter(private val uris : List<Uri>) :
     RecyclerView.Adapter<DetailBannerImgAdapter.EventViewHolder>() {
 
     private val storage = Firebase.storage
@@ -22,17 +22,18 @@ class DetailBannerImgAdapter(private val uris : List<String>) :
         RecyclerView.ViewHolder(binding.root) {
         val bannerImgUrl: ImageView = binding.detailImg
 
-        fun bind(imagePath : String){
-            storage.reference.child("post").child("${imagePath}")
-                .downloadUrl
-                .addOnSuccessListener { uri ->
-                    Glide.with(itemView)
-                        .load(uri)
-                        .into(bannerImgUrl)
-                    Log.d("xxxx", "bind: Successful : $uri")
-                }.addOnFailureListener {
-                    Log.d("xxxx", "bind Failure: $it ")
-                }
+        fun bind(imagePath : Uri){
+            bannerImgUrl.load(imagePath)
+//            storage.reference.child("post").child("${imagePath}")
+//                .downloadUrl
+//                .addOnSuccessListener { uri ->
+//                    Glide.with(itemView)
+//                        .load(uri)
+//                        .into(bannerImgUrl)
+//                    Log.d("xxxx", "bind: Successful : $uri")
+//                }.addOnFailureListener {
+//                    Log.d("xxxx", "bind Failure: $it ")
+//                }
         }
     }
 
