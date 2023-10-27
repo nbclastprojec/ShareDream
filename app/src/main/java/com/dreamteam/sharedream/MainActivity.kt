@@ -56,31 +56,31 @@ class MainActivity : AppCompatActivity() {
 
         val tabTitles = listOf("교환하기", "내소식")
 
-            if (intent.hasExtra("open_fragment")) {
-                val fragmentToOpen = intent.getStringExtra("open_fragment")
-                if (fragmentToOpen == "alarm_fragment") {
-                    val transaction = supportFragmentManager.beginTransaction()
-                    val alarmFragment = AlarmFragment()
-                    val alarmFragmentIndex = 1
-                    viewPager.setCurrentItem(alarmFragmentIndex, true)
-                    transaction.replace(R.id.viewPager, alarmFragment)
-                }
+        if (intent.hasExtra("open_fragment")) {
+            val fragmentToOpen = intent.getStringExtra("open_fragment")
+            if (fragmentToOpen == "alarm_fragment") {
+                val transaction = supportFragmentManager.beginTransaction()
+                val alarmFragment = AlarmFragment()
+                val alarmFragmentIndex = 1
+                viewPager.setCurrentItem(alarmFragmentIndex, true)
+                transaction.replace(R.id.viewPager, alarmFragment)
             }
+        }
 
-            TabLayoutMediator(
-                tabLayout,
-                viewPager,
-                { tab, position -> tab.text = tabTitles[position] }).attach()
+        TabLayoutMediator(
+            tabLayout,
+            viewPager,
+            { tab, position -> tab.text = tabTitles[position] }).attach()
 
 
-            binding.editTextSearchView.setOnClickListener {
+        binding.editTextSearchView.setOnClickListener {
 
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frag_edit, SeachFragment())
-                    .addToBackStack(null)
-                    .commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frag_edit, SeachFragment())
+                .addToBackStack(null)
+                .commit()
 
-            }
+        }
 
 
 
@@ -89,12 +89,16 @@ class MainActivity : AppCompatActivity() {
                 .addToBackStack(null).commit()
         }
     }
+
     //android 13 postnotification
-    private fun checkAppPushNotification(){
+    private fun checkAppPushNotification() {
 
         //android 13 이상 && 푸시권한 없음
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-            PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS")
+            PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(
+                this,
+                "android.permission.POST_NOTIFICATIONS"
+            )
         ) {
             // 푸쉬 권한 없음
             permissionPostNotification.launch("android.permission.POST_NOTIFICATIONS")
@@ -106,13 +110,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     /** 권한 요청 */
-    private val permissionPostNotification = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            //권한 허용
-        } else {
-            checkAppPushNotification()
+    private val permissionPostNotification =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                //권한 허용
+            } else {
+                checkAppPushNotification()
+            }
         }
-    }
 
     /** DynamicLink */
 //    private fun initDynamicLink() {
