@@ -153,7 +153,7 @@ class MessageActivity : AppCompatActivity() {
         }
         @SuppressLint("RtlHardcoded")
         override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-           val comment = comments[position]
+            val comment = comments[position]
             holder.bind(comment)
         }
 
@@ -196,5 +196,3 @@ class MessageActivity : AppCompatActivity() {
 
     }
 }
-
-

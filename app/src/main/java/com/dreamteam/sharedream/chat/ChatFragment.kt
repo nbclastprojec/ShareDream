@@ -33,7 +33,7 @@ class ChatFragment : Fragment() {
             return ChatFragment()
         }
     }
-        private val fireDatabase = FirebaseDatabase.getInstance().reference
+    private val fireDatabase = FirebaseDatabase.getInstance().reference
 
 
     override fun onAttach(context: Context) {
@@ -68,21 +68,21 @@ class ChatFragment : Fragment() {
 
             fireDatabase.child("ChatRoom").orderByChild("users/${uid}").equalTo(true)
                 .addListenerForSingleValueEvent(
-                object : ValueEventListener{
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        chatModel.clear()
-                        for (data in snapshot.children){
-                            chatModel.add(data.getValue<ChatModel>()!!)
-
+                    object : ValueEventListener{
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
                         }
-                        notifyDataSetChanged()
+
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            chatModel.clear()
+                            for (data in snapshot.children){
+                                chatModel.add(data.getValue<ChatModel>()!!)
+
+                            }
+                            notifyDataSetChanged()
+                        }
                     }
-                }
-            )
+                )
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 

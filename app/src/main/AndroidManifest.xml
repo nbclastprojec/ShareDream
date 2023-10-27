@@ -23,9 +23,6 @@
             android:name=".chat.MessageActivity"
             android:exported="false" />
         <activity
-            android:name=".DetailContainer"
-            android:exported="false" />
-        <activity
             android:name=".LogInActivity"
             android:exported="true">
             <intent-filter>
