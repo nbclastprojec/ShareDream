@@ -20,10 +20,13 @@ import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.databinding.WriteItemBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
+import com.google.firebase.Timestamp
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.UUID
 
 
@@ -88,9 +91,10 @@ class HomePostAdapter(private val context: Context, private val postClick: PostC
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price
+
         }
 
-        holder.bind(positionItem.imgs[0])
+        holder.bind(positionItem.imgs[0],positionItem.timestamp)
     }
 
     inner class HomePostRcvViewHolder(binding: WriteItemBinding) :
@@ -101,45 +105,46 @@ class HomePostAdapter(private val context: Context, private val postClick: PostC
         val postCategory: TextView = binding.writeCategory
         val postImg: ImageView = binding.writeImage
         val postheart:ImageView = binding.btnHeart
+        val postDate : TextView = binding.writePageDate
 
 
-        fun bind(imagePath: Uri) {
-        postImg.load(imagePath)
+        fun bind(imagePath: Uri,timestamp: Timestamp) {
+            postImg.load(imagePath)
+            val date: Date = timestamp.toDate()
+            // 1. 날짜 형식으로 만들기
+            // timestamp를 Date 객체로 변환
+
+            // SimpleDateFormat으로 원하는 형식으로 변환
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+//            postDate.text = dateFormat.format(date)
+
+            // 2. 현재 날짜, 시간 기준으로 만들기 ( 1시간 전, 2일 전, 1달 전)
+            val currentDateTime: Date = Date()
+            val diff: Long = currentDateTime.time - date.time
+            // 분 단위 차이
+            val minutes : Long = diff / (1000 * 60)
+            val hours : Long = minutes / 60
+            val day : Long = hours / 24
+            val week : Long = day / 7
+            val month : Long = day / 31
+            val year : Long = month / 12
+
+            val result: String =
+                when {
+                    minutes < 1 -> "방금 전"
+                    minutes < 60 -> "${minutes}분 전"
+                    hours < 24 -> "${hours}시간 전"
+                    day in 1..6 -> "${day}일 전"
+                    day in 7 .. 13 ->"지난 주"
+                    day in 14..30 -> "${week}주 전"
+                    month in 1..12 -> "${month}달 전"
+                    year in 1 .. 100 -> "${year}년 전"
+                    else -> "${dateFormat.format(date)}"
+                }
+            postDate.text = result
+
         }
-
-
-            //todo 글라이드 캐싱 추가 예정
-//                storage.reference.child("post").child("$imagePath").downloadUrl.addOnSuccessListener { uri ->
-//                 캐싱 - rcv 자체적인 캐시 or 페이징?
-//                    Log.d("xxxx", "bind: storage download uri after img - $imagePath")
-//                    Glide.with(itemView)
-//                        .load(uri)
-//                        .into(postImg)
-//                    this.imagePath = imagePath
-//                }
-//                    .addOnFailureListener {
-//                        Log.d("xxxx", " adapter bind Failure $it")
-//                    }
-//            } else {
-//                Glide.with(itemView)
-//                    .load(uri)
-//                    .into(postImg)
-//                this.imagePath = imagePath
-//            }
-//            Log.d("xxxx", "bind: storage download uri before img - ${imagePath}")
-//            storage.reference.child("post")
-//                .child("$imagePath").downloadUrl.addOnSuccessListener { uri ->
-////                 캐싱 - rcv 자체적인 캐시 or 페이징?
-//                Log.d("xxxx", "bind: storage download uri after img - $imagePath")
-//                Glide.with(itemView)
-//                    .load(uri)
-//                    .into(postImg)
-//
-//            }
-//                .addOnFailureListener {
-//                    Log.d("xxxx", " adapter bind Failure $it")
-//                }
-//        }
     }
     @SuppressLint("NotifyDataSetChanged")
     fun onCategorySelected(category: String) {

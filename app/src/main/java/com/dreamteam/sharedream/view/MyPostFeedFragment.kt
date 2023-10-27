@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.databinding.FragmentMyPostFeedBinding
-import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.MyPostFeedAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
@@ -62,7 +61,7 @@ class MyPostFeedFragment: Fragment() {
         myPostFeedAdapter = MyPostFeedAdapter(object : PostClick{
             override fun postClick(post: PostRcv) {
                 myPostFeedViewModel.currentPost.value = post
-                myPostFeedViewModel.testA()
+                myPostFeedViewModel.getDetailImgs()
                 parentFragmentManager.beginTransaction().add(R.id.frag_edit,
                     PostDetailFragment()
                 ).addToBackStack(null).commit()

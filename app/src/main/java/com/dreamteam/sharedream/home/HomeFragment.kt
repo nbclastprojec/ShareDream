@@ -84,6 +84,9 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
 
+        binding.homeBtnRefreshList.setOnClickListener {
+            myPostFeedViewModel.postDownload()
+        }
 
         binding.floatingActionButton.setOnClickListener {
             parentFragmentManager.beginTransaction().replace(R.id.frag_edit, EditFragment())
@@ -109,7 +112,23 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
         myPostFeedViewModel.postDownload()
 
-
+//        db.collection("Posts").addSnapshotListener { querySnapshot, exception ->
+//            if (exception != null) {
+//
+//                Log.d("xxxx", " Home Frag 리스닝 에러 : $exception ")
+//                return@addSnapshotListener
+//            }
+//
+//            Log.d("xxxx", " Home Frag SnapshotListener ")
+//            querySnapshot?.let {snapshot ->
+//                for (post in snapshot.documents){
+//                    val title = post.getString("title")
+//                    Log.d("xxxx", " Posts 아이템 변경 리스너 타이틀 : $title")
+//                }
+//            }
+//
+////            homePostAdapter.submitList(rcvList)
+//        }
 
         // todo Home Frag 게시글 LiveData Observe
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) {

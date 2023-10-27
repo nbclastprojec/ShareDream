@@ -55,7 +55,7 @@ class MyPostFeedViewModel : ViewModel() {
 
 
     // 게시글 디테일 아이템 사진들 불러오기
-    fun testA () {
+    fun getDetailImgs () {
         val uris = mutableListOf<Uri>()
         // 빈 리스트로 초기화
         _postUriResult.value = uris
@@ -73,7 +73,6 @@ class MyPostFeedViewModel : ViewModel() {
                            Log.d("xxxx", "testA Failure : $it ")
                        }
            }
-
             Log.d("xxxx", "postUriResult: ${_postUriResult.value} ")
         }
     }
@@ -82,7 +81,7 @@ class MyPostFeedViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 db.collection("Posts")
-                    .orderBy("deadline",Query.Direction.ASCENDING)
+                    .orderBy("timestamp",Query.Direction.DESCENDING)
                     .get()
                     .addOnSuccessListener { querySnapshot ->
                         if (!querySnapshot.isEmpty) {
@@ -133,7 +132,18 @@ class MyPostFeedViewModel : ViewModel() {
                         state = post.state
                     )
 
-                    postRcvList.add(postRcv)
+                    var inserted = false
+                    for ( index in postRcvList.indices){
+                        if (postRcv.timestamp > postRcvList[index].timestamp){
+                            postRcvList.add(index, postRcv)
+                            inserted = true
+                            break
+                        }
+                    }
+                    if (!inserted){
+                        postRcvList.add(postRcv)
+                    }
+
 
                     if (postRcvList.size == querySnapshot.size()) {
                         resultLiveData.postValue(postRcvList)
