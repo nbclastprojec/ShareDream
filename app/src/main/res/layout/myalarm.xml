@@ -6,16 +6,33 @@
     android:layout_height="match_parent">
 
 
-    <ImageView
-        android:id="@+id/image_trade"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="105dp"
+        android:layout_height="105dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
+        app:cardCornerRadius="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/image_trade"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/loading2" />
+
+        <ImageView
+            android:id="@+id/btn_heart"
+            android:layout_width="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right"
+            app:srcCompat="@drawable/mypage_heart" />
+    </androidx.cardview.widget.CardView>
     <TextView
         android:id="@+id/txt_tradeTitle"
         android:layout_width="wrap_content"
@@ -23,8 +40,8 @@
         android:textSize="20sp"
         android:layout_marginLeft="10dp"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/image_trade"
-        app:layout_constraintTop_toTopOf="@+id/image_trade" />
+        app:layout_constraintStart_toEndOf="@+id/cardview"
+        app:layout_constraintTop_toTopOf="@+id/cardview" />
 
     <TextView
         android:id="@+id/txt_category"
@@ -40,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/image_trade"
+        app:layout_constraintBottom_toBottomOf="@+id/cardview"
         app:layout_constraintStart_toStartOf="@+id/txt_tradeTitle" />
 
     <View

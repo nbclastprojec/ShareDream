@@ -1,6 +1,6 @@
 package com.dreamteam.sharedream.model
 
-data class Post(
+data class AlarmPost(
     val uid: String,
     val title: String,
     val price: String,
@@ -12,8 +12,8 @@ data class Post(
     val nickname: String,
     val likeUsers: List<String>,
     val token: String,
+    val documentId:String
 
-)
-{
-    constructor() : this("","", "", "", "", "","", listOf(),"", listOf(),"",)
+) {
+    constructor() : this("", "", "", "", "", "", "", listOf(), "", listOf(), "","")
 }

@@ -15,6 +15,7 @@ import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentMyPostFeedDetailBinding
+import com.dreamteam.sharedream.model.AlarmPost
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
@@ -25,7 +26,7 @@ class MyPostFeedDetailFragment : Fragment() {
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
 
-    private val postInfo = mutableListOf<Post>()
+    private val postInfo = mutableListOf<AlarmPost>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

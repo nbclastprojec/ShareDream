@@ -1,7 +1,5 @@
 package com.dreamteam.sharedream.home.Edit
 
-import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,10 +17,12 @@ import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
@@ -43,6 +42,8 @@ class EditFragment : Fragment() {
     private var imgs: MutableList<String> = mutableListOf()
 
     private lateinit var writePostImgAdapter: WritePostImageAdapter
+
+    var token: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,15 +77,16 @@ class EditFragment : Fragment() {
 
         // 게시글 작성 완료
         binding.btnComplete.setOnClickListener {
-            if (binding.imageCount.text == "0/10" ){
-                Toast.makeText(requireContext()," 이미지는 1장 이상 업로드 해야합니다. ", Toast.LENGTH_SHORT).show()
+            if (binding.imageCount.text == "0/10") {
+                Toast.makeText(requireContext(), " 이미지는 1장 이상 업로드 해야합니다. ", Toast.LENGTH_SHORT)
+                    .show()
                 Log.d("xxxx", " Upload Failure ")
             } else if (
                 binding.title.text.isEmpty() || binding.city.text.isEmpty() || binding.mainText.text.isEmpty() || binding.value.text.isEmpty()
             ) {
-                Toast.makeText(requireContext()," 모든 입력 가능란은 필수 입력사항 입니다.",Toast.LENGTH_SHORT).show()
-            }
-            else {
+                Toast.makeText(requireContext(), " 모든 입력 가능란은 필수 입력사항 입니다.", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
                 imageUpload()
             }
 
@@ -101,7 +103,7 @@ class EditFragment : Fragment() {
     private val pickMultipleMedia =
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uriList ->
             if (uriList.isNotEmpty()) {
-                uriList.forEach {uri ->
+                uriList.forEach { uri ->
                     Log.d("xxxx", "Selected URI: $uri")
                 }
                 uris = uriList.toMutableList()
@@ -132,38 +134,57 @@ class EditFragment : Fragment() {
             }
         }
 
-        val postUid = Constants.currentUserUid!!
-        val postTitle = binding.title.text.toString()
-        val postPrice = binding.value.text.toString()
-        val postCategory = category
-        val postAddress = binding.city.text.toString()
-        //todo 기한 추가 - 임시로 city 값 넣어둠
-        val postDeadline = binding.city.text.toString()
-        val postDesc = binding.mainText.text.toString()
-        val postImg: List<String> = imgs.toList()
-        val postLikeUsers = listOf<String>()
-        val post: Post = Post(
-            postUid,
-            postTitle,
-            postPrice,
-            postCategory,
-            postAddress,
-            postDeadline,
-            postDesc,
-            postImg,
-            userNickname,
-            postLikeUsers
-
-        )
-
-        db.collection("Posts")
-            .add(post)
-            .addOnSuccessListener {
-                Log.d("xxxx", "postUpload: added with : ${it}")
-                requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                token = task.result
+                Log.d("nyh", "postUpload: $token")
 
 
+                val postUid = Constants.currentUserUid!!
+                val postTitle = binding.title.text.toString()
+                val postPrice = binding.value.text.toString()
+                val postCategory = category
+                val postAddress = binding.city.text.toString()
+                //todo 기한 추가 - 임시로 city 값 넣어둠
+                val postDeadline = binding.city.text.toString()
+                val postDesc = binding.mainText.text.toString()
+                val postImg: List<String> = imgs.toList()
+                val postLikeUsers = listOf<String>()
+
+                val post = Post(
+                    postUid,
+                    postTitle,
+                    postPrice,
+                    postCategory,
+                    postAddress,
+                    postDeadline,
+                    postDesc,
+                    postImg,
+                    userNickname,
+                    postLikeUsers,
+                    token
+
+                )
+
+                db.collection("Posts")
+                    .add(post)
+                    .addOnSuccessListener { task ->
+                        val documentId = task.id
+                        Log.d("xxxx", "postUpload: added with : ${task}")
+                        val updatedData = mapOf("documentId" to documentId)
+                        db.collection("Posts")
+                            .document(documentId) // 생성된 documentId를 가리키는 참조
+                            .update(updatedData) // documentId 필드를 업데이트
+                            .addOnSuccessListener {
+                                requireActivity().supportFragmentManager.beginTransaction()
+                                    .remove(this)
+                                    .commit()
+                            }
+                    }.addOnFailureListener { error ->
+                        Log.d("xxxx", "Failed to update documentId: $error")
+                    }
             }
+        }
     }
 
     // 선택한 이미지 Storage에 업로드
@@ -180,10 +201,10 @@ class EditFragment : Fragment() {
                 storage.reference.child("post").child("${time}_$i").putFile(uri)
                     .addOnSuccessListener {
                         // 추후에 필요한 기능 추가
-                }
+                    }
                     .addOnFailureListener {
-                    Log.d("xxxx", " Edit Frag imageUpload Failure : $it ")
-                }
+                        Log.d("xxxx", " Edit Frag imageUpload Failure : $it ")
+                    }
             }
             downloadUserInfo()
         }
@@ -192,14 +213,19 @@ class EditFragment : Fragment() {
     }
 
     // 유저 정보에서 닉네임을 가져와 게시글에 적용 - 게시글 받아올 때마다 유저데이터를 호출하는 것보다 업로드할 때 한번만 호출하는 것이 좋아보임.
-    private fun downloadUserInfo(){
+    private fun downloadUserInfo() {
 
         db.collection("UserData").document("${Constants.currentUserUid!!}")
             .get()
             .addOnSuccessListener {
-            var nickname = it.data?.get("nickname") as String
-                postUpload(nickname)
-
+                var nickname = it.data?.get("nickname") as String
+                if (nickname != null) {
+                    postUpload(nickname)
+                } else {
+                    Log.d("nyh", "downloadUserInfo nickname null: $nickname ")
+                }
+            }.addOnFailureListener { error ->
+                Log.d("nyh", "downloadUserInfo nickname fail: $error")
             }
     }
 

@@ -51,11 +51,15 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation ("com.google.firebase:firebase-database-ktx")
     implementation ("androidx.lifecycle:lifecycle-viewmodel:2.4.0")
-    implementation("com.google.firebase:firebase-storage-ktx")
+//    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.3.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.3")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.google.firebase:firebase-messaging:23.3.0")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.google.firebase:firebase-functions-ktx:20.4.0")
 
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 
