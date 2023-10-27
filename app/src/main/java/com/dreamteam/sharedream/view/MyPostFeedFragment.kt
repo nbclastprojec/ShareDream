@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.databinding.FragmentMyPostFeedBinding
-import com.dreamteam.sharedream.model.Post
+import com.dreamteam.sharedream.model.AlarmPost
 import com.dreamteam.sharedream.view.adapter.MyPostFeedAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 
@@ -43,7 +43,7 @@ class MyPostFeedFragment : Fragment() {
         myPostFeedViewModel.postFeedDownload()
 
         myPostFeedViewModel.postFeedResult.observe(viewLifecycleOwner) {
-            val rcvList: MutableList<Post> = it
+            val rcvList: MutableList<AlarmPost> = it
 
             // todo 글 작성 기능 완료 후 - 내가 쓴 글 _ 작성된 글이 없을 때 예외처리
             myPostFeedAdapter.submitList(rcvList)
@@ -59,7 +59,7 @@ class MyPostFeedFragment : Fragment() {
 
     private fun setupRcv() {
         myPostFeedAdapter = MyPostFeedAdapter(object : PostClick {
-            override fun postClick(post: Post) {
+            override fun postClick(post: AlarmPost) {
                 myPostFeedViewModel.currentPost.value = post
                 myPostFeedViewModel.testA()
                 parentFragmentManager.beginTransaction().add(

@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dreamteam.sharedream.Util.Constants
-import com.dreamteam.sharedream.model.Post
+import com.dreamteam.sharedream.model.AlarmPost
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -23,18 +23,18 @@ class MyPostFeedViewModel : ViewModel() {
     private val storage = Firebase.storage
 
     // 내가 쓴 글 목록 LiveData todo 추후에 ViewType 나누는 걸로 수정할 예정.
-    private val _postFeedResult = MutableLiveData<MutableList<Post>>()
-    val postFeedResult: LiveData<MutableList<Post>> get() = _postFeedResult
+    private val _postFeedResult = MutableLiveData<MutableList<AlarmPost>>()
+    val postFeedResult: LiveData<MutableList<AlarmPost>> get() = _postFeedResult
 
     // 게시글 목록 Rcv 클릭한 아이템 정보 받아오기
-    var currentPost = MutableLiveData<Post>()
+    var currentPost = MutableLiveData<AlarmPost>()
     // 게시글 목록 Rcv 클릭한 아이템 작성자 프로필 이미지 가져오기 / 마이 페이지 프로필 이미지와 같은 단일 프로필 이미지 로딩
     private val _currentProfileImg = MutableLiveData<Uri>()
     val currentProfileImg : LiveData<Uri> get() = _currentProfileImg
 
     // Home Frag 게시글 정보 LiveData
-    private val _postResult = MutableLiveData<MutableList<Post>>()
-    val postResult: LiveData<MutableList<Post>> get() = _postResult
+    private val _postResult = MutableLiveData<MutableList<AlarmPost>>()
+    val postResult: LiveData<MutableList<AlarmPost>> get() = _postResult
 
     // todo Home Frag 게시글 대표 이미지 별도로 추가할 수 있도록 수정할 예정 - 이미지를 띄우는 속도가 너무 느림.
     private val _postUriResult = MutableLiveData<MutableList<Uri>>()
@@ -68,7 +68,7 @@ class MyPostFeedViewModel : ViewModel() {
     fun postDownload(){
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val postRcvList : MutableList<Post> = mutableListOf()
+                val postRcvList : MutableList<AlarmPost> = mutableListOf()
                 db.collection("Posts")
                     .orderBy("deadline",Query.Direction.ASCENDING)
                     .get()
@@ -107,7 +107,7 @@ class MyPostFeedViewModel : ViewModel() {
 //                                }
 
                                 // 기존 코드
-                                document.toObject<Post>()?.let {post ->
+                                document.toObject<AlarmPost>()?.let {post ->
                                     val postImgList : MutableList<Uri> = mutableListOf()
                                     for (i in post.imgs.indices){
                                     storage.reference.child("post").child("${post.imgs[i]}")
@@ -145,9 +145,9 @@ class MyPostFeedViewModel : ViewModel() {
                     .addOnSuccessListener { querySnapshot ->
                         if (!querySnapshot.isEmpty) {
                             val documentSnapshot = querySnapshot.documents
-                            val rcvList : MutableList<Post> = mutableListOf()
+                            val rcvList : MutableList<AlarmPost> = mutableListOf()
                             for (document in documentSnapshot) {
-                                document.toObject<Post>()?.let {
+                                document.toObject<AlarmPost>()?.let {
                                     rcvList.add(it)
                                 }
                             }

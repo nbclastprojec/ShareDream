@@ -17,6 +17,7 @@ import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -167,12 +168,20 @@ class EditFragment : Fragment() {
 
                 db.collection("Posts")
                     .add(post)
-                    .addOnSuccessListener {
-                        Log.d("xxxx", "postUpload: added with : ${it}")
-                        requireActivity().supportFragmentManager.beginTransaction().remove(this)
-                            .commit()
-
-
+                    .addOnSuccessListener { task ->
+                        val documentId = task.id
+                        Log.d("xxxx", "postUpload: added with : ${task}")
+                        val updatedData = mapOf("documentId" to documentId)
+                        db.collection("Posts")
+                            .document(documentId) // 생성된 documentId를 가리키는 참조
+                            .update(updatedData) // documentId 필드를 업데이트
+                            .addOnSuccessListener {
+                                requireActivity().supportFragmentManager.beginTransaction()
+                                    .remove(this)
+                                    .commit()
+                            }
+                    }.addOnFailureListener { error ->
+                        Log.d("xxxx", "Failed to update documentId: $error")
                     }
             }
         }
@@ -243,4 +252,3 @@ class EditFragment : Fragment() {
         return dateFormat
     }
 }
-

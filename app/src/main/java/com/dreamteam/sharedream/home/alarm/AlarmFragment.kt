@@ -44,7 +44,7 @@ class AlarmFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchTitle()
+        getMyalarm()
         alarmadapter = AlarmPostAdapter(mContext)
 
         binding.alarmRecycler.layoutManager =
@@ -53,7 +53,7 @@ class AlarmFragment : Fragment() {
 
     }
 
-    private fun searchTitle() {
+    private fun getMyalarm() {
         val postCollection = db.collection("Posts")
         //query 객체 만들고 get으로 가져오기
         postCollection.whereEqualTo("uid", currentUserUid)

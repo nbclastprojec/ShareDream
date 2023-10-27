@@ -16,12 +16,19 @@ import com.dreamteam.sharedream.FCMService
 import com.dreamteam.sharedream.adapter.DifferCallback
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.databinding.WriteItemBinding
+import com.dreamteam.sharedream.model.AlarmPost
 import com.dreamteam.sharedream.model.Post
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.ktx.storage
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import java.util.UUID
 
 
@@ -29,13 +36,16 @@ import java.util.UUID
 class HomePostAdapter(
     private val context: Context,
     private val postClick: PostClick,
-    private val allPosts: List<Post>
+    private val allPosts: List<AlarmPost>
 ) :
-    ListAdapter<Post, HomePostAdapter.HomePostRcvViewHolder>(DifferCallback.differCallback) {
-
+    ListAdapter<AlarmPost, HomePostAdapter.HomePostRcvViewHolder>(DifferCallback.differCallback) {
     private val storage = Firebase.storage
     private val allItems = allPosts
     private var db = Firebase.firestore
+
+    init {
+        db.collection("posts").orderBy("timestamp")
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomePostRcvViewHolder {
         return HomePostRcvViewHolder(
@@ -51,7 +61,32 @@ class HomePostAdapter(
     override fun onBindViewHolder(holder: HomePostRcvViewHolder, position: Int) {
         val post = currentList[position]
         val allpost = allPosts[position]
+
+
         holder.postheart.setOnClickListener {
+
+//            onRecyclerViewItemClicked(post.documentId)
+
+            val functions = FirebaseFunctions.getInstance()
+
+            val db = FirebaseFirestore.getInstance()
+            val documentId = post.documentId // 가져올 문서의 ID
+
+            db.collection("Posts").document(documentId).get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val document = task.result
+                        if (document != null && document.exists()) {
+                            val documentData = document.data
+                            Log.d("nyh", "onBindViewHolder: ${document.id}")
+                        } else {
+                            println("Document not found")
+                        }
+                    } else {
+                        val error = task.exception
+                        println("Error getting document: $error")
+                    }
+                }
             // 알림 제목과 내용 설정
 
             val nickname = allpost.nickname
@@ -63,7 +98,7 @@ class HomePostAdapter(
             val data = mutableMapOf<String, String>()
             data["key1"] = "value1"
             data["key2"] = "value2"
-            FirebaseMessaging.getInstance().isAutoInitEnabled = true
+//            FirebaseMessaging.getInstance().isAutoInitEnabled = true
 
             // FCM 알림을 보내기 위한 데이터 설정
 
@@ -77,13 +112,14 @@ class HomePostAdapter(
                 .addData("title", notificationTitle) // 알림 제목
                 .addData("body", notificationBody)
                 .build()
+            Log.d("nyh", "onBindViewHolder: token === $token")
             FirebaseMessaging.getInstance().send(message)
             // FCMService의 sendNonotification 함수 호출
             val fcmService = FCMService()
-            fcmService.sendNonotification(context, notificationTitle, notificationBody, data)
+            fcmService.sendNonotification(context,message)
 
             val alarmPost = Post(
-                uid = post.uid, // 랜덤 UID 생성 또는 고유한 ID 생성 방법을 사용
+                uid = post.uid,
                 title = post.title,
                 price = post.price,
                 category = post.category,
@@ -93,13 +129,14 @@ class HomePostAdapter(
                 imgs = post.imgs,
                 nickname = post.nickname,
                 likeUsers = post.likeUsers,
-                token = post.token // 알림을 받을 대상의 토큰
+                token = post.token,
             )
 
-            db.collection("AlarmPost")
-                .add(alarmPost)
+            db.collection("AlarmPost").document()
+                .set(alarmPost)
                 .addOnSuccessListener { documentReference ->
                     Log.d("nyh", "DocumentSnapshot ${documentReference}")
+
                 }
                 .addOnFailureListener { e ->
                     Log.w("nyh", "Error adding document", e)
@@ -118,6 +155,50 @@ class HomePostAdapter(
         }
 
         holder.bind(positionItem.imgs[0])
+    }
+
+
+    // RecyclerView에서 아이템을 클릭했을 때 호출되는 함수 (예: 아이템 클릭 리스너)
+    fun onRecyclerViewItemClicked(documentId: String) {
+        val db = FirebaseFirestore.getInstance()
+        val collectionRef = db.collection("Posts") // Firestore 컬렉션
+
+        collectionRef.document(documentId)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val documentData = documentSnapshot.data
+                    println("Document ID: ${documentSnapshot.id}")
+                    println("Document data: $documentData")
+
+                    // 데이터를 원격 서버로 전송
+                    val remoteServerUrl = "원격 서버의 URL" // 원격 서버의 URL을 여기에 입력
+
+                    // JSON 데이터를 생성
+                    val jsonData = """{"documentId": "$documentId", "data": $documentData}"""
+
+                    // OkHttp 클라이언트를 사용하여 HTTP POST 요청 보내기
+                    val client = OkHttpClient()
+                    val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
+                    val requestBody = RequestBody.create(mediaType, jsonData)
+                    val request = Request.Builder()
+                        .url(remoteServerUrl)
+                        .post(requestBody)
+                        .build()
+
+                    val response = client.newCall(request).execute()
+                    if (response.isSuccessful) {
+                        println("데이터 전송 성공")
+                    } else {
+                        println("데이터 전송 실패")
+                    }
+                } else {
+                    println("Document not found")
+                }
+            }
+            .addOnFailureListener { error ->
+                println("Error getting document: $error")
+            }
     }
 
     inner class HomePostRcvViewHolder(binding: WriteItemBinding) :
@@ -179,4 +260,20 @@ class HomePostAdapter(
         }
         notifyDataSetChanged()
     }
+
+//    private fun likeClick(position: Int) {
+//        val tsDoc = db.collection("posts").document(postUidList[position])
+//        db.runTransaction {
+//            val post = it.get(tsDoc).toObject(Post::class.java)
+//
+//            if (post!!.likeUsers.isNotEmpty()) {
+//                post.likeUsers.remove(uid)
+//            } else {
+//                post.bookmark[uid!!] = true
+//            }
+//
+//            it.set(tsDoc, post)
+//        }
+//    }
+
 }

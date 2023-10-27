@@ -9,12 +9,13 @@ import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.adapter.DifferCallback
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.databinding.WriteItemBinding
+import com.dreamteam.sharedream.model.AlarmPost
 import com.dreamteam.sharedream.model.Post
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 class MyPostFeedAdapter(private val postClick: PostClick) :
-    ListAdapter<Post, MyPostFeedAdapter.MyPostFeedRcvViewHolder>(DifferCallback.differCallback) {
+    ListAdapter<AlarmPost, MyPostFeedAdapter.MyPostFeedRcvViewHolder>(DifferCallback.differCallback) {
 
     private val storage = Firebase.storage
     inner class MyPostFeedRcvViewHolder(binding: WriteItemBinding) :

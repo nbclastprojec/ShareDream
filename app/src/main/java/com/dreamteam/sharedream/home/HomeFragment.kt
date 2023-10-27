@@ -1,6 +1,5 @@
 package com.dreamteam.sharedream.home
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -13,12 +12,11 @@ import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.home.Edit.EditFragment
-import com.dreamteam.sharedream.model.Post
+import com.dreamteam.sharedream.model.AlarmPost
 import com.dreamteam.sharedream.view.MyPostFeedDetailFragment
 import com.dreamteam.sharedream.view.adapter.HomePostAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
@@ -122,7 +120,7 @@ class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener
 
         // todo Home Frag 게시글 LiveData Observe
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) {
-            val rcvList: List<Post> = it
+            val rcvList: MutableList<AlarmPost>? = it
 
             Log.d("xxxx", " Home Frag Observe ")
             homePostAdapter.submitList(rcvList)
@@ -132,10 +130,10 @@ class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener
 
     fun setupRcv() {
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) {
-            val rcvList: List<Post> = it
+            val rcvList: List<AlarmPost> = it
 
             homePostAdapter = HomePostAdapter(requireContext(),object : PostClick {
-                override fun postClick(post: Post) {
+                override fun postClick(post: AlarmPost) {
                     myPostFeedViewModel.currentPost.value = post
                     myPostFeedViewModel.getCurrentProfileImg(post.uid)
                     parentFragmentManager.beginTransaction().add(

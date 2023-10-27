@@ -17,12 +17,34 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.dreamteam.sharedream.home.HomeAdapter
 import com.dreamteam.sharedream.home.Search.SeachFragment
 import com.dreamteam.sharedream.home.alarm.AlarmFragment
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.functions.FirebaseFunctions
+import com.google.firebase.functions.FirebaseFunctionsException
+import com.google.firebase.functions.functions
+import com.google.firebase.functions.ktx.functions
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var homeAdapter: HomeAdapter
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    private lateinit var functions: FirebaseFunctions
+    private fun addMessage(text: String): Task<String> {
+        val data = hashMapOf(
+            "text" to text,
+            "push" to true
+        )
+     return functions
+         .getHttpsCallable("addMessage")
+         .call(data)
+         .continueWith {  task ->
+             val result = task.result?.data as String
+             result
+         }
+    }
 
     init {
         Constants.currentUserUid = auth.currentUser!!.uid
@@ -33,6 +55,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        functions = Firebase.functions
+
+        addMessage("helloMyTest")
+            .addOnCompleteListener (OnCompleteListener {task ->
+                if (!task.isSuccessful) {
+                    val e = task.exception
+                    if (e is FirebaseFunctionsException) {
+                        val code = e.code
+                        val details = e.details
+                    }
+                }
+            })
+
+
+
         Log.d("xxxx", "MainACtivityOnCreate: ${Constants.currentUserUid} ")
         Log.isLoggable("Glide", Log.DEBUG)
 
@@ -40,10 +77,11 @@ class MainActivity : AppCompatActivity() {
         FCMService().getFirebaseToken()
         //PostNotification 대응
         checkAppPushNotification()
-
         //사용 안하면 삭제하기
         //DynamicLink 수신확인
-//        initDynamicLink()
+        initDynamicLink()
+
+
 
 
         homeAdapter = HomeAdapter(this)
@@ -115,17 +153,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     /** DynamicLink */
-//    private fun initDynamicLink() {
-//        val dynamicLinkData = intent.extras
-//        if (dynamicLinkData != null) {
-//            var dataStr = "DynamicLink 수신받은 값\n"
-//            for (key in dynamicLinkData.keySet()) {
-//                dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
-//            }
-//
-//            binding.textView13.text = dataStr
-//        }
-//    }
+    private fun initDynamicLink() {
+        val dynamicLinkData = intent.extras
+        if (dynamicLinkData != null) {
+            var dataStr = "DynamicLink 수신받은 값\n"
+            for (key in dynamicLinkData.keySet()) {
+                dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
+            }
+
+            binding.textView13.text = dataStr
+        }
+    }
     override fun onNewIntent(intent: Intent?) {
         Log.e("YMC", "nyh MainActivity onNewIntent")
         super.onNewIntent(intent)
