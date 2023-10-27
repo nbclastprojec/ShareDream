@@ -1,7 +1,7 @@
 package com.dreamteam.sharedream.chat
 
 data class Chatting(
-    val name : String? = null,
+    var name : String? = null,
     val profileImageUrl : String? = null,
     val uid : String? = null
 )

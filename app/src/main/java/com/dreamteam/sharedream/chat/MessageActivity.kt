@@ -3,7 +3,6 @@ package com.dreamteam.sharedream.chat
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -16,9 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.ActivityChatBinding
+import com.dreamteam.sharedream.databinding.ChatItemBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,10 +25,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.text.SimpleDateFormat
 import java.util.Date
-import kotlin.math.log
 
 class MessageActivity : AppCompatActivity() {
 
@@ -39,22 +36,28 @@ class MessageActivity : AppCompatActivity() {
     private var uid : String? = null
     private var recyclerView : RecyclerView? = null
 
+    private lateinit var binding : ActivityChatBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chat)
-        val imageView = findViewById<ImageView>(R.id.chatSendBtn)
-        val editText = findViewById<TextView>(R.id.chattext)
+        binding = ActivityChatBinding.inflate(layoutInflater)
+        val view = binding.root
+
+        val imageView = binding.chatSendBtn
+        val editText = binding.chattext
 
         val time = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("MM월 dd일 hh:mm")
         val realTime = dateFormat.format(Date(time)).toString()
-        val backbtn = findViewById<ImageView>(R.id.backButton_chat)
+        val backbtn = binding.backButtonChat
+
+        setContentView(view)
 
         destinationUid = intent.getStringExtra("destinationUid")
         Log.d("susu", "${destinationUid}")
 
         uid = Firebase.auth.currentUser?.uid.toString()
-        recyclerView = findViewById(R.id.chat_recycleView)
+        recyclerView = binding.chatRecycleView
 
         imageView.setOnClickListener{
             Log.d("susu", "$destinationUid")
@@ -110,6 +113,7 @@ class MessageActivity : AppCompatActivity() {
     }
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
 
+        // firestore에서 destinationUid 를 이용해서 db.collection ~ "Userdata" 로 name 꺼내오기
         private val comments = ArrayList<ChatModel.Comment>()
         private var chat : Chatting? = null
         init{
@@ -118,7 +122,7 @@ class MessageActivity : AppCompatActivity() {
                 }
                 override fun onDataChange(snapshot: DataSnapshot) {
                     chat = snapshot.getValue<Chatting>()
-                    //chat.text = friend?.name
+                    chat?.name = binding.chat.toString()
                     getMessageList()
                 }
             })
@@ -143,39 +147,48 @@ class MessageActivity : AppCompatActivity() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
-            val view : View = LayoutInflater.from(parent.context).inflate(R.layout.chat_item, parent, false)
+            val itemBinding = ChatItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
 
-            return MessageViewHolder(view)
+            return MessageViewHolder(itemBinding)
         }
         @SuppressLint("RtlHardcoded")
         override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-            holder.message.text = comments[position].message
-            holder.time.text = comments[position].time
-            if(comments[position].uid.equals(uid)){
-                holder.message.setBackgroundResource(R.drawable.rightbubble)
-                holder.name.visibility = View.INVISIBLE
-                holder.destination.visibility = View.INVISIBLE
-                holder.layout_main.gravity = Gravity.RIGHT
-            }else{
-                Glide.with(holder.itemView.context)
-                    .load(chat?.profileImageUrl)
-                    .into(holder.profile)
-                holder.message.setBackgroundResource(R.drawable.leftbubble)
-                holder.name.text = chat?.name
-                holder.destination.visibility = View.VISIBLE
-                holder.name.visibility = View.VISIBLE
-                holder.layout_main.gravity = Gravity.LEFT
+           val comment = comments[position]
+            holder.bind(comment)
+        }
+
+        inner class MessageViewHolder(private val itemBinding: ChatItemBinding) :
+            RecyclerView.ViewHolder(itemBinding.root) {
+
+            val message = itemBinding.chatMessage
+            val name: TextView = itemBinding.chatName
+            val profile: ImageView = itemBinding.chatImage
+            val destination: LinearLayout = itemBinding.messageItemLayoutDestination
+            val layoutMain: LinearLayout = itemBinding.messageItemLinearlayoutMain
+            val time: TextView = itemBinding.chatDate
+
+            fun bind(comment: ChatModel.Comment) {
+                with(itemBinding) {
+                    message.text = comment.message
+                    time.text = comment.time
+                    if (comment.uid == uid) {
+                        message.setBackgroundResource(R.drawable.rightbubble)
+                        name.visibility = View.INVISIBLE
+                        layoutMain.gravity = Gravity.RIGHT
+                    } else {
+                        Glide.with(itemView.context)
+                            .load(chat?.profileImageUrl)
+                            .into(profile)
+                        message.setBackgroundResource(R.drawable.leftbubble)
+                        name.text = chat?.name
+                        destination.visibility = View.VISIBLE
+                        name.visibility = View.VISIBLE
+                        layoutMain.gravity = Gravity.LEFT
+                    }
+                }
             }
         }
 
-        inner class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val message: TextView = view.findViewById(R.id.chat_message)
-            val name: TextView = view.findViewById(R.id.chat_name)
-            val profile: ImageView = view.findViewById(R.id.chat_image)
-            val destination: LinearLayout = view.findViewById(R.id.messageItem_layout_destination)
-            val layout_main: LinearLayout = view.findViewById(R.id.messageItem_linearlayout_main)
-            val time : TextView = view.findViewById(R.id.chat_date)
-        }
 
         override fun getItemCount(): Int {
             return comments.size
