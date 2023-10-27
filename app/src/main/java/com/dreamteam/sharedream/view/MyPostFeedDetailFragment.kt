@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.view
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
+import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentMyPostFeedDetailBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
@@ -72,6 +74,15 @@ class MyPostFeedDetailFragment : Fragment() {
 
         binding.detailCancelButton.setOnClickListener {
             parentFragmentManager.popBackStack()
+        }
+
+        binding.detailChatButton.setOnClickListener {
+            Log.d("susu", "Click 확인")
+
+            val destinationUid = "XE8S4oMfZSX7E8DIAfESsmHkA0i1"
+            val intent = Intent(context, MessageActivity::class.java)
+            intent.putExtra("destinationUid", destinationUid)
+            startActivity(intent)
         }
     }
 }

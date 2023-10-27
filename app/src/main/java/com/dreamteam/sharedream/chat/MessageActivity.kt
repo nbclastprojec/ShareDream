@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dreamteam.sharedream.R
+import com.dreamteam.sharedream.databinding.ActivityChatBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -47,6 +48,7 @@ class MessageActivity : AppCompatActivity() {
         val time = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("MM월 dd일 hh:mm")
         val realTime = dateFormat.format(Date(time)).toString()
+        val backbtn = findViewById<ImageView>(R.id.backButton_chat)
 
         destinationUid = intent.getStringExtra("destinationUid")
         Log.d("susu", "${destinationUid}")
@@ -78,6 +80,10 @@ class MessageActivity : AppCompatActivity() {
             }
         }
 
+        backbtn.setOnClickListener{
+            super.onBackPressed()
+        }
+
         checkChatRoom()
 
 
@@ -95,7 +101,6 @@ class MessageActivity : AppCompatActivity() {
                         val chatModel = item.getValue<ChatModel>()
                         if (chatModel?.users!!.containsKey(destinationUid)) {
                             chatRoomuid = item.key
-                           // messageActivity_ImageView.isEnabled = true
                             recyclerView?.layoutManager = LinearLayoutManager(this@MessageActivity)
                             recyclerView?.adapter = RecyclerViewAdapter()
                         }
@@ -106,13 +111,13 @@ class MessageActivity : AppCompatActivity() {
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
 
         private val comments = ArrayList<ChatModel.Comment>()
-        private var friend : Friend? = null
+        private var chat : Chatting? = null
         init{
             fireDatabase.child("users").child(destinationUid.toString()).addListenerForSingleValueEvent(object : ValueEventListener{
                 override fun onCancelled(error: DatabaseError) {
                 }
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    friend = snapshot.getValue<Friend>()
+                    chat = snapshot.getValue<Chatting>()
                     //chat.text = friend?.name
                     getMessageList()
                 }
@@ -144,19 +149,19 @@ class MessageActivity : AppCompatActivity() {
         }
         @SuppressLint("RtlHardcoded")
         override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-            holder.message.textSize = 20F
             holder.message.text = comments[position].message
             holder.time.text = comments[position].time
-            if(comments[position].uid.equals(uid)){ // 본인 채팅
-
+            if(comments[position].uid.equals(uid)){
+                holder.message.setBackgroundResource(R.drawable.rightbubble)
                 holder.name.visibility = View.INVISIBLE
                 holder.destination.visibility = View.INVISIBLE
                 holder.layout_main.gravity = Gravity.RIGHT
-            }else{ // 상대방 채팅
+            }else{
                 Glide.with(holder.itemView.context)
-                    .load(friend?.profileImageUrl)
+                    .load(chat?.profileImageUrl)
                     .into(holder.profile)
-                holder.name.text = friend?.name
+                holder.message.setBackgroundResource(R.drawable.leftbubble)
+                holder.name.text = chat?.name
                 holder.destination.visibility = View.VISIBLE
                 holder.name.visibility = View.VISIBLE
                 holder.layout_main.gravity = Gravity.LEFT

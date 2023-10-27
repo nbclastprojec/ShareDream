@@ -1,6 +1,6 @@
 package com.dreamteam.sharedream.chat
 
-data class Friend(
+data class Chatting(
     val name : String? = null,
     val profileImageUrl : String? = null,
     val uid : String? = null

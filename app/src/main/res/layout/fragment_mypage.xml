@@ -122,7 +122,7 @@
         android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_rental_history" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_chatlist" />
 
     <TextView
         android:id="@+id/tradepage_button3"
@@ -197,7 +197,7 @@
         app:srcCompat="@drawable/circle" />
 
     <ImageView
-        android:id="@+id/my_rental_history"
+        android:id="@+id/btn_chatlist"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="40dp"

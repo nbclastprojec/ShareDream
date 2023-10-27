@@ -3,6 +3,7 @@ package com.dreamteam.sharedream
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.dreamteam.sharedream.view.MyPostFeedDetailFragment
 
 class DetailFrameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,7 +13,7 @@ class DetailFrameActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
-        val detailPageFragment = DetailPageFragment()
+        val detailPageFragment = MyPostFeedDetailFragment()
         fragmentTransaction.replace(R.id.fragment_container, detailPageFragment)
         fragmentTransaction.commit()
         val intent = getIntent()

@@ -104,7 +104,7 @@ class ChatFragment : Fragment() {
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val friend = snapshot.getValue<Friend>()
+                    val friend = snapshot.getValue<Chatting>()
                     Glide.with(holder.itemView.context).load(friend?.profileImageUrl)
                         .apply(RequestOptions().circleCrop())
                         .into(holder.imageView)

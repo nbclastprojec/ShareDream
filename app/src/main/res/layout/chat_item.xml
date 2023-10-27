@@ -26,18 +26,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/chat_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/bbing"
                 android:text="이름"
                 android:textColor="#000000"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/chat_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
+                android:fontFamily="@font/bbing"
                 android:text="메세지"
                 android:textColor="#000000" />
             <TextView
