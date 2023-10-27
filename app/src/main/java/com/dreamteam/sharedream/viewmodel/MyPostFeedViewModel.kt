@@ -199,7 +199,28 @@ class MyPostFeedViewModel : ViewModel() {
                     likeList.addAll(documentSnap.data?.get("likeUsers") as List<String>)
                     Log.d("xxxx", " Before control LikeUsers List : $likeList")
 
-
+                    if (likeList.contains(uid)){
+                        //todo 이미 좋아요한 유저 이벤트 처리, 본인 게시물 좋아요 버튼 이벤트 처리.
+                        Log.d("xxxx", "addFavoritePost: 이미 좋아요한 UID")
+                        likeList.remove(uid)
+                        documentSnap.reference.update("likeUsers",likeList)
+                            .addOnSuccessListener {
+                                Log.d("xxxx", " 관심 목록에서 제거 O ")
+                            _likeUsersCount.postValue(likeList)
+                            }
+                            .addOnFailureListener {
+                                Log.d("xxxx", "관심목록에서 제외하기 Failure $it")
+                            }
+                    } else {
+                        likeList.add(uid)
+                        documentSnap.reference.update("likeUsers",likeList).addOnSuccessListener {
+                            Log.d("xxxx", " 좋아요 버튼 클릭 Successful, 좋아요 List에 UID 추가 " )
+                            _likeUsersCount.postValue(likeList)
+                            }
+                            .addOnFailureListener {
+                                Log.d("xxxx", " 좋아요 버튼 클릭 Failure 좋아요 List에 추가 X = $it ")
+                            }
+                        }
                     }
                 }
     }

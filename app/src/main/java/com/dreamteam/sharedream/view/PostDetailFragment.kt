@@ -1,12 +1,11 @@
 package com.dreamteam.sharedream.view
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -14,9 +13,8 @@ import coil.load
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
-import com.dreamteam.sharedream.databinding.FragmentMyPostFeedDetailBinding
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
-import com.dreamteam.sharedream.model.Post
+import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 
@@ -26,7 +24,7 @@ class PostDetailFragment : Fragment() {
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
 
-    private val postInfo = mutableListOf<Post>()
+    private val postInfo = mutableListOf<PostRcv>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,7 +32,7 @@ class PostDetailFragment : Fragment() {
         _binding = FragmentPostDetailBinding.inflate(inflater, container, false)
 
 
-        val imgs = mutableListOf<String>()
+        val imgs = mutableListOf<Uri>()
         myPostFeedViewModel.currentPost.observe(viewLifecycleOwner) {
             binding.detailId.text = it.nickname
             binding.detailAddress.text = it.address
@@ -51,6 +49,14 @@ class PostDetailFragment : Fragment() {
             // 수정 버튼 visibility
             if (it.uid == Constants.currentUserUid){
                 binding.detailBtnEditPost.visibility = View.VISIBLE
+            }
+
+            // 관심 목록에 있는 아이템일 경우 binding
+            if (it.likeUsers.contains(Constants.currentUserUid)){
+                binding.detailBtnSubFavorite.visibility = View.VISIBLE
+                binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
+            } else {
+                binding.detailBtnSubFavorite.visibility = View.GONE
             }
         }
 
@@ -70,6 +76,18 @@ class PostDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 관심목록 추가 시 카운트에 반영
+        myPostFeedViewModel.likeUsersCount.observe(viewLifecycleOwner){
+            binding.detailTvLikeCount.text = "${it.size}"
+            // 관심 목록에 있는 아이템일 경우 binding
+            if (it.contains(Constants.currentUserUid)){
+                binding.detailBtnSubFavorite.visibility = View.VISIBLE
+                binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
+            } else {
+                binding.detailBtnSubFavorite.visibility = View.GONE
+                binding.detailLike.setImageResource(R.drawable.like)
+            }
+        }
         // 수정 버튼 클릭 이벤트
         binding.detailBtnEditPost.setOnClickListener {
             parentFragmentManager.beginTransaction().replace(R.id.frag_edit,PostEditFragment()).addToBackStack(null).commit()
@@ -77,10 +95,15 @@ class PostDetailFragment : Fragment() {
         }
 
         // 좋아요 버튼 클릭 이벤트
-        binding.detailLike.setOnClickListener {
+        binding.detailBtnAddFavorite.setOnClickListener {
             Util.showDialog(requireContext(),"관심 목록에 추가","내 관심 목록에 추가하시겠습니까?"){
-                myPostFeedViewModel.addFavoritePost(Constants.currentUserUid!!,postInfo[0].imgs[0])
-                Log.d("xxxx", "Detail page postInfo[0].imgs[0] =  ${postInfo[0].imgs[0]}")
+                myPostFeedViewModel.addOrSubFavoritePost(Constants.currentUserUid!!,postInfo[0].timestamp)
+                Log.d("xxxx", " detail like btn clicked, post timestamp  =  ${postInfo[0].timestamp}")
+            }
+        }
+        binding.detailBtnSubFavorite.setOnClickListener {
+            Util.showDialog(requireContext(),"관심 목록에서 제거","내 관심 목록에서 게시글의 아이템을 제거하시겠습니까?"){
+                myPostFeedViewModel.addOrSubFavoritePost(Constants.currentUserUid!!,postInfo[0].timestamp)
             }
         }
 
