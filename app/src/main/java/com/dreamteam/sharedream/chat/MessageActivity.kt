@@ -129,7 +129,7 @@ class MessageActivity : AppCompatActivity() {
         }
 
         fun getMessageList(){
-            fireDatabase.child("chatrooms").child(chatRoomuid.toString()).child("comments").addValueEventListener(object : ValueEventListener{
+            fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments").addValueEventListener(object : ValueEventListener{
                 override fun onCancelled(error: DatabaseError) {
                 }
                 override fun onDataChange(snapshot: DataSnapshot) {
