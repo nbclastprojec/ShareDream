@@ -93,7 +93,7 @@ class PostDetailFragment : Fragment() {
         binding.detailBtnEditPost.setOnClickListener {
             myPostFeedViewModel.currentPostToEditPage.postValue(currentPostInfo[0])
 //            myPostFeedViewModel.downloadEditPostDefault(currentPostInfo[0].timestamp)
-            parentFragmentManager.beginTransaction().replace(R.id.frag_edit,PostEditFragment()).addToBackStack(null).commit()
+            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frag_edit,PostEditFragment()).addToBackStack(null).commit()
 
         }
 

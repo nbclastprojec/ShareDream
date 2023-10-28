@@ -10,12 +10,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toFile
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.adapter.ImgClick
-import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.databinding.FragmentPostEditBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
@@ -23,6 +24,9 @@ import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.android.material.chip.Chip
 import com.google.firebase.Timestamp
+import java.io.File
+import java.net.URI
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -51,12 +55,10 @@ class PostEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRcv()
 
         // 이미지 선택
         binding.editBtnSelectImg.setOnClickListener {
-            uris = mutableListOf()
             pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
@@ -93,7 +95,7 @@ class PostEditFragment : Fragment() {
             }
         }
 
-        var editCategory : String
+        var editCategory : String = ""
         when (binding.chipgroup.checkedChipId) {
             R.id.cloths_chip1 -> editCategory = "의류"
             R.id.machine_chip1 -> editCategory = "가전제품"
@@ -104,14 +106,14 @@ class PostEditFragment : Fragment() {
             R.id.toy_chip1 -> editCategory = "문구"
             else -> {
                 Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
-                return
+
             }
         }
 
 
 
         // 업로드 하기
-        binding.btnComplete1.setOnClickListener {
+        binding.btnComplete.setOnClickListener {
             Log.d("xxxx", " postEditFrag 완료 버튼 클릭")
             val post = Post(
                 Constants.currentUserUid!!,
@@ -127,22 +129,31 @@ class PostEditFragment : Fragment() {
                 currentPost!!.likeUsers,
                 currentPost!!.token,
                 currentPost!!.timestamp,
-                "교환 가능"
+                "교환 가능",
             )
-            myPostFeedViewModel.uploadEditPost(uris,post)
-//            parentFragmentManager.popBackStack()
+            Log.d("xxxx", "onViewCreated: ${uris}")
+
+            val testList = mutableListOf<Any>()
+            testList.addAll(uris)
+            for ( index in testList.indices){
+                if (currentPost!!.imgs.contains(testList[index])){
+                    testList[index] = (URI(testList[index].toString()).toURL())
+                } else {
+                }
+            }
+
+            myPostFeedViewModel.uploadEditPost(testList,post)
+            parentFragmentManager.popBackStack()
         }
 
 
-        // 이미지 선택
-        binding.editBtnSelectImg.setOnClickListener {
-            uris = mutableListOf()
-            pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        binding.topMassage.setOnClickListener {
+
         }
 
         // 뒤로가기 버튼
-        binding.editBtnBack.setOnClickListener {
-
+        binding.btnBack.setOnClickListener {
+            Log.d("xxxx", " edit frag 뒤로가기 버튼 클릭 ")
             parentFragmentManager.popBackStack()
         }
     }
@@ -154,7 +165,7 @@ class PostEditFragment : Fragment() {
                 uriList.forEach { uri ->
                     Log.d("xxxx", "Selected URI: $uri")
                 }
-                uris = uriList.toMutableList()
+                uris.addAll(uriList)
 
                 Log.d("xxxx", "Edit Frag Number of items selected : ${uris} ")
                 writePostImgAdapter.submitList(uris)
@@ -169,6 +180,13 @@ class PostEditFragment : Fragment() {
         writePostImgAdapter = WritePostImageAdapter(object : ImgClick {
             override fun imgClick(uri: Uri) {
                 Log.d("xxxx", "imgClicked: ${uri} , whole uris : $uris")
+                // todo 아이템 클릭 시 다이얼로그 or 삭제 버튼
+                Util.showDialog(requireContext(),"이미지 삭제","선택한 이미지를 삭제 하시겠습니까?"){
+                    uris.remove(uri)
+                    binding.imageCount.text = "${uris.size}/10"
+                    writePostImgAdapter.notifyDataSetChanged()
+                }
+
             }
 
         })

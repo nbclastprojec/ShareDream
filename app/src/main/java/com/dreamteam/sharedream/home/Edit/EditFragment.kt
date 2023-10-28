@@ -187,6 +187,7 @@ class EditFragment : Fragment() {
                 storage.reference.child("post").child("${time}_$i").putFile(uri)
                     .addOnSuccessListener {
                         // 추후에 필요한 기능 추가
+                        Log.d("xxxx", "imageUpload: ${uri}")
                     }
                     .addOnFailureListener {
                         Log.d("xxxx", " Edit Frag imageUpload Failure : $it ")

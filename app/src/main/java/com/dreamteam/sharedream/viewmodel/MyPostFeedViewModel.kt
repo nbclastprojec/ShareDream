@@ -12,35 +12,35 @@ import com.dreamteam.sharedream.model.PostRcv
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
+import com.google.firebase.appcheck.internal.HttpErrorResponse
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class MyPostFeedViewModel : ViewModel() {
     private val db = Firebase.firestore
-    private val auth = Firebase.auth
     private val storage = Firebase.storage
 
     // 내가 쓴 글 목록 LiveData todo 추후에 ViewType 나누는 걸로 수정할 예정.
     private val _postFeedResult = MutableLiveData<MutableList<PostRcv>>()
     val postFeedResult: LiveData<MutableList<PostRcv>> get() = _postFeedResult
 
-    // 게시글 목록 Rcv 클릭한 아이템 정보 받아오기
-    var currentPost = MutableLiveData<PostRcv>()
-
     // 관심 목록 ( 좋아요 ) 추가 시 카운트 변동
     private val _likeUsersCount = MutableLiveData<MutableList<String>>()
     val likeUsersCount : LiveData<MutableList<String>> get() = _likeUsersCount
-
 
     // 게시글 목록 Rcv 클릭한 아이템 작성자 프로필 이미지 가져오기 / 마이 페이지 프로필 이미지와 같은 단일 프로필 이미지 로딩
     private val _currentProfileImg = MutableLiveData<Uri>()
@@ -54,12 +54,16 @@ class MyPostFeedViewModel : ViewModel() {
     private val _postUriResult = MutableLiveData<MutableList<Uri>>()
     val postUriResult : LiveData<MutableList<Uri>> get() = _postUriResult
 
+    // 게시글 목록 Rcv 클릭한 아이템 정보 받아오기
+    var currentPost = MutableLiveData<PostRcv>()
+
     // 수정 페이지 이동 시 기존에 작성 되어 있던 정보 불러오기
     var currentPostToEditPage = MutableLiveData<PostRcv>()
 
     // 포스트 수정된 DB 업로드
     // 선택한 이미지 Storage에 업로드
-    fun uploadEditPost(uris : MutableList<Uri>, post : Post) {
+    fun uploadEditPost(uris : MutableList<Any>, post : Post) {
+        viewModelScope.launch(Dispatchers.IO) {
         val imgs : MutableList<String> = mutableListOf()
         fun getTime(): String {
             val currentDateTime = Calendar.getInstance().time
@@ -69,21 +73,45 @@ class MyPostFeedViewModel : ViewModel() {
             return dateFormat
         }
         val time = getTime()
-        uris?.let { uris ->
-            for (i in uris.indices) {
-                val uri = uris[i]
-                val fileName = "${time}_$i"
-
-                imgs.add(fileName)
-
-                storage.reference.child("post").child("${time}_$i").putFile(uri)
-                    .addOnSuccessListener {
-                        // 추후에 필요한 기능 추가
+        uris?.let { uriAndUrl ->
+            Log.d("xxxx", "imageUpload 1. uris : $uris")
+                try {
+                    var count : Int = 0
+                    for (item in uriAndUrl){ // index in uriAndUrl로 하면 작동이 안됨.
+                        count++
+                        val fileName = "${time}_$count"
+                        imgs.add(fileName)
+                        when (item) {
+                            is Uri -> {
+                                storage.reference.child("post").child("${time}_$count").putFile(item)
+                                    .addOnSuccessListener {
+                                        Log.d("xxxx", " Uri Succesful : $it")
+                                    }
+                                    .addOnFailureListener {
+                                        Log.d("xxxx", " Uri Failure : $it")
+                                    }
+                            }
+                            is URL -> {
+                                val connection = item.openConnection() as HttpURLConnection
+                                connection.connect()
+                                val inputStream = connection.inputStream
+                                storage.reference.child("post").child("${time}_$count").putStream(inputStream)
+                                    .addOnSuccessListener{
+                                        Log.d("xxxx", " URL Successful : $it ")
+                                    }
+                                    .addOnFailureListener{
+                                        Log.d("xxxx", " URL Failure : $it ")
+                                    }
+                            }
+                            else -> {}
+                        }
                     }
-                    .addOnFailureListener {
-                        Log.d("xxxx", " Edit Frag imageUpload Failure : $it ")
-                    }
-            }
+                }catch (exception : StorageException){
+                    val errorCode = exception.errorCode
+                    Log.d("xxxx", " 파일 업로드 실패 errorCode: ${errorCode}")
+                }
+
+            // timestamp 기준으로 수정하는 게시글 data를 가져와 변경된 게시글로 수정
             post.imgs = imgs
             db.collection("Posts").whereEqualTo("timestamp",post.timestamp).get()
                 .addOnSuccessListener {querySnapshot ->
@@ -91,7 +119,7 @@ class MyPostFeedViewModel : ViewModel() {
                     if (!querySnapshot.isEmpty){
                         querySnapshot.documents[0].reference.set(post)
                             .addOnSuccessListener {
-                            Log.d("xxxx", "imageUpload: 게시글 수정 완료 ") 
+                                Log.d("xxxx", "imageUpload: 게시글 수정 완료 ")
                             }
                             .addOnFailureListener {
                                 Log.d("xxxx", "uploadEditPost: 게시글 수정 실패 $it")
@@ -101,6 +129,7 @@ class MyPostFeedViewModel : ViewModel() {
                 .addOnFailureListener {
                     Log.d("xxxx", "uploadEditPost: 초장부터 실패 $it")
                 }
+        }
         }
     }
 
@@ -115,7 +144,6 @@ class MyPostFeedViewModel : ViewModel() {
                    storage.reference.child("post").child("${post.imgs[index]}").downloadUrl
                        .addOnSuccessListener {
                            uris.add(it)
-
                            _postUriResult.postValue(uris)
                            Log.d("xxxx", "testA Successful : ${_postUriResult.value} ")
                        }
@@ -151,7 +179,7 @@ class MyPostFeedViewModel : ViewModel() {
         }
     }
 
-    // Post Model 형식 -> PostRcv 형식으로 변환
+    // Model 형식 Post  -> PostRcv 형식으로 변환
     private fun convertPostToPostRcv (post: Post, querySnapshot: QuerySnapshot, postRcvList:MutableList<PostRcv>,
                                       resultLiveData: MutableLiveData<MutableList<PostRcv>>) {
         val postImgUris: List<String> = post.imgs
@@ -163,6 +191,7 @@ class MyPostFeedViewModel : ViewModel() {
             downloadTasks.add(downloadTask)
         }
 
+        // 이미지를 모두 받아온 뒤 한번에 PostRcv의 List<Uri> 에 담아준다 ->
         Tasks.whenAllSuccess<Uri>(downloadTasks)
             .addOnSuccessListener { uriList ->
                 postImgList.addAll(uriList)
