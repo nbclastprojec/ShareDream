@@ -61,7 +61,7 @@ class EditActivity : AppCompatActivity() {
             registerForActivityResult.launch(intent)
         }
 
-        binding.btnComplete.setOnClickListener {
+        binding.editBtnComplete.setOnClickListener {
 
             // uriList에 값 들어오면 uploadAta실행
             if (uriList.isNotEmpty()) {
@@ -145,10 +145,10 @@ class EditActivity : AppCompatActivity() {
 
 
     private fun uploadData() {
-        val title = binding.title.text.toString()
-        val city = binding.city.text.toString()
-        val mainText = binding.mainText.text.toString()
-        val valueStr = binding.value.text.toString()
+        val title = binding.editTvTitle.text.toString()
+        val city = binding.editEtvAddress.text.toString()
+        val mainText = binding.editEtvDesc.text.toString()
+        val valueStr = binding.editEtvPrice.text.toString()
         val value = valueStr.toIntOrNull()
 
         if (value == null) {

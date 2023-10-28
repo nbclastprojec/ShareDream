@@ -1,6 +1,5 @@
 package com.dreamteam.sharedream.home
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -13,13 +12,12 @@ import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.home.Edit.EditFragment
-import com.dreamteam.sharedream.model.Post
-import com.dreamteam.sharedream.view.MyPostFeedDetailFragment
+import com.dreamteam.sharedream.model.PostRcv
+import com.dreamteam.sharedream.view.PostDetailFragment
 import com.dreamteam.sharedream.view.adapter.HomePostAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -29,7 +27,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 
-class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener {
+class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -48,6 +46,7 @@ class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener
     }
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
+    private var rcvList: List<PostRcv> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +83,9 @@ class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
 
+        binding.homeBtnRefreshList.setOnClickListener {
+            myPostFeedViewModel.downloadHomePostRcv()
+        }
 
         binding.floatingActionButton.setOnClickListener {
             parentFragmentManager.beginTransaction().replace(R.id.frag_edit, EditFragment())
@@ -107,22 +109,29 @@ class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener
 
         setupRcv()
 
-        myPostFeedViewModel.postDownload()
+        myPostFeedViewModel.downloadHomePostRcv()
 
-        db.collection("Posts").addSnapshotListener { querySnapshot, exception ->
-            if (exception != null) {
+//        db.collection("Posts").addSnapshotListener { querySnapshot, exception ->
+//            if (exception != null) {
+//
+//                Log.d("xxxx", " Home Frag 리스닝 에러 : $exception ")
+//                return@addSnapshotListener
+//            }
+//
+//            Log.d("xxxx", " Home Frag SnapshotListener ")
+//            querySnapshot?.let {snapshot ->
+//                for (post in snapshot.documents){
+//                    val title = post.getString("title")
+//                    Log.d("xxxx", " Posts 아이템 변경 리스너 타이틀 : $title")
+//                }
+//            }
+//
+////            homePostAdapter.submitList(rcvList)
+//        }
 
-                Log.d("xxxx", " Home Frag 리스닝 에러 : $exception ")
-                return@addSnapshotListener
-            }
 
-            Log.d("xxxx", " Home Frag SnapshotListener ")
-            myPostFeedViewModel.postDownload()
-        }
-
-        // todo Home Frag 게시글 LiveData Observe
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) {
-            val rcvList: List<Post> = it
+            rcvList = it
 
             Log.d("xxxx", " Home Frag Observe ")
             homePostAdapter.submitList(rcvList)
@@ -132,15 +141,15 @@ class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener
 
     fun setupRcv() {
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) {
-            val rcvList: List<Post> = it
+            val rcvList: List<PostRcv> = it
 
-            homePostAdapter = HomePostAdapter(requireContext(),object : PostClick {
-                override fun postClick(post: Post) {
+            homePostAdapter = HomePostAdapter(requireContext(), object : PostClick {
+                override fun postClick(post: PostRcv) {
                     myPostFeedViewModel.currentPost.value = post
-                    myPostFeedViewModel.getCurrentProfileImg(post.uid)
+                    myPostFeedViewModel.downloadCurrentProfileImg(post.uid)
                     parentFragmentManager.beginTransaction().add(
                         R.id.frag_edit,
-                        MyPostFeedDetailFragment()
+                        PostDetailFragment()
                     ).addToBackStack(null).commit()
                     Log.d("xxxx", " myPostFeed Item Click = $post ")
                 }
@@ -175,8 +184,6 @@ class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener
 //        homePostAdapter.notifyDataSetChanged()
 //    }
 }
-
-
 
 
 //class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener {

@@ -1,13 +1,11 @@
 package com.dreamteam.sharedream
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
@@ -18,18 +16,11 @@ import com.dreamteam.sharedream.view.MyPostFeedFragment
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMypageBinding? = null
@@ -70,7 +61,7 @@ class MyPageFragment : Fragment() {
 
         // 내정보 수정 페이지로 이동
         binding.mypageEditButton.setOnClickListener {
-            myPostFeedViewModel.getCurrentProfileImg(Constants.currentUserUid!!)
+            myPostFeedViewModel.downloadCurrentProfileImg(Constants.currentUserUid!!)
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frag_edit, MyPageEditFragment()).addToBackStack("myPageEdit").commit()
         }
@@ -136,11 +127,9 @@ class MyPageFragment : Fragment() {
 
         Util.showDialog(requireContext(),"회원 탈퇴","회원 탈퇴 시 기존 정보를 다시 복구할 수 없습니다.") {
             auth.signOut()
+            auth.currentUser!!.delete()
             startActivity(Intent(activity,LogInActivity::class.java))
             requireActivity().finish()}
-        auth.currentUser!!.delete()
-        startActivity(Intent(activity,LogInActivity::class.java))
-        requireActivity().finish()
     }
 
     private fun signOut() {

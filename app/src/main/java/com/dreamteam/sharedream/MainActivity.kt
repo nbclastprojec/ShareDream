@@ -18,15 +18,27 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.dreamteam.sharedream.home.HomeAdapter
 import com.dreamteam.sharedream.home.Search.SeachFragment
+import com.dreamteam.sharedream.model.UserData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var homeAdapter: HomeAdapter
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val auth: FirebaseAuth = Firebase.auth
+    private val db : FirebaseFirestore = Firebase.firestore
 
     init {
         Constants.currentUserUid = auth.currentUser!!.uid
+        db.collection("UserData").document("${auth.currentUser!!.uid}")
+            .get()
+            .addOnSuccessListener {
+                Constants.currentUserInfo = it.toObject<UserData>()
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,45 +68,50 @@ class MainActivity : AppCompatActivity() {
 
         val tabTitles = listOf("교환하기", "내소식")
 
-            if (intent.hasExtra("open_fragment")) {
-                val fragmentToOpen = intent.getStringExtra("open_fragment")
-                if (fragmentToOpen == "alarm_fragment") {
-                    val transaction = supportFragmentManager.beginTransaction()
-                    val alarmFragment = AlarmFragment()
-                    val alarmFragmentIndex = 1
-                    viewPager.setCurrentItem(alarmFragmentIndex, true)
-                    transaction.replace(R.id.viewPager, alarmFragment)
-                }
+        if (intent.hasExtra("open_fragment")) {
+            val fragmentToOpen = intent.getStringExtra("open_fragment")
+            if (fragmentToOpen == "alarm_fragment") {
+                val transaction = supportFragmentManager.beginTransaction()
+                val alarmFragment = AlarmFragment()
+                val alarmFragmentIndex = 1
+                viewPager.setCurrentItem(alarmFragmentIndex, true)
+                transaction.replace(R.id.viewPager, alarmFragment)
             }
+        }
 
-            TabLayoutMediator(
-                tabLayout,
-                viewPager,
-                { tab, position -> tab.text = tabTitles[position] }).attach()
+        TabLayoutMediator(
+            tabLayout,
+            viewPager,
+            { tab, position -> tab.text = tabTitles[position] }).attach()
 
 
-            binding.editTextSearchView.setOnClickListener {
+        binding.editTextSearchView.setOnClickListener {
 
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frag_edit, SeachFragment())
-                    .addToBackStack(null)
-                    .commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frag_edit, SeachFragment())
+                .addToBackStack(null)
+                .commit()
 
-            }
+        }
 
 
 
         binding.btnMypage.setOnClickListener {
+            Log.d("xxxx", " MainActivity Mypage Btn Click ${Constants.currentUserInfo}")
             supportFragmentManager.beginTransaction().add(R.id.frag_edit, MyPageFragment())
                 .addToBackStack(null).commit()
         }
     }
+
     //android 13 postnotification
-    private fun checkAppPushNotification(){
+    private fun checkAppPushNotification() {
 
         //android 13 이상 && 푸시권한 없음
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-            PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS")
+            PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(
+                this,
+                "android.permission.POST_NOTIFICATIONS"
+            )
         ) {
             // 푸쉬 권한 없음
             permissionPostNotification.launch("android.permission.POST_NOTIFICATIONS")
@@ -106,13 +123,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     /** 권한 요청 */
-    private val permissionPostNotification = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            //권한 허용
-        } else {
-            checkAppPushNotification()
+    private val permissionPostNotification =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                //권한 허용
+            } else {
+                checkAppPushNotification()
+            }
         }
-    }
 
     /** DynamicLink */
 //    private fun initDynamicLink() {
