@@ -1,7 +1,6 @@
 package com.dreamteam.sharedream.view
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,12 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
+import com.dreamteam.sharedream.LogInActivity
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentMyPostFeedDetailBinding
 import com.dreamteam.sharedream.model.AlarmPost
-import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 
@@ -43,10 +42,11 @@ class MyPostFeedDetailFragment : Fragment() {
             binding.detailpageExplain.text = it.desc
             binding.detailMoney.text = "${it.price} 원"
             binding.detailTvLikeCount.text = "${it.likeUsers.size}"
-
             postInfo.add(it)
-            Log.d("xxxx", " detail Page PostInfo : $postInfo")
+            Log.d("xxxx", " detail Page PostInfo : $it")
             imgs.addAll(it.imgs)
+
+
 
         }
 
@@ -79,11 +79,34 @@ class MyPostFeedDetailFragment : Fragment() {
 
         binding.detailChatButton.setOnClickListener {
             Log.d("susu", "Click 확인")
+            getUserInformation()
 
-            val destinationUid = "XE8S4oMfZSX7E8DIAfESsmHkA0i1"
-            val intent = Intent(context, MessageActivity::class.java)
-            intent.putExtra("destinationUid", destinationUid)
-            startActivity(intent)
+
         }
+
+    }
+
+
+    private fun getUserInformation() {
+        val documentIdString = postInfo[0].toString()
+        val parts = documentIdString.split("documentId=")
+        if (parts.size > 1) {
+            val endIndex = parts[1].indexOf(")")
+            if (endIndex != -1) {
+                val documentId = parts[1].substring(0, endIndex)
+                startMessageActivity(documentId)
+                Log.d("afafafafafa", "$documentId ")
+            }
+        }
+    }
+
+
+
+
+
+    private fun startMessageActivity(documentId: String) {
+        val intent = Intent(requireContext(), MessageActivity::class.java)
+        intent.putExtra("documentId", documentId)
+        startActivity(intent)
     }
 }
