@@ -64,12 +64,10 @@ class MyPostFeedFragment : Fragment() {
         myPostFeedAdapter = MyPostFeedAdapter(object : PostClick {
             override fun postClick(post: PostRcv) {
                 myPostFeedViewModel.currentPost.value = post
-//                myPostFeedViewModel.downloadDetailImgs()
                 parentFragmentManager.beginTransaction().add(
                     R.id.frag_edit,
                     PostDetailFragment()
                 ).addToBackStack(null).commit()
-                Log.d("xxxx", " myPostFeed Item Click = $post ")
             }
         })
 

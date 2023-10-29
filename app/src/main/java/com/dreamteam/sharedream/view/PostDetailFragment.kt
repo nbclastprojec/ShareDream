@@ -17,6 +17,9 @@ import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
+import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class PostDetailFragment : Fragment() {
     private var _binding: FragmentPostDetailBinding? = null
@@ -31,7 +34,6 @@ class PostDetailFragment : Fragment() {
     ): View? {
         _binding = FragmentPostDetailBinding.inflate(inflater, container, false)
 
-
         val imgs = mutableListOf<Uri>()
         myPostFeedViewModel.currentPost.observe(viewLifecycleOwner) {
             binding.detailId.text = it.nickname
@@ -41,6 +43,10 @@ class PostDetailFragment : Fragment() {
             binding.detailpageExplain.text = it.desc
             binding.detailMoney.text = "${it.price} 원"
             binding.detailTvLikeCount.text = "${it.likeUsers.size}"
+            binding.detailpageDate.text = "${time(it.timestamp)}"
+
+            // 게시물 작성자 프로필 이미지 받아오기
+            myPostFeedViewModel.downloadCurrentProfileImg(it.uid)
 
             currentPostInfo.add(it)
             Log.d("xxxx", " detail Page PostInfo : $currentPostInfo")
@@ -59,7 +65,6 @@ class PostDetailFragment : Fragment() {
                 binding.detailBtnSubFavorite.visibility = View.GONE
             }
         }
-
 
         myPostFeedViewModel.currentProfileImg.observe(viewLifecycleOwner){
             binding.datailProfile.load(it)
@@ -100,7 +105,7 @@ class PostDetailFragment : Fragment() {
         // 관심 목록 추가 버튼 클릭 이벤트
         binding.detailBtnAddFavorite.setOnClickListener {
             Util.showDialog(requireContext(),"관심 목록에 추가","내 관심 목록에 추가하시겠습니까?"){
-                myPostFeedViewModel.addOrSubFavoritePost(Constants.currentUserUid!!,currentPostInfo[0].timestamp)
+                myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
                 Log.d("xxxx", " detail like btn clicked, post timestamp  =  ${currentPostInfo[0].timestamp}")
             }
         }
@@ -108,7 +113,7 @@ class PostDetailFragment : Fragment() {
         // 관심 목록 제거 버튼 클릭 이벤트
         binding.detailBtnSubFavorite.setOnClickListener {
             Util.showDialog(requireContext(),"관심 목록에서 제거","내 관심 목록에서 게시글의 아이템을 제거하시겠습니까?"){
-                myPostFeedViewModel.addOrSubFavoritePost(Constants.currentUserUid!!,currentPostInfo[0].timestamp)
+                myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
             }
         }
 
@@ -116,5 +121,42 @@ class PostDetailFragment : Fragment() {
         binding.detailCancelButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+    }
+
+    private fun time(timestamp:Timestamp): String{
+        val date: Date = timestamp.toDate()
+        // 1. 날짜 형식으로 만들기
+        // timestamp를 Date 객체로 변환
+
+        // SimpleDateFormat으로 원하는 형식으로 변환
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+//            postDate.text = dateFormat.format(date)
+
+        // 2. 현재 날짜, 시간 기준으로 만들기 ( 1시간 전, 2일 전, 1달 전)
+        val currentDateTime: Date = Date()
+        val diff: Long = currentDateTime.time - date.time
+        // 분 단위 차이
+        val minutes : Long = diff / (1000 * 60)
+        val hours : Long = minutes / 60
+        val day : Long = hours / 24
+        val week : Long = day / 7
+        val month : Long = day / 30
+        val year : Long = month / 12
+
+        val result: String =
+            when {
+                minutes < 1 -> "방금 전"
+                minutes < 60 -> "${minutes}분 전"
+                hours < 24 -> "${hours}시간 전"
+                day in 1..6 -> "${day}일 전"
+                day in 7 .. 13 ->"지난 주"
+                day in 14..30 -> "${week}주 전"
+                month in 1..12 -> "${month}달 전"
+                year in 1 .. 100 -> "${year}년 전"
+                else -> "${dateFormat.format(date)}"
+            }
+
+        return result
     }
 }
