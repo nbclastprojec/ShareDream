@@ -113,8 +113,7 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
         myPostFeedViewModel.downloadHomePostRcv()
 
-        db.collection("Posts").addSnapshotListener { querySnapshot, exception ->
-            if (exception != null) {
+
 
 
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) {
@@ -124,6 +123,8 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
             homePostAdapter.submitList(rcvList)
             homePostAdapter.notifyDataSetChanged()
         }
+
+
     }
 
     fun setupRcv() {
@@ -145,12 +146,17 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
             binding.homeRecycle.apply {
                 setHasFixedSize(true)
                 layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.VERTICAL,
+                        false
+                    )
                 adapter = homePostAdapter
                 addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
             }
         }
     }
+
 
     override fun onCategorySelected(category: String) {
         selectedCategory = category
@@ -158,6 +164,7 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
         homePostAdapter.onCategorySelected(selectedCategory)
 
     }
+}
 //    @SuppressLint("NotifyDataSetChanged")
 //    override fun onCategorySelected(category: String) {
 //
@@ -170,7 +177,6 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 //        }
 //        homePostAdapter.notifyDataSetChanged()
 //    }
-}
 
 
 //class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener {

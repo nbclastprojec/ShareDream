@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.adapter.PostClick
+import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentMyPostFeedBinding
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.MyPostFeedAdapter
@@ -82,4 +84,5 @@ class MyPostFeedFragment : Fragment() {
         }
 
     }
+
 }

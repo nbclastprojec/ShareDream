@@ -163,14 +163,18 @@ class MyPostFeedViewModel : ViewModel() {
                     .orderBy("timestamp",Query.Direction.DESCENDING)
                     .get()
                     .addOnSuccessListener { querySnapshot ->
+                        Log.d("please","$querySnapshot")
                         if (!querySnapshot.isEmpty) {
                             val postRcvList = mutableListOf<PostRcv>()
                             for ( document in querySnapshot.documents){
                                 document.toObject<Post>()?.let { post ->
                                     convertPostToPostRcv(post,querySnapshot, postRcvList,_postResult)
+                                    Log.d("postpost","$post")
                                 }
                             }
                         }
+                    }.addOnFailureListener {
+                        Log.d("pleaseFail","$it")
                     }
 
             }catch (e: Exception){
@@ -189,6 +193,7 @@ class MyPostFeedViewModel : ViewModel() {
         for (uri in postImgUris) {
             val downloadTask = storage.reference.child("post").child(uri).downloadUrl
             downloadTasks.add(downloadTask)
+
         }
 
         // 이미지를 모두 받아온 뒤 한번에 PostRcv의 List<Uri> 에 담아준다 ->
@@ -210,7 +215,8 @@ class MyPostFeedViewModel : ViewModel() {
                         likeUsers = post.likeUsers,
                         token = post.token,
                         timestamp = post.timestamp,
-                        state = post.state
+                        state = post.state,
+                        documentId=post.documentId
                     )
 
                     var inserted = false

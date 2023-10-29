@@ -130,6 +130,7 @@ class PostEditFragment : Fragment() {
                 currentPost!!.token,
                 currentPost!!.timestamp,
                 "교환 가능",
+                ""
             )
             Log.d("xxxx", "onViewCreated: ${uris}")
 

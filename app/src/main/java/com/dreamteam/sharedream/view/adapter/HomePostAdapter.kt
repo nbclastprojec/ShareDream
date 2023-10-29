@@ -76,8 +76,8 @@ class HomePostAdapter(private val context: Context, private val postClick: PostC
                         .build()
                     FirebaseMessaging.getInstance().send(message)
                     // FCMService의 sendNonotification 함수 호출
-                    val fcmService = FCMService()
-                    fcmService.sendNonotification(context, notificationTitle, notificationBody, data)
+//                    val fcmService = FCMService()
+//                    fcmService.sendNonotification(context, notificationTitle, notificationBody, data)
 
 
                 }

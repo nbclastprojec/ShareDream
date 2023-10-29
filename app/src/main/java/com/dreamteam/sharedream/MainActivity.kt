@@ -68,16 +68,16 @@ class MainActivity : AppCompatActivity() {
 
         val tabTitles = listOf("교환하기", "내소식")
 
-        if (intent.hasExtra("open_fragment")) {
+  /*      if (intent.hasExtra("open_fragment")) {
             val fragmentToOpen = intent.getStringExtra("open_fragment")
             if (fragmentToOpen == "alarm_fragment") {
                 val transaction = supportFragmentManager.beginTransaction()
-                val alarmFragment = AlarmFragment()
+               // val alarmFragment = AlarmFragment()
                 val alarmFragmentIndex = 1
                 viewPager.setCurrentItem(alarmFragmentIndex, true)
                 transaction.replace(R.id.viewPager, alarmFragment)
             }
-        }
+        }*/
 
         TabLayoutMediator(
             tabLayout,

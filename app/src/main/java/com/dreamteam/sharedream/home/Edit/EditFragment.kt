@@ -157,7 +157,8 @@ class EditFragment : Fragment() {
                     postLikeUsers,
                     token,
                     Timestamp.now(),
-                    "교환 가능"
+                    "교환 가능",
+                    ""
                 )
 
                 db.collection("Posts")

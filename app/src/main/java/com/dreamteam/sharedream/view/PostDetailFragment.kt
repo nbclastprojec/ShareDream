@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.view
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import coil.load
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
+import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
@@ -116,5 +118,31 @@ class PostDetailFragment : Fragment() {
         binding.detailCancelButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+
+        binding.detailChatButton.setOnClickListener {
+            getUserInformation()
+        }
+    }
+    private fun getUserInformation() {
+        val documentIdString = currentPostInfo[0].toString()
+        val parts = documentIdString.split("documentId=")
+        if (parts.size > 1) {
+            val endIndex = parts[1].indexOf(")")
+            if (endIndex != -1) {
+                val documentId = parts[1].substring(0, endIndex)
+                startMessageActivity(documentId)
+                Log.d("afafafafafa", "$documentId ")
+            }
+        }
+    }
+
+
+
+
+
+    private fun startMessageActivity(documentId: String) {
+        val intent = Intent(requireContext(), MessageActivity::class.java)
+        intent.putExtra("documentId", documentId)
+        startActivity(intent)
     }
 }
