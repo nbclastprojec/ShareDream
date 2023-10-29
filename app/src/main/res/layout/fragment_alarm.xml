@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AlarmFragment">
+    tools:context=".home.alarm.AlarmFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,6 +34,7 @@
             app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/alarmRecycler"
             android:layout_width="409dp"
             android:layout_height="668dp"
             android:layout_marginTop="15dp"

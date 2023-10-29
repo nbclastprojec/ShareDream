@@ -1,10 +1,6 @@
 package com.dreamteam.sharedream.model
 
-import android.net.Uri
-import com.google.firebase.Timestamp
-
-data class PostRcv(
-
+data class AlarmPost(
     val uid: String,
     val title: String,
     val price: String,
@@ -12,12 +8,12 @@ data class PostRcv(
     val address: String,
     val deadline: String,
     val desc: String,
-    var imgs: List<Uri>,
+    var imgs: List<String>,
     val nickname: String,
-    var likeUsers: List<String>,
+    val likeUsers: List<String>,
     val token: String,
-    val timestamp: Timestamp,
-    val state : String,
     val documentId:String
 
-)
+) {
+    constructor() : this("", "", "", "", "", "", "", listOf(), "", listOf(), "","")
+}

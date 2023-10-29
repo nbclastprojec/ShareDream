@@ -162,12 +162,20 @@ class EditFragment : Fragment() {
 
                 db.collection("Posts")
                     .add(post)
-                    .addOnSuccessListener {
-                        Log.d("xxxx", "postUpload: added with : ${it}")
-                        requireActivity().supportFragmentManager.beginTransaction().remove(this)
-                            .commit()
-
-
+                    .addOnSuccessListener { task ->
+                        val documentId = task.id
+                        Log.d("xxxx", "postUpload: added with : ${task}")
+                        val updatedData = mapOf("documentId" to documentId)
+                        db.collection("Posts")
+                            .document(documentId) // 생성된 documentId를 가리키는 참조
+                            .update(updatedData) // documentId 필드를 업데이트
+                            .addOnSuccessListener {
+                                requireActivity().supportFragmentManager.beginTransaction()
+                                    .remove(this)
+                                    .commit()
+                            }
+                    }.addOnFailureListener { error ->
+                        Log.d("xxxx", "Failed to update documentId: $error")
                     }
             }
         }

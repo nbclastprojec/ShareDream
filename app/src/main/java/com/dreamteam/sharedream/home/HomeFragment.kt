@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.adapter.PostClick
@@ -111,23 +113,8 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
         myPostFeedViewModel.downloadHomePostRcv()
 
-//        db.collection("Posts").addSnapshotListener { querySnapshot, exception ->
-//            if (exception != null) {
-//
-//                Log.d("xxxx", " Home Frag 리스닝 에러 : $exception ")
-//                return@addSnapshotListener
-//            }
-//
-//            Log.d("xxxx", " Home Frag SnapshotListener ")
-//            querySnapshot?.let {snapshot ->
-//                for (post in snapshot.documents){
-//                    val title = post.getString("title")
-//                    Log.d("xxxx", " Posts 아이템 변경 리스너 타이틀 : $title")
-//                }
-//            }
-//
-////            homePostAdapter.submitList(rcvList)
-//        }
+        db.collection("Posts").addSnapshotListener { querySnapshot, exception ->
+            if (exception != null) {
 
 
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) {
