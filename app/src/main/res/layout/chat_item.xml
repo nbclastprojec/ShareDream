@@ -6,10 +6,10 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:layout_marginTop="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="10dp">
+        android:orientation="horizontal">
         <LinearLayout
             android:id="@+id/messageItem_layout_destination"
             android:layout_width="wrap_content"
@@ -17,10 +17,9 @@
             android:orientation="vertical"
             android:gravity="center">
             <ImageView
-                android:id="@+id/messageItem_imageview_profile"
+                android:id="@+id/chat_image"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_height="50dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -29,7 +28,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/messageItem_textview_name"
+                android:id="@+id/chat_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/bbing"
@@ -38,19 +37,17 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/messageItem_textView_message"
+                android:id="@+id/chat_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:fontFamily="@font/bbing"
                 android:text="메세지"
                 android:textColor="#000000" />
-
             <TextView
-                android:id="@+id/messageItem_textView_time"
+                android:id="@+id/chat_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/bbing"
                 android:text="시간"
                 android:textSize="12sp" />
         </LinearLayout>

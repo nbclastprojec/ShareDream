@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.adapter.PostClick
@@ -100,23 +102,7 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
         myPostFeedViewModel.downloadHomePostRcv()
 
-//        db.collection("Posts").addSnapshotListener { querySnapshot, exception ->
-//            if (exception != null) {
-//
-//                Log.d("xxxx", " Home Frag 리스닝 에러 : $exception ")
-//                return@addSnapshotListener
-//            }
-//
-//            Log.d("xxxx", " Home Frag SnapshotListener ")
-//            querySnapshot?.let {snapshot ->
-//                for (post in snapshot.documents){
-//                    val title = post.getString("title")
-//                    Log.d("xxxx", " Posts 아이템 변경 리스너 타이틀 : $title")
-//                }
-//            }
-//
-////            homePostAdapter.submitList(rcvList)
-//        }
+
 
 
         // todo 쿼리 통해서 가져온 데이터의 마지막 Document 값을 받아와서 해당 Document 부터 X개 가져오는 로직 만들기
@@ -126,6 +112,8 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
             homePostAdapter.submitList(it)
             homePostAdapter.notifyDataSetChanged()
         }
+
+
     }
 
     fun setupRcv() {
@@ -147,12 +135,17 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
             binding.homeRecycle.apply {
                 setHasFixedSize(true)
                 layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.VERTICAL,
+                        false
+                    )
                 adapter = homePostAdapter
                 addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
             }
         }
     }
+
 
     override fun onCategorySelected(category: String) {
         selectedCategory = category
@@ -160,6 +153,7 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
         homePostAdapter.onCategorySelected(selectedCategory)
 
     }
+}
 //    @SuppressLint("NotifyDataSetChanged")
 //    override fun onCategorySelected(category: String) {
 //
@@ -172,7 +166,6 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 //        }
 //        homePostAdapter.notifyDataSetChanged()
 //    }
-}
 
 
 //class HomeFragment : Fragment(),CategoryDialogFragment.CategorySelectionListener {

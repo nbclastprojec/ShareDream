@@ -12,6 +12,7 @@ import coil.load
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
+import com.dreamteam.sharedream.chat.ChatFragment
 import com.dreamteam.sharedream.databinding.FragmentMypageBinding
 import com.dreamteam.sharedream.view.MyPostFeedFragment
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
@@ -102,6 +103,13 @@ class MyPageFragment : Fragment() {
         binding.btnDeleteAccount.setOnClickListener {
             deleteUserAccount()
         }
+
+        // 내 채팅 목록 버튼 클릭 이벤트
+        binding.btnChatlist.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frag_edit, ChatFragment()).addToBackStack(null).commit()
+        }
+
 
     }
     private fun downloadProfileImg() {
