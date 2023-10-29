@@ -9,11 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
+import com.dreamteam.sharedream.model.UserData
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
-import com.google.firebase.appcheck.internal.HttpErrorResponse
-import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
@@ -23,7 +23,6 @@ import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -33,6 +32,14 @@ import java.util.Locale
 class MyPostFeedViewModel : ViewModel() {
     private val db = Firebase.firestore
     private val storage = Firebase.storage
+
+    companion object {
+        const val USER_DATA = "UserData"
+        const val POST_BARTER_DATA = "Posts_Barter"
+        const val POST_RENTAL_DATA = "Posts_Rental"
+        const val USER_PROFILE_IMAGE = "ProfileImg"
+        const val POST_IMAGES = "post"
+    }
 
     // 내가 쓴 글 목록 LiveData todo 추후에 ViewType 나누는 걸로 수정할 예정.
     private val _postFeedResult = MutableLiveData<MutableList<PostRcv>>()
@@ -50,12 +57,17 @@ class MyPostFeedViewModel : ViewModel() {
     private val _postResult = MutableLiveData<MutableList<PostRcv>>()
     val postResult: LiveData<MutableList<PostRcv>> get() = _postResult
 
-    // todo Home Frag 게시글 대표 이미지 별도로 추가할 수 있도록 수정할 예정 - 이미지를 띄우는 속도가 너무 느림.
-    private val _postUriResult = MutableLiveData<MutableList<Uri>>()
-    val postUriResult : LiveData<MutableList<Uri>> get() = _postUriResult
+    // myPage 사용자 정보
+    private val _myPageResult = MutableLiveData<UserData>()
+    val myPageResult : MutableLiveData<UserData> get() = _myPageResult
+
+    // userPage 다른 유저 사용자 정보
+    private val _userPageResult = MutableLiveData<UserData>()
+    val userPageResult : MutableLiveData<UserData> get() = _userPageResult
 
     // 게시글 목록 Rcv 클릭한 아이템 정보 받아오기
-    var currentPost = MutableLiveData<PostRcv>()
+    private val _currentPost = MutableLiveData<PostRcv>()
+    val currentPost : MutableLiveData<PostRcv> get() = _currentPost
 
     // 수정 페이지 이동 시 기존에 작성 되어 있던 정보 불러오기
     var currentPostToEditPage = MutableLiveData<PostRcv>()
@@ -133,26 +145,9 @@ class MyPostFeedViewModel : ViewModel() {
         }
     }
 
-    // 게시글 디테일 아이템 사진들 불러오기
-    fun downloadDetailImgs () {
-        val uris = mutableListOf<Uri>()
-        // 빈 리스트로 초기화
-        _postUriResult.value = uris
-        Log.d("xxxx", " 초기화 ? : ${uris} ")
-        currentPost.value?.let { post ->
-           for ( index in post.imgs.indices){
-                   storage.reference.child("post").child("${post.imgs[index]}").downloadUrl
-                       .addOnSuccessListener {
-                           uris.add(it)
-                           _postUriResult.postValue(uris)
-                           Log.d("xxxx", "testA Successful : ${_postUriResult.value} ")
-                       }
-                       .addOnFailureListener {
-                           Log.d("xxxx", "testA Failure : $it ")
-                       }
-           }
-            Log.d("xxxx", "postUriResult: ${_postUriResult.value} ")
-        }
+    // 게시물 디테일 정보 받아오기
+    fun setCurrentPost(postRcv : PostRcv){
+        _currentPost.value = postRcv
     }
 
     // Home Frag 게시글 정보 받아오기
@@ -272,8 +267,48 @@ class MyPostFeedViewModel : ViewModel() {
             }
     }
 
+    // 유저 데이터 가져오기
+    fun downloadUserInfo(uid : String,resultLiveData : MutableLiveData<UserData>){
+        db.collection("UserData").document(uid).get()
+            .addOnSuccessListener {
+                resultLiveData.postValue(it.toObject<UserData>())
+            }
+    }
+
+    // 유저 데이터 수정하기
+    fun uploadEditUserInfo(nickname : String,intro : String){
+        db.collection(USER_DATA).document(Constants.currentUserUid!!)
+            .update(
+                "nickname",nickname,
+                "intro",intro
+            ).addOnSuccessListener {
+                downloadUserInfo(Constants.currentUserUid!!,_myPageResult)
+                Constants.currentUserInfo!!.nickname = nickname
+                Constants.currentUserInfo!!.intro = intro
+                Log.d("xxxx", "uploadEditUserInfo: Successful $it")
+            }.addOnFailureListener {
+                Log.d("xxxx", "uploadEditUserInfo: Failure $it")
+            }
+    }
+
+    // 유저 프로필 이미지 수정하기
+    fun uploadUserProfileImg(photoUri : Uri) {
+
+        val uploadTask = storage.reference.child("ProfileImg").child("${Constants.currentUserUid}")
+            .putFile(photoUri!!)
+        uploadTask.addOnSuccessListener {
+            // 파일 저장 성공 시 이벤트
+            downloadCurrentProfileImg(Constants.currentUserUid!!)
+            Log.d("xxxx", " img upload successful $it")
+        }.addOnFailureListener {
+            // 파일 저장 실패 시 이벤트
+            Log.d("xxxx", " img upload failure : $it ")
+        }
+    }
+
     // 관심 목록 추가 or 제거
-    fun addOrSubFavoritePost(uid: String, postPath: Timestamp){
+    fun addOrSubFavoritePost(postPath: Timestamp){
+        val uid = Constants.currentUserUid
         db.collection("Posts").whereEqualTo("timestamp", postPath)
             .get()
             .addOnSuccessListener {querySnapshot ->
@@ -298,7 +333,7 @@ class MyPostFeedViewModel : ViewModel() {
                                 Log.d("xxxx", "관심목록에서 제외하기 Failure $it")
                             }
                     } else {
-                        likeList.add(uid)
+                        likeList.add(uid!!)
                         documentSnap.reference.update("likeUsers",likeList).addOnSuccessListener {
                             Log.d("xxxx", " 좋아요 버튼 클릭 Successful, 좋아요 List에 UID 추가 " )
                             _likeUsersCount.postValue(likeList)
@@ -310,4 +345,8 @@ class MyPostFeedViewModel : ViewModel() {
                     }
                 }
     }
+
+    // 관심 목록 추가, 제거 분리하여 관리
+    fun subFavoritePost(){}
+
 }
