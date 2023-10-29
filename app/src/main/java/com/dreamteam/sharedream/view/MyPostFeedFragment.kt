@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.databinding.FragmentMyPostFeedBinding
-import com.dreamteam.sharedream.model.AlarmPost
+import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.MyPostFeedAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 
@@ -43,10 +43,13 @@ class MyPostFeedFragment : Fragment() {
         myPostFeedViewModel.postFeedDownload()
 
         myPostFeedViewModel.postFeedResult.observe(viewLifecycleOwner) {
-            val rcvList: MutableList<AlarmPost> = it
+            val rcvList: MutableList<PostRcv> = it
 
             // todo 글 작성 기능 완료 후 - 내가 쓴 글 _ 작성된 글이 없을 때 예외처리
             myPostFeedAdapter.submitList(rcvList)
+            if (rcvList.isNotEmpty()) {
+                binding.myPostFeedImgNotifyNotfound.visibility = View.GONE
+            }
             Log.d("xxxx", " submitList : $rcvList")
             myPostFeedAdapter.notifyDataSetChanged()
         }
@@ -59,17 +62,16 @@ class MyPostFeedFragment : Fragment() {
 
     private fun setupRcv() {
         myPostFeedAdapter = MyPostFeedAdapter(object : PostClick {
-            override fun postClick(post: AlarmPost) {
+            override fun postClick(post: PostRcv) {
                 myPostFeedViewModel.currentPost.value = post
-                myPostFeedViewModel.testA()
+//                myPostFeedViewModel.downloadDetailImgs()
                 parentFragmentManager.beginTransaction().add(
                     R.id.frag_edit,
-                    MyPostFeedDetailFragment()
+                    PostDetailFragment()
                 ).addToBackStack(null).commit()
                 Log.d("xxxx", " myPostFeed Item Click = $post ")
             }
-        }
-        )
+        })
 
         binding.myPostFeedRcv.apply {
             setHasFixedSize(true)

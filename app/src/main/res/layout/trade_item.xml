@@ -8,13 +8,11 @@
         android:id="@+id/linearLayout"
         android:layout_width="272dp"
         android:layout_height="119dp"
-        android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         android:orientation="vertical"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tradepage_image"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -78,16 +76,36 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/tradepage_image"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="106dp"
-        android:layout_height="115dp"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:scaleType="centerCrop"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/bar1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/gan" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/tradepage_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/gan" />
+
+<!--        <ImageView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="@color/soldout_bg_color"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:src="@drawable/bg_img_completed_trade_white" />-->
+
+
+    </FrameLayout>
+
 
     <View
         android:id="@+id/bar1"

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/top_massage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="교환글 수정"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="110dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="16dp"
+                android:src="@drawable/clamp"
+                app:layout_constraintBottom_toTopOf="@+id/scrollView4"
+                app:layout_constraintEnd_toStartOf="@+id/top_massage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_complete"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="110dp"
+                android:paddingBottom="12dp"
+                android:paddingTop="16dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toTopOf="@+id/scrollView4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/top_massage"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_toolbar_btn_comlete_nborder"
+                />
+
+
+            <ScrollView
+                android:id="@+id/scrollView4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="60dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/gray900"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout3"
+                        android:layout_width="0dp"
+                        android:layout_height="100dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/edit_btn_select_img"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_margin="20dp"
+                            android:background="@drawable/btn_camera"
+                            tools:layout_editor_absoluteX="20dp"
+                            tools:layout_editor_absoluteY="88dp">
+
+                            <ImageView
+                                android:id="@+id/imageView9"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:src="@drawable/camera"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/image_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0/10"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/view10"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray900"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+                    <EditText
+                        android:id="@+id/edit_tv_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:hint="제목을 입력해주세요"
+                        android:maxLines="1"
+                        android:textColorHint="@color/hint_color"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view10" />
+
+
+                    <View
+                        android:id="@+id/view11"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/gray900"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/edit_tv_title" />
+
+                    <EditText
+                        android:id="@+id/edit_etv_price"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:hint="값어치를 입력해주세요"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColorHint="@color/hint_color"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view11" />
+
+
+                    <View
+                        android:id="@+id/view12"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/gray900"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/edit_etv_price" />
+
+
+                    <TextView
+                        android:id="@+id/edit_tv_category"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:hint="물건에 알맞는 카테고리를 선택해주세요"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view12" />
+
+
+                    <View
+                        android:id="@+id/view13"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/gray900"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/edit_tv_category" />
+
+                    <EditText
+                        android:id="@+id/edit_etv_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:hint="교환장소로 원하는 지역을 입력해주세요"
+                        android:textColorHint="@color/hint_color"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/chipgroup" />
+
+
+                    <View
+                        android:id="@+id/view15"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray900"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/edit_etv_address" />
+
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipgroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view13"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/cloths_chip1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:checkable="true"
+                            android:text="의류"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/machine_chip1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:checkable="true"
+                            android:text="가전제품"
+                            android:textSize="12sp" />
+
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/sport_chip1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:checkable="true"
+                            android:text="스포츠"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/art_chip1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:checkable="true"
+                            android:text="예술"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/book_chip1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:checkable="true"
+                            android:text="독서"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/beauty_chip1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:checkable="true"
+                            android:text="뷰티"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/toy_chip1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:checkable="true"
+                            android:text="문구"
+                            android:textSize="12sp" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <EditText
+                        android:id="@+id/edit_etv_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="1dp"
+                        android:ems="10"
+                        android:gravity="start"
+                        android:hint="상세정보를 입력해주세요."
+                        android:inputType="textMultiLine"
+                        android:maxLines="20"
+                        android:textColorHint="@color/hint_color"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/edit_etv_address" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,6 @@ package com.dreamteam.sharedream.home
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,14 +9,10 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.dreamteam.sharedream.DetailFrameActivity
-import com.dreamteam.sharedream.FCMService
 import com.dreamteam.sharedream.databinding.WriteItemBinding
 import com.dreamteam.sharedream.model.PostData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.ktx.storage
 import java.util.UUID
 
@@ -159,12 +154,11 @@ class HomeAdapter(private val context: Context) :
 
             homeHolder.itemView.setOnClickListener {
 
-
-                val sendValue = homeItem.value.toString()
-                val intent = Intent(context, DetailFrameActivity::class.java)
-                intent.putExtra("value", sendValue)
-                context.startActivity(intent)
-                Log.d("document12", "documentId:$sendValue")
+//                val sendValue = homeItem.value.toString()
+//                val intent = Intent(context, DetailFrameActivity::class.java)
+//                intent.putExtra("value", sendValue)
+//                context.startActivity(intent)
+//                Log.d("document12", "documentId:$sendValue")
             }
 
             Log.d("nyh", "onBindViewHolder: $homeItem")

@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    >
+
+    <ImageView
+        android:id="@+id/detail_cancel_button"
+        android:layout_width="80dp"
+        android:layout_height="0dp"
+        android:src="@drawable/clamp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="1dp"
+        android:paddingEnd="24dp"
+        android:layout_marginVertical="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/detail_img_viewpager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/detail_btn_edit_post"
+        android:layout_width="80dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="12dp"
+        android:layout_marginVertical="5dp"
+        android:src="@drawable/pencil"
+        android:visibility="gone"
+        />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/detail_img_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_marginTop="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view9"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="16dp"
+        android:background="#D9D9D9"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailpage_time" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/detail_btn_add_favorite"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/detail_btn_bg"
+        android:text="관심 목록에 추가하기"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/detail_chatButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/detail_btn_sub_favorite"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/detail_btn_bg"
+        android:text="관심 목록에서 제외하기"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/detail_chatButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/detail_like"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingTop="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/detail_id"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/detail_id"
+        app:layout_constraintTop_toBottomOf="@+id/detail_img_viewpager"
+        app:srcCompat="@drawable/like" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_vertical"
+        android:text="값어치"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/detail_btn_add_favorite"
+        app:layout_constraintEnd_toStartOf="@+id/detail_money"
+        app:layout_constraintStart_toStartOf="@+id/detail_btn_add_favorite"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/detail_chatButton"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/detail_btn_bg"
+
+        android:text=" 메시지 보내기 "
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/detail_btn_add_favorite" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#D9D9D9"
+        android:layout_marginBottom="130dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/detail_money"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp"
+        android:text="5,000,000 원"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="@+id/textView10"
+        app:layout_constraintEnd_toStartOf="@+id/detail_chatButton"
+        app:layout_constraintStart_toEndOf="@+id/textView10"
+        app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view9">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/detailpage_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/bbing"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="집에서 쓰던 빗살무늬 토기 교환 원합니다. 구운지 얼마 안된 그릇이라 잘 안깨져요. 갓 잡은 물고기로 교환 받습니다. 언제든 연락주세요."
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/detailpage_time"
+        android:layout_width="54dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="45분전"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/view9"
+        app:layout_constraintStart_toEndOf="@+id/detailpage_category"
+        app:layout_constraintTop_toBottomOf="@+id/detailpage_title" />
+
+    <TextView
+        android:id="@+id/detailpage_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:ellipsize="marquee"
+        android:fontFamily="@font/bbing"
+        android:maxLines="1"
+        android:text="주방용품"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/view9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailpage_title" />
+
+    <TextView
+        android:id="@+id/detailpage_title"
+        android:layout_width="0dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="72dp"
+        android:ellipsize="marquee"
+        android:fontFamily="@font/bbing"
+        android:maxLines="1"
+        android:maxLength="16"
+        android:text="빗살무늬토기빗살무늬토기빗살무늬토기"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    <TextView
+        android:id="@+id/detail_address"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:ellipsize="marquee"
+        android:fontFamily="@font/bbing"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:text="나뭇잎 마을 고인돌 옆"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toStartOf="@+id/detail_like"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/detail_id"
+        app:layout_constraintTop_toBottomOf="@+id/detail_id" />
+
+    <TextView
+        android:id="@+id/detail_id"
+        android:layout_width="0dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="72dp"
+        android:ellipsize="marquee"
+        android:fontFamily="@font/bbing"
+        android:maxLines="1"
+        android:gravity="center_vertical"
+        android:text="아이디아이디아이디아이디아이디아이디아이디"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/detail_img_viewpager" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="336dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_img_viewpager">
+
+        <ImageView
+            android:id="@+id/datail_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/example" />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="16dp"
+        android:background="#D9D9D9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_address" />
+
+    <TextView
+        android:id="@+id/detail_tv_like_count"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center_horizontal"
+        android:text="3333"
+        app:layout_constraintBottom_toBottomOf="@+id/detail_address"
+        app:layout_constraintEnd_toEndOf="@+id/detail_like"
+        app:layout_constraintStart_toStartOf="@+id/detail_like"
+        app:layout_constraintTop_toTopOf="@+id/detail_address" />
+
+    <TextView
+        android:id="@+id/detail_tv_item_state"
+        android:layout_width="85dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="56dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp"
+        android:text="교환 완료"
+        android:textSize="18sp"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="@+id/textView10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView10"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:text="상태 : "
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/detail_tv_item_state"
+        app:layout_constraintEnd_toStartOf="@+id/detail_tv_item_state"
+        app:layout_constraintStart_toStartOf="@+id/detail_chatButton"
+        app:layout_constraintTop_toTopOf="@+id/detail_tv_item_state" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="409dp"
+        android:layout_height="2dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@+id/detail_img_viewpager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/detail_tv_title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="80dp"
+        android:gravity="center"
+        android:paddingHorizontal="20dp"
+        android:text="게시물 세부정보"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/detail_cancel_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/detail_ic_state"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:foregroundGravity="center"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/detail_tv_item_state"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/detail_tv_item_state"
+        app:layout_constraintTop_toTopOf="@+id/detail_tv_item_state"
+        app:srcCompat="@drawable/detail_img_state_end72" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="409dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="4dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="409dp"
+        android:layout_height="2dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_img_viewpager" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

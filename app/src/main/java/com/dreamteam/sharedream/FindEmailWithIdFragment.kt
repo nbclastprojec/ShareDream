@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.dreamteam.sharedream.databinding.FragmentFindEmailDialogBinding
 import com.dreamteam.sharedream.databinding.FragmentFindEmailWithIdBinding
-import com.dreamteam.sharedream.databinding.FragmentFindIdBinding
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.auth.FirebaseAuth

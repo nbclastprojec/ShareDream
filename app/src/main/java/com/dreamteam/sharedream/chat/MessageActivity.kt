@@ -59,8 +59,6 @@ class MessageActivity : AppCompatActivity() {
                     //혹시몰라서 다 긁어왔습니다 필요없는거 지우시면됩니다.
                     val address = document.getString("address")//주소
                     val category = document.getString("category")//카테고리
-                    val deadline = document.getString("deadline")//이건머지
-                    val desc = document.getString("desc")//글설명
                     val image = document.get("imgs") as List<String>
                     val nickname = document.getString("nickname")//닉네임
                     val price = document.getString("price")//가격

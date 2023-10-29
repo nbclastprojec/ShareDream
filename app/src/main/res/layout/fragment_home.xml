@@ -22,7 +22,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginRight="10dp"
         android:text="필터"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/btn_filter"
@@ -31,11 +30,13 @@
 
     <ImageView
         android:id="@+id/btn_filter"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="13dp"
+        android:paddingBottom="8dp"
         android:src="@drawable/settingicon"
+        app:layout_constraintBottom_toTopOf="@+id/viewwe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,6 +62,18 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_filter" />
+
+    <TextView
+        android:id="@+id/home_btn_refresh_list"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:paddingHorizontal="20dp"
+        android:text="새로고침"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/viewwe"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

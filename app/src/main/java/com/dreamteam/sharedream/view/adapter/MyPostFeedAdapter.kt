@@ -1,21 +1,23 @@
 package com.dreamteam.sharedream.view.adapter
 
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.adapter.DifferCallback
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.databinding.WriteItemBinding
-import com.dreamteam.sharedream.model.AlarmPost
 import com.dreamteam.sharedream.model.Post
+import com.dreamteam.sharedream.model.PostRcv
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 class MyPostFeedAdapter(private val postClick: PostClick) :
-    ListAdapter<AlarmPost, MyPostFeedAdapter.MyPostFeedRcvViewHolder>(DifferCallback.differCallback) {
+    ListAdapter<PostRcv, MyPostFeedAdapter.MyPostFeedRcvViewHolder>(DifferCallback.differCallback) {
 
     private val storage = Firebase.storage
     inner class MyPostFeedRcvViewHolder(binding: WriteItemBinding) :
@@ -26,14 +28,15 @@ class MyPostFeedAdapter(private val postClick: PostClick) :
         val category = binding.writeCategory
         val image = binding.writeImage
 
-        fun bind(imagePath : String) {
-            storage.reference.child("post").child("$imagePath").downloadUrl.addOnSuccessListener { uri ->
-                Glide.with(itemView)
-                    .load(uri)
-                    .into(image)
-            }.addOnFailureListener {
-                Log.d("xxxx", " adapter bind Failure $it")
-            }
+        fun bind(imagePath : Uri) {
+            image.load(imagePath)
+//            storage.reference.child("post").child("$imagePath").downloadUrl.addOnSuccessListener { uri ->
+//                Glide.with(itemView)
+//                    .load(uri)
+//                    .into(image)
+//            }.addOnFailureListener {
+//                Log.d("xxxx", " adapter bind Failure $it")
+//            }
 
 
         }

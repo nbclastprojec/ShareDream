@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
@@ -17,7 +18,8 @@ import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
-import com.google.android.gms.tasks.OnCompleteListener
+import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -70,19 +72,19 @@ class EditFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 이미지 선택
-        binding.camera.setOnClickListener {
+        binding.editBtnSelectImg.setOnClickListener {
             uris = mutableListOf()
             pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
         // 게시글 작성 완료
-        binding.btnComplete.setOnClickListener {
+        binding.editBtnComplete.setOnClickListener {
             if (binding.imageCount.text == "0/10") {
                 Toast.makeText(requireContext(), " 이미지는 1장 이상 업로드 해야합니다. ", Toast.LENGTH_SHORT)
                     .show()
                 Log.d("xxxx", " Upload Failure ")
             } else if (
-                binding.title.text.isEmpty() || binding.city.text.isEmpty() || binding.mainText.text.isEmpty() || binding.value.text.isEmpty()
+                binding.editTvTitle.text.isEmpty() || binding.editEtvAddress.text.isEmpty() || binding.editEtvDesc.text.isEmpty() || binding.editEtvPrice.text.isEmpty()
             ) {
                 Toast.makeText(requireContext(), " 모든 입력 가능란은 필수 입력사항 입니다.", Toast.LENGTH_SHORT)
                     .show()
@@ -93,7 +95,7 @@ class EditFragment : Fragment() {
         }
 
         // 뒤로가기 버튼
-        binding.btnBack.setOnClickListener {
+        binding.editBtnBack.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
@@ -137,33 +139,25 @@ class EditFragment : Fragment() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 token = task.result
-                Log.d("nyh", "postUpload: $token")
 
-
-                val postUid = Constants.currentUserUid!!
-                val postTitle = binding.title.text.toString()
-                val postPrice = binding.value.text.toString()
-                val postCategory = category
-                val postAddress = binding.city.text.toString()
-                //todo 기한 추가 - 임시로 city 값 넣어둠
-                val postDeadline = binding.city.text.toString()
-                val postDesc = binding.mainText.text.toString()
                 val postImg: List<String> = imgs.toList()
                 val postLikeUsers = listOf<String>()
 
                 val post = Post(
-                    postUid,
-                    postTitle,
-                    postPrice,
-                    postCategory,
-                    postAddress,
-                    postDeadline,
-                    postDesc,
+                    Constants.currentUserUid!!,
+                    binding.editTvTitle.text.toString(),
+                    binding.editEtvPrice.text.toString(),
+                    category,
+                    binding.editEtvAddress.text.toString(),
+                    //todo ↓ deadline 추가 - 임시로 city 값 넣어둠
+                    binding.editEtvAddress.text.toString(),
+                    binding.editEtvDesc.text.toString(),
                     postImg,
-                    userNickname,
+                    Constants.currentUserInfo!!.nickname,
                     postLikeUsers,
-                    token
-
+                    token,
+                    Timestamp.now(),
+                    "교환 가능"
                 )
 
                 db.collection("Posts")
@@ -201,6 +195,7 @@ class EditFragment : Fragment() {
                 storage.reference.child("post").child("${time}_$i").putFile(uri)
                     .addOnSuccessListener {
                         // 추후에 필요한 기능 추가
+                        Log.d("xxxx", "imageUpload: ${uri}")
                     }
                     .addOnFailureListener {
                         Log.d("xxxx", " Edit Frag imageUpload Failure : $it ")
@@ -252,3 +247,4 @@ class EditFragment : Fragment() {
         return dateFormat
     }
 }
+
