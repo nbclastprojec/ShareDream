@@ -18,7 +18,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.194"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/suitesemibold"
+        android:textColor="@color/black"/>
 
     <View
         android:id="@+id/view6"
@@ -51,6 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="혹시 비밀번호를 잊으셨나요?"
+        android:fontFamily="@font/suitesemibold"
         android:textColor="@color/black"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="@+id/show_id"
@@ -61,6 +64,7 @@
         android:id="@+id/textView17"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="아래의 버튼을 눌러 비밀번호를 찾을 수 있습니다!"
         app:layout_constraintEnd_toEndOf="@+id/textView16"
         app:layout_constraintStart_toStartOf="@+id/textView16"
@@ -68,28 +72,30 @@
 
     <Button
         android:id="@+id/find_password_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_width="330dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/loginbtn"
+        android:fontFamily="@font/suitesemibold"
         android:gravity="center"
         android:text="비밀번호 찾으러가기"
         android:textColor="@color/white"
-        android:textSize="23sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/textView17"
         app:layout_constraintStart_toStartOf="@+id/textView17"
         app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="330dp"
+        android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/loginbtn"
         android:gravity="center"
         android:text="로그인 하러가기"
         android:textColor="@color/white"
-        android:textSize="23sp"
+        android:textSize="20sp"
+        android:fontFamily="@font/suitesemibold"
         app:layout_constraintEnd_toEndOf="@+id/find_password_btn"
         app:layout_constraintStart_toStartOf="@+id/find_password_btn"
         app:layout_constraintTop_toBottomOf="@+id/find_password_btn" />

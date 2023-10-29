@@ -27,14 +27,15 @@
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:text="김우가우가"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/chatting_date"
                 android:layout_width="126dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="10dp"
-                android:fontFamily="@font/bbing"
+                android:fontFamily="@font/suitellight"
                 android:text="2023년 10월 16일 21:48"
                 android:textSize="10sp" />
         </LinearLayout>
@@ -45,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/bbing"
+            android:fontFamily="@font/suiteregular"
             android:text="빗살무늬 토기랑 물고기 교환 원합니다."
             android:textSize="10sp" />
     </LinearLayout>

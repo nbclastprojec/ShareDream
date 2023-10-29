@@ -13,8 +13,9 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="72dp"
-            android:layout_height="58dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="5dp"
             android:src="@drawable/trade"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
             app:layout_constraintEnd_toStartOf="@+id/textView"
@@ -24,19 +25,23 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="47dp"
+            android:layout_marginTop="45dp"
             android:text="회원가입"
-            android:textSize="28sp"
+            android:textSize="25sp"
+            android:fontFamily="@font/suitesemibold"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/edit_email"
-            android:layout_width="320dp"
+            android:layout_width="340dp"
             android:layout_height="40dp"
-            android:background="@drawable/login_editbox"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/searchid"
             android:ems="10"
+            android:paddingLeft="10dp"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,10 +49,12 @@
 
         <EditText
             android:id="@+id/eidt_id"
-            android:layout_width="320dp"
+            android:layout_width="340dp"
             android:layout_height="40dp"
-            android:background="@drawable/login_editbox"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/searchid"
             android:ems="10"
+            android:paddingLeft="10dp"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,10 +62,12 @@
 
         <EditText
             android:id="@+id/edit_password"
-            android:layout_width="320dp"
+            android:layout_width="340dp"
             android:layout_height="40dp"
-            android:background="@drawable/login_editbox"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/searchid"
             android:ems="10"
+            android:paddingLeft="10dp"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,10 +75,12 @@
 
         <EditText
             android:id="@+id/edit_phoneNumber"
-            android:layout_width="320dp"
+            android:layout_width="340dp"
             android:layout_height="40dp"
-            android:background="@drawable/login_editbox"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/searchid"
             android:ems="10"
+            android:paddingLeft="10dp"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,10 +88,12 @@
 
         <EditText
             android:id="@+id/edit_passwordCheck"
-            android:layout_width="320dp"
+            android:layout_width="340dp"
             android:layout_height="40dp"
-            android:background="@drawable/login_editbox"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/searchid"
             android:ems="10"
+            android:paddingLeft="10dp"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,8 +104,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/suitesemibold"
             android:text="아이디"
-            android:textSize="13sp"
+            android:textColor="#000000"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_email" />
 
@@ -101,8 +117,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/suitesemibold"
             android:text="비밀번호"
-            android:textSize="13sp"
+            android:textColor="#000000"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eidt_id" />
 
@@ -111,8 +130,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/suitesemibold"
             android:text="비밀번호 확인"
-            android:textSize="13sp"
+            android:textColor="#000000"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_password" />
 
@@ -123,7 +145,9 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
             android:text="이메일"
-            android:textSize="13sp"
+            android:fontFamily="@font/suitesemibold"
+            android:textColor="#000000"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -132,8 +156,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/suitesemibold"
             android:text="전화번호"
-            android:textSize="13sp"
+            android:textColor="#000000"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_passwordCheck" />
 
@@ -146,14 +173,17 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_phoneNumber">
+            app:layout_constraintTop_toBottomOf="@+id/edit_phoneNumber"
+            android:paddingLeft="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox"
-                android:layout_width="wrap_content"
+                android:layout_width="7dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:checked="false"
+
                 />
 
 
@@ -164,7 +194,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:text="모두 동의"
-                android:textSize="18sp" />
+                android:textColor="@color/black"
+                android:fontFamily="@font/suitesemibold"
+                android:textSize="18sp"
+                android:layout_gravity="center"/>
         </LinearLayout>
 
         <LinearLayout
@@ -172,7 +205,7 @@
             android:layout_width="294dp"
             android:layout_height="45dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/agreeboxline"
+            android:background="@drawable/sigin"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
@@ -188,17 +221,23 @@
                 android:layout_weight="9"
                 android:textSize="18sp"
                 android:text="이용약관 동의"
-                android:textColor="@color/white" />
+                android:fontFamily="@font/suitebold"
+                android:paddingLeft="10dp"
+                android:gravity="left"
+                android:textColor="@color/black" />
 
-            <ImageView
+            <TextView
                 android:id="@+id/imageView3"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:rotationX="0"
-                android:rotationY="180"
-                android:src="@drawable/arrow" />
+                android:text=">"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:gravity="right"
+                android:layout_marginRight="10dp"
+                android:fontFamily="@font/suiteheavy"/>
         </LinearLayout>
 
 
@@ -207,7 +246,7 @@
             android:layout_width="294dp"
             android:layout_height="45dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/agreeboxline"
+            android:background="@drawable/sigin"
 
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -224,27 +263,33 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:text="이용약관"
-                android:textColor="@color/white" />
-            <ImageView
+                android:paddingLeft="10dp"
+                android:fontFamily="@font/suitebold"
+                android:textColor="@color/black" />
+            <TextView
                 android:id="@+id/imageView33"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:rotationX="0"
-                android:rotationY="180"
-                android:src="@drawable/arrow" />
+                android:text=">"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:gravity="right"
+                android:layout_marginRight="10dp"
+                android:fontFamily="@font/suiteheavy" />
         </LinearLayout>
 
         <Button
             android:id="@+id/btn_signup"
-            android:layout_width="wrap_content"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/loginbtn"
             android:text="가입하기"
             android:textColor="@color/white"
             android:textSize="20sp"
+            android:fontFamily="@font/suitesemibold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/agree_2" />

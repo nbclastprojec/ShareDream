@@ -17,9 +17,11 @@
             android:id="@+id/top_massage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="13dp"
             android:textSize="20dp"
             android:text="글쓰기"
+            android:fontFamily="@font/suitesemibold"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

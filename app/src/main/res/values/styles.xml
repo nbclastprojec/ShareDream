@@ -3,7 +3,8 @@
 
     <style name="CustomFloatingActionButton" parent="Widget.Design.FloatingActionButton">
         <item name="backgroundTint">@color/white</item>
-        <item name="srcCompat">@drawable/btn_floating</item>
+        <item name="android:src">@drawable/img_2
+        </item>
     </style>
 
 </resources>
