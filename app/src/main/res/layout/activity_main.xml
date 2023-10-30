@@ -81,13 +81,13 @@
 
             <LinearLayout
 
-                android:layout_width="35dp"
+                android:layout_width="55dp"
                 android:layout_height="39dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="11dp"
                 android:gravity="center"
-                android:layout_marginRight="10dp"
                 android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/editTextSearchView"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -103,9 +103,9 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/suitellight"
                     android:text="MY PAGE"
+                    android:gravity="center"
                     android:textColor="#000000"
                     android:textSize="8sp"
-
                     android:textStyle="bold" />
             </LinearLayout>
 

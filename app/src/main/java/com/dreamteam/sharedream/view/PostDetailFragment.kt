@@ -45,7 +45,7 @@ class PostDetailFragment : Fragment() {
             binding.detailpageExplain.text = it.desc
             binding.detailMoney.text = "${it.price} 원"
             binding.detailTvLikeCount.text = "${it.likeUsers.size}"
-            binding.detailpageDate.text = "${time(it.timestamp)}"
+            binding.detailpageTime.text = "${time(it.timestamp)}"
 
             // 게시물 작성자 프로필 이미지 받아오기
             myPostFeedViewModel.downloadCurrentProfileImg(it.uid)

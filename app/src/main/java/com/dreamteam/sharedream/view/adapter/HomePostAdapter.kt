@@ -64,58 +64,58 @@ class HomePostAdapter(
         val allpost = allPosts[position]
         val userId = post.uid
 
-        holder.postheart.setOnClickListener {
-            val db = FirebaseFirestore.getInstance()
-            val documentId = post.documentId // 게시물의 ID
-            val userId = post.uid // 게시물의 작성자 ID
-
-            // Firestore에서 게시물 정보 가져오기
-            db.collection("Posts").document(documentId).get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val document = task.result
-                        if (document != null && document.exists()) {
-
-                            // 게시물 작성자의 FCM 토큰 가져오기
-                            val writerToken = post.token
-
-                            // "좋아요" 누른 사용자와 게시글 작성자 구별
-                            if (userId == post.uid) {
-                                val nickname = allpost.nickname
-                                val notificationTitle = "$nickname 님이 ${allpost.title}글을 좋아합니다."
-                                val notificationBody = "얼른 가서 확인 해 보세요!"
-                                val uniqueMessageId = UUID.randomUUID().toString()
-
-
-                                // FCM 알림에 추가할 데이터 설정
-                                val data = mutableMapOf<String, String>()
-                                data["key1"] = "value1"
-                                data["key2"] = "value2"
-                                Log.d("nyh", "onBindViewHolder: ${writerToken}")
-                                Log.d("nyh", "onBindViewHolder: ${userId}")
-
-
-                                FirebaseMessaging.getInstance().isAutoInitEnabled = true
-
-                                // FCM 알림을 보내기 위한 데이터 설정
-                                val message = RemoteMessage.Builder(writerToken)
-                                    .setMessageId(uniqueMessageId)
-                                    .setData(data)
-                                    .addData("title", notificationTitle)
-                                    .addData("body", notificationBody)
-                                    .build()
-
-                                // FCM 알림 전송
-                                FirebaseMessaging.getInstance().send(message)
-                            }
-                        } else {
-                            println("Document not found")
-                        }
-                    } else {
-                        val error = task.exception
-                        println("Error getting document: $error")
-                    }
-                }
+//        holder.postheart.setOnClickListener {
+//            val db = FirebaseFirestore.getInstance()
+//            val documentId = post.documentId // 게시물의 ID
+//            val userId = post.uid // 게시물의 작성자 ID
+//
+//            // Firestore에서 게시물 정보 가져오기
+//            db.collection("Posts").document(documentId).get()
+//                .addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        val document = task.result
+//                        if (document != null && document.exists()) {
+//
+//                            // 게시물 작성자의 FCM 토큰 가져오기
+//                            val writerToken = post.token
+//
+//                            // "좋아요" 누른 사용자와 게시글 작성자 구별
+//                            if (userId == post.uid) {
+//                                val nickname = allpost.nickname
+//                                val notificationTitle = "$nickname 님이 ${allpost.title}글을 좋아합니다."
+//                                val notificationBody = "얼른 가서 확인 해 보세요!"
+//                                val uniqueMessageId = UUID.randomUUID().toString()
+//
+//
+//                                // FCM 알림에 추가할 데이터 설정
+//                                val data = mutableMapOf<String, String>()
+//                                data["key1"] = "value1"
+//                                data["key2"] = "value2"
+//                                Log.d("nyh", "onBindViewHolder: ${writerToken}")
+//                                Log.d("nyh", "onBindViewHolder: ${userId}")
+//
+//
+//                                FirebaseMessaging.getInstance().isAutoInitEnabled = true
+//
+//                                // FCM 알림을 보내기 위한 데이터 설정
+//                                val message = RemoteMessage.Builder(writerToken)
+//                                    .setMessageId(uniqueMessageId)
+//                                    .setData(data)
+//                                    .addData("title", notificationTitle)
+//                                    .addData("body", notificationBody)
+//                                    .build()
+//
+//                                // FCM 알림 전송
+//                                FirebaseMessaging.getInstance().send(message)
+//                            }
+//                        } else {
+//                            println("Document not found")
+//                        }
+//                    } else {
+//                        val error = task.exception
+//                        println("Error getting document: $error")
+//                    }
+//                }
 
 
 //        holder.postheart.setOnClickListener {
@@ -213,7 +213,7 @@ class HomePostAdapter(
 //                    fcmService.sendNonotification(context, notificationTitle, notificationBody, data)
 
 
-        }
+//        }
         holder.itemView.setOnClickListener {
             postClick?.postClick(post)
         }
@@ -237,7 +237,7 @@ class HomePostAdapter(
         val postPrice: TextView = binding.writePrice
         val postCategory: TextView = binding.writeCategory
         val postImg: ImageView = binding.writeImage
-        val postheart: ImageView = binding.btnHeart
+//        val postheart: ImageView = binding.btnHeart
         val postDate: TextView = binding.writePageDate
 
 

@@ -215,7 +215,7 @@ class MessageActivity : AppCompatActivity() {
                     message.text = comment.message
                     time.text = comment.time
                     if (comment.uid == uid) {
-                        message.setBackgroundResource(R.drawable.chatting_me)
+                        message.setBackgroundResource(R.drawable.rightbubble)
                         name.visibility = View.INVISIBLE
                         layoutMain.gravity = Gravity.RIGHT
                     } else {

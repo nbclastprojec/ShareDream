@@ -114,15 +114,14 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat_recycleView">
+        app:layout_constraintStart_toStartOf="parent">
 
         <EditText
 
             android:id="@+id/chattext"
             android:layout_width="328dp"
             android:layout_height="42dp"
-            android:layout_alignParentBottom="true"
+
             android:layout_marginStart="10dp"
             android:background="@drawable/loginbtn_2"
             android:fontFamily="@font/bbing"

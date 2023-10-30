@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/help_cancelButton"
         android:layout_width="180dp"
         android:layout_height="30dp"
@@ -54,6 +54,7 @@
         android:layout_marginTop="5dp"
         android:fontFamily="@font/suitellight"
         android:hint="버그 제보합니다."
+        android:background="@null"
         android:textColorHint="#858484"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/help_tittle"
@@ -151,6 +152,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/suitellight"
+        android:background="@null"
         android:hint="답변 수신을 위해 정확한 이메일 주소를 입력해주세요."
         android:textColorHint="#858484"
         android:textSize="12sp"
@@ -159,7 +161,7 @@
         app:layout_constraintTop_toBottomOf="@+id/help_typeselect" />
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/help_sendButton"
         android:layout_width="180dp"
         android:layout_height="30dp"

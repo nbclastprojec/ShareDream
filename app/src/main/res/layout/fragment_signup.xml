@@ -280,9 +280,9 @@
                 android:fontFamily="@font/suiteheavy" />
         </LinearLayout>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_signup"
-            android:layout_width="350dp"
+            android:layout_width="359dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/loginbtn"
