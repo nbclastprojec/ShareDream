@@ -8,12 +8,14 @@
         android:id="@+id/linearLayout"
         android:layout_width="272dp"
         android:layout_height="110dp"
-        android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="15dp"
         android:layout_marginEnd="10dp"
         android:gravity="left"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:paddingLeft="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardview"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,11 +25,12 @@
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:ellipsize="marquee"
-            android:fontFamily="@font/bbing"
-            android:gravity="left"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center|left"
             android:maxLines="1"
             android:text="필요 없어진 간석기 교환 합니다."
             android:textColor="@color/black"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
@@ -35,7 +38,7 @@
             android:layout_width="253dp"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
-            android:fontFamily="@font/bbing"
+            android:fontFamily="sans-serif"
             android:gravity="left"
             android:maxLines="1"
             android:text="청동도끼 사용해서 이제 필요 없어요 :)"
@@ -45,42 +48,45 @@
             android:id="@+id/write_category"
             android:layout_width="253dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/bbing"
+            android:fontFamily="sans-serif"
             android:gravity="left"
             android:text="카테고리 : 도구"
             android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="60dp"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:fontFamily="@font/bmdh"
-                android:gravity="center"
+                android:fontFamily="sans-serif"
+                android:gravity="center|left"
                 android:text="값어치 : " />
 
             <TextView
                 android:id="@+id/write_price"
                 android:layout_width="110dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="left"
                 android:layout_weight="1"
                 android:ellipsize="marquee"
-                android:fontFamily="@font/bbing"
+                android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:text="60,000,000원 " />
+                android:text="60,000,000원 "
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/write_page_date"
                 android:layout_width="90dp"
                 android:layout_height="27dp"
-                android:fontFamily="@font/bbing"
-                android:gravity="right"
+                android:fontFamily="sans-serif"
+                android:gravity="center|left"
                 android:text="2023.10.11" />
         </LinearLayout>
     </LinearLayout>
@@ -90,37 +96,27 @@
         android:layout_width="105dp"
         android:layout_height="105dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
         app:cardCornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/write_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/loading2" />
-
         <ImageView
-            android:id="@+id/btn_heart"
-            android:layout_width="25dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_height="25dp"
-            android:layout_gravity="right"
-            app:srcCompat="@drawable/mypage_heart" />
+            android:id="@+id/write_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/loading2" />
+
+        <!--        <ImageView-->
+        <!--            android:id="@+id/btn_heart"-->
+        <!--            android:layout_width="25dp"-->
+        <!--            android:layout_height="25dp"-->
+        <!--            android:layout_gravity="bottom|center_horizontal|end"-->
+        <!--            android:layout_marginTop="5dp"-->
+        <!--            android:layout_marginRight="5dp"-->
+        <!--            app:srcCompat="@drawable/img_1" />-->
     </androidx.cardview.widget.CardView>
 
-    <View
-        android:id="@+id/bar1"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="10dp"
-        android:background="#D9D9D9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

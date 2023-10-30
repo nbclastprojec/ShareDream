@@ -7,11 +7,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_recycleView"
-        android:layout_width="403dp"
-        android:layout_height="533dp"
+        android:layout_width="408dp"
+        android:layout_height="509dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
@@ -30,9 +30,10 @@
         android:id="@+id/chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/bbing"
+        android:layout_marginTop="13dp"
+        android:fontFamily="@font/suitesemibold"
         android:text="김우가우가"
+        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +42,7 @@
     <View
         android:id="@+id/bar1"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="#D9D9D9"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,41 +50,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chat" />
 
-    <EditText
-
-        android:id="@+id/chattext"
-        android:layout_width="328dp"
-        android:layout_height="42dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="10dp"
-        android:background="@drawable/loginbtn_2"
-        android:fontFamily="@font/bbing"
-        android:gravity="center_vertical"
-        android:hint="메세지를 입력하세요."
-        android:padding="10dp"
-        android:textColorHint="#D9D9D9"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat_recycleView" />
-
-    <ImageView
-        android:id="@+id/chatSendBtn"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/send"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toEndOf="@+id/chattext" />
-
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:layout_margin="16dp"
+        android:paddingTop="10dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/chat">
 
@@ -116,42 +88,55 @@
                 android:id="@+id/chattittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/bbing"
-                android:textSize="20sp"
+                android:fontFamily="@font/suitesemibold"
+                android:textColor="@color/black"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
                 android:text="빗살무늬토기" />
 
             <TextView
                 android:id="@+id/region"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/bbing"
+                android:fontFamily="@font/suitellight"
+                android:paddingLeft="10dp"
                 android:textSize="16sp"
                 android:text="지역" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp"
-            app:layout_constraintStart_toEndOf="@+id/chattittle"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="가격" />
+    <LinearLayout
+        android:id="@+id/chatlayout"
+        android:layout_width="406dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-            <TextView
-                android:id="@+id/category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/bbing"
-                android:textSize="16sp"
-                android:text="카테고리" />
-        </LinearLayout>
+        <EditText
+
+            android:id="@+id/chattext"
+            android:layout_width="328dp"
+            android:layout_height="42dp"
+
+            android:layout_marginStart="10dp"
+            android:background="@drawable/loginbtn_2"
+            android:fontFamily="@font/bbing"
+            android:gravity="center_vertical"
+            android:hint="메세지를 입력하세요."
+            android:paddingLeft="12dp"
+            android:textColorHint="#D9D9D9" />
+
+        <ImageView
+            android:id="@+id/chatSendBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:foregroundGravity="center"
+            android:src="@drawable/send" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,11 +31,12 @@
         android:id="@+id/chatting_tittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="@font/suiteregular"
         android:text="대화 내역"
+        android:textColor="#000000"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

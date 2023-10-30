@@ -8,11 +8,12 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="272dp"
-        android:layout_height="119dp"
+        android:layout_width="276dp"
+        android:layout_height="124dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
+        android:gravity="left"
         android:orientation="vertical"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,9 +24,12 @@
             android:id="@+id/like_tittle"
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            android:fontFamily="@font/bbing"
-            android:gravity="right"
+            android:ellipsize="marquee"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center|left"
+            android:maxLines="1"
             android:text="필요 없어진 간석기 교환 합니다."
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -33,8 +37,10 @@
             android:id="@+id/like_subtittle"
             android:layout_width="253dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/bbing"
-            android:gravity="right"
+            android:ellipsize="marquee"
+            android:fontFamily="sans-serif"
+            android:gravity="left"
+            android:maxLines="1"
             android:text="청동도끼 사용해서 이제 필요 없어요 :)"
             android:textSize="14sp" />
 
@@ -42,38 +48,45 @@
             android:id="@+id/like_category"
             android:layout_width="253dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/bbing"
-            android:gravity="right"
+            android:fontFamily="sans-serif"
+            android:gravity="left"
             android:text="카테고리 : 도구"
             android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
 
             <TextView
                 android:id="@+id/textView23"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:fontFamily="sans-serif"
+                android:gravity="center|left"
                 android:text="값어치 : " />
 
             <TextView
                 android:id="@+id/like_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="110dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
                 android:layout_weight="1"
-                android:fontFamily="@font/bbing"
-                android:text="5,000 원" />
+                android:ellipsize="marquee"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="5,000원 "
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/like_date"
-                android:layout_width="139dp"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/bbing"
-                android:gravity="right"
+                android:layout_width="90dp"
+                android:layout_height="27dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center|left"
                 android:text="2023.10.11" />
         </LinearLayout>
 

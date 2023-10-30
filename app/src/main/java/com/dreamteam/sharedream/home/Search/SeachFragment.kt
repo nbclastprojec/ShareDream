@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.databinding.FragmentSeachBinding
-import com.dreamteam.sharedream.model.PostData
+import com.dreamteam.sharedream.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -73,28 +73,28 @@ class SeachFragment : Fragment() {
     }
 
     private fun searchTitle(title: String) {
-        val postCollection = firestore.collection("Post")
-        //query 객체 만들고 get으로 가져오기
+        val postCollection = firestore.collection("Posts")
+
+        // query 객체 만들고 get으로 가져오기
         postCollection.whereEqualTo("title", title)
             .get()
             .addOnSuccessListener { querySnapshot ->
-                val searchList = mutableListOf<PostData>()
+                val searchList = mutableListOf<Post>()
 
-                //for문으로 data를 searchList에 넣어주고 adapter로 전달하기
-
+                // for문으로 data를 searchList에 넣어주고 adapter로 전달하기
                 for (i in querySnapshot.documents) {
-                    val data = i.toObject(PostData::class.java)
+                    val data = i.toObject(Post::class.java)
                     data?.let {
                         searchList.add(it)
-                        Log.d("nyh", "searchTitle: $searchList")
                     }
                 }
+                Log.d("nyh", "searchTitle success: ${searchList.size} items retrieved.")
                 searchadapter.setData(searchList)
                 val startPosition = searchList.size
                 searchadapter.notifyItemRangeInserted(startPosition, searchList.size)
+                searchadapter.notifyDataSetChanged()
             }.addOnFailureListener { exception ->
                 Log.d("nyh", "searchTitle fail : $exception")
             }
     }
-
 }

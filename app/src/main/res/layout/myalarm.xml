@@ -27,19 +27,23 @@
         <ImageView
             android:id="@+id/btn_heart"
             android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="bottom|center_horizontal|end"
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
-            android:layout_height="25dp"
-            android:layout_gravity="right"
-            app:srcCompat="@drawable/mypage_heart" />
+            android:src="@drawable/img_1"/>
     </androidx.cardview.widget.CardView>
+
     <TextView
         android:id="@+id/txt_tradeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:layout_marginLeft="10dp"
-        android:text="TextView"
+        android:fontFamily="sans-serif"
+        android:text="교환을 희망하는 물건"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/cardview"
         app:layout_constraintTop_toTopOf="@+id/cardview" />
 
@@ -47,8 +51,9 @@
         android:id="@+id/txt_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:fontFamily="sans-serif"
         android:text="희망교환물품 : 의류"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/txt_tradeTitle"
         app:layout_constraintTop_toBottomOf="@+id/txt_tradeTitle" />
 
@@ -56,6 +61,7 @@
         android:id="@+id/txt_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="@+id/cardview"
         app:layout_constraintStart_toStartOf="@+id/txt_tradeTitle" />

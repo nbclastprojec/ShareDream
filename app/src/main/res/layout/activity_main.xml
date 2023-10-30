@@ -26,37 +26,45 @@
                 android:id="@+id/textView13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="3dp"
                 android:text="바꿔"
                 android:textColor="@color/black"
-                android:textStyle="bold"
+                android:fontFamily="@font/suitemedium"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView5"
-                android:layout_width="28dp"
-                android:layout_height="27dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="15dp"
                 android:src="@drawable/trade"
+                app:layout_constraintBottom_toBottomOf="@+id/textView13"
                 app:layout_constraintStart_toEndOf="@+id/textView13"
-                app:layout_constraintTop_toTopOf="@+id/textView13" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/suitemedium"
                 android:text="드림"
+                android:textColor="@color/black"
+                android:textSize="18sp"
                 app:layout_constraintStart_toEndOf="@+id/imageView5"
-                app:layout_constraintTop_toTopOf="@+id/imageView5" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/editTextSearchView"
-                android:layout_width="275dp"
+                android:layout_width="240dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="13dp"
                 android:background="@drawable/edit_searchbox"
-                android:layout_marginTop="10dp"
                 android:inputType="text"
                 app:layout_constraintStart_toEndOf="@+id/textView14"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -65,21 +73,41 @@
                 android:id="@+id/imageView7"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginRight="5dp"
                 app:layout_constraintBottom_toBottomOf="@+id/editTextSearchView"
                 app:layout_constraintEnd_toEndOf="@+id/editTextSearchView"
                 app:layout_constraintTop_toTopOf="@+id/editTextSearchView"
                 app:srcCompat="@drawable/btn_search" />
 
-            <ImageView
-                android:id="@+id/btn_mypage"
-                android:layout_width="32dp"
-                android:layout_height="30dp"
-                app:layout_constraintBottom_toBottomOf="@+id/editTextSearchView"
+            <LinearLayout
+
+                android:layout_width="55dp"
+                android:layout_height="39dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="11dp"
+                android:gravity="center"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/editTextSearchView"
-                app:layout_constraintTop_toTopOf="@+id/editTextSearchView"
-                app:srcCompat="@drawable/btn_home" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/btn_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    app:srcCompat="@drawable/user" />
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suitellight"
+                    android:text="MY PAGE"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="8sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/view"
@@ -142,6 +170,7 @@
                 android:id="@+id/viewPager"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:padding="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

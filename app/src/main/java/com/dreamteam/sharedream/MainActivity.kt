@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        binding.btnMypage.setOnClickListener {
+        binding.btnHome.setOnClickListener {
             Log.d("xxxx", " MainActivity Mypage Btn Click ${Constants.currentUserInfo}")
             supportFragmentManager.beginTransaction().add(R.id.frag_edit, MyPageFragment())
                 .addToBackStack(null).commit()

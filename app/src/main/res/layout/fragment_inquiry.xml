@@ -6,10 +6,10 @@
     android:layout_height="match_parent">
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/help_cancelButton"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_width="180dp"
+        android:layout_height="30dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
@@ -27,10 +27,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="@font/suitesemibold"
         android:text="제목"
         android:textSize="16sp"
-        android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bar" />
 
@@ -40,10 +40,9 @@
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="@font/suitellight"
         android:text="버그 제보"
         android:textSize="14sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/helptype"
         app:layout_constraintTop_toBottomOf="@+id/bar1" />
 
@@ -53,8 +52,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="45dp"
         android:layout_marginTop="5dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="@font/suitellight"
         android:hint="버그 제보합니다."
+        android:background="@null"
         android:textColorHint="#858484"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/help_tittle"
@@ -76,10 +76,10 @@
         android:layout_height="28dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="@font/suitesemibold"
         android:text="메일주소"
         android:textSize="16sp"
-        android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/helptype" />
 
@@ -89,10 +89,10 @@
         android:layout_height="23dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="@font/suitesemibold"
         android:text="문의유형"
         android:textSize="16sp"
-        android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bar1" />
 
@@ -110,11 +110,12 @@
         android:id="@+id/helppage_tittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/bbing"
+        android:layout_marginTop="13dp"
+        android:fontFamily="@font/suitesemibold"
         android:text="1:1 문의하기"
         android:textSize="20sp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -150,7 +151,8 @@
         android:layout_width="306dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="@font/suitellight"
+        android:background="@null"
         android:hint="답변 수신을 위해 정확한 이메일 주소를 입력해주세요."
         android:textColorHint="#858484"
         android:textSize="12sp"
@@ -159,10 +161,10 @@
         app:layout_constraintTop_toBottomOf="@+id/help_typeselect" />
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/help_sendButton"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_width="180dp"
+        android:layout_height="30dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
@@ -186,14 +188,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp">
 
             <TextView
+
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="문의사항을 적어주세요."
                 android:textColorHint="#858484"
+                android:fontFamily="@font/suitemedium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
