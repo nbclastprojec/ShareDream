@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.dreamteam.sharedream.NicknameCheckDailogFragment
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.home.Edit.EditFragment
 import com.dreamteam.sharedream.model.PostRcv
@@ -32,9 +34,9 @@ import com.google.firebase.ktx.Firebase
 class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     private lateinit var viewModel: HomeViewModel
-
     private lateinit var homePostAdapter: HomePostAdapter
     private lateinit var mContext: Context
     private var selectedCategory: String = ""
@@ -53,6 +55,8 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        auth = Firebase.auth
+        db = Firebase.firestore
 
         return binding.root
     }
@@ -73,6 +77,8 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        val uid = auth.currentUser?.uid.toString()
+        checkNickName(uid)
 
         binding.homeBtnRefreshList.setOnClickListener {
             myPostFeedViewModel.downloadHomePostRcv()
@@ -152,6 +158,27 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
         // 카테고리에 따라 게시물을 필터링
         homePostAdapter.onCategorySelected(selectedCategory)
 
+    }
+    fun checkNickName(uid: String) {
+        val fireStore = FirebaseFirestore.getInstance()
+        val UserData = fireStore.collection("UserData")
+        val document = UserData.document(uid)
+
+        document.get().addOnSuccessListener { snapshot ->
+            if (snapshot.exists()) {
+                val nickname = snapshot.getString("nickname")
+                val number = snapshot.getString("number")
+
+                if (number != null) {
+                    if (number.isNotEmpty() && (nickname.isNullOrEmpty() || nickname == "닉네임 설정 필요" || nickname == "")){
+                        val nicknameCheckDailogFragment = NicknameCheckDailogFragment()
+                        nicknameCheckDailogFragment.show(requireFragmentManager(), "Agree1")
+                    }
+                }
+            } else {
+                Toast.makeText(context, "닉네임 설정 오류 에러", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
 //    @SuppressLint("NotifyDataSetChanged")

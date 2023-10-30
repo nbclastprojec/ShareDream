@@ -74,52 +74,71 @@ class SignUpFragment : Fragment() {
         return binding.root
     }
 
-    private fun check() {
-        val checkbox=binding.checkBox
+    private fun check():Boolean {
+        val checkbox = binding.checkBox
         val email = binding.editEmail.text.toString()
         val password = binding.editPassword.text.toString()
-        val passwordCk=binding.editPasswordCheck.text.toString()
-        val number=binding.editPhoneNumber.text.toString()
+        val passwordCk = binding.editPasswordCheck.text.toString()
+        val number = binding.editPhoneNumber.text.toString()
         val id = binding.eidtId.text.toString()
+
         if (email.isEmpty()) {
             binding.editEmail.error = "이메일을 입력해주세요."
-
+            return false
         } else if (password.isEmpty()) {
             binding.editPassword.error = "비밀번호를 입력해주세요."
-
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email)
-                .matches()
-        ) {   //android.util.Patterns.EMAIL_ADDRESS == 안드로이드에서 제공하는 기본 이메일 형식패턴
+            return false
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.editEmail.error = "이메일 형식이 아닙니다."
-
+            return false
         } else if (!special(password)) {
             binding.editPassword.error = "최소 하나 이상의 특수문자를 입력해 주세요."
-
-        } else if (password!=passwordCk){
-            binding.editPasswordCheck.error="비밀번호와 똑같이 입력해 주세요."
-
-
-        } else if (!phone(number)){
-            binding.editPassword.error="핸드폰 번호는 숫자로만 이루어져야 합니다."
-
-
-
-        }
-
-        else if (!checkbox.isChecked) {
-            Toast.makeText(requireContext(),"약관동의를 체크해주세요.",Toast.LENGTH_SHORT).show()
-
-        }else {
-            checkId(id)
-
-
-
+            return false
+        } else if (password != passwordCk) {
+            binding.editPasswordCheck.error = "비밀번호와 똑같이 입력해 주세요."
+            return false
+        } else if (id.length < 5) {
+            binding.eidtId.error = "아이디는 최소 5글자 이상이어야 합니다."
+            return false
+        } else if (!isValidPassword(password)) {
+            binding.editPassword.error = "비밀번호는 최소 7글자 이상이어야 하며, 영어, 숫자, 특수 문자를 포함해야 합니다."
+            return false
+        } else if (!phone(number)) {
+            binding.editPassword.error = "핸드폰 번호는 숫자로만 이루어져야 합니다."
+            return false
+        } else if (!checkbox.isChecked) {
+            Toast.makeText(requireContext(), "약관동의를 체크해주세요.", Toast.LENGTH_SHORT).show()
+            return false
+        } else {
+           checkEmailAndId(email, id)
 
         }
-
+        return true
+    }
+    private fun isValidPassword(password: String): Boolean {
+        val pattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{7,}\$".toRegex()
+        return pattern.matches(password)
     }
 
+    private fun checkEmailAndId(email: String, id: String) {
+        val firestore = FirebaseFirestore.getInstance()
+        val userData = firestore.collection("UserData")
 
+        userData.whereEqualTo("email", email).get().addOnSuccessListener { documents ->
+            if (documents.isEmpty) {
+
+                checkId(id)
+            } else {
+                binding.editEmail.error = "이미 등록된 이메일 주소입니다."
+
+
+
+            }
+        }.addOnFailureListener { e ->
+
+            Toast.makeText(requireContext(), "이메일 중복 확인 실패", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 
     fun special(text:String):Boolean{
