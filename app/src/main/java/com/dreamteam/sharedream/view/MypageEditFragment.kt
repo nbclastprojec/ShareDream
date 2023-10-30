@@ -1,8 +1,6 @@
 package com.dreamteam.sharedream
 
-import android.app.Instrumentation.ActivityResult
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -29,25 +27,12 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 
 class MyPageEditFragment : Fragment() {
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
-    private lateinit var storage: FirebaseStorage
-
-    private lateinit var photoUri: Uri
+    private var photoUri: Uri? = null
 
     private var _binding: FragmentMypageEditProfileBinding? = null
     private val binding get() = _binding!!
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        auth = Firebase.auth
-        db = Firebase.firestore
-        storage = Firebase.storage
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,62 +41,61 @@ class MyPageEditFragment : Fragment() {
     ): View? {
         _binding = FragmentMypageEditProfileBinding.inflate(inflater, container, false)
 
-        downloadProfileImg()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.profileId.text = Constants.currentUserInfo?.nickname?:"닉네임이 설정되지 않았습니다 재접속해주세요"
-        binding.profileText.setText(Constants.currentUserInfo?.intro?:"자기소개가 설정되지 않았습니다.")
+        myPostFeedViewModel.currentProfileImg.observe(viewLifecycleOwner){
+            binding.profileImage.load(it)
+        }
+        // 키보드 내리기
+
+        binding.profileId.text = Constants.currentUserInfo?.nickname ?: "닉네임이 설정되지 않았습니다 재접속해주세요"
+        binding.profileText.setText(Constants.currentUserInfo?.intro ?: "자기소개가 설정되지 않았습니다.")
+
+        // 이미지 수정 버튼
         binding.btnProfileImgEdit.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        binding.profileId
+        // 유저 정보 수정 완료 버튼
         binding.completeButton.setOnClickListener {
+            val nickname = binding.profileId.text.toString()
+            val intro = binding.profileText.text.toString()
+
             if (binding.profileId.text.isEmpty() || binding.profileText.text.isEmpty()) {
-                Toast.makeText(requireContext()," 변경할 자기소개를 입력해주세요",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), " 변경할 자기소개를 입력해주세요", Toast.LENGTH_SHORT).show()
             } else if (photoUri != null) {
-                val nickname = binding.profileId.text.toString()
-                val intro = binding.profileText.text.toString()
-                imageUpload()
-                profileUpload(nickname, intro)
+
+                // 캐시로 대체?
+                myPostFeedViewModel.uploadUserProfileImg(photoUri!!)
+                myPostFeedViewModel.uploadEditUserInfo(nickname, intro)
+
+                Toast.makeText(this.context, "회원정보가 수정되었습니다", Toast.LENGTH_SHORT).show()
                 parentFragmentManager.popBackStack()
+
             } else {
-
+                myPostFeedViewModel.uploadEditUserInfo(nickname, intro)
+                Toast.makeText(this.context, "회원정보가 수정되었습니다", Toast.LENGTH_SHORT).show()
+                parentFragmentManager.popBackStack()
             }
-        }
 
-        binding.backButtonProfile.setOnClickListener {
+            // 키보드 입력창 내리기
             val inputMethodManager =
                 requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
-            Toast.makeText(this.context,"회원정보가 수정되었습니다",Toast.LENGTH_SHORT).show()
+        }
+
+        // 뒤로가기 버튼
+        binding.backButtonProfile.setOnClickListener {
+            // 키보드 입력 창 내리기
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
             parentFragmentManager.popBackStack()
-
         }
-
-        myPostFeedViewModel.currentProfileImg.observe(viewLifecycleOwner){
-            binding.profileImage.load(it)
-        }
-    }
-    private fun downloadProfileImg(){
-        val downloadTask = storage.reference.child("ProfileImg").child("${Constants.currentUserUid}}")
-            .downloadUrl
-        downloadTask.addOnSuccessListener {
-            photoUri = it
-            Log.d("xxxx", "downloadTask Successful uri : $it")
-            if (it != null)
-                Glide.with(this)
-                    .load(photoUri)
-                    .into(binding.profileImage)
-        }.addOnFailureListener {
-            Log.d("xxxx", "downloadTask Failure Exception : $it")
-        }
-
     }
 
     private val pickMedia =
@@ -128,28 +112,6 @@ class MyPageEditFragment : Fragment() {
                 Log.d("xxxx", "No media selected ")
             }
         }
-
-    private fun profileUpload(nickname: String, intro: String) {
-        db.collection("UserData")
-            .document(Constants.currentUserUid!!)
-            .update(
-                "nickname", "${binding.profileId.text}",
-                "intro", "${binding.profileText.text}"
-            )
-    }
-
-    private fun imageUpload() {
-
-        val uploadTask = storage.reference.child("ProfileImg").child("${Constants.currentUserUid}}")
-            .putFile(photoUri!!)
-        uploadTask.addOnSuccessListener {
-            // 파일 저장 성공 시 이벤트
-            Log.d("xxxx", " img upload successful ")
-        }.addOnFailureListener {
-            // 파일 저장 실패 시 이벤트
-            Log.d("xxxx", " img upload failure : $it ")
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -164,6 +164,8 @@ class SignUpFragment : Fragment() {
                 val firestore=FirebaseFirestore.getInstance()
                 val userCollection=firestore.collection("UserData")
                 val userDocument = userCollection.document(uid?:"")
+                Constants.currentUserUid = auth.currentUser!!.uid
+                Log.d("xxxx", "createAccount: ${Constants.currentUserUid}")
 
 
                 val userData= hashMapOf(

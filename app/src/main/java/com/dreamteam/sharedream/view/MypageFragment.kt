@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import coil.load
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
@@ -32,7 +33,6 @@ class MyPageFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
 
-
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,14 +51,29 @@ class MyPageFragment : Fragment() {
     ): View? {
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
 
-        downloadProfileImg()
-        downloadProfileInfo()
+
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.mypageId.text = Constants.currentUserInfo?.nickname ?: "닉네임이 설정되지 않았습니다 재접속해주세요"
+        binding.mypageIntro.setText(Constants.currentUserInfo?.intro ?: "자기소개가 설정되지 않았습니다.")
+        myPostFeedViewModel.downloadCurrentProfileImg(Constants.currentUserUid!!)
+
+        // 변경된 자기소개, 닉네임 반영
+        myPostFeedViewModel.myPageResult.observe(viewLifecycleOwner){
+            binding.mypageIntro.text = it.intro
+            binding.mypageId.text = it.nickname
+        }
+
+        // 수정된 이미지로 변경
+        myPostFeedViewModel.currentProfileImg.observe(viewLifecycleOwner){
+            binding.mypageImage.load(it)
+        }
+
 
         // 내정보 수정 페이지로 이동
         binding.mypageEditButton.setOnClickListener {
@@ -98,7 +113,7 @@ class MyPageFragment : Fragment() {
 
     }
     private fun downloadProfileImg() {
-        val downloadTask = storage.reference.child("ProfileImg").child("${Constants.currentUserUid}")
+        val downloadTask = storage.reference.child("ProfileImg").child(Constants.currentUserUid!!)
             .downloadUrl
         downloadTask.addOnSuccessListener{
             Log.d("xxxx", "downloadTask Successful uri : $it")
