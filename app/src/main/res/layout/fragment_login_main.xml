@@ -25,9 +25,10 @@
             android:id="@+id/btnProfileImgEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="76dp"
             android:src="@drawable/loginbox_first"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,9 +36,10 @@
             android:id="@+id/tv_signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sign_up"
             android:layout_marginTop="10dp"
-            android:textColor="@color/gray900"
+            android:text="@string/sign_up"
+            android:fontFamily="sans-serif"
+            android:textColor="#A3A1A1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_login" />
@@ -52,37 +54,42 @@
             android:textSize="36sp"
             app:layout_constraintBottom_toBottomOf="@+id/btnProfileImgEdit"
             app:layout_constraintEnd_toEndOf="@+id/btnProfileImgEdit"
+            app:layout_constraintHorizontal_bias="0.623"
             app:layout_constraintStart_toStartOf="@+id/btnProfileImgEdit"
-            app:layout_constraintTop_toTopOf="@+id/btnProfileImgEdit" />
+            app:layout_constraintTop_toTopOf="@+id/btnProfileImgEdit"
+            app:layout_constraintVertical_bias="0.427" />
 
         <Button
             android:id="@+id/btn_googleLogin"
-            android:layout_width="294dp"
-            android:layout_height="50dp"
+            android:layout_width="356dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
             android:background="@drawable/loginbtn_2"
-            android:text="구글로 로그인하기"
-            android:textSize="20sp"
+            android:paddingLeft="10dp"
             android:drawableLeft="@drawable/btn_google"
+            android:fontFamily="@font/suitebold"
+            android:gravity="center"
+            android:text="구글로 로그인하기"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnProfileImgEdit" />
 
         <Button
             android:id="@+id/btn_login"
-            android:layout_width="294dp"
-            android:layout_height="50dp"
+            android:layout_width="359dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="11dp"
-            android:background="@drawable/loginbtn"
             android:text="로그인 하기"
-            android:textSize="20sp"
+            android:fontFamily="@font/suitebold"
             android:textColor="@color/white"
+            android:background="@drawable/loginbtn"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_googleLogin" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </FrameLayout>

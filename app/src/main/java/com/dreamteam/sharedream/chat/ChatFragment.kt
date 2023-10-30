@@ -119,7 +119,7 @@ class ChatFragment : Fragment() {
                     holder.tittle.text = friend?.name
                 }
             })
-            //메세지 내림차순 정렬 후 마지막 메세지의 키값을 가져
+            //메세지 내림차순 정렬 후 마지막 메세지의 키값을 가져옴
             val commentMap = TreeMap<String, ChatModel.Comment>(reverseOrder())
             commentMap.putAll(chatModel[position].comments)
             val lastMessageKey = commentMap.keys.toTypedArray()[0]

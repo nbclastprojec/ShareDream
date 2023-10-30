@@ -13,6 +13,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -43,6 +45,7 @@ class MessageActivity : AppCompatActivity() {
     private val storage = Firebase.storage
     private lateinit var binding : ActivityChatBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
@@ -56,21 +59,26 @@ class MessageActivity : AppCompatActivity() {
         UserData.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    //혹시몰라서 다 긁어왔습니다 필요없는거 지우시면됩니다.
+
                     val address = document.getString("address")//주소
                     val category = document.getString("category")//카테고리
                     val image = document.get("imgs") as List<String>
                     val nickname = document.getString("nickname")//닉네임
                     val price = document.getString("price")//가격
                     val title = document.getString("title")//제목
-                    val uid = document.getString("uid")//uid
+                    val postUseruid = document.getString("uid")//uid
                     bindingImage(image[0])
-                    //함수로 따로 빼서 사용해주셔도 됩니다.
+
                     binding.chattittle.text=title
                     binding.chat.text=nickname
-                    binding.category.text=category
-                    binding.price.text=price+"원"
+                    //binding.category.text=category
+                    ///binding.price.text=price+"원"
                     binding.region.text=address
+
+                    destinationUid = postUseruid
+
+                    Log.d("susu", "${postUseruid}")
+
 
                 } else {
                     Log.d("MessageActivity", "문서가 없는 예전글이에요.")
@@ -89,8 +97,7 @@ class MessageActivity : AppCompatActivity() {
 
         setContentView(view)
 
-        destinationUid = intent.getStringExtra("destinationUid")
-        Log.d("susu", "${destinationUid}")
+
 
         uid = Firebase.auth.currentUser?.uid.toString()
         recyclerView = binding.chatRecycleView
@@ -208,7 +215,7 @@ class MessageActivity : AppCompatActivity() {
                     message.text = comment.message
                     time.text = comment.time
                     if (comment.uid == uid) {
-                        message.setBackgroundResource(R.drawable.rightbubble)
+                        message.setBackgroundResource(R.drawable.chatting_me)
                         name.visibility = View.INVISIBLE
                         layoutMain.gravity = Gravity.RIGHT
                     } else {

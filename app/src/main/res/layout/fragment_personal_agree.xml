@@ -17,18 +17,24 @@
             android:layout_marginTop="15dp"
             android:text="[개인정보 수집 및 이용 동의]"
             android:textSize="18dp"
+            android:fontFamily="@font/suitebold"
             android:layout_marginStart="20dp"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="10dp"/>
 
         <TextView
             android:id="@+id/objectSub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="378dp"
+            android:layout_height="56dp"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:fontFamily="sans-serif"
+            android:paddingTop="10dp"
             android:text="@string/personalAgreeSub"
+            android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/object" />
@@ -44,17 +50,24 @@
             android:textSize="18dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/objectSub" />
+            app:layout_constraintTop_toBottomOf="@+id/objectSub"
+            android:paddingTop="10dp"/>
+
         <TextView
             android:id="@+id/perposeOfUseSub"
-            android:layout_width="match_parent"
+            android:layout_width="380dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:fontFamily="sans-serif"
+            android:paddingTop="10dp"
             android:text="@string/purpose_of_use"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/perposeOfUse" />
+            app:layout_constraintTop_toBottomOf="@+id/perposeOfUse"
+            android:padding="10dp"
+            />
 
         <TextView
             android:id="@+id/RetentionPeriod"
@@ -67,26 +80,34 @@
             android:textSize="18dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/perposeOfUseSub" />
+            app:layout_constraintTop_toBottomOf="@+id/perposeOfUseSub"
+            android:paddingTop="10dp"/>
 
         <TextView
             android:id="@+id/RetentionPeriodSub"
-            android:layout_width="match_parent"
+            android:layout_width="370dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:fontFamily="sans-serif"
+            android:paddingTop="10dp"
             android:text="@string/Retention_period"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/RetentionPeriod" />
+            app:layout_constraintTop_toBottomOf="@+id/RetentionPeriod"
+            />
 
         <TextView
             android:id="@+id/adSub"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:fontFamily="sans-serif"
+            android:paddingTop="10dp"
             android:text="@string/periodAgree"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -94,14 +115,15 @@
 
         <Button
             android:id="@+id/agree_btn"
-            android:layout_width="231dp"
-            android:layout_height="59dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="328dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/loginbtn"
+            android:fontFamily="@font/suitesemibold"
             android:gravity="center"
             android:text="확인하였습니다."
             android:textColor="@color/white"
-            android:textSize="23sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/adSub" />
@@ -113,7 +135,8 @@
             android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/agree_btn" />
+            app:layout_constraintTop_toBottomOf="@+id/agree_btn"
+            android:paddingTop="10dp"/>
 
 
 

@@ -33,16 +33,18 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_signout"
-        app:srcCompat="@drawable/outimage" />
+        app:srcCompat="@drawable/xkfxhl" />
 
     <ImageView
         android:id="@+id/imageView18"
-        android:layout_width="404dp"
-        android:layout_height="125dp"
+        android:layout_width="409dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/add" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_delete_account"
+        app:srcCompat="@drawable/add_sp" />
 
     <TextView
         android:id="@+id/btn_signout"
@@ -70,7 +72,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_inquiry"
-        app:srcCompat="@drawable/outimage" />
+        app:srcCompat="@drawable/fhrmdkdnt" />
 
     <TextView
         android:id="@+id/btn_inquiry"
@@ -97,12 +99,12 @@
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view4"
-        app:srcCompat="@drawable/mypage_home" />
+        app:srcCompat="@drawable/ansdml" />
 
     <View
         android:id="@+id/view4"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="1dp"
         android:layout_marginTop="20dp"
         android:background="#D9D9D9"
         app:layout_constraintEnd_toEndOf="parent"
@@ -114,13 +116,12 @@
         android:id="@+id/tradepage_button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="55dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="@font/suitemedium"
         android:text="대화내역"
         android:textColor="@color/black"
-        android:textSize="10sp"
-        android:textStyle="bold"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_chatlist" />
 
@@ -128,13 +129,12 @@
         android:id="@+id/tradepage_button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="90dp"
+        android:layout_marginStart="73dp"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="@font/suitemedium"
         android:text="내가 쓴 글"
         android:textColor="@color/black"
-        android:textSize="10sp"
-        android:textStyle="bold"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/tradepage_button2"
         app:layout_constraintTop_toBottomOf="@+id/btn_my_post_feed" />
 
@@ -142,13 +142,12 @@
         android:id="@+id/tradepage_button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="95dp"
+        android:layout_marginStart="73dp"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="@font/suitemedium"
         android:text="관심목록"
         android:textColor="@color/black"
-        android:textSize="10sp"
-        android:textStyle="bold"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/tradepage_button"
         app:layout_constraintTop_toBottomOf="@+id/btn_my_favorite_list" />
 
@@ -156,13 +155,12 @@
         android:id="@+id/tradepage_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="54dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="@font/suitemedium"
         android:text="교환내역"
         android:textColor="@color/black"
-        android:textSize="10sp"
-        android:textStyle="bold"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_my_trade_history" />
 
@@ -271,9 +269,9 @@
         android:layout_width="260dp"
         android:layout_height="54dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="sans-serif"
         android:maxLines="3"
         android:text="나의 설명 나의 설명 나의 설명 나의 설명"
         android:textSize="14sp"
@@ -288,12 +286,12 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="60dp"
-        android:fontFamily="@font/bbing"
-        android:text="나의 아이디"
-        android:maxLines="1"
         android:ellipsize="marquee"
+        android:fontFamily="@font/suitesemibold"
+        android:maxLines="1"
+        android:text="나의 아이디"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/imageView8"
         app:layout_constraintStart_toEndOf="@+id/cardView"
@@ -307,7 +305,7 @@
         android:layout_marginEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/settingicon" />
+        app:srcCompat="@drawable/img_3" />
 
     <ImageView
         android:id="@+id/backButton_mypage"
@@ -323,19 +321,19 @@
         android:id="@+id/mypage_tittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
         android:layout_marginTop="12dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="sans-serif"
         android:text="나의 드림"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/bar1"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="#D9D9D9"
         app:layout_constraintEnd_toEndOf="parent"
@@ -367,8 +365,8 @@
     <View
         android:id="@+id/view3"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
         android:background="#D9D9D9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

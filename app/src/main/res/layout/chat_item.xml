@@ -31,23 +31,24 @@
                 android:id="@+id/chat_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/bbing"
+                android:fontFamily="@font/suitesemibold"
                 android:text="이름"
                 android:textColor="#000000"
-                android:textStyle="bold" />
+                />
 
             <TextView
                 android:id="@+id/chat_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:fontFamily="@font/bbing"
+                android:fontFamily="@font/suitellight"
                 android:text="메세지"
                 android:textColor="#000000" />
             <TextView
                 android:id="@+id/chat_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/suitellight"
                 android:text="시간"
                 android:textSize="12sp" />
         </LinearLayout>
