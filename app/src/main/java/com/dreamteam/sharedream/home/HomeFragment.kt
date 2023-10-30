@@ -35,9 +35,7 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
     private lateinit var viewModel: HomeViewModel
 
-    private lateinit var auth: FirebaseAuth
     private lateinit var homePostAdapter: HomePostAdapter
-    private lateinit var db: FirebaseFirestore
     private lateinit var mContext: Context
     private var selectedCategory: String = ""
 
@@ -48,15 +46,7 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
     }
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
-    private var rcvList: List<PostRcv> = listOf()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        auth = Firebase.auth
-        db = Firebase.firestore
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,7 +73,6 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-
 
         binding.homeBtnRefreshList.setOnClickListener {
             myPostFeedViewModel.downloadHomePostRcv()
@@ -116,11 +105,11 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
 
 
+        // todo 쿼리 통해서 가져온 데이터의 마지막 Document 값을 받아와서 해당 Document 부터 X개 가져오는 로직 만들기
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) {
-            rcvList = it
 
             Log.d("xxxx", " Home Frag Observe ")
-            homePostAdapter.submitList(rcvList)
+            homePostAdapter.submitList(it)
             homePostAdapter.notifyDataSetChanged()
         }
 
@@ -133,8 +122,8 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
             homePostAdapter = HomePostAdapter(requireContext(), object : PostClick {
                 override fun postClick(post: PostRcv) {
-                    myPostFeedViewModel.currentPost.value = post
-                    myPostFeedViewModel.downloadCurrentProfileImg(post.uid)
+                    myPostFeedViewModel.setCurrentPost(post)
+
                     parentFragmentManager.beginTransaction().add(
                         R.id.frag_edit,
                         PostDetailFragment()

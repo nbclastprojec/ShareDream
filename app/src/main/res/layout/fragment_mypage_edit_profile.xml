@@ -57,7 +57,7 @@
             android:layout_width="110dp"
             android:layout_height="118dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/example" />
+            android:src="@drawable/loading2" />
 
     </androidx.cardview.widget.CardView>
 

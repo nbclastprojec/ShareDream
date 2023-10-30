@@ -33,7 +33,6 @@ import java.util.UUID
 class HomePostAdapter(private val context: Context, private val postClick: PostClick, private val allPosts: List<PostRcv>) :
     ListAdapter<PostRcv, HomePostAdapter.HomePostRcvViewHolder>(DifferCallback.differCallback) {
 
-    private val storage = Firebase.storage
     private val allItems = allPosts
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomePostRcvViewHolder {
@@ -127,7 +126,7 @@ class HomePostAdapter(private val context: Context, private val postClick: PostC
             val hours : Long = minutes / 60
             val day : Long = hours / 24
             val week : Long = day / 7
-            val month : Long = day / 31
+            val month : Long = day / 30
             val year : Long = month / 12
 
             val result: String =
