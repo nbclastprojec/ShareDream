@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.FragmentNicknameCheckDailalogBinding
+import com.dreamteam.sharedream.model.UserData
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 
 
 class NicknameCheckDailogFragment : DialogFragment() {
@@ -38,6 +41,11 @@ class NicknameCheckDailogFragment : DialogFragment() {
 
                 document.update(userData as Map<String, Any>)
                     .addOnSuccessListener {
+                       collection.document("${auth.currentUser!!.uid}")
+                            .get()
+                            .addOnSuccessListener {
+                                Constants.currentUserInfo = it.toObject<UserData>()
+                            }
                         dismiss()
                     }
                     .addOnFailureListener { e ->
