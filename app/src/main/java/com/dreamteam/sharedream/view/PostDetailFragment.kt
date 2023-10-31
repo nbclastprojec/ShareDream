@@ -195,15 +195,16 @@ class PostDetailFragment : Fragment() {
 
     private fun setStateDialog (){
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        val postState = binding.detailTvItemState
+
         builder.setTitle("변경을 원하는 게시물의 상태를 선택해주세요")
             .setPositiveButton("저장") { dialog, which ->
-                val postState = binding.detailTvItemState.text.toString()
 
                 // DB에 해당 게시글 State 값 변경하기
-                myPostFeedViewModel.uploadChangedPostState(currentPostInfo[0].timestamp,postState)
+                myPostFeedViewModel.uploadChangedPostState(currentPostInfo[0].timestamp,"${postState.text}")
 
                 // 홈 게시글 목록에 게시글 변경된 상태 변경하기d
-                val revisedPost = currentPostInfo[0].copy(state = postState)
+                val revisedPost = currentPostInfo[0].copy(state = "${postState.text}")
                 myPostFeedViewModel.setRevisedPost(revisedPost)
             }
             .setNegativeButton("취소") { dialog, which ->
@@ -212,21 +213,28 @@ class PostDetailFragment : Fragment() {
                 dialog.dismiss()
             }
             .setSingleChoiceItems(
-                arrayOf("교환 가능", "교환 보류", "예약 중", "교환 완료"), 0
+                arrayOf("교환 가능", "교환 보류", "예약 중", "교환 완료"),
+                when (postState.text) {
+                    "교환 가능" -> 0
+                    "교환 보류" -> 1
+                    "예약 중" -> 2
+                    "교환 완료" ->3
+                    else -> 0
+                }
             ) { dialog, which ->
                 when (which) {
                     0 -> {
-                        binding.detailTvItemState.text = "교환 가능"
+                        postState.text = "교환 가능"
                         stateIconChange()
                     }
 
                     1 -> {
-                        binding.detailTvItemState.text = "교환 보류"
+                        postState.text = "교환 보류"
                         stateIconChange()
                     }
 
                     2 -> {
-                        binding.detailTvItemState.text = "예약 중"
+                        postState.text = "예약 중"
                         stateIconChange()
 
                     }
