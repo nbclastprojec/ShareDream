@@ -46,6 +46,7 @@ class MessageActivity : AppCompatActivity() {
     private lateinit var binding : ActivityChatBinding
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
@@ -53,6 +54,7 @@ class MessageActivity : AppCompatActivity() {
 
         val receivedDocumentId = intent.getStringExtra("documentId").toString()//document 아이디 가져왔습니다. 이게 최신글은 document ID가 있어서 이걸로 검색하시면 스토어에 글 바로 연결됩니다. 최신화된지 얼마안되서 있는글도 있고 없는글도 있어요. 최근에 쓴 글은 다 있어서 주석 이거보시면 지워주시면 감사하겠습니당
         val store = FirebaseFirestore.getInstance()
+
 
 
         val UserData = store.collection("Posts").document(receivedDocumentId)
@@ -156,7 +158,6 @@ class MessageActivity : AppCompatActivity() {
     }
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
 
-        // firestore에서 destinationUid 를 이용해서 db.collection ~ "Userdata" 로 name 꺼내오기
         private val comments = ArrayList<ChatModel.Comment>()
         private var chat : Chatting? = null
         init{
