@@ -99,7 +99,6 @@ class PostDetailFragment : Fragment() {
             if (changedPost.timestamp == currentPostInfo[0].timestamp) {
                 detailPageInfoChange(changedPost)
 
-
                 imgs.clear()
                 imgs.addAll(changedPost.imgs)
             }
@@ -198,6 +197,14 @@ class PostDetailFragment : Fragment() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
         builder.setTitle("변경을 원하는 게시물의 상태를 선택해주세요")
             .setPositiveButton("저장") { dialog, which ->
+                val postState = binding.detailTvItemState.text.toString()
+
+                // DB에 해당 게시글 State 값 변경하기
+                myPostFeedViewModel.uploadChangedPostState(currentPostInfo[0].timestamp,postState)
+
+                // 홈 게시글 목록에 게시글 변경된 상태 변경하기d
+                val revisedPost = currentPostInfo[0].copy(state = postState)
+                myPostFeedViewModel.setRevisedPost(revisedPost)
             }
             .setNegativeButton("취소") { dialog, which ->
                 binding.detailTvItemState.text = currentPostInfo[0].state

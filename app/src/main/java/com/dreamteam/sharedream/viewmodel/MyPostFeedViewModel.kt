@@ -13,7 +13,6 @@ import com.dreamteam.sharedream.model.UserData
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
@@ -78,8 +77,7 @@ class MyPostFeedViewModel : ViewModel() {
     val editPostResult : MutableLiveData<PostRcv> get() = _editPostResult
 
 
-    // 포스트 수정된 DB 업로드
-    // 선택한 이미지 Storage에 업로드
+    // 포스트 수정된 DB 업로드 , 추가한 이미지 Storage에 업로드
     fun uploadEditPost(uris : MutableList<Any>, post : Post) {
         viewModelScope.launch(Dispatchers.IO) {
         val imgs : MutableList<String> = mutableListOf()
@@ -152,7 +150,7 @@ class MyPostFeedViewModel : ViewModel() {
     }
 
     // 게시글 수정 완료 시 디테일 페이지에 데이터 넘겨주기.
-    fun detailPageEdit(postRcv : PostRcv){
+    fun setRevisedPost(postRcv : PostRcv){
         _editPostResult.postValue(postRcv)
     }
 
@@ -387,4 +385,17 @@ class MyPostFeedViewModel : ViewModel() {
     fun subFavoritePost(){}
     fun addFavoritePost(){}
 
+    // Detail Page 작성자 게시글 상태 변경
+    fun uploadChangedPostState(timestamp: Timestamp,state: String){
+        db.collection("Posts").whereEqualTo("timestamp",timestamp).get()
+            .addOnSuccessListener { querySanp ->
+                querySanp.documents[0].reference.update("state",state)
+                    .addOnSuccessListener {
+                    Log.d("xxxx", "uploadChangedPostState: State 변경 성공")
+                    }
+                    .addOnFailureListener {
+                        Log.d("xxxx", "uploadChangedPostState: State 변경 실패 -> $it")
+                    }
+            }
+    }
 }
