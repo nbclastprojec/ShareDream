@@ -1,13 +1,21 @@
 package com.dreamteam.sharedream.view
 
-import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -17,15 +25,14 @@ import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
-import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
-@Suppress("DEPRECATION")
 class PostDetailFragment : Fragment() {
     private var _binding: FragmentPostDetailBinding? = null
     private val binding get() = _binding!!
@@ -33,22 +40,38 @@ class PostDetailFragment : Fragment() {
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
 
     private val currentPostInfo = mutableListOf<PostRcv>()
+
+    private fun detailPageInfoChange(postRcv: PostRcv) {
+        binding.detailId.text = postRcv.nickname
+        binding.detailAddress.text = postRcv.address
+        binding.detailpageTitle.text = postRcv.title
+        binding.detailpageCategory.text = postRcv.category
+        binding.detailpageExplain.text = postRcv.desc
+        binding.detailMoney.text = "${postRcv.price} 원"
+        binding.detailTvLikeCount.text = "${postRcv.likeUsers.size}"
+        binding.detailpageTime.text = "${time(postRcv.timestamp)}"
+        binding.detailTvItemState.text = postRcv.state
+        stateIconChange()
+
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPostDetailBinding.inflate(inflater, container, false)
 
+
         val imgs = mutableListOf<Uri>()
         myPostFeedViewModel.currentPost.observe(viewLifecycleOwner) {
-            binding.detailId.text = it.nickname
-            binding.detailAddress.text = it.address
-            binding.detailpageTitle.text = it.title
-            binding.detailpageCategory.text = it.category
-            binding.detailpageExplain.text = it.desc
-            binding.detailMoney.text = "${it.price} 원"
-            binding.detailTvLikeCount.text = "${it.likeUsers.size}"
-            binding.detailpageTime.text = "${time(it.timestamp)}"
+            detailPageInfoChange(it)
+
+
+            if (it.uid == Constants.currentUserUid) {
+                binding.detailBtnStateChange.visibility = View.VISIBLE
+            }
+
 
             // 게시물 작성자 프로필 이미지 받아오기
             myPostFeedViewModel.downloadCurrentProfileImg(it.uid)
@@ -71,6 +94,18 @@ class PostDetailFragment : Fragment() {
             }
         }
 
+        // 게시물 수정 시 디테일 페이지 View 업데이트
+        myPostFeedViewModel.editPostResult.observe(viewLifecycleOwner) { changedPost ->
+            if (changedPost.timestamp == currentPostInfo[0].timestamp) {
+                detailPageInfoChange(changedPost)
+
+
+                imgs.clear()
+                imgs.addAll(changedPost.imgs)
+            }
+        }
+
+        // 게시물 작성자 프로필 이미지
         myPostFeedViewModel.currentProfileImg.observe(viewLifecycleOwner) {
             binding.datailProfile.load(it)
         }
@@ -83,20 +118,24 @@ class PostDetailFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // 관심목록 추가 시 카운트에 반영
-        myPostFeedViewModel.likeUsersCount.observe(viewLifecycleOwner) {
-            binding.detailTvLikeCount.text = "${it.size}"
-            // 관심 목록에 있는 아이템일 경우 binding
-            if (it.contains(Constants.currentUserUid)) {
-                binding.detailBtnSubFavorite.visibility = View.VISIBLE
-                binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
-            } else {
-                binding.detailBtnSubFavorite.visibility = View.GONE
-                binding.detailLike.setImageResource(R.drawable.like)
+        myPostFeedViewModel.likeUserChangeResult.observe(viewLifecycleOwner) {
+            if (it[0].timestamp == currentPostInfo[0].timestamp) {
+                Log.d("xxxx", " 일치 ?: ${it[0].timestamp == currentPostInfo[0].timestamp} ")
+                Log.d("xxxx", " 전체 LiveData : ${it} 바뀐 Livedata ${it[0].likeUsers}")
+                binding.detailTvLikeCount.text = "${it[0].likeUsers.size}"
+
+                // 관심 목록에 있는 아이템일 경우 binding
+                if (it[0].likeUsers.contains(Constants.currentUserUid)) {
+                    binding.detailBtnSubFavorite.visibility = View.VISIBLE
+                    binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
+                } else {
+                    binding.detailBtnSubFavorite.visibility = View.GONE
+                    binding.detailLike.setImageResource(R.drawable.like)
+                }
             }
         }
 
@@ -107,6 +146,11 @@ class PostDetailFragment : Fragment() {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.frag_edit, PostEditFragment()).addToBackStack(null).commit()
 
+        }
+
+        // 포스트 상태 변경 버튼 클릭 이벤트
+        binding.detailBtnStateChange.setOnClickListener {
+            setStateDialog()
         }
 
         // 관심 목록 추가 버튼 클릭 이벤트
@@ -132,43 +176,62 @@ class PostDetailFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
+        // 채팅하기 버튼 클릭 이벤트 - 작성자와 채팅하기
         binding.detailChatButton.setOnClickListener {
             getUserInformation()
         }
+    }
 
-        val post = arguments?.getSerializable("post") as Post?
-
-        if (post != null) {
-            binding.detailId.text = post.nickname
-            binding.detailId.text = post.nickname
-            binding.detailAddress.text = post.address
-            binding.detailpageTitle.text = post.title
-            binding.detailpageCategory.text = post.category
-            binding.detailpageExplain.text = post.desc
-            binding.detailMoney.text = "${post.price} 원"
-            binding.detailTvLikeCount.text = "${post.likeUsers.size}"
-            binding.detailpageTime.text = time(post.timestamp)
-
-            myPostFeedViewModel.downloadCurrentProfileImg(post.uid)
-
-            if (post.uid == Constants.currentUserUid) {
-                binding.detailBtnEditPost.visibility = View.VISIBLE
-            } else {
-                binding.detailBtnEditPost.visibility = View.GONE
+    private fun stateIconChange() {
+        binding.detailIcState.setImageResource(
+            when (binding.detailTvItemState.text) {
+                "교환 가능" -> R.drawable.detail_img_state_ok72
+                "교환 보류" -> R.drawable.detail_img_state_pause72
+                "예약 중" -> R.drawable.detail_img_state_pause72
+                "교환 완료" -> R.drawable.detail_img_state_end72
+                else -> R.drawable.detail_img_state_end72
             }
+        )
+    }
 
-            // 관심 목록에 있는 아이템의 경우 아이콘 변경 및 관심 목록 제거 버튼 표시
-            if (post.likeUsers.contains(Constants.currentUserUid)) {
-                binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
-                binding.detailBtnSubFavorite.visibility = View.VISIBLE
-            } else {
-                binding.detailLike.setImageResource(R.drawable.like)
-                binding.detailBtnSubFavorite.visibility = View.GONE
+    private fun setStateDialog (){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        builder.setTitle("변경을 원하는 게시물의 상태를 선택해주세요")
+            .setPositiveButton("저장") { dialog, which ->
             }
+            .setNegativeButton("취소") { dialog, which ->
+                binding.detailTvItemState.text = currentPostInfo[0].state
+                stateIconChange()
+                dialog.dismiss()
+            }
+            .setSingleChoiceItems(
+                arrayOf("교환 가능", "교환 보류", "예약 중", "교환 완료"), 0
+            ) { dialog, which ->
+                when (which) {
+                    0 -> {
+                        binding.detailTvItemState.text = "교환 가능"
+                        stateIconChange()
+                    }
 
-        }
+                    1 -> {
+                        binding.detailTvItemState.text = "교환 보류"
+                        stateIconChange()
+                    }
 
+                    2 -> {
+                        binding.detailTvItemState.text = "예약 중"
+                        stateIconChange()
 
+                    }
+
+                    3 -> {
+                        binding.detailTvItemState.text = "교환 완료"
+                        stateIconChange()
+                    }
+                }
+            }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
     private fun getUserInformation() {
@@ -190,6 +253,7 @@ class PostDetailFragment : Fragment() {
         intent.putExtra("documentId", documentId)
         startActivity(intent)
     }
+
 
     private fun time(timestamp: Timestamp): String {
         val date: Date = timestamp.toDate()
@@ -226,9 +290,5 @@ class PostDetailFragment : Fragment() {
             }
 
         return result
-    }
-
-    private fun getSearch() {
-
     }
 }
