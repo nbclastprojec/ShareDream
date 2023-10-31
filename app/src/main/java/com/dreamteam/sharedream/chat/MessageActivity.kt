@@ -62,8 +62,6 @@ class MessageActivity : AppCompatActivity() {
             .addOnSuccessListener { document ->
                 if (document != null) {
 
-                    val address = document.getString("address")//주소
-                    val category = document.getString("category")//카테고리
                     val image = document.get("imgs") as List<String>
                     val nickname = document.getString("nickname")//닉네임
                     val price = document.getString("price")//가격
@@ -75,7 +73,6 @@ class MessageActivity : AppCompatActivity() {
                     binding.chat.text=nickname
                     //binding.category.text=category
                     ///binding.price.text=price+"원"
-                    binding.region.text=address
 
                     destinationUid = postUseruid
 
