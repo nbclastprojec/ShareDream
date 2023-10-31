@@ -4,22 +4,17 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.AppCompatButton
-import androidx.core.net.toFile
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
@@ -32,14 +27,8 @@ import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.android.material.chip.Chip
-import com.google.firebase.Timestamp
-import java.io.File
 import java.net.URI
-import java.net.URL
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 class PostEditFragment : Fragment() {
 
@@ -125,7 +114,7 @@ class PostEditFragment : Fragment() {
 
 
 
-        // 업로드 하기
+        // 업로드 하기 todo 게시글 수정 시 기존 이미지 삭제하기
         binding.btnComplete.setOnClickListener {
             Log.d("xxxx", " postEditFrag 완료 버튼 클릭")
             // 게시글 수정을 감지하여 현재 포스트 정보를 변경해주는 Listener 추가 - 디테일 페이지를 닫을 시 stop
@@ -149,7 +138,7 @@ class PostEditFragment : Fragment() {
             )
 
             // 디테일 페이지로 수정 된 게시글 정보 이동하기
-            myPostFeedViewModel.detailPageEdit(myPostFeedViewModel.postToPostRcv(post,uris))
+            myPostFeedViewModel.setRevisedPost(myPostFeedViewModel.postToPostRcv(post,uris))
             Log.d("xxxx", "onViewCreated: ${uris}")
 
             val testList = mutableListOf<Any>()
