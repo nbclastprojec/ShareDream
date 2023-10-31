@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -225,6 +226,7 @@ class HomePostAdapter(
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price+"원"
 
+
         }
 
         holder.bind(positionItem.imgs[0], positionItem.timestamp)
@@ -240,9 +242,20 @@ class HomePostAdapter(
 //        val postheart: ImageView = binding.btnHeart
         val postDate: TextView = binding.writePageDate
 
+        val postStateBgClosed: ImageView = binding.itemImgStateClosed
+        val postStateBgPutOff: ImageView = binding.itemImgStatePutOff
+        val postStateBgReservation : ImageView = binding.itemImgStateReservation
+
 
         fun bind(imagePath: Uri, timestamp: Timestamp) {
             postImg.load(imagePath)
+            when (currentList[position].state){
+                "교환 보류" -> postStateBgPutOff.visibility = View.VISIBLE
+                "예약 중" -> postStateBgReservation.visibility = View.VISIBLE
+                "교환 완료" -> postStateBgClosed.visibility = View.VISIBLE
+                else -> return
+            }
+
             val date: Date = timestamp.toDate()
             // 1. 날짜 형식으로 만들기
             // timestamp를 Date 객체로 변환
