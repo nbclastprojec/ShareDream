@@ -250,6 +250,11 @@ class HomePostAdapter(
         fun bind(imagePath: Uri, timestamp: Timestamp) {
             postImg.load(imagePath)
             when (currentList[position].state){
+                "교환 가능" -> {
+                    postStateBgClosed.visibility = View.INVISIBLE
+                    postStateBgPutOff.visibility = View.INVISIBLE
+                    postStateBgReservation.visibility = View.INVISIBLE
+                }
                 "교환 보류" -> postStateBgPutOff.visibility = View.VISIBLE
                 "예약 중" -> postStateBgReservation.visibility = View.VISIBLE
                 "교환 완료" -> postStateBgClosed.visibility = View.VISIBLE
