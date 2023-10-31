@@ -8,7 +8,7 @@ import com.dreamteam.sharedream.model.PostRcv
 object DifferCallback {
     val differCallback = object : DiffUtil.ItemCallback<PostRcv>(){
         override fun areItemsTheSame(oldItem: PostRcv, newItem: PostRcv): Boolean {
-            return oldItem == newItem
+            return oldItem.timestamp == newItem.timestamp
         }
 
         override fun areContentsTheSame(oldItem: PostRcv, newItem: PostRcv): Boolean {

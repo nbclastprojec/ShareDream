@@ -46,20 +46,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/detail_btn_add_favorite"
         android:layout_width="170dp"
         android:layout_height="40dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/detail_btn_bg"
         android:fontFamily="@font/suiteregular"
         android:gravity="center"
-        android:paddingLeft="10dp"
         android:text="관심 목록에 추가하기"
         android:textColor="@color/white"
-        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/detail_chatButton"
         app:layout_constraintStart_toStartOf="parent" />
@@ -67,7 +67,7 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/detail_btn_sub_favorite"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
@@ -78,6 +78,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/detail_chatButton"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/detail_btn_state_change"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/detail_btn_bg"
+        android:text="아이템 상태 변경하기"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/detail_chatButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <ImageView
         android:id="@+id/detail_like"
@@ -109,7 +125,6 @@
         android:id="@+id/detail_chatButton"
         android:layout_width="170dp"
         android:layout_height="40dp"
-        android:layout_marginStart="5dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/detail_btn_bg"
