@@ -101,13 +101,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/write_image"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/loading2" />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/write_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/loading2" />
+
+            <ImageView
+                android:id="@+id/item_img_state_closed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/soldout_bg_color"
+                android:src="@drawable/bg_state_img_closed_white"
+                android:visibility="invisible"
+                />
+
+            <ImageView
+                android:id="@+id/item_img_state_reservation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/soldout_bg_color"
+                android:src="@drawable/bg_state_img_reservation_white"
+                android:visibility="invisible"
+                />
+
+            <ImageView
+                android:id="@+id/item_img_state_put_off"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/soldout_bg_color"
+                android:src="@drawable/bg_state_img_put_off_white"
+                android:visibility="invisible"
+                />
+
+
+        </FrameLayout>
+
 
         <!--        <ImageView-->
         <!--            android:id="@+id/btn_heart"-->
