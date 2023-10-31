@@ -108,18 +108,37 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
         myPostFeedViewModel.downloadHomePostRcv()
 
-
-
-
         // todo 쿼리 통해서 가져온 데이터의 마지막 Document 값을 받아와서 해당 Document 부터 X개 가져오는 로직 만들기
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) {
 
-            Log.d("xxxx", " Home Frag Observe ")
             homePostAdapter.submitList(it)
-            homePostAdapter.notifyDataSetChanged()
         }
 
+        // 게시물 수정 시 Home Fragment 에 해당 게시글 수정 반영
+        myPostFeedViewModel.editPostResult.observe(viewLifecycleOwner){
+            val testList = homePostAdapter.currentList.toMutableList()
+            for (index in testList.indices){
+                if (testList[index].timestamp == it.timestamp){
+                    testList[index] = it
+                    Log.d("xxxx", " Rcv Item Change = $testList")
+                    updateRcv(index,it)
+                }
+            }
+        }
+    }
 
+    private fun updateRcv(position: Int, post: PostRcv){
+        val layoutManager = binding.homeRecycle.layoutManager
+        val scrollPosition = if (layoutManager != null){
+            (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        } else { 0 }
+        val newList = homePostAdapter.currentList.toMutableList()
+        newList[position] = post
+        homePostAdapter.submitList(newList)
+
+        binding.homeRecycle.post{
+            binding.homeRecycle.scrollToPosition(scrollPosition)
+        }
     }
 
     fun setupRcv() {
