@@ -139,6 +139,8 @@ class HomePostAdapter(
     }
     fun sortLikeAsc() {
         val sortedItem = allItems.sortedBy { it.likeUsers.size }
+        submitList(sortedItem)
+        notifyDataSetChanged()
     }
 
 

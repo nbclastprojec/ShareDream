@@ -196,10 +196,11 @@ class MyPostFeedViewModel : ViewModel() {
                 postImgList.addAll(uriList)
 
                 if (postImgUris.size == postImgList.size) {
+
                     val postRcv = PostRcv(
                         uid = post.uid,
                         title = post.title,
-                        price = post.price.replace(",", "").toInt(),
+                        price = post.price.toString().replace(",", "").toLong(),
                         category = post.category,
                         address = post.address,
                         deadline = post.deadline,

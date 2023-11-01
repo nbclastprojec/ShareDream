@@ -233,4 +233,5 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
         val recyclerView = binding.homeRecycle
         recyclerView.scrollToPosition(1) // 맨 위로 스크롤
     }
+
 }
