@@ -27,9 +27,12 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.ktx.storage
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 
 @Suppress("DEPRECATION")
@@ -224,6 +227,7 @@ class HomePostAdapter(
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price
+            postEndDate.text = EndTime(positionItem.endDate)
 
         }
 
@@ -239,6 +243,7 @@ class HomePostAdapter(
         val postImg: ImageView = binding.writeImage
 //        val postheart: ImageView = binding.btnHeart
         val postDate: TextView = binding.writePageDate
+        val postEndDate:TextView=binding.endDate
 
 
         fun bind(imagePath: Uri, timestamp: Timestamp) {
@@ -292,6 +297,26 @@ class HomePostAdapter(
         }
         notifyDataSetChanged()
     }
+    private fun EndTime(endTime: String): String {
+        val dateFormat = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.US)
+        try {
+            val futureDate = dateFormat.parse(endTime)
+            val currentDate = Date()
+            val diff = futureDate.time - currentDate.time
+            val days = TimeUnit.MILLISECONDS.toDays(diff)
+            val hours = TimeUnit.MILLISECONDS.toHours(diff)
+            return when {
+                days >= 2 -> "$days 일남음"
+                days >= 1 -> "$days 일남음"
+                hours >= 1 -> "$hours 시간남음"
+                else -> "마감직전!"
+            }
+        } catch (e: java.text.ParseException) {
+            return "날짜 형식 오류"
+        }
+    }
+
+
 
 //    private fun likeClick(position: Int) {
 //        val tsDoc = db.collection("posts").document(postUidList[position])
