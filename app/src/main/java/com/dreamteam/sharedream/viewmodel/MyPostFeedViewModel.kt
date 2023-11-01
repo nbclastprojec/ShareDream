@@ -188,7 +188,6 @@ class MyPostFeedViewModel : ViewModel() {
         for (uri in postImgUris) {
             val downloadTask = storage.reference.child("post").child(uri).downloadUrl
             downloadTasks.add(downloadTask)
-
         }
 
         // 이미지를 모두 받아온 뒤 한번에 PostRcv의 List<Uri> 에 담아준다 ->
@@ -200,7 +199,7 @@ class MyPostFeedViewModel : ViewModel() {
                     val postRcv = PostRcv(
                         uid = post.uid,
                         title = post.title,
-                        price = post.price,
+                        price = post.price.replace(",", "").toInt(),
                         category = post.category,
                         address = post.address,
                         deadline = post.deadline,

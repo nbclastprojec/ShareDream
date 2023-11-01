@@ -223,7 +223,7 @@ class HomePostAdapter(
             postCategory.text = "카테고리 : ${positionItem.category}"
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
-            postPrice.text = positionItem.price
+            postPrice.text = positionItem.price.toString()
 
         }
 
@@ -280,19 +280,60 @@ class HomePostAdapter(
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun onCategorySelected(category: String) {
 
-        if (category.isEmpty()) {
-            submitList(allItems)
+    @SuppressLint("NotifyDataSetChanged")
+    fun onCategorySelected(category: String, minPrice: Int?, maxPrice: Int?, ) {
+
+        val categoryFiltered = if (category.isEmpty() || category == "전체") {
+            allItems // 전체 아이템 유지
         } else {
-            // 카테고리에 따라 게시물을 필터링하고 어댑터를 업데이트합니다.
-            val filteredList = allItems.filter { it.category == category }
-            submitList(filteredList)
+            allItems.filter { it.category == category } // 카테고리 필터 적용
         }
+
+
+
+        // 가격 필터
+        val priceFiltered =
+            if(category.isEmpty() || category == "전체" ) {
+                when {
+                    minPrice != null && maxPrice != null -> {
+                        allItems.filter { it.price in (minPrice..maxPrice) }
+                    }
+
+                    minPrice != null -> {
+                        allItems.filter { it.price >= minPrice }
+                    }
+
+                    maxPrice != null -> {
+                        allItems.filter { it.price <= maxPrice }
+                    }
+
+                    else -> {
+                        allItems // 가격 필터 없음
+                    }
+                }
+            } else {
+                when {
+                    minPrice != null && maxPrice != null -> {
+                        categoryFiltered.filter { it.price in (minPrice..maxPrice) }
+                    }
+
+                    minPrice != null -> {
+                        categoryFiltered.filter { it.price >= minPrice }
+                    }
+
+                    maxPrice != null -> {
+                        categoryFiltered.filter { it.price <= maxPrice }
+                    }
+
+                    else -> allItems
+                }
+            }
+
+        submitList(priceFiltered)
         notifyDataSetChanged()
     }
-
+}
 //    private fun likeClick(position: Int) {
 //        val tsDoc = db.collection("posts").document(postUidList[position])
 //        db.runTransaction {
@@ -307,5 +348,3 @@ class HomePostAdapter(
 //            it.set(tsDoc, post)
 //        }
 //    }
-
-}

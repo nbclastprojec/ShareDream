@@ -33,7 +33,7 @@ import java.util.Locale
 
 class PostEditFragment : Fragment() {
 
-    private var _binding : FragmentPostEditBinding? = null
+    private var _binding: FragmentPostEditBinding? = null
     private val binding get() = _binding!!
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
@@ -42,7 +42,7 @@ class PostEditFragment : Fragment() {
 
     private var uris: MutableList<Uri> = mutableListOf()
     private var imgs: MutableList<String> = mutableListOf()
-    private var currentPost : PostRcv? = null
+    private var currentPost: PostRcv? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,8 +63,8 @@ class PostEditFragment : Fragment() {
         }
 
         // 기존 포스트 정보 가져와서 수정 페이지에 띄우기
-        var category : String
-        myPostFeedViewModel.currentPostToEditPage.observe(viewLifecycleOwner){ post ->
+        var category: String
+        myPostFeedViewModel.currentPostToEditPage.observe(viewLifecycleOwner) { post ->
             currentPost = post
 
             binding.imageCount.text = "${post.imgs.size}/10"
@@ -79,8 +79,8 @@ class PostEditFragment : Fragment() {
             writePostImgAdapter.submitList(uris)
             writePostImgAdapter.notifyDataSetChanged()
 
-            var defaultChip : Int? = null
-            when (category){
+            var defaultChip: Int? = null
+            when (category) {
                 "의류" -> defaultChip = R.id.cloths_chip1
                 "가전제품" -> defaultChip = R.id.machine_chip1
                 "스포츠" -> defaultChip = R.id.sport_chip1
@@ -88,6 +88,12 @@ class PostEditFragment : Fragment() {
                 "독서" -> defaultChip = R.id.book_chip1
                 "뷰티" -> defaultChip = R.id.beauty_chip1
                 "문구" -> defaultChip = R.id.toy_chip1
+                "가구" -> defaultChip = R.id.furniture1
+                "생활" -> defaultChip = R.id.life1
+                "식품" -> defaultChip = R.id.food1
+                "유아동/출산" -> defaultChip = R.id.kids1
+                "반려동물용품" -> defaultChip = R.id.pet1
+                "기타" -> defaultChip = R.id.etc1
             }
             defaultChip?.let {
                 val selectedChip: Chip = binding.chipgroup.findViewById(defaultChip) as Chip
@@ -95,7 +101,7 @@ class PostEditFragment : Fragment() {
             }
         }
 
-        var editCategory : String = ""
+        var editCategory: String = ""
         when (binding.chipgroup.checkedChipId) {
             R.id.cloths_chip1 -> editCategory = "의류"
             R.id.machine_chip1 -> editCategory = "가전제품"
@@ -104,12 +110,17 @@ class PostEditFragment : Fragment() {
             R.id.book_chip1 -> editCategory = "독서"
             R.id.beauty_chip1 -> editCategory = "뷰티"
             R.id.toy_chip1 -> editCategory = "문구"
+            R.id.furniture1 -> editCategory = "가구"
+            R.id.life1 -> editCategory = "생활"
+            R.id.food1 -> editCategory = "식품"
+            R.id.kids1 -> editCategory = "유아동/출산"
+            R.id.pet1 -> editCategory = "반려동물용품"
+            R.id.etc1 -> editCategory = "기타"
             else -> {
                 Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
 
             }
         }
-
 
 
         // 업로드 하기
@@ -136,14 +147,14 @@ class PostEditFragment : Fragment() {
 
             val testList = mutableListOf<Any>()
             testList.addAll(uris)
-            for ( index in testList.indices){
-                if (currentPost!!.imgs.contains(testList[index])){
+            for (index in testList.indices) {
+                if (currentPost!!.imgs.contains(testList[index])) {
                     testList[index] = (URI(testList[index].toString()).toURL())
                 } else {
                 }
             }
 
-            myPostFeedViewModel.uploadEditPost(testList,post)
+            myPostFeedViewModel.uploadEditPost(testList, post)
             parentFragmentManager.popBackStack()
         }
 
@@ -182,7 +193,7 @@ class PostEditFragment : Fragment() {
             override fun imgClick(uri: Uri) {
                 Log.d("xxxx", "imgClicked: ${uri} , whole uris : $uris")
                 // todo 아이템 클릭 시 다이얼로그 or 삭제 버튼
-                Util.showDialog(requireContext(),"이미지 삭제","선택한 이미지를 삭제 하시겠습니까?"){
+                Util.showDialog(requireContext(), "이미지 삭제", "선택한 이미지를 삭제 하시겠습니까?") {
                     uris.remove(uri)
                     binding.imageCount.text = "${uris.size}/10"
                     writePostImgAdapter.notifyDataSetChanged()

@@ -76,7 +76,8 @@ class SeachFragment : Fragment() {
         val postCollection = firestore.collection("Posts")
 
         // query 객체 만들고 get으로 가져오기
-        postCollection.whereEqualTo("title", title)
+        postCollection.whereGreaterThanOrEqualTo("title", title)
+            .whereLessThanOrEqualTo("title",title + "\uf8ff")
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val searchList = mutableListOf<Post>()
