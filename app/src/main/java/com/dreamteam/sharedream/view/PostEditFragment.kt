@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dreamteam.sharedream.NicknameCheckDailogFragment
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
@@ -134,7 +135,11 @@ class PostEditFragment : Fragment() {
                 currentPost!!.token,
                 currentPost!!.timestamp,
                 "교환 가능",
-                currentPost!!.documentId
+                "",
+                ""
+
+
+
             )
 
             // 디테일 페이지로 수정 된 게시글 정보 이동하기
@@ -205,6 +210,8 @@ class PostEditFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = writePostImgAdapter
         }
+
+
     }
 
     private fun convertCurrencyWon(editText: EditText) = with(binding) {
