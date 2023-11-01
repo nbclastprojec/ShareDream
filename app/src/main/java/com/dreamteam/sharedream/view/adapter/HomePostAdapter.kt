@@ -61,159 +61,7 @@ class HomePostAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: HomePostRcvViewHolder, position: Int) {
         val post = currentList[position]
-        val allpost = allPosts[position]
-        val userId = post.uid
 
-//        holder.postheart.setOnClickListener {
-//            val db = FirebaseFirestore.getInstance()
-//            val documentId = post.documentId // 게시물의 ID
-//            val userId = post.uid // 게시물의 작성자 ID
-//
-//            // Firestore에서 게시물 정보 가져오기
-//            db.collection("Posts").document(documentId).get()
-//                .addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        val document = task.result
-//                        if (document != null && document.exists()) {
-//
-//                            // 게시물 작성자의 FCM 토큰 가져오기
-//                            val writerToken = post.token
-//
-//                            // "좋아요" 누른 사용자와 게시글 작성자 구별
-//                            if (userId == post.uid) {
-//                                val nickname = allpost.nickname
-//                                val notificationTitle = "$nickname 님이 ${allpost.title}글을 좋아합니다."
-//                                val notificationBody = "얼른 가서 확인 해 보세요!"
-//                                val uniqueMessageId = UUID.randomUUID().toString()
-//
-//
-//                                // FCM 알림에 추가할 데이터 설정
-//                                val data = mutableMapOf<String, String>()
-//                                data["key1"] = "value1"
-//                                data["key2"] = "value2"
-//                                Log.d("nyh", "onBindViewHolder: ${writerToken}")
-//                                Log.d("nyh", "onBindViewHolder: ${userId}")
-//
-//
-//                                FirebaseMessaging.getInstance().isAutoInitEnabled = true
-//
-//                                // FCM 알림을 보내기 위한 데이터 설정
-//                                val message = RemoteMessage.Builder(writerToken)
-//                                    .setMessageId(uniqueMessageId)
-//                                    .setData(data)
-//                                    .addData("title", notificationTitle)
-//                                    .addData("body", notificationBody)
-//                                    .build()
-//
-//                                // FCM 알림 전송
-//                                FirebaseMessaging.getInstance().send(message)
-//                            }
-//                        } else {
-//                            println("Document not found")
-//                        }
-//                    } else {
-//                        val error = task.exception
-//                        println("Error getting document: $error")
-//                    }
-//                }
-
-
-//        holder.postheart.setOnClickListener {
-//
-////            onRecyclerViewItemClicked(post.documentId)
-//
-//            val functions = FirebaseFunctions.getInstance()
-//
-//            val db = FirebaseFirestore.getInstance()
-//            val documentId = post.documentId // 가져올 문서의 ID
-//
-//            db.collection("Posts").document(documentId).get()
-//                .addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        val document = task.result
-//                        if (document != null && document.exists()) {
-//
-//                            val writerToken = document.getString("token")
-////                            val documentData = document.data
-//                            if (userId != post.token) {
-//                                val nickname = allpost.nickname
-//                                val notificationTitle = "$nickname 님이 ${allpost.title}글을 좋아합니다."
-//                                val notificationBody = "얼른 가서 확인 해 보세요!"
-//                                val uniqueMessageId = UUID.randomUUID().toString()
-//
-//                                // FCM 알림에 추가할 데이터 설정
-//                                val data = mutableMapOf<String, String>()
-//                                data["key1"] = "value1"
-//                                data["key2"] = "value2"
-////            FirebaseMessaging.getInstance().isAutoInitEnabled = true
-//
-//                                // FCM 알림을 보내기 위한 데이터 설정
-//
-//
-//                                val token = post.token
-//                                Log.d("nyh", "onBindViewHolder: $token")
-//
-//                                val message = RemoteMessage.Builder(token)
-//                                    .setMessageId(uniqueMessageId)
-//                                    .setData(data) // 데이터 추가
-//                                    .addData("title", notificationTitle) // 알림 제목
-//                                    .addData("body", notificationBody)
-//                                    .build()
-//                                Log.d("nyh", "onBindViewHolder: token === $token")
-//                                FirebaseMessaging.getInstance().send(message)
-//                                // FCMService의 sendNonotification 함수 호출
-//                                val fcmService = FCMService()
-//                                fcmService.sendNonotification(writerToken,message)
-//
-//                            }
-//
-//
-//                            Log.d("nyh", "onBindViewHolder: ${document.id}")
-//                        } else {
-//                            println("Document not found")
-//                        }
-//                    } else {
-//                        val error = task.exception
-//                        println("Error getting document: $error")
-//                    }
-//                }
-            // 알림 제목과 내용 설정
-
-//            val nickname = allpost.nickname
-//            val notificationTitle = "$nickname 님이 ${allpost.title}글을 좋아합니다."
-//            val notificationBody = "얼른 가서 확인 해 보세요!"
-//            val uniqueMessageId = UUID.randomUUID().toString()
-//
-//            // FCM 알림에 추가할 데이터 설정
-//            val data = mutableMapOf<String, String>()
-//            data["key1"] = "value1"
-//            data["key2"] = "value2"
-////            FirebaseMessaging.getInstance().isAutoInitEnabled = true
-//
-//            // FCM 알림을 보내기 위한 데이터 설정
-//
-//
-//            val token = post.token
-//            Log.d("nyh", "onBindViewHolder: $token")
-//
-//            val message = RemoteMessage.Builder(token)
-//                .setMessageId(uniqueMessageId)
-//                .setData(data) // 데이터 추가
-//                .addData("title", notificationTitle) // 알림 제목
-//                .addData("body", notificationBody)
-//                .build()
-//            Log.d("nyh", "onBindViewHolder: token === $token")
-//            FirebaseMessaging.getInstance().send(message)
-//            // FCMService의 sendNonotification 함수 호출
-//            val fcmService = FCMService()
-//            fcmService.sendNonotification(context,message)
-            // FCM 알림을 보내기 위한 데이터 설정
-            // FCMService의 sendNonotification 함수 호출
-//                    val fcmService = FCMService()
-//                    fcmService.sendNonotification(context, notificationTitle, notificationBody, data)
-
-
-//        }
         holder.itemView.setOnClickListener {
             postClick?.postClick(post)
         }
@@ -279,6 +127,21 @@ class HomePostAdapter(
 
         }
     }
+    fun sortPriceAsc(){
+        val sortedItems = allItems.sortedBy { it.price }
+        submitList(sortedItems)
+        notifyDataSetChanged()
+    }
+    fun sortPriceDesc(){
+        val sortedItems =  allItems.sortedByDescending { it.price }
+        submitList(sortedItems)
+        notifyDataSetChanged()
+    }
+    fun sortLikeAsc() {
+        val sortedItem = allItems.sortedBy { it.likeUsers.size }
+    }
+
+
 
 
     @SuppressLint("NotifyDataSetChanged")

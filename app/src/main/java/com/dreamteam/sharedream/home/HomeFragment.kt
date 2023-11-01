@@ -6,11 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.NicknameCheckDailogFragment
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.home.Edit.EditFragment
+import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.PostDetailFragment
 import com.dreamteam.sharedream.view.adapter.HomePostAdapter
@@ -118,6 +122,43 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
         }
 
 
+        val sortSpinner: Spinner = binding.sortSpinner
+        sortSpinner.adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.sort_home,
+            android.R.layout.simple_spinner_item
+        )
+
+        sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                Log.d("nyh", "onItemSelected: click!")
+                if (::homePostAdapter.isInitialized) when (position) {
+                    0 -> setupRcv()
+                    1 -> {
+                        homePostAdapter.sortPriceDesc()
+                        scrollToTop()
+                    }
+                    2 -> {
+                        homePostAdapter.sortPriceAsc()
+                        scrollToTop()
+                    }
+                    3 -> {
+                        homePostAdapter.sortLikeAsc()
+                        scrollToTop()
+                    }
+                    else -> setupRcv()
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Log.d("nyh", "onNothingSelected: $id")
+            }
+        }
     }
 
     fun setupRcv() {
@@ -186,5 +227,10 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
                 Toast.makeText(context, "닉네임 설정 오류 에러", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun scrollToTop() {
+        val recyclerView = binding.homeRecycle
+        recyclerView.scrollToPosition(1) // 맨 위로 스크롤
     }
 }

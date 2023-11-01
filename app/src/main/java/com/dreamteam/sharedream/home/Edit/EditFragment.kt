@@ -130,6 +130,12 @@ class EditFragment : Fragment() {
             R.id.book_chip1 -> category = "독서"
             R.id.beauty_chip1 -> category = "뷰티"
             R.id.toy_chip1 -> category = "문구"
+            R.id.furniture1 -> category = "가구"
+            R.id.life1 -> category = "생활"
+            R.id.food1 -> category = "식품"
+            R.id.kids1 -> category = "유아동/출산"
+            R.id.pet1 -> category = "반려동물용품"
+            R.id.etc1 -> category = "기타"
             else -> {
                 Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
                 return

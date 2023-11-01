@@ -8,4 +8,11 @@
         <item>서비스 제안</item>
         <item>기타</item>
     </string-array>
+    <string-array name="sort_home">
+        <item>정렬</item>
+        <item>가격높은순</item>
+        <item>가격낮은순</item>
+        <item>좋아요 많은순</item>
+
+    </string-array>
 </resources>
