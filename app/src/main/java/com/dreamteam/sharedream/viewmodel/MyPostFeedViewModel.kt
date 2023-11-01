@@ -203,7 +203,8 @@ class MyPostFeedViewModel : ViewModel() {
             post.token,
             post.timestamp,
             post.state,
-            post.documentId
+            post.documentId,
+            post.endTime
         )
     }
 
@@ -226,7 +227,7 @@ class MyPostFeedViewModel : ViewModel() {
                 postImgList.addAll(uriList)
 
                 if (postImgUris.size == postImgList.size) {
-                    val postRcv = PostRcv(
+                    var postRcv = PostRcv(
                         uid = post.uid,
                         title = post.title,
                         price = post.price,
@@ -246,7 +247,6 @@ class MyPostFeedViewModel : ViewModel() {
 
 
                     // Post -> PostRcv
-                    val postRcv = postToPostRcv(post,postImgList)
 
 
                     var inserted = false
