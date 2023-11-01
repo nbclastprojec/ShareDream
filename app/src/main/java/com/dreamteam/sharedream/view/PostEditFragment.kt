@@ -12,6 +12,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dreamteam.sharedream.NicknameCheckDailogFragment
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
@@ -134,6 +135,7 @@ class PostEditFragment : Fragment() {
                 currentPost!!.token,
                 currentPost!!.timestamp,
                 "교환 가능",
+                "",
                 ""
             )
             Log.d("xxxx", "onViewCreated: ${uris}")
@@ -201,6 +203,8 @@ class PostEditFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = writePostImgAdapter
         }
+
+
     }
 
     override fun onDestroyView() {

@@ -211,7 +211,8 @@ class MyPostFeedViewModel : ViewModel() {
                         token = post.token,
                         timestamp = post.timestamp,
                         state = post.state,
-                        documentId=post.documentId
+                        documentId=post.documentId,
+                        endDate = post.endTime
                     )
 
                     var inserted = false

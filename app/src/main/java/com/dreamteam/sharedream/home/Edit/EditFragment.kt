@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.home.Edit
 
+import CalenderFragmentDialog
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.adapter.ImgClick
@@ -27,10 +29,13 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
+import kotlin.concurrent.fixedRateTimer
 
 
-class EditFragment : Fragment() {
+class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
+
     private var _binding: ActivityEditBinding? = null
     private val binding get() = _binding!!
 
@@ -42,6 +47,8 @@ class EditFragment : Fragment() {
     private var imgs: MutableList<String> = mutableListOf()
 
     private lateinit var writePostImgAdapter: WritePostImageAdapter
+
+    private var selectedDate: String =""
 
     var token: String = ""
 
@@ -74,7 +81,11 @@ class EditFragment : Fragment() {
             uris = mutableListOf()
             pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-
+        binding.calender.setOnClickListener {
+            val calenderFragmentDialog = CalenderFragmentDialog()
+            calenderFragmentDialog.setCalendarDataListener(this)
+            calenderFragmentDialog.show(requireFragmentManager(), "CalenderDialog")
+        }
         // 게시글 작성 완료
         binding.editBtnComplete.setOnClickListener {
             if (binding.imageCount.text == "0/10") {
@@ -116,6 +127,19 @@ class EditFragment : Fragment() {
                 Log.d("xxxx", "Edit Frag No media selected: ")
             }
         }
+    override fun onDataSelected(date: Date) {
+        val calendar = Calendar.getInstance()
+        val currentDate = calendar.time
+        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+        val currentTime = dateFormat.format(currentDate)
+        Log.d("datedate","${date}")
+        val formattedDate = SimpleDateFormat("yyyy년 MM월 dd일").format(date)
+        binding.calender.text =currentTime+"부터, "+formattedDate+"까지"
+        selectedDate = date.toString()
+
+
+
+    }
 
     // 게시글 업로드 기능 - downloadUserInfo()에서 실행
     private fun postUpload(userNickname: String) {
@@ -162,7 +186,10 @@ class EditFragment : Fragment() {
                     token,
                     Timestamp.now(),
                     "교환 가능",
-                    ""
+                    "",
+                    endTime=selectedDate
+
+
                 )
 
                 db.collection("Posts")
@@ -251,5 +278,7 @@ class EditFragment : Fragment() {
 
         return dateFormat
     }
+
+
 }
 
