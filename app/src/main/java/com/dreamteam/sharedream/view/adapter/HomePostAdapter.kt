@@ -303,12 +303,11 @@ class HomePostAdapter(
             val futureDate = dateFormat.parse(endTime)
             val currentDate = Date()
             val diff = futureDate.time - currentDate.time
-            val days = TimeUnit.MILLISECONDS.toDays(diff)
-            val hours = TimeUnit.MILLISECONDS.toHours(diff)
+            val days = TimeUnit.MILLISECONDS.toDays(diff)//시간을 밀리초로 변한한 뒤 일로변환
+            val hours = TimeUnit.MILLISECONDS.toHours(diff)//시간을 밀리초로 변환한 뒤 시간으로변환
             return when {
-                days >= 2 -> "$days 일남음"
-                days >= 1 -> "$days 일남음"
-                hours >= 1 -> "$hours 시간남음"
+                days >= 1 -> "$days 일 남음"
+                hours >= 1 -> "$hours 시간 남음"
                 else -> "마감직전!"
             }
         } catch (e: java.text.ParseException) {
