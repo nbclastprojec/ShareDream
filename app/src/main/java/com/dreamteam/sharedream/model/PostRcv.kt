@@ -18,6 +18,7 @@ data class PostRcv(
     val token: String,
     val timestamp: Timestamp,
     val state : String,
-    val documentId:String
+    val documentId:String,
+    val endDate:String
 
 )

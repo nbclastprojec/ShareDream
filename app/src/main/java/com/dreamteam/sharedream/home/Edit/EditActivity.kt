@@ -60,7 +60,11 @@ class EditActivity : AppCompatActivity() {
             registerForActivityResult.launch(intent)
         }
 
+
+
         binding.editBtnComplete.setOnClickListener {
+
+
 
             // uriList에 값 들어오면 uploadAta실행
             if (uriList.isNotEmpty()) {
@@ -69,6 +73,8 @@ class EditActivity : AppCompatActivity() {
                 Toast.makeText(this, "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
+
+
     }
 
     @SuppressLint("NotifyDataSetChanged")

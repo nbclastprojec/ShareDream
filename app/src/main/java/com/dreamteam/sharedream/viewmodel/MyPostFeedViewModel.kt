@@ -226,9 +226,28 @@ class MyPostFeedViewModel : ViewModel() {
                 postImgList.addAll(uriList)
 
                 if (postImgUris.size == postImgList.size) {
+                    val postRcv = PostRcv(
+                        uid = post.uid,
+                        title = post.title,
+                        price = post.price,
+                        category = post.category,
+                        address = post.address,
+                        deadline = post.deadline,
+                        desc = post.desc,
+                        imgs = postImgList,
+                        nickname = post.nickname,
+                        likeUsers = post.likeUsers,
+                        token = post.token,
+                        timestamp = post.timestamp,
+                        state = post.state,
+                        documentId=post.documentId,
+                        endDate = post.endTime
+                    )
+
 
                     // Post -> PostRcv
                     val postRcv = postToPostRcv(post,postImgList)
+
 
                     var inserted = false
                     for ( index in postRcvList.indices){
