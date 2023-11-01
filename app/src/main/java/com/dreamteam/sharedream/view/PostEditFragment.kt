@@ -1,16 +1,20 @@
 package com.dreamteam.sharedream.view
 
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toFile
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.NicknameCheckDailogFragment
@@ -24,13 +28,8 @@ import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.android.material.chip.Chip
-import com.google.firebase.Timestamp
-import java.io.File
 import java.net.URI
-import java.net.URL
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.text.DecimalFormat
 
 class PostEditFragment : Fragment() {
 
@@ -57,6 +56,9 @@ class PostEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRcv()
+
+        // Text Watcher
+        convertCurrencyWon(binding.editEtvPrice)
 
         // 이미지 선택
         binding.editBtnSelectImg.setOnClickListener {
@@ -113,9 +115,11 @@ class PostEditFragment : Fragment() {
 
 
 
-        // 업로드 하기
+        // 업로드 하기 todo 게시글 수정 시 기존 이미지 삭제하기
         binding.btnComplete.setOnClickListener {
             Log.d("xxxx", " postEditFrag 완료 버튼 클릭")
+            // 게시글 수정을 감지하여 현재 포스트 정보를 변경해주는 Listener 추가 - 디테일 페이지를 닫을 시 stop
+//            myPostFeedViewModel.startListening(currentPost!!.timestamp)
             val post = Post(
                 Constants.currentUserUid!!,
                 binding.editTvTitle.text.toString(),
@@ -133,7 +137,13 @@ class PostEditFragment : Fragment() {
                 "교환 가능",
                 "",
                 ""
+
+                currentPost!!.documentId
+
             )
+
+            // 디테일 페이지로 수정 된 게시글 정보 이동하기
+            myPostFeedViewModel.setRevisedPost(myPostFeedViewModel.postToPostRcv(post,uris))
             Log.d("xxxx", "onViewCreated: ${uris}")
 
             val testList = mutableListOf<Any>()
@@ -146,6 +156,7 @@ class PostEditFragment : Fragment() {
             }
 
             myPostFeedViewModel.uploadEditPost(testList,post)
+
             parentFragmentManager.popBackStack()
         }
 
@@ -202,6 +213,37 @@ class PostEditFragment : Fragment() {
 
 
     }
+
+    private fun convertCurrencyWon(editText: EditText) = with(binding) {
+        var result = ""
+        val decimalFormat = DecimalFormat("#,###")
+
+        editText.addTextChangedListener(object : TextWatcher {
+            @RequiresApi(Build.VERSION_CODES.M)
+            override fun beforeTextChanged(charSequence: CharSequence?, i1: Int, i2: Int, i3: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val inputText = s.toString()
+                if (inputText != result) {
+                    val numericValue = inputText.replace(",", "").toLongOrNull()
+                    if (numericValue != null) {
+                        result = decimalFormat.format(numericValue)
+                        editText.removeTextChangedListener(this)
+                        editText.setText(result)
+                        editText.setSelection(result.length)
+                        editText.addTextChangedListener(this)
+                    }
+                }
+            }
+
+            // 이 밑으론 해당 글과는 딱히 관련 없는 코드로 무시해도 된다.
+            @RequiresApi(Build.VERSION_CODES.M)
+            override fun afterTextChanged(editable: Editable?) {
+            }
+        })
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
