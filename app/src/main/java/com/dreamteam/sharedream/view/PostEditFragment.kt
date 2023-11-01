@@ -138,7 +138,7 @@ class PostEditFragment : Fragment() {
                 "",
                 ""
 
-                currentPost!!.documentId
+
 
             )
 
