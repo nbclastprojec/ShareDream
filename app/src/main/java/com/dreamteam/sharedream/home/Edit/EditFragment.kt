@@ -16,7 +16,9 @@ import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
+import com.dreamteam.sharedream.model.LocationData
 import com.dreamteam.sharedream.model.Post
+import com.dreamteam.sharedream.view.MapViewFragment
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
@@ -27,6 +29,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.naver.maps.geometry.LatLng
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -45,6 +48,10 @@ class EditFragment : Fragment() {
 
     private lateinit var writePostImgAdapter: WritePostImageAdapter
 
+    private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
+
+    private var locationInfo: LocationData? = null
+
     var token: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +69,15 @@ class EditFragment : Fragment() {
     ): View? {
         _binding = ActivityEditBinding.inflate(inflater, container, false)
 
+        // 거래장소 변경 내용 반영
+        myPostFeedViewModel.locationResult.observe(viewLifecycleOwner) {
+            Log.d("xxxx", " edit Fragment 지도 변경 observe ")
+            locationInfo = it
+            Log.d("xxxx", " 글 작성 지도 위치 설정 $locationInfo")
+            it?.let {
+                binding.editEtvAddress.setText(it.address)
+            }?:binding.editEtvAddress.setText("")
+        }
 
         setupRcv()
 
@@ -70,6 +86,8 @@ class EditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         // 이미지 선택
         binding.editBtnSelectImg.setOnClickListener {
@@ -88,10 +106,19 @@ class EditFragment : Fragment() {
             ) {
                 Toast.makeText(requireContext(), " 모든 입력 가능란은 필수 입력사항 입니다.", Toast.LENGTH_SHORT)
                     .show()
+            } else if (locationInfo == null) {
+                Toast.makeText(requireContext(), " 지도를 통해 거래 장소를 선택 해주세요 ", Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 imageUpload()
             }
 
+        }
+
+        // todo 임시로 베너 클릭 시 Map이 나오도록 설정.
+        binding.topMassage.setOnClickListener {
+            parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment())
+                .addToBackStack(null).commit()
         }
 
         // 뒤로가기 버튼
@@ -146,7 +173,7 @@ class EditFragment : Fragment() {
                 val post = Post(
                     Constants.currentUserUid!!,
                     binding.editTvTitle.text.toString(),
-                    binding.editEtvPrice.text.toString(),
+                    binding.editEtvPrice.text.toString().toInt(),
                     category,
                     binding.editEtvAddress.text.toString(),
                     //todo ↓ deadline 추가 - 임시로 city 값 넣어둠
@@ -158,7 +185,12 @@ class EditFragment : Fragment() {
                     token,
                     Timestamp.now(),
                     "교환 가능",
-                    ""
+                    "",
+                    listOf(
+                        locationInfo!!.latLng.latitude,
+                        locationInfo!!.latLng.longitude
+                    ), // todo LatLng
+                    locationInfo!!.cityInfo, // todo locationKeyword
                 )
 
                 db.collection("Posts")
@@ -204,8 +236,6 @@ class EditFragment : Fragment() {
             }
             downloadUserInfo()
         }
-        Log.d("xxxx", " Edit Frag Post Info Img : $imgs ")
-        Log.d("xxxx", "Edit Frag Post Info uris : $uris")
     }
 
     // 유저 정보에서 닉네임을 가져와 게시글에 적용 - 게시글 받아올 때마다 유저데이터를 호출하는 것보다 업로드할 때 한번만 호출하는 것이 좋아보임.

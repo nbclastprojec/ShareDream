@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.viewmodel
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.model.LocationData
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.model.UserData
@@ -76,6 +78,9 @@ class MyPostFeedViewModel : ViewModel() {
     private val _editPostResult = MutableLiveData<PostRcv>()
     val editPostResult : MutableLiveData<PostRcv> get() = _editPostResult
 
+    // MapView 데이터 이동하기
+    private val _locationResult = MutableLiveData<LocationData>()
+    val locationResult : MutableLiveData<LocationData> get() = _locationResult
 
     // 포스트 수정된 DB 업로드 , 추가한 이미지 Storage에 업로드
     fun uploadEditPost(uris : MutableList<Any>, post : Post) {
@@ -156,7 +161,23 @@ class MyPostFeedViewModel : ViewModel() {
 
     // 게시물 디테일 정보 받아오기
     fun setCurrentPost(postRcv : PostRcv){
-        _currentPost.value = postRcv
+        _currentPost.postValue(postRcv)
+    }
+
+    @SuppressLint("NullSafeMutableLiveData")
+    fun cleanCurrentPost() {
+        _currentPost.postValue(null)
+    }
+
+    // 기존 데이터 제거하기
+    @SuppressLint("NullSafeMutableLiveData")
+    fun cleanLocationResult(){
+        _locationResult.postValue(null)
+    }
+
+    // 위치 정보 넘기기, 받기
+    fun setLocationInfo(locationData: LocationData){
+        _locationResult.postValue(locationData)
     }
 
     // Home Frag 전체 게시글 DB 받아오기
@@ -203,7 +224,9 @@ class MyPostFeedViewModel : ViewModel() {
             post.token,
             post.timestamp,
             post.state,
-            post.documentId
+            post.documentId,
+            post.locationLatLng,
+            post.locationKeyword,
         )
     }
 

@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -52,8 +53,6 @@ class PostDetailFragment : Fragment() {
         binding.detailpageTime.text = "${time(postRcv.timestamp)}"
         binding.detailTvItemState.text = postRcv.state
         stateIconChange()
-
-
     }
 
     override fun onCreateView(
@@ -67,11 +66,9 @@ class PostDetailFragment : Fragment() {
         myPostFeedViewModel.currentPost.observe(viewLifecycleOwner) {
             detailPageInfoChange(it)
 
-
             if (it.uid == Constants.currentUserUid) {
                 binding.detailBtnStateChange.visibility = View.VISIBLE
             }
-
 
             // 게시물 작성자 프로필 이미지 받아오기
             myPostFeedViewModel.downloadCurrentProfileImg(it.uid)
@@ -147,6 +144,19 @@ class PostDetailFragment : Fragment() {
 
         }
 
+        binding.detailAddress.setOnClickListener {
+            if (currentPostInfo[0].uid != Constants.currentUserUid){
+            }
+            // 위치 권한 확인 후 없다면 요청, 있다면 MapView
+            if (!Util.permissionCheck(this.requireContext())) {
+                ActivityCompat.requestPermissions(requireActivity(), Util.PERMISSIONS, 5000)
+            } else {
+                parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment())
+                    .addToBackStack(null).commit()
+            }
+        }
+
+
         // 포스트 상태 변경 버튼 클릭 이벤트
         binding.detailBtnStateChange.setOnClickListener {
             setStateDialog()
@@ -193,7 +203,7 @@ class PostDetailFragment : Fragment() {
         )
     }
 
-    private fun setStateDialog (){
+    private fun setStateDialog() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
         val postState = binding.detailTvItemState
 
@@ -201,7 +211,10 @@ class PostDetailFragment : Fragment() {
             .setPositiveButton("저장") { dialog, which ->
 
                 // DB에 해당 게시글 State 값 변경하기
-                myPostFeedViewModel.uploadChangedPostState(currentPostInfo[0].timestamp,"${postState.text}")
+                myPostFeedViewModel.uploadChangedPostState(
+                    currentPostInfo[0].timestamp,
+                    "${postState.text}"
+                )
 
                 // 홈 게시글 목록에 게시글 변경된 상태 변경하기d
                 val revisedPost = currentPostInfo[0].copy(state = "${postState.text}")
@@ -218,7 +231,7 @@ class PostDetailFragment : Fragment() {
                     "교환 가능" -> 0
                     "교환 보류" -> 1
                     "예약 중" -> 2
-                    "교환 완료" ->3
+                    "교환 완료" -> 3
                     else -> 0
                 }
             ) { dialog, which ->

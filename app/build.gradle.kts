@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -36,6 +37,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -45,6 +47,10 @@ android {
 
 dependencies {
 
+    // 네이버 Maps SDK
+    implementation("com.naver.maps:map-sdk:3.17.0")
+
+    // Firebase SDK
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
@@ -66,6 +72,8 @@ dependencies {
     // Coil
     implementation("io.coil-kt:coil:2.4.0")
 
+    // FusedLocationProvider
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     implementation ("androidx.fragment:fragment-ktx:1.6.1")
 

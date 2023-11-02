@@ -224,7 +224,7 @@ class HomePostAdapter(
             postCategory.text = "카테고리 : ${positionItem.category}"
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
-            postPrice.text = positionItem.price+"원"
+            postPrice.text = positionItem.price.toString()+"원"
 
 
         }
@@ -249,6 +249,7 @@ class HomePostAdapter(
 
         fun bind(imagePath: Uri, timestamp: Timestamp) {
             postImg.load(imagePath)
+
             when (currentList[position].state){
                 "교환 가능" -> {
                     postStateBgClosed.visibility = View.INVISIBLE

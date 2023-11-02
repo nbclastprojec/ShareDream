@@ -50,7 +50,7 @@ class SeachAdapter(private val context: Context) :
         searchHolder.title.text = searchItem.title
         searchHolder.subtitle.text = searchItem.desc
         searchHolder.category.text = searchItem.category
-        searchHolder.value.text = searchItem.price
+        searchHolder.value.text = searchItem.price.toString()
         Log.d("nyh", "onBindViewHolder: $searchItem")
     }
 

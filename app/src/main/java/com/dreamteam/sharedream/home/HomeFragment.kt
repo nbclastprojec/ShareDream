@@ -1,6 +1,5 @@
 package com.dreamteam.sharedream.home
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +13,6 @@ import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.NicknameCheckDailogFragment
@@ -92,6 +90,8 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
         binding.floatingActionButton.setOnClickListener {
             Log.d("MainActivity", "nyh floatingbtn clicked")
+            myPostFeedViewModel.cleanCurrentPost()
+            myPostFeedViewModel.cleanLocationResult()
             parentFragmentManager.beginTransaction().replace(R.id.frag_edit, EditFragment())
                 .addToBackStack(null).commit()
         }
@@ -116,11 +116,11 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
 
         // 게시물 수정 시 Home Fragment 에 해당 게시글 수정 반영
         myPostFeedViewModel.editPostResult.observe(viewLifecycleOwner){
-            val testList = homePostAdapter.currentList.toMutableList()
-            for (index in testList.indices){
-                if (testList[index].timestamp == it.timestamp){
-                    testList[index] = it
-                    Log.d("xxxx", " Rcv Item Change = $testList")
+            val currentPostList = homePostAdapter.currentList.toMutableList()
+            for (index in currentPostList.indices){
+                if (currentPostList[index].timestamp == it.timestamp){
+                    currentPostList[index] = it
+                    Log.d("xxxx", " Rcv Item Change = $currentPostList")
                     updateRcv(index,it)
                 }
             }
