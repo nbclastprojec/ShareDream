@@ -223,7 +223,7 @@ class HomePostAdapter(
             postCategory.text = "카테고리 : ${positionItem.category}"
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
-            postPrice.text = positionItem.price
+            postPrice.text = positionItem.price.toString()
 
         }
 

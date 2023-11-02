@@ -44,6 +44,8 @@ class MessageActivity : AppCompatActivity() {
     private var recyclerView : RecyclerView? = null
     private val storage = Firebase.storage
     private lateinit var binding : ActivityChatBinding
+    private var document : String? = null
+
 
 
 
@@ -57,6 +59,8 @@ class MessageActivity : AppCompatActivity() {
 
 
 
+        document = receivedDocumentId
+
         val UserData = store.collection("Posts").document(receivedDocumentId)
         UserData.get()
             .addOnSuccessListener { document ->
@@ -64,15 +68,13 @@ class MessageActivity : AppCompatActivity() {
 
                     val image = document.get("imgs") as List<String>
                     val nickname = document.getString("nickname")//닉네임
-                    val price = document.getString("price")//가격
                     val title = document.getString("title")//제목
                     val postUseruid = document.getString("uid")//uid
                     bindingImage(image[0])
 
                     binding.chattittle.text=title
-                    binding.chat.text=nickname
-                    //binding.category.text=category
-                    ///binding.price.text=price+"원"
+                    binding.chat.text= nickname
+
 
                     destinationUid = postUseruid
 
@@ -106,7 +108,7 @@ class MessageActivity : AppCompatActivity() {
             val chatModel = ChatModel()
             chatModel.users.put(uid.toString(),true)
             chatModel.users.put(destinationUid!!,true)
-
+            chatModel.document = receivedDocumentId
             val comment = ChatModel.Comment(uid, editText.text.toString(), realTime)
             if(chatRoomuid == null) {
                 imageView.isEnabled = false
@@ -178,7 +180,6 @@ class MessageActivity : AppCompatActivity() {
                     for(data in snapshot.children){
                         val item = data.getValue<ChatModel.Comment>()
                         comments.add(item!!)
-                        println(comments)
                     }
                     notifyDataSetChanged()
                     //메세지를 보낼 시 화면을 맨 밑으로 내림
@@ -239,24 +240,24 @@ class MessageActivity : AppCompatActivity() {
     }
     fun bindingImage(image:String) {
 
-            val chatpostimage=binding.chatpostimage
-            Log.d("asasas","$chatpostimage")
-            if (image.isNotEmpty()) {
+        val chatpostimage=binding.chatpostimage
+        Log.d("asasas","$chatpostimage")
+        if (image.isNotEmpty()) {
 
-                val imagePath = "$image"
-                storage.reference.child("post").child("${image}").downloadUrl
-                    .addOnSuccessListener { uri ->
-                        Glide.with(this)
-                            .load(uri)
-                            .into(chatpostimage)
-                    }
-                    .addOnFailureListener { exception ->
-                        exception.printStackTrace()
-                        Toast.makeText(this, "이미지 로드 실패", Toast.LENGTH_SHORT).show()
-                    }
-            } else {
+            val imagePath = "$image"
+            storage.reference.child("post").child("${image}").downloadUrl
+                .addOnSuccessListener { uri ->
+                    Glide.with(this)
+                        .load(uri)
+                        .into(chatpostimage)
+                }
+                .addOnFailureListener { exception ->
+                    exception.printStackTrace()
+                    Toast.makeText(this, "이미지 로드 실패", Toast.LENGTH_SHORT).show()
+                }
+        } else {
 
-            }
+        }
 
 
 

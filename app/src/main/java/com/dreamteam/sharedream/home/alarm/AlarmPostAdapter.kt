@@ -61,7 +61,7 @@ class AlarmPostAdapter(private val context: Context) :
         holder.apply {
             alarmTitle.text = alamItem.title
             alarmCategory.text = alamItem.category
-            alarmValue.text = alamItem.price
+            alarmValue.text = alamItem.price.toString()
             binde(alamItem.imgs.first())
             Log.d("nyh", "onBindViewHolder: $alarmItem")
         }

@@ -2,6 +2,7 @@ package com.dreamteam.sharedream.chat
 
 import android.content.Context
 import android.content.Intent
+import android.net.ParseException
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,6 +27,8 @@ import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.TreeMap
 
 class ChatFragment : Fragment() {
@@ -101,6 +104,7 @@ class ChatFragment : Fragment() {
         inner class ViewHolder(private val itemBinding: ChattingroomItemBinding) :
             RecyclerView.ViewHolder(itemBinding.root) {
             val imageView: ImageView = itemBinding.chattingroomProfile
+            val time : TextView = itemBinding.chattingDate
             val tittle: TextView = itemBinding.chattingName
             val lastMessage: TextView = itemBinding.chattingMessage
         }
@@ -111,18 +115,15 @@ class ChatFragment : Fragment() {
                 if (!user.equals(uid)) {
                     destinationUid = user
                     destinationUsers.add(destinationUid)
-                    
-                    firestore.collection("Posts")
-                        .whereEqualTo("uid", destinationUid)
-                        .get()
+
+                    firestore.collection("UserData").document(destinationUid)
+                    .get()
                         .addOnSuccessListener { documents ->
-                            Log.d("susu", "onBindViewHolder: ${destinationUid}")
-                            for (document in documents) {
-                                val name = document.getString("nickname")
-                                Log.d("susu", "onBindViewHolder: ${name}")
+                                val name = documents.getString("nickname")
 
                                 holder.tittle.text = name
-                            }
+                            Log.d("susu", "name: ${name}")
+
                         }
                         .addOnFailureListener { exception ->
                             Log.d("susu", "Error getting documents: $exception")
@@ -130,13 +131,22 @@ class ChatFragment : Fragment() {
 
                 }
 
-                }
+            }
 
             //메세지 내림차순 정렬 후 마지막 메세지의 키값을 가져옴
             val commentMap = TreeMap<String, ChatModel.Comment>(reverseOrder())
             commentMap.putAll(chatModel[position].comments)
             val lastMessageKey = commentMap.keys.toTypedArray()[0]
+            val inputFormat = SimpleDateFormat("MM월 dd일 HH:mm")
+            val outputFormat = SimpleDateFormat("MM월 dd일 HH:mm")
+            val time = chatModel[position].comments[lastMessageKey]?.time
+            val parsedDate = time?.let { inputFormat.parse(it) }
+            val formattedDate = parsedDate?.let { outputFormat.format(it) }
+
             holder.lastMessage.text = chatModel[position].comments[lastMessageKey]?.message
+            holder.time.text = formattedDate
+
+
 
             //채팅창 선책 시 이동
             holder.itemView.setOnClickListener {
@@ -145,6 +155,7 @@ class ChatFragment : Fragment() {
                 context?.startActivity(intent)
             }
         }
+
 
         override fun getItemCount(): Int {
             return chatModel.size

@@ -146,7 +146,7 @@ class EditFragment : Fragment() {
                 val post = Post(
                     Constants.currentUserUid!!,
                     binding.editTvTitle.text.toString(),
-                    binding.editEtvPrice.text.toString(),
+                    binding.editEtvPrice.text.toString().toLong(),
                     category,
                     binding.editEtvAddress.text.toString(),
                     //todo ↓ deadline 추가 - 임시로 city 값 넣어둠
