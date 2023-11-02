@@ -4,19 +4,11 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -31,7 +23,6 @@ import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,25 +13,17 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.bumptech.glide.Glide
-import com.dreamteam.sharedream.FCMService
 import com.dreamteam.sharedream.adapter.DifferCallback
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.databinding.WriteItemBinding
-import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.ktx.storage
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 
@@ -76,9 +67,8 @@ class HomePostAdapter(
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price.toString()
-            postPrice.text = positionItem.price
             postEndDate.text = EndTime(positionItem.endDate)
-            postPrice.text = positionItem.price+"원"
+            postPrice.text = "${positionItem.price}원"
 
 
         }

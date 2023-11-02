@@ -24,5 +24,5 @@ data class Post(
 
 ) : Serializable
 {
-    constructor() : this("","", "", "", "", "","", listOf(),"", listOf(),"",Timestamp.now(),"","","")
+    constructor() : this("","", 0, "", "", "","", listOf(),"", listOf(),"",Timestamp.now(),"","","")
 }

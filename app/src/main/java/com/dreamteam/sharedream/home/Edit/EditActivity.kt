@@ -28,7 +28,6 @@ class EditActivity : AppCompatActivity() {
     val db = Firebase.firestore
     private var uriList = ArrayList<Uri>()
     private val maxNumber = 10
-    lateinit var adapter: EditImageAdapter
     private lateinit var auth: FirebaseAuth
     private var postData = PostData()
     private var imageUploadCount = 0
@@ -40,8 +39,7 @@ class EditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        adapter = EditImageAdapter(this, uriList)
-        binding.recyclerView.adapter = adapter
+
         binding.recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
@@ -103,7 +101,6 @@ class EditActivity : AppCompatActivity() {
                             uriList.add(uri)
                         }
                     }
-                    adapter.notifyDataSetChanged()
                     printCount()
                 }
             }
