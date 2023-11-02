@@ -12,8 +12,16 @@ import com.dreamteam.sharedream.model.Post
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
-class SeachAdapter(private val context: Context) :
+class SeachAdapter(
+    private val context: Context,
+    private val itemClickListener: OnItemClickListener
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onItemClick(post: Post)
+    }
+
 
     private var searchDataItem: List<Post> = ArrayList()
 
@@ -28,11 +36,17 @@ class SeachAdapter(private val context: Context) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
+        val post = searchDataItem[position]
+        holder.itemView.setOnClickListener {
+            itemClickListener.onItemClick(post)
+        }
+
+
         val searchItem = searchDataItem[position]
         val searchHolder = holder as SeachAdapter.SearchHolder
         val storage = Firebase.storage
         val fileName = searchItem.imgs.first()
-        val storageRef = storage.getReference("post").child(fileName)
+        val storageRef = storage.getReference("post").child(fileName.toString())
         val downloadTask = storageRef.downloadUrl
 
         downloadTask.addOnSuccessListener { uri ->
@@ -50,7 +64,7 @@ class SeachAdapter(private val context: Context) :
         searchHolder.title.text = searchItem.title
         searchHolder.subtitle.text = searchItem.desc
         searchHolder.category.text = searchItem.category
-        searchHolder.value.text = searchItem.price
+        searchHolder.value.text = searchItem.price.toString()
         Log.d("nyh", "onBindViewHolder: $searchItem")
     }
 
@@ -74,4 +88,5 @@ class SeachAdapter(private val context: Context) :
             Log.d("nyh", "setDataSearchAdapter: Data is empty.")
         }
     }
+
 }

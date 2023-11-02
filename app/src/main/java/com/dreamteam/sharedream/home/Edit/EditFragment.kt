@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.dreamteam.sharedream.R
@@ -20,7 +19,6 @@ import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
-import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -154,6 +152,12 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
             R.id.book_chip1 -> category = "독서"
             R.id.beauty_chip1 -> category = "뷰티"
             R.id.toy_chip1 -> category = "문구"
+            R.id.furniture1 -> category = "가구"
+            R.id.life1 -> category = "생활"
+            R.id.food1 -> category = "식품"
+            R.id.kids1 -> category = "유아동/출산"
+            R.id.pet1 -> category = "반려동물용품"
+            R.id.etc1 -> category = "기타"
             else -> {
                 Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
                 return
@@ -170,7 +174,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
                 val post = Post(
                     Constants.currentUserUid!!,
                     binding.editTvTitle.text.toString(),
-                    binding.editEtvPrice.text.toString(),
+                    binding.editEtvPrice.text.toString().toLong(),
                     category,
                     binding.editEtvAddress.text.toString(),
                     //todo ↓ deadline 추가 - 임시로 city 값 넣어둠

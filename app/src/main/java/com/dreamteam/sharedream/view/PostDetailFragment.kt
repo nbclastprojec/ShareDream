@@ -1,21 +1,14 @@
 package com.dreamteam.sharedream.view
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -25,14 +18,15 @@ import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
+import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
+@Suppress("DEPRECATION")
 class PostDetailFragment : Fragment() {
     private var _binding: FragmentPostDetailBinding? = null
     private val binding get() = _binding!!
@@ -117,6 +111,7 @@ class PostDetailFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -179,6 +174,40 @@ class PostDetailFragment : Fragment() {
         binding.detailChatButton.setOnClickListener {
             getUserInformation()
         }
+
+        val post = arguments?.getSerializable("post") as Post?
+
+        if (post != null) {
+            binding.detailId.text = post.nickname
+            binding.detailId.text = post.nickname
+            binding.detailAddress.text = post.address
+            binding.detailpageTitle.text = post.title
+            binding.detailpageCategory.text = post.category
+            binding.detailpageExplain.text = post.desc
+            binding.detailMoney.text = "${post.price} 원"
+            binding.detailTvLikeCount.text = "${post.likeUsers.size}"
+            binding.detailpageTime.text = time(post.timestamp)
+
+            myPostFeedViewModel.downloadCurrentProfileImg(post.uid)
+
+            if (post.uid == Constants.currentUserUid) {
+                binding.detailBtnEditPost.visibility = View.VISIBLE
+            } else {
+                binding.detailBtnEditPost.visibility = View.GONE
+            }
+
+            // 관심 목록에 있는 아이템의 경우 아이콘 변경 및 관심 목록 제거 버튼 표시
+            if (post.likeUsers.contains(Constants.currentUserUid)) {
+                binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
+                binding.detailBtnSubFavorite.visibility = View.VISIBLE
+            } else {
+                binding.detailLike.setImageResource(R.drawable.like)
+                binding.detailBtnSubFavorite.visibility = View.GONE
+            }
+
+        }
+
+
     }
 
     private fun stateIconChange() {

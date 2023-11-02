@@ -230,7 +230,7 @@ class MyPostFeedViewModel : ViewModel() {
                     var postRcv = PostRcv(
                         uid = post.uid,
                         title = post.title,
-                        price = post.price,
+                        price = post.price.toString().replace(",", "").toLong(),
                         category = post.category,
                         address = post.address,
                         deadline = post.deadline,
@@ -244,10 +244,6 @@ class MyPostFeedViewModel : ViewModel() {
                         documentId=post.documentId,
                         endDate = post.endTime
                     )
-
-
-                    // Post -> PostRcv
-
 
                     var inserted = false
                     for ( index in postRcvList.indices){
@@ -268,6 +264,7 @@ class MyPostFeedViewModel : ViewModel() {
                 }
             }
     }
+
 
     // 내가 쓴 글 목록 받아오기 -  whereEqualTo, orderBy
     fun postFeedDownload() {
