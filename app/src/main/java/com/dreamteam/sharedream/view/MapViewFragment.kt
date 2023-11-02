@@ -117,7 +117,9 @@ class MapViewFragment : Fragment(), OnMapReadyCallback {
                     if (binding.mapTvAddress.text.length > 2) {
                         myPostFeedViewModel.setLocationInfo(locationInfo!!)
                         // 디테일 페이지로 돌아온 뒤 지도 클릭 시 변경사항 반영
+                        if (_currentPostInfo != null){
                         myPostFeedViewModel.setCurrentPost(currentPostInfo.copy(locationLatLng = listOf(locationInfo.latLng.longitude,locationInfo.latLng.longitude)))
+                        }
                         Log.d("xxxx", " setLocationInfo ! ${locationInfo} ")
                         parentFragmentManager.popBackStack()
                     }
@@ -182,7 +184,7 @@ class MapViewFragment : Fragment(), OnMapReadyCallback {
             }
 
             // 지도 위치 클릭 이벤트
-            currentPostInfo?.let {
+            _currentPostInfo?.let {
                 if (it.uid != Constants.currentUserUid) {
                     // todo 게시글 작성자가 아닌 사용자의 지도 클릭 이벤트
                 } else {
