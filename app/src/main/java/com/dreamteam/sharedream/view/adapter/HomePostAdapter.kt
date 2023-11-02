@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -27,9 +28,12 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.ktx.storage
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 
 @Suppress("DEPRECATION")
@@ -72,6 +76,10 @@ class HomePostAdapter(
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price.toString()
+            postPrice.text = positionItem.price
+            postEndDate.text = EndTime(positionItem.endDate)
+            postPrice.text = positionItem.price+"원"
+
 
         }
 
@@ -87,10 +95,27 @@ class HomePostAdapter(
         val postImg: ImageView = binding.writeImage
 //        val postheart: ImageView = binding.btnHeart
         val postDate: TextView = binding.writePageDate
+        val postEndDate:TextView=binding.endDate
+
+        val postStateBgClosed: ImageView = binding.itemImgStateClosed
+        val postStateBgPutOff: ImageView = binding.itemImgStatePutOff
+        val postStateBgReservation : ImageView = binding.itemImgStateReservation
 
 
         fun bind(imagePath: Uri, timestamp: Timestamp) {
             postImg.load(imagePath)
+            when (currentList[position].state){
+                "교환 가능" -> {
+                    postStateBgClosed.visibility = View.INVISIBLE
+                    postStateBgPutOff.visibility = View.INVISIBLE
+                    postStateBgReservation.visibility = View.INVISIBLE
+                }
+                "교환 보류" -> postStateBgPutOff.visibility = View.VISIBLE
+                "예약 중" -> postStateBgReservation.visibility = View.VISIBLE
+                "교환 완료" -> postStateBgClosed.visibility = View.VISIBLE
+                else -> return
+            }
+
             val date: Date = timestamp.toDate()
             // 1. 날짜 형식으로 만들기
             // timestamp를 Date 객체로 변환
@@ -198,7 +223,26 @@ class HomePostAdapter(
         submitList(priceFiltered)
         notifyDataSetChanged()
     }
-}
+    private fun EndTime(endTime: String): String {
+        val dateFormat = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.US)
+        try {
+            val futureDate = dateFormat.parse(endTime)
+            val currentDate = Date()
+            val diff = futureDate.time - currentDate.time
+            val days = TimeUnit.MILLISECONDS.toDays(diff)//시간을 밀리초로 변한한 뒤 일로변환
+            val hours = TimeUnit.MILLISECONDS.toHours(diff)//시간을 밀리초로 변환한 뒤 시간으로변환
+            return when {
+                days >= 1 -> "$days 일 남음"
+                hours >= 1 -> "$hours 시간 남음"
+                else -> "마감직전!"
+            }
+        } catch (e: java.text.ParseException) {
+            return "날짜 형식 오류"
+        }
+    }
+
+
+
 //    private fun likeClick(position: Int) {
 //        val tsDoc = db.collection("posts").document(postUidList[position])
 //        db.runTransaction {
@@ -213,3 +257,5 @@ class HomePostAdapter(
 //            it.set(tsDoc, post)
 //        }
 //    }
+
+}
