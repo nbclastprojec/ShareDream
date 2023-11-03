@@ -28,7 +28,6 @@ class EditActivity : AppCompatActivity() {
     val db = Firebase.firestore
     private var uriList = ArrayList<Uri>()
     private val maxNumber = 10
-    lateinit var adapter: EditImageAdapter
     private lateinit var auth: FirebaseAuth
     private var postData = PostData()
     private var imageUploadCount = 0
@@ -40,8 +39,7 @@ class EditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        adapter = EditImageAdapter(this, uriList)
-        binding.recyclerView.adapter = adapter
+
         binding.recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
@@ -60,7 +58,11 @@ class EditActivity : AppCompatActivity() {
             registerForActivityResult.launch(intent)
         }
 
+
+
         binding.editBtnComplete.setOnClickListener {
+
+
 
             // uriList에 값 들어오면 uploadAta실행
             if (uriList.isNotEmpty()) {
@@ -69,6 +71,8 @@ class EditActivity : AppCompatActivity() {
                 Toast.makeText(this, "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
+
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -97,7 +101,6 @@ class EditActivity : AppCompatActivity() {
                             uriList.add(uri)
                         }
                     }
-                    adapter.notifyDataSetChanged()
                     printCount()
                 }
             }

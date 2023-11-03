@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dreamteam.sharedream.NicknameCheckDailogFragment
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
@@ -85,14 +86,6 @@ class PostEditFragment : Fragment() {
             binding.editEtvDesc.setText("${post.desc}")
             category = "${post.category}"
 
-            if (post.locationLatLng.isNotEmpty() || post.locationKeyword.isNotEmpty()){
-                locationLatLng = LocationData(
-                    LatLng(post.locationLatLng[0],post.locationLatLng[1]),
-                    post.address,
-                    post.locationKeyword)
-            }
-
-
             writePostImgAdapter.submitList(uris)
             writePostImgAdapter.notifyDataSetChanged()
 
@@ -105,6 +98,12 @@ class PostEditFragment : Fragment() {
                 "독서" -> defaultChip = R.id.book_chip1
                 "뷰티" -> defaultChip = R.id.beauty_chip1
                 "문구" -> defaultChip = R.id.toy_chip1
+                "가구" -> defaultChip = R.id.furniture1
+                "생활" -> defaultChip = R.id.life1
+                "식품" -> defaultChip = R.id.food1
+                "유아동/출산" -> defaultChip = R.id.kids1
+                "반려동물용품" -> defaultChip = R.id.pet1
+                "기타" -> defaultChip = R.id.etc1
             }
             defaultChip?.let {
                 val selectedChip: Chip = binding.chipgroup.findViewById(defaultChip) as Chip
@@ -112,7 +111,7 @@ class PostEditFragment : Fragment() {
             }
         }
 
-        var editCategory: String = ""
+        var editCategory : String = ""
         when (binding.chipgroup.checkedChipId) {
             R.id.cloths_chip1 -> editCategory = "의류"
             R.id.machine_chip1 -> editCategory = "가전제품"
@@ -121,6 +120,12 @@ class PostEditFragment : Fragment() {
             R.id.book_chip1 -> editCategory = "독서"
             R.id.beauty_chip1 -> editCategory = "뷰티"
             R.id.toy_chip1 -> editCategory = "문구"
+            R.id.furniture1 -> editCategory = "가구"
+            R.id.life1 -> editCategory = "생활"
+            R.id.food1 -> editCategory = "식품"
+            R.id.kids1 -> editCategory = "유아동/출산"
+            R.id.pet1 -> editCategory = "반려동물용품"
+            R.id.etc1 -> editCategory = "기타"
             else -> {
                 Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
 
@@ -144,7 +149,7 @@ class PostEditFragment : Fragment() {
             val post = Post(
                 Constants.currentUserUid!!,
                 binding.editTvTitle.text.toString(),
-                binding.editEtvPrice.text.toString().replace(",","").toInt(),
+                binding.editEtvPrice.text.toString().replace(",","").toLong(),
                 editCategory,
                 binding.editEtvAddress.text.toString(),
                 //todo ↓ deadline 추가 - 임시로 city 값 넣어둠
@@ -159,6 +164,7 @@ class PostEditFragment : Fragment() {
                 currentPost!!.documentId,
                 listOf(locationLatLng!!.latLng.latitude,locationLatLng!!.latLng.longitude),
                 currentPost!!.locationKeyword,
+                ""
             )
 
             // 디테일 페이지로 수정 된 게시글 정보 이동하기
@@ -200,7 +206,6 @@ class PostEditFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
     }
-
 
     // 이미지 선택 기능
     private val pickMultipleMedia =
@@ -265,6 +270,8 @@ class PostEditFragment : Fragment() {
                 }
             }
 
+            // 이 밑으론 해당 글과는 딱히 관련 없는 코드로 무시해도 된다.
+            @RequiresApi(Build.VERSION_CODES.M)
             override fun afterTextChanged(editable: Editable?) {
             }
         })

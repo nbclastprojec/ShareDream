@@ -213,7 +213,7 @@ class MyPostFeedViewModel : ViewModel() {
         return PostRcv(
             post.uid,
             post.title,
-            post.price,
+            post.price.toString().replace(",", "").toLong(),
             post.category,
             post.address,
             post.deadline,
@@ -227,6 +227,7 @@ class MyPostFeedViewModel : ViewModel() {
             post.documentId,
             post.locationLatLng,
             post.locationKeyword,
+            post.endTime
         )
     }
 

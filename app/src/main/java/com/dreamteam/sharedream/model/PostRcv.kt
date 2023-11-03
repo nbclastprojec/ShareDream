@@ -7,7 +7,7 @@ data class PostRcv(
 
     val uid: String,
     val title: String,
-    val price: Int,
+    val price: Long,
     val category: String,
     val address: String,
     val deadline: String,
@@ -20,6 +20,7 @@ data class PostRcv(
     val state : String,
     val documentId:String,
     val locationLatLng : List<Double>,
-    val locationKeyword : List<String>
+    val locationKeyword : List<String>,
+    val endDate:String,
 
 )

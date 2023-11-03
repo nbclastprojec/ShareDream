@@ -13,14 +13,14 @@
         android:layout_marginStart="131dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="131dp"
+        android:fontFamily="@font/suitesemibold"
         android:text="아이디를 찾았어요!"
+        android:textColor="@color/black"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.194"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:fontFamily="@font/suitesemibold"
-        android:textColor="@color/black"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/view6"

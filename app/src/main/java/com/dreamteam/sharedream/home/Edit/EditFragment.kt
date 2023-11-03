@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.home.Edit
 
+import CalenderFragmentDialog
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.adapter.ImgClick
@@ -32,10 +34,13 @@ import com.google.firebase.storage.ktx.storage
 import com.naver.maps.geometry.LatLng
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
+import kotlin.concurrent.fixedRateTimer
 
 
-class EditFragment : Fragment() {
+class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
+
     private var _binding: ActivityEditBinding? = null
     private val binding get() = _binding!!
 
@@ -51,6 +56,8 @@ class EditFragment : Fragment() {
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
 
     private var locationInfo: LocationData? = null
+
+    private var selectedDate: String =""
 
     var token: String = ""
 
@@ -87,14 +94,16 @@ class EditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         // 이미지 선택
         binding.editBtnSelectImg.setOnClickListener {
             uris = mutableListOf()
             pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-
+        binding.calender.setOnClickListener {
+            val calenderFragmentDialog = CalenderFragmentDialog()
+            calenderFragmentDialog.setCalendarDataListener(this)
+            calenderFragmentDialog.show(requireFragmentManager(), "CalenderDialog")
+        }
         // 게시글 작성 완료
         binding.editBtnComplete.setOnClickListener {
             if (binding.imageCount.text == "0/10") {
@@ -145,6 +154,19 @@ class EditFragment : Fragment() {
                 Log.d("xxxx", "Edit Frag No media selected: ")
             }
         }
+    override fun onDataSelected(date: Date) {
+        val calendar = Calendar.getInstance()
+        val currentDate = calendar.time
+        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+        val currentTime = dateFormat.format(currentDate)
+        Log.d("datedate","${date}")
+        val formattedDate = SimpleDateFormat("yyyy년 MM월 dd일").format(date)
+        binding.calender.text =currentTime+"부터, "+formattedDate+"까지"
+        selectedDate = date.toString()
+
+
+
+    }
 
     // 게시글 업로드 기능 - downloadUserInfo()에서 실행
     private fun postUpload(userNickname: String) {
@@ -157,6 +179,12 @@ class EditFragment : Fragment() {
             R.id.book_chip1 -> category = "독서"
             R.id.beauty_chip1 -> category = "뷰티"
             R.id.toy_chip1 -> category = "문구"
+            R.id.furniture1 -> category = "가구"
+            R.id.life1 -> category = "생활"
+            R.id.food1 -> category = "식품"
+            R.id.kids1 -> category = "유아동/출산"
+            R.id.pet1 -> category = "반려동물용품"
+            R.id.etc1 -> category = "기타"
             else -> {
                 Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
                 return
@@ -173,7 +201,7 @@ class EditFragment : Fragment() {
                 val post = Post(
                     Constants.currentUserUid!!,
                     binding.editTvTitle.text.toString(),
-                    binding.editEtvPrice.text.toString().toInt(),
+                    binding.editEtvPrice.text.toString().replace(",","").toLong(),
                     category,
                     binding.editEtvAddress.text.toString(),
                     //todo ↓ deadline 추가 - 임시로 city 값 넣어둠
@@ -190,7 +218,8 @@ class EditFragment : Fragment() {
                         locationInfo!!.latLng.latitude,
                         locationInfo!!.latLng.longitude
                     ), // todo LatLng
-                    locationInfo!!.cityInfo, // todo locationKeyword
+                    locationInfo!!.cityInfo, // todo locationKeyword,
+                    endTime=selectedDate
                 )
 
                 db.collection("Posts")

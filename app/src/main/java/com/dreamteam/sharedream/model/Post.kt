@@ -1,11 +1,13 @@
 package com.dreamteam.sharedream.model
 
 import com.google.firebase.Timestamp
+import java.io.Serializable
+
 
 data class Post(
     val uid: String,
     val title: String,
-    val price: Int,
+    val price: Long,
     val category: String,
     val address: String,
     val deadline: String,
@@ -20,10 +22,10 @@ data class Post(
     val documentId : String,
     val locationLatLng: List<Double>,
     val locationKeyword : List<String>,
-
-    )
+    val endTime:String
+) : Serializable
 {
     constructor() : this("","", 0, "", "", "","", listOf(),"", listOf(),"",Timestamp.now(),"","",
-        listOf(), listOf()
+        listOf(), listOf(),""
     )
 }

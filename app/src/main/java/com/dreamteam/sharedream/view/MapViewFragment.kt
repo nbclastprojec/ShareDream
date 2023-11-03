@@ -113,7 +113,7 @@ class MapViewFragment : Fragment(), OnMapReadyCallback {
 
             // 설정 완료 버튼 클릭 이벤트
             binding.mapBtnComplete.setOnClickListener {
-                locationInfo?.let {
+                _locationInfo?.let {
                     if (binding.mapTvAddress.text.length > 2) {
                         myPostFeedViewModel.setLocationInfo(locationInfo!!)
                         // 디테일 페이지로 돌아온 뒤 지도 클릭 시 변경사항 반영

@@ -38,10 +38,15 @@ class CategoryDialogFragment : DialogFragment() {
             //selected된 값 전달
             val homeFragment = parentFragment as HomeFragment
             homeFragment.onCategorySelected(selectedCategory)
-
-            dismiss()
+        }
+        binding.max1000.setOnClickListener {
+            categorySelectionListener?.onCategorySelected("max1000")
+        }
+        binding.max10000.setOnClickListener{
+            categorySelectionListener?.onCategorySelected("max10000")
         }
     }
+
 
     //home으로 기능 내보내기
     fun setCategorySelectionListener(listener: CategorySelectionListener) {
