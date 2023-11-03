@@ -85,7 +85,7 @@
                         android:id="@+id/view"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="5dp"
                         android:background="@color/gray900"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -338,6 +338,29 @@
                             android:text="문구"
                             android:textSize="12sp" />
                     </com.google.android.material.chip.ChipGroup>
+                    <TextView
+                        android:id="@+id/calender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@null"
+                        android:hint="교환할 기간을 선택해 주세요."
+                        android:textColorHint="@color/hint_color"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view15" />
+                    <View
+                        android:id="@+id/view17"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gray900"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/calender" />
 
                     <EditText
                         android:id="@+id/edit_etv_desc"
@@ -357,7 +380,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/edit_etv_address" />
+                        app:layout_constraintTop_toBottomOf="@+id/view17" />
                     <View
                         android:id="@+id/view16"
                         android:layout_width="match_parent"

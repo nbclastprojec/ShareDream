@@ -166,11 +166,13 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
 
                 val postImg: List<String> = imgs.toList()
                 val postLikeUsers = listOf<String>()
+                val priceString = binding.editEtvPrice.text.toString()
+                val priceLong = priceString.toLong()
 
                 val post = Post(
                     Constants.currentUserUid!!,
                     binding.editTvTitle.text.toString(),
-                    binding.editEtvPrice.text.toString(),
+                    priceLong,
                     category,
                     binding.editEtvAddress.text.toString(),
                     //todo ↓ deadline 추가 - 임시로 city 값 넣어둠

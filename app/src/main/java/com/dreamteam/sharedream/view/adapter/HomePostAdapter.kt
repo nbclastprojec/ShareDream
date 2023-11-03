@@ -227,9 +227,9 @@ class HomePostAdapter(
             postCategory.text = "카테고리 : ${positionItem.category}"
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
-            postPrice.text = positionItem.price
+            postPrice.text = positionItem.price.toString()
             postEndDate.text = EndTime(positionItem.endDate)
-            postPrice.text = positionItem.price+"원"
+            postPrice.text = positionItem.price.toString()+"원"
 
 
         }
@@ -324,12 +324,14 @@ class HomePostAdapter(
             val diff = futureDate.time - currentDate.time
             val days = TimeUnit.MILLISECONDS.toDays(diff)//시간을 밀리초로 변한한 뒤 일로변환
             val hours = TimeUnit.MILLISECONDS.toHours(diff)//시간을 밀리초로 변환한 뒤 시간으로변환
+            val minites = TimeUnit.MILLISECONDS.toMinutes(diff)//분변환
             return when {
                 days >= 1 -> "$days 일 남음"
                 hours >= 1 -> "$hours 시간 남음"
-                else -> "마감직전!"
+                minites >=0 -> "$minites 분 남음"
+                else -> "마감되었습니다!"
             }
-        } catch (e: java.text.ParseException) {
+        } catch (e: ParseException) {
             return "날짜 형식 오류"
         }
     }

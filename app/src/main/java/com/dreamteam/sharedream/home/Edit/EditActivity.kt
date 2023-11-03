@@ -220,4 +220,5 @@ class EditActivity : AppCompatActivity() {
             }
         }
     }
+
 }

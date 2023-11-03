@@ -7,7 +7,7 @@ data class PostRcv(
 
     val uid: String,
     val title: String,
-    val price: String,
+    val price: Long,
     val category: String,
     val address: String,
     val deadline: String,

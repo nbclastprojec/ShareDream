@@ -64,7 +64,7 @@ class MyPostFeedAdapter(private val postClick: PostClick) :
             category.text = "카테고리 : ${positionItem.category}"
             title.text = positionItem.title
             subtitle.text = positionItem.desc
-            value.text = positionItem.price
+            value.text = positionItem.price.toString()
             bind(positionItem.imgs.first())
             Log.d("xxxx", "onBindViewHolder: bind")
         }

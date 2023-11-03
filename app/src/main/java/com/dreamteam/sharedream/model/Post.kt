@@ -5,7 +5,7 @@ import com.google.firebase.Timestamp
 data class Post(
     val uid: String,
     val title: String,
-    val price: String,
+    val price: Long,
     val category: String,
     val address: String,
     val deadline: String,
@@ -22,5 +22,5 @@ data class Post(
 
 )
 {
-    constructor() : this("","", "", "", "", "","", listOf(),"", listOf(),"",Timestamp.now(),"","","")
+    constructor() : this("","", 0, "", "", "","", listOf(),"", listOf(),"",Timestamp.now(),"","","")
 }

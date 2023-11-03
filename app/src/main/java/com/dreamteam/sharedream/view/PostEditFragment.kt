@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.view
 
+import CalenderFragmentDialog
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -30,8 +31,12 @@ import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.android.material.chip.Chip
 import java.net.URI
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
-class PostEditFragment : Fragment() {
+class PostEditFragment : Fragment(), CalenderFragmentDialog.CalendarDataListener {
 
     private var _binding : FragmentPostEditBinding? = null
     private val binding get() = _binding!!
@@ -43,6 +48,7 @@ class PostEditFragment : Fragment() {
     private var uris: MutableList<Uri> = mutableListOf()
     private var imgs: MutableList<String> = mutableListOf()
     private var currentPost : PostRcv? = null
+    private var selectedDate: String =""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,6 +84,7 @@ class PostEditFragment : Fragment() {
             binding.editEtvAddress.setText("${post.address}")
             binding.editEtvDesc.setText("${post.desc}")
             category = "${post.category}"
+            binding.calender.setText("${post.endDate}")
 
             writePostImgAdapter.submitList(uris)
             writePostImgAdapter.notifyDataSetChanged()
@@ -113,17 +120,24 @@ class PostEditFragment : Fragment() {
             }
         }
 
-
+        binding.calender.setOnClickListener {
+            val calenderFragmentDialog = CalenderFragmentDialog()
+            calenderFragmentDialog.setCalendarDataListener(this)
+            calenderFragmentDialog.show(requireFragmentManager(), "CalenderDialog")
+        }
 
         // 업로드 하기 todo 게시글 수정 시 기존 이미지 삭제하기
         binding.btnComplete.setOnClickListener {
+            val priceString = binding.editEtvPrice.text.toString()
+            val priceLong = priceString.toLong()
+
             Log.d("xxxx", " postEditFrag 완료 버튼 클릭")
             // 게시글 수정을 감지하여 현재 포스트 정보를 변경해주는 Listener 추가 - 디테일 페이지를 닫을 시 stop
 //            myPostFeedViewModel.startListening(currentPost!!.timestamp)
             val post = Post(
                 Constants.currentUserUid!!,
                 binding.editTvTitle.text.toString(),
-                binding.editEtvPrice.text.toString(),
+                priceLong,
                 editCategory,
                 binding.editEtvAddress.text.toString(),
                 //todo ↓ deadline 추가 - 임시로 city 값 넣어둠
@@ -136,7 +150,8 @@ class PostEditFragment : Fragment() {
                 currentPost!!.timestamp,
                 "교환 가능",
                 "",
-                ""
+                selectedDate
+
 
 
 
@@ -248,5 +263,18 @@ class PostEditFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    override fun onDataSelected(date: Date) {
+        val calendar = Calendar.getInstance()
+        val currentDate = calendar.time
+        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+        val currentTime = dateFormat.format(currentDate)
+        Log.d("datedate","${date}")
+        val formattedDate = SimpleDateFormat("yyyy년 MM월 dd일").format(date)
+        binding.calender.text =currentTime+"부터, "+formattedDate+"까지"
+        selectedDate = date.toString()
+
+
+
     }
 }

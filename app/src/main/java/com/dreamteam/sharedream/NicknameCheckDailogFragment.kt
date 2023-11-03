@@ -30,6 +30,8 @@ class NicknameCheckDailogFragment : DialogFragment() {
         fireStore = FirebaseFirestore.getInstance()
         val userUid = auth.currentUser?.uid.toString()
 
+        isCancelable = false
+
         binding.nickNameCreateBtn.setOnClickListener {
             if (userUid != null) {
                 val collection = fireStore.collection("UserData")

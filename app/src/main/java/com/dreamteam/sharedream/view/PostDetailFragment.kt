@@ -23,6 +23,7 @@ import coil.load
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
+import com.dreamteam.sharedream.YourDetailFragment
 import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
 import com.dreamteam.sharedream.model.PostRcv
@@ -52,6 +53,7 @@ class PostDetailFragment : Fragment() {
         binding.detailpageTime.text = "${time(postRcv.timestamp)}"
         binding.detailTvItemState.text = postRcv.state
         stateIconChange()
+        Log.d("tetete","${postRcv}")
 
 
     }
@@ -103,6 +105,9 @@ class PostDetailFragment : Fragment() {
                 imgs.addAll(changedPost.imgs)
             }
         }
+        myPostFeedViewModel.currentPost.observe(viewLifecycleOwner) { post ->
+            detailPageInfoChange(post)
+        }
 
         // 게시물 작성자 프로필 이미지
         myPostFeedViewModel.currentProfileImg.observe(viewLifecycleOwner) {
@@ -150,6 +155,14 @@ class PostDetailFragment : Fragment() {
         // 포스트 상태 변경 버튼 클릭 이벤트
         binding.detailBtnStateChange.setOnClickListener {
             setStateDialog()
+        }
+
+        binding.datailProfile.setOnClickListener {
+            val yourDetailFragment=YourDetailFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frag_edit,yourDetailFragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         // 관심 목록 추가 버튼 클릭 이벤트
