@@ -9,10 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import androidx.annotation.RequiresApi
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -25,6 +22,7 @@ import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
+import com.dreamteam.sharedream.view.MapViewFragment.Companion.READ_ONLY
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
@@ -51,6 +49,7 @@ class PostDetailFragment : Fragment() {
         binding.detailpageTime.text = "${time(postRcv.timestamp)}"
         binding.detailTvItemState.text = postRcv.state
         stateIconChange()
+
     }
 
     override fun onCreateView(
@@ -144,14 +143,17 @@ class PostDetailFragment : Fragment() {
         }
 
         binding.detailAddress.setOnClickListener {
-            if (currentPostInfo[0].uid != Constants.currentUserUid){
-            }
-            // 위치 권한 확인 후 없다면 요청, 있다면 MapView
-            if (!Util.permissionCheck(this.requireContext())) {
-                ActivityCompat.requestPermissions(requireActivity(), Util.PERMISSIONS, 5000)
+            if (currentPostInfo[0].locationLatLng.isNotEmpty()) {
+                // 위치 권한 확인 후 없다면 요청, 있다면 MapView
+                if (!Util.permissionCheck(this.requireContext())) {
+                    ActivityCompat.requestPermissions(requireActivity(), Util.PERMISSIONS, 5000)
+                } else {
+                    parentFragmentManager.beginTransaction()
+                        .add(R.id.frag_edit, MapViewFragment(READ_ONLY))
+                        .addToBackStack(null).commit()
+                }
             } else {
-                parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment())
-                    .addToBackStack(null).commit()
+                Toast.makeText(requireContext(),"거래장소가 지정되지 않았습니다",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -264,7 +266,7 @@ class PostDetailFragment : Fragment() {
                     "교환 가능" -> 0
                     "교환 보류" -> 1
                     "예약 중" -> 2
-                    "교환 완료" ->3
+                    "교환 완료" -> 3
                     else -> 0
                 }
             ) { dialog, which ->

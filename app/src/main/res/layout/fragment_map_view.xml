@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_state_img_reservation_white"
+    android:background="@color/white"
     tools:context=".view.MapViewFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout

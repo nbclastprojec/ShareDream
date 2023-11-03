@@ -148,7 +148,7 @@ class MyPostFeedViewModel : ViewModel() {
                     }
                 }
                 .addOnFailureListener {
-                    Log.d("xxxx", "uploadEditPost: 초장부터 실패 $it")
+                    Log.d("xxxx", "uploadEditPost: 초기 실패 $it")
                 }
         }
         }
@@ -156,12 +156,12 @@ class MyPostFeedViewModel : ViewModel() {
 
     // 게시글 수정 완료 시 디테일 페이지에 데이터 넘겨주기.
     fun setRevisedPost(postRcv : PostRcv){
-        _editPostResult.postValue(postRcv)
+        _editPostResult.value = postRcv
     }
 
     // 게시물 디테일 정보 받아오기
     fun setCurrentPost(postRcv : PostRcv){
-        _currentPost.postValue(postRcv)
+        _currentPost.value = (postRcv)
     }
 
     @SuppressLint("NullSafeMutableLiveData")

@@ -21,6 +21,7 @@ import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.model.LocationData
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.view.MapViewFragment
+import com.dreamteam.sharedream.view.MapViewFragment.Companion.EDITABLE
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
@@ -126,7 +127,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
 
         // todo 임시로 베너 클릭 시 Map이 나오도록 설정.
         binding.topMassage.setOnClickListener {
-            parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment())
+            parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment(EDITABLE))
                 .addToBackStack(null).commit()
         }
 
@@ -154,6 +155,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
                 Log.d("xxxx", "Edit Frag No media selected: ")
             }
         }
+
     override fun onDataSelected(date: Date) {
         val calendar = Calendar.getInstance()
         val currentDate = calendar.time
@@ -163,8 +165,6 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
         val formattedDate = SimpleDateFormat("yyyy년 MM월 dd일").format(date)
         binding.calender.text =currentTime+"부터, "+formattedDate+"까지"
         selectedDate = date.toString()
-
-
 
     }
 

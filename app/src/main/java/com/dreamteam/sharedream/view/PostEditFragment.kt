@@ -1,6 +1,6 @@
 package com.dreamteam.sharedream.view
 
-import android.content.pm.PackageManager
+import CalenderFragmentDialog
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,10 +17,8 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dreamteam.sharedream.NicknameCheckDailogFragment
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
@@ -29,14 +27,19 @@ import com.dreamteam.sharedream.databinding.FragmentPostEditBinding
 import com.dreamteam.sharedream.model.LocationData
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
+import com.dreamteam.sharedream.view.MapViewFragment.Companion.EDITABLE
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.android.material.chip.Chip
 import com.naver.maps.geometry.LatLng
 import java.net.URI
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
-class PostEditFragment : Fragment() {
+class PostEditFragment : Fragment(), CalenderFragmentDialog.CalendarDataListener {
 
     private var _binding: FragmentPostEditBinding? = null
     private val binding get() = _binding!!
@@ -49,6 +52,8 @@ class PostEditFragment : Fragment() {
     private var currentPost: PostRcv? = null
 
     private var locationLatLng: LocationData? = null
+
+    private var selectedDate: String =""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,6 +90,13 @@ class PostEditFragment : Fragment() {
             binding.editEtvAddress.setText("${post.address}")
             binding.editEtvDesc.setText("${post.desc}")
             category = "${post.category}"
+            binding.calender.text = selectedDate
+
+            // 기존 수정 전 게시글 위치 정보 지정해주기
+            locationLatLng = LocationData(LatLng(post.locationLatLng[0],post.locationLatLng[1]),post.address,post.locationKeyword)
+
+            // 기존 수정 전 게시글 마감 기한 정보 지정해주기
+            selectedDate = post.endDate
 
             writePostImgAdapter.submitList(uris)
             writePostImgAdapter.notifyDataSetChanged()
@@ -134,9 +146,11 @@ class PostEditFragment : Fragment() {
 
         // 거래장소 변경 내용 반영
         myPostFeedViewModel.locationResult.observe(viewLifecycleOwner){
-            locationLatLng = it
-            binding.editEtvAddress.setText(it.address)
-            Log.d("xxxx", " 위치 변경 locationLatLng = ${locationLatLng}")
+            it?.let {
+                locationLatLng = it
+                binding.editEtvAddress.setText(it.address)
+                Log.d("xxxx", " 위치 변경 locationLatLng = ${locationLatLng}")
+            }
         }
 
 
@@ -164,7 +178,7 @@ class PostEditFragment : Fragment() {
                 currentPost!!.documentId,
                 listOf(locationLatLng!!.latLng.latitude,locationLatLng!!.latLng.longitude),
                 currentPost!!.locationKeyword,
-                ""
+                selectedDate,
             )
 
             // 디테일 페이지로 수정 된 게시글 정보 이동하기
@@ -189,13 +203,11 @@ class PostEditFragment : Fragment() {
         binding.topMassage.setOnClickListener {
 
             // 위치 권한 확인 후 없다면 요청, 있다면 MapView
-            if (Util.permissionCheck(this.requireContext())) {
+            if (!Util.permissionCheck(this.requireContext())) {
                 ActivityCompat.requestPermissions(requireActivity(), Util.PERMISSIONS, 5000)
-                parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment())
-                    .addToBackStack(null).commit()
             }
             else {
-                parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment())
+                parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment(EDITABLE))
                     .addToBackStack(null).commit()
             }
         }
@@ -204,6 +216,13 @@ class PostEditFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             Log.d("xxxx", " edit frag 뒤로가기 버튼 클릭 ")
             parentFragmentManager.popBackStack()
+        }
+
+        // 마감 기한 지정하기
+        binding.calender.setOnClickListener {
+            val calenderFragmentDialog = CalenderFragmentDialog()
+            calenderFragmentDialog.setCalendarDataListener(this)
+            calenderFragmentDialog.show(requireFragmentManager(), "CalenderDialog")
         }
     }
 
@@ -277,6 +296,17 @@ class PostEditFragment : Fragment() {
         })
     }
 
+    override fun onDataSelected(date: Date) {
+        val calendar = Calendar.getInstance()
+        val currentDate = calendar.time
+        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+        val currentTime = dateFormat.format(currentDate)
+        Log.d("datedate","${date}")
+        val formattedDate = SimpleDateFormat("yyyy년 MM월 dd일").format(date)
+        binding.calender.text =currentTime+"부터, "+formattedDate+"까지"
+        selectedDate = date.toString()
+
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

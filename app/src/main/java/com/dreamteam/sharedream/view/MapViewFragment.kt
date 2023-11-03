@@ -32,10 +32,12 @@ import com.naver.maps.map.util.MarkerIcons
 import java.util.Locale
 
 
-class MapViewFragment : Fragment(), OnMapReadyCallback {
+class MapViewFragment(private val state:String) : Fragment(), OnMapReadyCallback {
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+        const val READ_ONLY = "READONLY"
+        const val EDITABLE = "EDITABLE"
     }
 
     private var _binding: FragmentMapViewBinding? = null
@@ -70,6 +72,8 @@ class MapViewFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         _binding = FragmentMapViewBinding.inflate(inflater, container, false)
 
+
+
         return binding.root
     }
 
@@ -96,35 +100,38 @@ class MapViewFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 // 게시글 작성자가 아니면 마커 위치 변경할 수 없도록 함.
-                if (it.uid != Constants.currentUserUid) {
-                    binding.mapBtnComplete.visibility = View.GONE
+                if (state != READ_ONLY) {
+                    if (it.uid != Constants.currentUserUid) {
+                        binding.mapBtnComplete.visibility = View.GONE
+                    } else {
+                        binding.mapBtnComplete.visibility = View.VISIBLE
+                    }
                 } else {
-                    binding.mapBtnComplete.visibility = View.VISIBLE
+                    binding.mapBtnComplete.visibility = View.GONE
                 }
-
                 // 초기 마커 텍스트 위치 지정.
                 binding.mapTvAddress.text = it.address
             }
+        }
 
-            // 뒤로가기 버튼 클릭 이벤트
-            binding.mapBtnBack.setOnClickListener {
-                parentFragmentManager.popBackStack()
-            }
+        // 뒤로가기 버튼 클릭 이벤트
+        binding.mapBtnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
 
-            // 설정 완료 버튼 클릭 이벤트
-            binding.mapBtnComplete.setOnClickListener {
-                _locationInfo?.let {
-                    if (binding.mapTvAddress.text.length > 2) {
-                        myPostFeedViewModel.setLocationInfo(locationInfo!!)
-                        // 디테일 페이지로 돌아온 뒤 지도 클릭 시 변경사항 반영
-                        if (_currentPostInfo != null){
-                        myPostFeedViewModel.setCurrentPost(currentPostInfo.copy(locationLatLng = listOf(locationInfo.latLng.longitude,locationInfo.latLng.longitude)))
-                        }
-                        Log.d("xxxx", " setLocationInfo ! ${locationInfo} ")
-                        parentFragmentManager.popBackStack()
+        // 설정 완료 버튼 클릭 이벤트
+        binding.mapBtnComplete.setOnClickListener {
+            _locationInfo?.let {
+                if (binding.mapTvAddress.text.length > 2) {
+                    myPostFeedViewModel.setLocationInfo(locationInfo!!)
+                    // 디테일 페이지로 돌아온 뒤 지도 클릭 시 변경사항 반영
+                    if (_currentPostInfo != null){
+                        myPostFeedViewModel.setCurrentPost(currentPostInfo.copy(locationLatLng = listOf(locationInfo.latLng.latitude,locationInfo.latLng.longitude)))
                     }
-                } ?: Toast.makeText(requireContext(), "위치를 다시 선택해주세요", Toast.LENGTH_SHORT).show()
-            }
+                    Log.d("xxxx", " setLocationInfo ! ${locationInfo} ")
+                    parentFragmentManager.popBackStack()
+                }
+            } ?: Toast.makeText(requireContext(), "위치를 다시 선택해주세요", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -135,6 +142,7 @@ class MapViewFragment : Fragment(), OnMapReadyCallback {
     // NaverMap 객체 설정
     override fun onMapReady(naverMap: NaverMap) {
         Log.d("xxxx", "onMapReady: 생성 ")
+        Log.d("xxxx", "onMapReady: $initCameraPosition")
         this.naverMap = naverMap
 
         // 마커 이미지 지정
@@ -163,15 +171,18 @@ class MapViewFragment : Fragment(), OnMapReadyCallback {
             // 지도 밝기 조정 ( -1 ~ 1 사이로 지정 )
             lightness = 0.1f
 
-            // 최소 최대 줌 레벨 제한
+            // 카메라 최소 최대 줌 레벨 제한
             maxZoom = 20.0
             minZoom = 8.0
 
+            // marker 초기 위치 설정
             marker.position = LatLng(initCameraPosition.latitude, initCameraPosition.longitude)
             marker.map = naverMap
+
             // UI 설정 객체 접근
             val uiSettings = naverMap.uiSettings
 
+            // naverMap UI 설정
             uiSettings.apply {
                 // 좌측 하단 Naver 로고 클릭 활성화 여부
                 isLogoClickEnabled = false
@@ -179,26 +190,25 @@ class MapViewFragment : Fragment(), OnMapReadyCallback {
                 // 나침반 활성화 여부
                 isCompassEnabled = true
 
-                // 현재 위치 추적 버튼 활성화 여부 -> 별도로 사용자 위치 설정을 해주어야 한다, 객체 생성할 때 Option으로 넣어줄 수도 있다.
+                // 현재 위치 추적 버튼 활성화 여부 -> 사용자 현재 위치 설정을 해주어야 한다
                 isLocationButtonEnabled = true
             }
 
             // 지도 위치 클릭 이벤트
             _currentPostInfo?.let {
-                if (it.uid != Constants.currentUserUid) {
+                if (state == READ_ONLY) {
                     // todo 게시글 작성자가 아닌 사용자의 지도 클릭 이벤트
                 } else {
                     setOnMapClickListener { pointF, latLng ->
                         mapClickEvent(latLng)
+                        Log.d("xxxx", " currentPost 있을때")
                     }
                 }
-            }
-
-            // 게시글 작성 시 맵 클릭 이벤트
-            setOnMapClickListener { pointF, latLng ->
+                // 게시글 작성 시 맵 클릭 이벤트
+            }?: setOnMapClickListener { pointF, latLng ->
                 mapClickEvent(latLng)
+                Log.d("xxxx", " currentPost 없을 때")
             }
-
 
             // 카메라 초기 위치 지정, 애니메이션
             moveCamera(

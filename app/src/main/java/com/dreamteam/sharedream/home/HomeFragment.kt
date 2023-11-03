@@ -148,43 +148,44 @@ class HomeFragment : Fragment(), CategoryDialogFragment.CategorySelectionListene
         binding.homeRecycle.post{
             binding.homeRecycle.scrollToPosition(scrollPosition)
         }
-        val sortSpinner: Spinner = binding.sortSpinner
-        sortSpinner.adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.sort_home,
-            android.R.layout.simple_spinner_item
-        )
 
-        sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                Log.d("nyh", "onItemSelected: click!")
-                if (::homePostAdapter.isInitialized) when (position) {
-                    0 -> setupRcv()
-                    1 -> {
-                        homePostAdapter.sortPriceDesc()
-                        scrollToTop()
-                    }
-                    2 -> {
-                        homePostAdapter.sortPriceAsc()
-                        scrollToTop()
-                    }
-                    3 -> {
-                        homePostAdapter.sortLikeAsc()
-                        scrollToTop()
-                    }
-                    else -> setupRcv()
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                Log.d("nyh", "onNothingSelected: $id")
-            }
-        }
+//        val sortSpinner: Spinner = binding.sortSpinner
+//        sortSpinner.adapter = ArrayAdapter.createFromResource(
+//            requireContext(),
+//            R.array.sort_home,
+//            android.R.layout.simple_spinner_item
+//        )
+//
+//        sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(
+//                parent: AdapterView<*>?,
+//                view: View?,
+//                position: Int,
+//                id: Long
+//            ) {
+//                Log.d("nyh", "onItemSelected: click!")
+//                if (::homePostAdapter.isInitialized) when (position) {
+//                    0 -> setupRcv()
+//                    1 -> {
+//                        homePostAdapter.sortPriceDesc()
+//                        scrollToTop()
+//                    }
+//                    2 -> {
+//                        homePostAdapter.sortPriceAsc()
+//                        scrollToTop()
+//                    }
+//                    3 -> {
+//                        homePostAdapter.sortLikeAsc()
+//                        scrollToTop()
+//                    }
+//                    else -> setupRcv()
+//                }
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                Log.d("nyh", "onNothingSelected: $id")
+//            }
+//        }
     }
 
     fun setupRcv() {
