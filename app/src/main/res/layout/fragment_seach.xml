@@ -128,5 +128,15 @@
             android:layout_marginRight="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/ic_backbtn"
+            app:layout_constraintBottom_toTopOf="@+id/searchRecycler"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
