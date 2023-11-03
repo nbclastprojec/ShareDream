@@ -172,7 +172,7 @@
         android:layout_marginTop="30dp"
         app:layout_constraintStart_toEndOf="@+id/btn_my_trade_history"
         app:layout_constraintTop_toBottomOf="@+id/view3"
-        app:srcCompat="@drawable/circle" />
+        app:srcCompat="@drawable/icn_bookmark_list" />
 
     <ImageView
         android:id="@+id/btn_my_post_feed"
@@ -182,7 +182,7 @@
         android:layout_marginTop="30dp"
         app:layout_constraintStart_toEndOf="@+id/btn_my_favorite_list"
         app:layout_constraintTop_toBottomOf="@+id/view3"
-        app:srcCompat="@drawable/circle" />
+        app:srcCompat="@drawable/icn_mypost_list" />
 
     <ImageView
         android:id="@+id/btn_my_trade_history"
@@ -192,7 +192,7 @@
         android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3"
-        app:srcCompat="@drawable/circle" />
+        app:srcCompat="@drawable/icn_mytrade_list" />
 
     <ImageView
         android:id="@+id/btn_chatlist"
@@ -202,7 +202,7 @@
         android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tradepage_button"
-        app:srcCompat="@drawable/circle" />
+        app:srcCompat="@drawable/icn_chat_list" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -309,13 +309,13 @@
 
     <ImageView
         android:id="@+id/backButton_mypage"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/clamp" />
+        app:srcCompat="@drawable/ic_backbtn" />
 
     <TextView
         android:id="@+id/mypage_tittle"

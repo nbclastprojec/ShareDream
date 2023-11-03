@@ -8,4 +8,5 @@
     <color name="hint_color">#BFBBBB</color>
     <color name="soldout_bg_color">#B9655D5D</color>
     <color name="text_color">#3F3F3F</color>
+    <color name="mainred">#F24C3D</color>
 </resources>

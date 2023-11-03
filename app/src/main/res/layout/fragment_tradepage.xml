@@ -21,13 +21,13 @@
 
     <ImageView
         android:id="@+id/backButton_tradepage"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/clamp" />
+        app:srcCompat="@drawable/ic_backbtn" />
 
     <TextView
         android:id="@+id/tradepage_tittle"
