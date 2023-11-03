@@ -39,10 +39,10 @@
 
         <ImageView
             android:id="@+id/edit_btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/clamp"
+            android:src="@drawable/ic_backbtn"
             app:layout_constraintBottom_toBottomOf="@+id/top_massage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/top_massage" />

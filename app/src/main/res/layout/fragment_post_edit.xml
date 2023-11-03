@@ -42,7 +42,7 @@
                 android:paddingTop="20dp"
                 android:paddingBottom="16dp"
                 android:scaleType="center"
-                android:src="@drawable/clamp"
+                android:src="@drawable/ic_backbtn"
                 app:layout_constraintBottom_toTopOf="@+id/scrollView4"
                 app:layout_constraintEnd_toStartOf="@+id/top_massage"
                 app:layout_constraintStart_toStartOf="parent"
@@ -155,6 +155,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:hint="제목을 입력해주세요"
+                        android:background="@null"
                         android:maxLines="1"
                         android:textColorHint="@color/hint_color"
                         android:textSize="16sp"
@@ -199,6 +200,7 @@
                         android:paddingStart="4dp"
                         android:inputType="number"
                         android:hint="값어치를 입력해주세요"
+                        android:background="@null"
                         android:maxLines="1"
                         android:visibility="invisible"
                         android:textColorHint="@color/hint_color"
@@ -252,6 +254,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:hint="교환장소로 원하는 지역을 입력해주세요"
+                        android:background="@null"
                         android:textColorHint="@color/hint_color"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -284,59 +287,107 @@
                         <com.google.android.material.chip.Chip
                             android:id="@+id/cloths_chip1"
                             android:layout_width="wrap_content"
-                            android:layout_height="40dp"
+                            android:layout_height="45dp"
                             android:checkable="true"
                             android:text="의류"
-                            android:textSize="12sp" />
+                            android:textSize="15sp" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/machine_chip1"
                             android:layout_width="wrap_content"
-                            android:layout_height="40dp"
+                            android:layout_height="45dp"
                             android:checkable="true"
                             android:text="가전제품"
-                            android:textSize="12sp" />
+                            android:textSize="15sp" />
 
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/sport_chip1"
                             android:layout_width="wrap_content"
-                            android:layout_height="40dp"
+                            android:layout_height="45dp"
                             android:checkable="true"
                             android:text="스포츠"
-                            android:textSize="12sp" />
+                            android:textSize="15sp" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/art_chip1"
                             android:layout_width="wrap_content"
-                            android:layout_height="40dp"
+                            android:layout_height="45dp"
                             android:checkable="true"
                             android:text="예술"
-                            android:textSize="12sp" />
+                            android:textSize="15sp" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/book_chip1"
                             android:layout_width="wrap_content"
-                            android:layout_height="40dp"
+                            android:layout_height="45dp"
                             android:checkable="true"
                             android:text="독서"
-                            android:textSize="12sp" />
+                            android:textSize="15sp" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/beauty_chip1"
                             android:layout_width="wrap_content"
-                            android:layout_height="40dp"
+                            android:layout_height="45dp"
                             android:checkable="true"
                             android:text="뷰티"
-                            android:textSize="12sp" />
+                            android:textSize="15sp" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/toy_chip1"
                             android:layout_width="wrap_content"
-                            android:layout_height="40dp"
+                            android:layout_height="45dp"
                             android:checkable="true"
                             android:text="문구"
-                            android:textSize="12sp" />
+                            android:textSize="15sp" />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/furniture1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="45dp"
+                            android:checkable="true"
+                            android:text="가구"
+                            android:textSize="15sp"
+                            />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/life1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="45dp"
+                            android:checkable="true"
+                            android:text="생활"
+                            android:textSize="15sp"
+                            />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/food1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="45dp"
+                            android:text="식품"
+                            android:checkable="true"
+                            android:textSize="15sp"
+                            />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/kids1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="45dp"
+                            android:text="유아동/출산"
+                            android:checkable="true"
+                            android:textSize="15sp"
+                            />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/pet1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="45dp"
+                            android:text="반려동물용품"
+                            android:checkable="true"
+                            android:textSize="15sp"
+                            />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/etc1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="45dp"
+                            android:text="기타"
+                            android:checkable="true"
+                            android:textSize="15sp"
+                            />
                     </com.google.android.material.chip.ChipGroup>
 
                     <EditText
