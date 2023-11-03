@@ -17,8 +17,26 @@ data class PostRcv(
     var likeUsers: List<String>,
     val token: String,
     val timestamp: Timestamp,
-    val state : String,
-    val documentId:String,
-    val endDate:String
+    val state: String,
+    val documentId: String,
+    val endDate: String
 
-)
+) {
+    constructor() : this(
+        "",
+        "",
+        0,
+        "",
+        "",
+        "",
+        "",
+        listOf(),
+        "",
+        listOf(),
+        "",
+        Timestamp.now(),
+        "",
+        "",
+        ""
+    )
+}
