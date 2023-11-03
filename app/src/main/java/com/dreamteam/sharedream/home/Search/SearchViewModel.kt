@@ -13,13 +13,11 @@ class SearchViewModel : ViewModel() {
 
     private val _selectedPost = MutableLiveData<Post?>()
     val selectedPost: LiveData<Post?> = _selectedPost
-
     fun performSearch(title: String) {
         searchRepository.searchTitle(title) { results ->
             _searchResults.value = results
         }
     }
-
     fun sortSearchLowPrice(title: String) {
         searchRepository.sortLikeUsers(title) { results ->
             _searchResults.value = results
@@ -33,7 +31,6 @@ class SearchViewModel : ViewModel() {
     fun onPostClicked(post: Post) {
         _selectedPost.value = post
     }
-
     fun resetSelectedPost() {
         _selectedPost.value = null
     }
