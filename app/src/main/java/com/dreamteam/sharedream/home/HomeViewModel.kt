@@ -21,6 +21,7 @@ class HomeViewModel : ViewModel() {
 
     fun onRefreshComplete() {
         _refreshData.value = false
+        _refreshData.value = false
     }
 
     fun sortCategorys(category: String) {

@@ -112,6 +112,7 @@ class HomePostAdapter(
 
         fun bind(imagePath: Uri, timestamp: Timestamp) {
             postImg.load(imagePath)
+
             when (currentList[position].state){
                 "교환 가능" -> {
                     postStateBgClosed.visibility = View.INVISIBLE

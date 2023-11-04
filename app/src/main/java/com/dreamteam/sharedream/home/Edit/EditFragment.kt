@@ -11,14 +11,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
+import com.dreamteam.sharedream.model.LocationData
 import com.dreamteam.sharedream.model.Post
+import com.dreamteam.sharedream.view.MapViewFragment
+import com.dreamteam.sharedream.view.MapViewFragment.Companion.EDITABLE
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
+import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -27,6 +32,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.naver.maps.geometry.LatLng
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -48,6 +54,10 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
 
     private lateinit var writePostImgAdapter: WritePostImageAdapter
 
+    private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
+
+    private var locationInfo: LocationData? = null
+
     private var selectedDate: String =""
 
     var token: String = ""
@@ -67,6 +77,15 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
     ): View? {
         _binding = ActivityEditBinding.inflate(inflater, container, false)
 
+        // 거래장소 변경 내용 반영
+        myPostFeedViewModel.locationResult.observe(viewLifecycleOwner) {
+            Log.d("xxxx", " edit Fragment 지도 변경 observe ")
+            locationInfo = it
+            Log.d("xxxx", " 글 작성 지도 위치 설정 $locationInfo")
+            it?.let {
+                binding.editEtvAddress.setText(it.address)
+            }?:binding.editEtvAddress.setText("")
+        }
 
         setupRcv()
 
@@ -97,10 +116,18 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
             ) {
                 Toast.makeText(requireContext(), " 모든 입력 가능란은 필수 입력사항 입니다.", Toast.LENGTH_SHORT)
                     .show()
+            } else if (locationInfo == null) {
+                Toast.makeText(requireContext(), " 지도를 통해 거래 장소를 선택 해주세요 ", Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 imageUpload()
             }
 
+        }
+
+        binding.editBtnLocationPick.setOnClickListener {
+            parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment(EDITABLE))
+                .addToBackStack(null).commit()
         }
 
         // 뒤로가기 버튼
@@ -127,6 +154,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
                 Log.d("xxxx", "Edit Frag No media selected: ")
             }
         }
+
     override fun onDataSelected(date: Date) {
         val calendar = Calendar.getInstance()
         val currentDate = calendar.time
@@ -136,8 +164,6 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
         val formattedDate = SimpleDateFormat("yyyy년 MM월 dd일").format(date)
         binding.calender.text =currentTime+"부터, "+formattedDate+"까지"
         selectedDate = date.toString()
-
-
 
     }
 
@@ -174,7 +200,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
                 val post = Post(
                     Constants.currentUserUid!!,
                     binding.editTvTitle.text.toString(),
-                    binding.editEtvPrice.text.toString().toLong(),
+                    binding.editEtvPrice.text.toString().replace(",","").toLong(),
                     category,
                     binding.editEtvAddress.text.toString(),
                     //todo ↓ deadline 추가 - 임시로 city 값 넣어둠
@@ -187,9 +213,12 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
                     Timestamp.now(),
                     "교환 가능",
                     "",
+                    listOf(
+                        locationInfo!!.latLng.latitude,
+                        locationInfo!!.latLng.longitude
+                    ), // todo LatLng
+                    locationInfo!!.cityInfo, // todo locationKeyword,
                     endTime=selectedDate
-
-
                 )
 
                 db.collection("Posts")
@@ -235,8 +264,6 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
             }
             downloadUserInfo()
         }
-        Log.d("xxxx", " Edit Frag Post Info Img : $imgs ")
-        Log.d("xxxx", "Edit Frag Post Info uris : $uris")
     }
 
     // 유저 정보에서 닉네임을 가져와 게시글에 적용 - 게시글 받아올 때마다 유저데이터를 호출하는 것보다 업로드할 때 한번만 호출하는 것이 좋아보임.
@@ -278,7 +305,5 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
 
         return dateFormat
     }
-
-
 }
 
