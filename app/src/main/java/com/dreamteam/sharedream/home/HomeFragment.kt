@@ -67,8 +67,6 @@ class HomeFragment : Fragment() {
             }
         }, emptyList())
 
-        setupRcv()
-
         return binding.root
     }
 
@@ -92,7 +90,6 @@ class HomeFragment : Fragment() {
 
         binding.homeBtnRefreshList.setOnClickListener {
             myPostFeedViewModel.downloadHomePostRcv()
-
         }
 
         binding.floatingActionButton.setOnClickListener {
@@ -102,7 +99,7 @@ class HomeFragment : Fragment() {
                 .addToBackStack(null).commit()
         }
 
-//        setupRcv()
+        setupRcv()
 
         myPostFeedViewModel.downloadHomePostRcv()
 
@@ -129,121 +126,120 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-            viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
-                homePostAdapter.submitList(result)
-                homePostAdapter.notifyDataSetChanged()
-            }
-            myPostFeedViewModel.postResult.observe(viewLifecycleOwner) { posts ->
-                homePostAdapter.submitList(posts)
-            }
-            categoryViewModel.selectedCategory.observe(viewLifecycleOwner) { selectedCategory ->
-                viewModel.sortCategorys(selectedCategory)
-                Log.d("nyh", "Selected Category in HomeFragment: $selectedCategory")
-
-            }
-            viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
-                homePostAdapter.submitList(result)
-                homePostAdapter.notifyDataSetChanged()
-            }
         }
+        viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
+            homePostAdapter.submitList(result)
+            homePostAdapter.notifyDataSetChanged()
+        }
+        myPostFeedViewModel.postResult.observe(viewLifecycleOwner) { posts ->
+            homePostAdapter.submitList(posts)
+        }
+        categoryViewModel.selectedCategory.observe(viewLifecycleOwner) { selectedCategory ->
+            viewModel.sortCategorys(selectedCategory)
+            Log.d("nyh", "Selected Category in HomeFragment: $selectedCategory")
 
+        }
+        viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
+            homePostAdapter.submitList(result)
+            homePostAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun updateRcv(position: Int, post: PostRcv) {
+        val layoutManager = binding.homeRecycle.layoutManager
+        val scrollPosition = if (layoutManager != null) {
+            (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        } else {
+            0
+        }
+        val newList = homePostAdapter.currentList.toMutableList()
+        newList[position] = post
+        homePostAdapter.submitList(newList)
+
+        binding.homeRecycle.post {
+            binding.homeRecycle.scrollToPosition(scrollPosition)
+        }
         val sortSpinner = binding.sortSpinner
-        private fun updateRcv(position: Int, post: PostRcv) {
-            val layoutManager = binding.homeRecycle.layoutManager
-            val scrollPosition = if (layoutManager != null) {
-                (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        sortSpinner.adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.sort_home,
+            android.R.layout.simple_spinner_item
+        )
+        sortSpinner.setSelection(0)
+
+        sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when (position) {
+                    0 -> viewModel.sortCategorys("")
+                    1 -> homePostAdapter.sortPriceDesc()
+                    2 -> homePostAdapter.sortPriceAsc()
+                    3 -> homePostAdapter.sortLikeAsc()
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                viewModel.sortCategorys("")
+            }
+        }
+        categoryViewModel.seletedPrice.observe(viewLifecycleOwner) { priceRange ->
+            val minPrice = priceRange.first
+            val maxPrice = priceRange.second
+            homePostAdapter.filteredPrice(minPrice, maxPrice)
+        }
+    }
+
+    fun setupRcv() {
+        myPostFeedViewModel.postResult.observe(viewLifecycleOwner) { posts ->
+            val rcvList: List<PostRcv> = posts
+
+            homePostAdapter = HomePostAdapter(requireContext(), object : PostClick {
+                override fun postClick(post: PostRcv) {
+                    myPostFeedViewModel.setCurrentPost(post)
+
+                    parentFragmentManager.beginTransaction().add(
+                        R.id.frag_edit,
+                        PostDetailFragment()
+                    ).addToBackStack(null).commit()
+                }
+            }, rcvList)
+
+            binding.homeRecycle.apply {
+                setHasFixedSize(true)
+                layoutManager =
+                    LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.VERTICAL,
+                        false
+                    )
+                adapter = homePostAdapter
+                addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
+            }
+        }
+    }
+
+    fun checkNickName(uid: String) {
+        val fireStore = FirebaseFirestore.getInstance()
+        val UserData = fireStore.collection("UserData")
+        val document = UserData.document(uid)
+
+        document.get().addOnSuccessListener { snapshot ->
+            if (snapshot.exists()) {
+                val nickname = snapshot.getString("nickname")
+                val number = snapshot.getString("number")
+
+                if (number != null) {
+                    if (number.isNotEmpty() && (nickname.isNullOrEmpty() || nickname == "닉네임 설정 필요" || nickname == "")) {
+                        val nicknameCheckDailogFragment = NicknameCheckDailogFragment()
+                        nicknameCheckDailogFragment.show(requireFragmentManager(), "Agree1")
+                    }
+                }
             } else {
-                0
-            }
-            val newList = homePostAdapter.currentList.toMutableList()
-            newList[position] = post
-            homePostAdapter.submitList(newList)
-
-            binding.homeRecycle.post {
-                binding.homeRecycle.scrollToPosition(scrollPosition)
-            }
-            val sortSpinner = binding.sortSpinner
-            sortSpinner.adapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.sort_home,
-                android.R.layout.simple_spinner_item
-            )
-            sortSpinner.setSelection(0)
-
-            sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    when (position) {
-                        0 -> viewModel.sortCategorys("")
-                        1 -> homePostAdapter.sortPriceDesc()
-                        2 -> homePostAdapter.sortPriceAsc()
-                        3 -> homePostAdapter.sortLikeAsc()
-                    }
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    viewModel.sortCategorys("")
-                }
-            }
-            categoryViewModel.seletedPrice.observe(viewLifecycleOwner) { priceRange ->
-                val minPrice = priceRange.first
-                val maxPrice = priceRange.second
-                homePostAdapter.filteredPrice(minPrice, maxPrice)
-            }
-        }
-
-        fun setupRcv() {
-            myPostFeedViewModel.postResult.observe(viewLifecycleOwner) { posts ->
-                val rcvList: List<PostRcv> = posts
-
-                homePostAdapter = HomePostAdapter(requireContext(), object : PostClick {
-                    override fun postClick(post: PostRcv) {
-                        myPostFeedViewModel.setCurrentPost(post)
-
-                        parentFragmentManager.beginTransaction().add(
-                            R.id.frag_edit,
-                            PostDetailFragment()
-                        ).addToBackStack(null).commit()
-                    }
-                }, rcvList)
-
-                binding.homeRecycle.apply {
-                    setHasFixedSize(true)
-                    layoutManager =
-                        LinearLayoutManager(
-                            requireContext(),
-                            LinearLayoutManager.VERTICAL,
-                            false
-                        )
-                    adapter = homePostAdapter
-                    addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
-                }
-            }
-        }
-
-        fun checkNickName(uid: String) {
-            val fireStore = FirebaseFirestore.getInstance()
-            val UserData = fireStore.collection("UserData")
-            val document = UserData.document(uid)
-
-            document.get().addOnSuccessListener { snapshot ->
-                if (snapshot.exists()) {
-                    val nickname = snapshot.getString("nickname")
-                    val number = snapshot.getString("number")
-
-                    if (number != null) {
-                        if (number.isNotEmpty() && (nickname.isNullOrEmpty() || nickname == "닉네임 설정 필요" || nickname == "")) {
-                            val nicknameCheckDailogFragment = NicknameCheckDailogFragment()
-                            nicknameCheckDailogFragment.show(requireFragmentManager(), "Agree1")
-                        }
-                    }
-                } else {
-                    Toast.makeText(context, "닉네임 설정 오류 에러", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(context, "닉네임 설정 오류 에러", Toast.LENGTH_SHORT).show()
             }
         }
     }
