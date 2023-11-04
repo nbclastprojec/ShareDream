@@ -46,7 +46,7 @@ class FCMService : FirebaseMessagingService() {
 
         if (remoteMessage.notification != null) {
             //알림생성
-            sendNonotification(applicationContext, remoteMessage)
+            sendNotification(applicationContext, remoteMessage)
             Log.d("nyh", "onMessageReceived: ${remoteMessage.notification?.title}")
             Log.d("nyh", "onMessageReceived: ${remoteMessage.notification?.body}")
         } else {
@@ -56,12 +56,9 @@ class FCMService : FirebaseMessagingService() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun sendNonotification(context: Context ,remoteMessage: RemoteMessage) {
-
-
+    fun sendNotification(context: Context, remoteMessage: RemoteMessage) {
         // 알림을 생성할 때는 context를 사용합니다.
 
-        Log.d("nyh", "sendNotification: 알림전 ${remoteMessage.notification?.title}")
         // channel 설정
         val channelId = "channelId"
         val channelName = "channelName"
@@ -110,7 +107,6 @@ class FCMService : FirebaseMessagingService() {
         }
 
         notificationManager.notify(uniId, notificationBuilder.build())
-        Log.d("nyh", "sendNotification 알림생성 uniId = $uniId")
     }
 
     //Token 가져오기

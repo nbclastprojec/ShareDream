@@ -55,7 +55,6 @@ class HomeRepository {
             downloadTasks.add(downloadTask)
         }
 
-
         Tasks.whenAllSuccess<Uri>(downloadTasks)
             .addOnSuccessListener { uriList ->
                 postImgList.addAll(uriList)

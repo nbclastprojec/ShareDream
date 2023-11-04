@@ -29,19 +29,4 @@ class HomeViewModel : ViewModel() {
             Log.d("nyh", "HomeViewModel sortCategorys: $result")
         }
     }
-//    fun sortHighPrice(category: String){
-//        homeRepository.categoryHighPrice(category){result ->
-//            _sortData.value = result
-//        }
-//    }
-//    fun sortLowPrice(category: String){
-//        homeRepository.categoryLowPrice(category){result ->
-//            _sortData.value = result
-//        }
-//    }
-//    fun sortLikeUsers(category: String){
-//        homeRepository.categoryLikeUsers(category){result ->
-//            _sortData.value = result
-//        }
-//    }
 }

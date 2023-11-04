@@ -1,13 +1,19 @@
 package com.dreamteam.sharedream.view
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -17,13 +23,16 @@ import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
+import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Date
 
+@Suppress("DEPRECATION")
 class PostDetailFragment : Fragment() {
     private var _binding: FragmentPostDetailBinding? = null
     private val binding get() = _binding!!
@@ -108,6 +117,8 @@ class PostDetailFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -117,6 +128,7 @@ class PostDetailFragment : Fragment() {
                 Log.d("xxxx", " 일치 ?: ${it[0].timestamp == currentPostInfo[0].timestamp} ")
                 Log.d("xxxx", " 전체 LiveData : ${it} 바뀐 Livedata ${it[0].likeUsers}")
                 binding.detailTvLikeCount.text = "${it[0].likeUsers.size}"
+
 
                 // 관심 목록에 있는 아이템일 경우 binding
                 if (it[0].likeUsers.contains(Constants.currentUserUid)) {
@@ -145,8 +157,10 @@ class PostDetailFragment : Fragment() {
 
         // 관심 목록 추가 버튼 클릭 이벤트
         binding.detailBtnAddFavorite.setOnClickListener {
+
             Util.showDialog(requireContext(), "관심 목록에 추가", "내 관심 목록에 추가하시겠습니까?") {
                 myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
+
                 Log.d(
                     "xxxx",
                     " detail like btn clicked, post timestamp  =  ${currentPostInfo[0].timestamp}"
@@ -170,6 +184,40 @@ class PostDetailFragment : Fragment() {
         binding.detailChatButton.setOnClickListener {
             getUserInformation()
         }
+
+        val post = arguments?.getSerializable("post") as Post?
+
+        if (post != null) {
+            binding.detailId.text = post.nickname
+            binding.detailId.text = post.nickname
+            binding.detailAddress.text = post.address
+            binding.detailpageTitle.text = post.title
+            binding.detailpageCategory.text = post.category
+            binding.detailpageExplain.text = post.desc
+            binding.detailMoney.text = "${post.price} 원"
+            binding.detailTvLikeCount.text = "${post.likeUsers.size}"
+            binding.detailpageTime.text = time(post.timestamp)
+
+            myPostFeedViewModel.downloadCurrentProfileImg(post.uid)
+
+            if (post.uid == Constants.currentUserUid) {
+                binding.detailBtnEditPost.visibility = View.VISIBLE
+            } else {
+                binding.detailBtnEditPost.visibility = View.GONE
+            }
+
+            // 관심 목록에 있는 아이템의 경우 아이콘 변경 및 관심 목록 제거 버튼 표시
+            if (post.likeUsers.contains(Constants.currentUserUid)) {
+                binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
+                binding.detailBtnSubFavorite.visibility = View.VISIBLE
+            } else {
+                binding.detailLike.setImageResource(R.drawable.like)
+                binding.detailBtnSubFavorite.visibility = View.GONE
+            }
+
+        }
+
+
     }
 
     private fun stateIconChange() {
@@ -297,4 +345,37 @@ class PostDetailFragment : Fragment() {
 
         return result
     }
+    private fun stateIconChange(state: String) {
+        val stateIcon = when (state) {
+            "교환 가능" -> R.drawable.detail_img_state_ok72
+            "교환 보류" -> R.drawable.detail_img_state_pause72
+            "예약 중" -> R.drawable.detail_img_state_pause72
+            "교환 완료" -> R.drawable.detail_img_state_end72
+            else -> R.drawable.detail_img_state_end72
+        }
+        binding.detailIcState.setImageResource(stateIcon)
+    }
+    fun getToken() {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("posts")
+            .get()
+            .addOnSuccessListener { documents ->
+                val tokens = mutableListOf<String>()
+
+                for (document in documents) {
+                    val token = document.getString("token")
+                    token?.let {
+                        tokens.add(it)
+                    }
+                }
+
+                // tokens 리스트에 모든 "token" 필드 값을 가져옵니다.
+                // 이제 tokens 리스트를 사용하여 원하는 작업을 수행할 수 있습니다.
+            }
+            .addOnFailureListener { exception ->
+                Log.w("nyh", "Error getting documents: ", exception)
+            }
+    }
+
 }

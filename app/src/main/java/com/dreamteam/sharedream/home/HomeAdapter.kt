@@ -76,22 +76,7 @@ class HomeAdapter(private val context: Context) :
 
     //선택되지 않았을 땐 전체데이터 설정, else는 filter
     @SuppressLint("NotifyDataSetChanged")
-//    fun filterByCategory(category: String) {
-//        if (category.isEmpty()) {
-//            Log.d("nyh", "filterByCategory: ${filteredDataItem.size}")
-//            Log.d("nyh", "filterByCategory: ${filteredDataItem}")
-//            filteredDataItem = homeDataItem // 전체 데이터 표시
-//        } else if (category.isNotEmpty())  {
-//            filteredDataItem = homeDataItem.filter { it.category == category }
-//            Log.d("nyh", "filterByCategory else: ${filteredDataItem.size}")
-//            Log.d("nyh", "filterByCategory else : ${filteredDataItem}")
-//        } else  {
-//            filteredDataItem = homeDataItem
-//        }
-//        notifyDataSetChanged()
-//    }
 
-//    @SuppressLint("SuspiciousIndentation")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val homeItem = filteredDataItem[position]
