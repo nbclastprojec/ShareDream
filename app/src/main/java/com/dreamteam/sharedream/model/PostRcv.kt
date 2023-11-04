@@ -23,4 +23,24 @@ data class PostRcv(
     val locationKeyword : List<String>,
     val endDate:String,
 
-)
+) {
+    constructor() : this(
+        "",
+        "",
+        0,
+        "",
+        "",
+        "",
+        "",
+        listOf(),
+        "",
+        listOf(),
+        "",
+        Timestamp.now(),
+        "",
+        "",
+        listOf(),
+        listOf(),
+        ""
+    )
+}

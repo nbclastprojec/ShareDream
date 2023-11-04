@@ -37,8 +37,6 @@ class SeachFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSeachBinding.inflate(inflater, container, false)
-
-
         return binding.root
     }
 

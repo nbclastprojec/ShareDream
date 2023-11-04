@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit
 class HomePostAdapter(
     private val context: Context,
     private val postClick: PostClick,
-    private val allPosts: List<PostRcv>
+    private var allPosts: List<PostRcv>
 ) :
     ListAdapter<PostRcv, HomePostAdapter.HomePostRcvViewHolder>(DifferCallback.differCallback) {
 
@@ -75,6 +75,24 @@ class HomePostAdapter(
 
         holder.bind(positionItem.imgs[0], positionItem.timestamp)
     }
+    fun sortPriceAsc(){
+        val sortedItems = currentList.sortedBy { it.price }
+        submitList(sortedItems)
+    }
+    fun sortPriceDesc(){
+        val sortedItems =  currentList.sortedByDescending { it.price }
+        submitList(sortedItems)
+    }
+    fun sortLikeAsc() {
+        val sortedItem = currentList.sortedBy { it.likeUsers.size }
+        submitList(sortedItem)
+    }
+
+    fun filteredPrice(minPrice:Long, maxPrice: Long){
+        val filteredList = currentList.filter { it.price in minPrice .. maxPrice}
+        submitList(filteredList)
+    }
+
 
     inner class HomePostRcvViewHolder(binding: WriteItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -143,77 +161,9 @@ class HomePostAdapter(
 
         }
     }
-    fun sortPriceAsc(){
-        val sortedItems = allItems.sortedBy { it.price }
-        submitList(sortedItems)
-        notifyDataSetChanged()
-    }
-    fun sortPriceDesc(){
-        val sortedItems =  allItems.sortedByDescending { it.price }
-        submitList(sortedItems)
-        notifyDataSetChanged()
-    }
-    fun sortLikeAsc() {
-        val sortedItem = allItems.sortedBy { it.likeUsers.size }
-        submitList(sortedItem)
-        notifyDataSetChanged()
-    }
 
 
 
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun onCategorySelected(category: String, minPrice: Int?, maxPrice: Int?, ) {
-
-        val categoryFiltered = if (category.isEmpty() || category == "전체") {
-            allItems // 전체 아이템 유지
-        } else {
-            allItems.filter { it.category == category } // 카테고리 필터 적용
-        }
-
-
-
-        // 가격 필터
-        val priceFiltered =
-            if(category.isEmpty() || category == "전체" ) {
-                when {
-                    minPrice != null && maxPrice != null -> {
-                        allItems.filter { it.price in (minPrice..maxPrice) }
-                    }
-
-                    minPrice != null -> {
-                        allItems.filter { it.price >= minPrice }
-                    }
-
-                    maxPrice != null -> {
-                        allItems.filter { it.price <= maxPrice }
-                    }
-
-                    else -> {
-                        allItems // 가격 필터 없음
-                    }
-                }
-            } else {
-                when {
-                    minPrice != null && maxPrice != null -> {
-                        categoryFiltered.filter { it.price in (minPrice..maxPrice) }
-                    }
-
-                    minPrice != null -> {
-                        categoryFiltered.filter { it.price >= minPrice }
-                    }
-
-                    maxPrice != null -> {
-                        categoryFiltered.filter { it.price <= maxPrice }
-                    }
-
-                    else -> allItems
-                }
-            }
-
-        submitList(priceFiltered)
-        notifyDataSetChanged()
-    }
     private fun EndTime(endTime: String): String {
         val dateFormat = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.US)
         try {
@@ -231,22 +181,9 @@ class HomePostAdapter(
             return "날짜 형식 오류"
         }
     }
-
-
-
-//    private fun likeClick(position: Int) {
-//        val tsDoc = db.collection("posts").document(postUidList[position])
-//        db.runTransaction {
-//            val post = it.get(tsDoc).toObject(Post::class.java)
-//
-//            if (post!!.likeUsers.isNotEmpty()) {
-//                post.likeUsers.remove(uid)
-//            } else {
-//                post.bookmark[uid!!] = true
-//            }
-//
-//            it.set(tsDoc, post)
-//        }
-//    }
-
+    fun setData(data:List<PostRcv>){
+        if(data.isNotEmpty()){
+            allPosts = ArrayList(data)
+        }
+    }
 }
