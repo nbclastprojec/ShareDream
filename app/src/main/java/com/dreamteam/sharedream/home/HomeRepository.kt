@@ -76,6 +76,8 @@ class HomeRepository {
                         timestamp = post.timestamp,
                         state = post.state,
                         documentId = post.documentId,
+                        locationLatLng = post.locationLatLng,
+                        locationKeyword = post.locationKeyword,
                         endDate = post.endTime
                     )
 

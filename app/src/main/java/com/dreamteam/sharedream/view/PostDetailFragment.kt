@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -20,6 +22,7 @@ import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
+import com.dreamteam.sharedream.view.MapViewFragment.Companion.READ_ONLY
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
@@ -47,7 +50,6 @@ class PostDetailFragment : Fragment() {
         binding.detailTvItemState.text = postRcv.state
         stateIconChange()
 
-
     }
 
     override fun onCreateView(
@@ -61,11 +63,9 @@ class PostDetailFragment : Fragment() {
         myPostFeedViewModel.currentPost.observe(viewLifecycleOwner) {
             detailPageInfoChange(it)
 
-
             if (it.uid == Constants.currentUserUid) {
                 binding.detailBtnStateChange.visibility = View.VISIBLE
             }
-
 
             // 게시물 작성자 프로필 이미지 받아오기
             myPostFeedViewModel.downloadCurrentProfileImg(it.uid)
@@ -142,6 +142,22 @@ class PostDetailFragment : Fragment() {
 
         }
 
+        binding.detailAddress.setOnClickListener {
+            if (currentPostInfo[0].locationLatLng.isNotEmpty()) {
+                // 위치 권한 확인 후 없다면 요청, 있다면 MapView
+                if (!Util.permissionCheck(this.requireContext())) {
+                    ActivityCompat.requestPermissions(requireActivity(), Util.PERMISSIONS, 5000)
+                } else {
+                    parentFragmentManager.beginTransaction()
+                        .add(R.id.frag_edit, MapViewFragment(READ_ONLY))
+                        .addToBackStack(null).commit()
+                }
+            } else {
+                Toast.makeText(requireContext(),"거래장소가 지정되지 않았습니다",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
         // 포스트 상태 변경 버튼 클릭 이벤트
         binding.detailBtnStateChange.setOnClickListener {
             setStateDialog()
@@ -149,12 +165,16 @@ class PostDetailFragment : Fragment() {
 
         // 관심 목록 추가 버튼 클릭 이벤트
         binding.detailBtnAddFavorite.setOnClickListener {
-            Util.showDialog(requireContext(), "관심 목록에 추가", "내 관심 목록에 추가하시겠습니까?") {
-                myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
-                Log.d(
-                    "xxxx",
-                    " detail like btn clicked, post timestamp  =  ${currentPostInfo[0].timestamp}"
-                )
+            if (currentPostInfo[0].uid != Constants.currentUserUid){
+                Util.showDialog(requireContext(), "관심 목록에 추가", "내 관심 목록에 추가하시겠습니까?") {
+                    myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
+                    Log.d(
+                        "xxxx",
+                        " detail like btn clicked, post timestamp  =  ${currentPostInfo[0].timestamp}"
+                    )
+                }
+            } else {
+                Toast.makeText(requireContext(),"게시글 작성자는 관심목록에 추가할 수 없습니다",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -222,7 +242,7 @@ class PostDetailFragment : Fragment() {
         )
     }
 
-    private fun setStateDialog (){
+    private fun setStateDialog() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
         val postState = binding.detailTvItemState
 
@@ -230,7 +250,10 @@ class PostDetailFragment : Fragment() {
             .setPositiveButton("저장") { dialog, which ->
 
                 // DB에 해당 게시글 State 값 변경하기
-                myPostFeedViewModel.uploadChangedPostState(currentPostInfo[0].timestamp,"${postState.text}")
+                myPostFeedViewModel.uploadChangedPostState(
+                    currentPostInfo[0].timestamp,
+                    "${postState.text}"
+                )
 
                 // 홈 게시글 목록에 게시글 변경된 상태 변경하기d
                 val revisedPost = currentPostInfo[0].copy(state = "${postState.text}")
@@ -247,7 +270,7 @@ class PostDetailFragment : Fragment() {
                     "교환 가능" -> 0
                     "교환 보류" -> 1
                     "예약 중" -> 2
-                    "교환 완료" ->3
+                    "교환 완료" -> 3
                     else -> 0
                 }
             ) { dialog, which ->

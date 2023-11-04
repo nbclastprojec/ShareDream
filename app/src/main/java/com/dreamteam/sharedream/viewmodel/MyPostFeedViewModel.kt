@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.viewmodel
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.model.LocationData
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.model.UserData
@@ -76,6 +78,9 @@ class MyPostFeedViewModel : ViewModel() {
     private val _editPostResult = MutableLiveData<PostRcv>()
     val editPostResult : MutableLiveData<PostRcv> get() = _editPostResult
 
+    // MapView 데이터 이동하기
+    private val _locationResult = MutableLiveData<LocationData>()
+    val locationResult : MutableLiveData<LocationData> get() = _locationResult
 
     // 포스트 수정된 DB 업로드 , 추가한 이미지 Storage에 업로드
     fun uploadEditPost(uris : MutableList<Any>, post : Post) {
@@ -143,7 +148,7 @@ class MyPostFeedViewModel : ViewModel() {
                     }
                 }
                 .addOnFailureListener {
-                    Log.d("xxxx", "uploadEditPost: 초장부터 실패 $it")
+                    Log.d("xxxx", "uploadEditPost: 초기 실패 $it")
                 }
         }
         }
@@ -151,12 +156,28 @@ class MyPostFeedViewModel : ViewModel() {
 
     // 게시글 수정 완료 시 디테일 페이지에 데이터 넘겨주기.
     fun setRevisedPost(postRcv : PostRcv){
-        _editPostResult.postValue(postRcv)
+        _editPostResult.value = postRcv
     }
 
     // 게시물 디테일 정보 받아오기
     fun setCurrentPost(postRcv : PostRcv){
-        _currentPost.value = postRcv
+        _currentPost.value = (postRcv)
+    }
+
+    @SuppressLint("NullSafeMutableLiveData")
+    fun cleanCurrentPost() {
+        _currentPost.postValue(null)
+    }
+
+    // 기존 데이터 제거하기
+    @SuppressLint("NullSafeMutableLiveData")
+    fun cleanLocationResult(){
+        _locationResult.postValue(null)
+    }
+
+    // 위치 정보 넘기기, 받기
+    fun setLocationInfo(locationData: LocationData){
+        _locationResult.postValue(locationData)
     }
 
     // Home Frag 전체 게시글 DB 받아오기
@@ -192,7 +213,7 @@ class MyPostFeedViewModel : ViewModel() {
         return PostRcv(
             post.uid,
             post.title,
-            post.price,
+            post.price.toString().replace(",", "").toLong(),
             post.category,
             post.address,
             post.deadline,
@@ -204,6 +225,8 @@ class MyPostFeedViewModel : ViewModel() {
             post.timestamp,
             post.state,
             post.documentId,
+            post.locationLatLng,
+            post.locationKeyword,
             post.endTime
         )
     }
@@ -226,23 +249,9 @@ class MyPostFeedViewModel : ViewModel() {
                 postImgList.addAll(uriList)
 
                 if (postImgUris.size == postImgList.size) {
-                    var postRcv = PostRcv(
-                        uid = post.uid,
-                        title = post.title,
-                        price = post.price.toString().replace(",", "").toLong(),
-                        category = post.category,
-                        address = post.address,
-                        deadline = post.deadline,
-                        desc = post.desc,
-                        imgs = postImgList,
-                        nickname = post.nickname,
-                        likeUsers = post.likeUsers,
-                        token = post.token,
-                        timestamp = post.timestamp,
-                        state = post.state,
-                        documentId=post.documentId,
-                        endDate = post.endTime
-                    )
+
+                    // Post -> PostRcv
+                    val postRcv = postToPostRcv(post,postImgList)
 
                     var inserted = false
                     for ( index in postRcvList.indices){
@@ -263,7 +272,6 @@ class MyPostFeedViewModel : ViewModel() {
                 }
             }
     }
-
 
     // 내가 쓴 글 목록 받아오기 -  whereEqualTo, orderBy
     fun postFeedDownload() {

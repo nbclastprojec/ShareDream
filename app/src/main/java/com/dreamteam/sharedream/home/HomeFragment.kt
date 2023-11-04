@@ -91,9 +91,12 @@ class HomeFragment : Fragment() {
 
         binding.homeBtnRefreshList.setOnClickListener {
             myPostFeedViewModel.downloadHomePostRcv()
+
         }
 
         binding.floatingActionButton.setOnClickListener {
+            myPostFeedViewModel.cleanCurrentPost()
+            myPostFeedViewModel.cleanLocationResult()
             parentFragmentManager.beginTransaction().replace(R.id.frag_edit, EditFragment())
                 .addToBackStack(null).commit()
         }
@@ -114,12 +117,36 @@ class HomeFragment : Fragment() {
             viewModel.sortCategorys(selectedCategory)
             Log.d("nyh", "Selected Category in HomeFragment: $selectedCategory")
 
+            // 게시물 수정 시 Home Fragment 에 해당 게시글 수정 반영
+            myPostFeedViewModel.editPostResult.observe(viewLifecycleOwner) {
+                val currentPostList = homePostAdapter.currentList.toMutableList()
+                for (index in currentPostList.indices) {
+                    if (currentPostList[index].timestamp == it.timestamp) {
+                        currentPostList[index] = it
+                        Log.d("xxxx", " Rcv Item Change = $currentPostList")
+                        updateRcv(index, it)
+                    }
+                }
+            }
+            viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
+                homePostAdapter.submitList(result)
+                homePostAdapter.notifyDataSetChanged()
+            }
         }
-        viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
-            homePostAdapter.submitList(result)
-            homePostAdapter.notifyDataSetChanged()
-        }
+    }
 
+    private fun updateRcv(position: Int, post: PostRcv){
+        val layoutManager = binding.homeRecycle.layoutManager
+        val scrollPosition = if (layoutManager != null){
+            (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        } else { 0 }
+        val newList = homePostAdapter.currentList.toMutableList()
+        newList[position] = post
+        homePostAdapter.submitList(newList)
+
+        binding.homeRecycle.post{
+            binding.homeRecycle.scrollToPosition(scrollPosition)
+        }
         val sortSpinner = binding.sortSpinner
         sortSpinner.adapter = ArrayAdapter.createFromResource(
             requireContext(),

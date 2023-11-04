@@ -20,9 +20,12 @@ data class Post(
     val timestamp : Timestamp,
     val state : String,
     val documentId : String,
+    val locationLatLng: List<Double>,
+    val locationKeyword : List<String>,
     val endTime:String
-
 ) : Serializable
 {
-    constructor() : this("","", 0, "", "", "","", listOf(),"", listOf(),"",Timestamp.now(),"","","")
+    constructor() : this("","", 0, "", "", "","", listOf(),"", listOf(),"",Timestamp.now(),"","",
+        listOf(), listOf(),""
+    )
 }
