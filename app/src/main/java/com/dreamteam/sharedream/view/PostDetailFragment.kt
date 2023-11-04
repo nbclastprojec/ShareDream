@@ -2,8 +2,11 @@ package com.dreamteam.sharedream.view
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,6 +29,7 @@ import com.dreamteam.sharedream.view.MapViewFragment.Companion.READ_ONLY
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -320,7 +324,6 @@ class PostDetailFragment : Fragment() {
         intent.putExtra("documentId", documentId)
         startActivity(intent)
     }
-
 
     private fun time(timestamp: Timestamp): String {
         val date: Date = timestamp.toDate()

@@ -38,12 +38,12 @@ import java.util.concurrent.TimeUnit
 class MessageActivity : AppCompatActivity() {
 
     private val fireDatabase = FirebaseDatabase.getInstance().reference
-    private var chatRoomuid : String? = null
-    private var destinationUid : String? = null
-    private var uid : String? = null
-    private var recyclerView : RecyclerView? = null
+    private var chatRoomuid: String? = null
+    private var destinationUid: String? = null
+    private var uid: String? = null
+    private var recyclerView: RecyclerView? = null
     private val storage = Firebase.storage
-    private lateinit var binding : ActivityChatBinding
+    private lateinit var binding: ActivityChatBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,9 +51,9 @@ class MessageActivity : AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         val view = binding.root
 
-        val receivedDocumentId = intent.getStringExtra("documentId").toString()//document 아이디 가져왔습니다. 이게 최신글은 document ID가 있어서 이걸로 검색하시면 스토어에 글 바로 연결됩니다. 최신화된지 얼마안되서 있는글도 있고 없는글도 있어요. 최근에 쓴 글은 다 있어서 주석 이거보시면 지워주시면 감사하겠습니당
+        val receivedDocumentId = intent.getStringExtra("documentId")
+            .toString()//document 아이디 가져왔습니다. 이게 최신글은 document ID가 있어서 이걸로 검색하시면 스토어에 글 바로 연결됩니다. 최신화된지 얼마안되서 있는글도 있고 없는글도 있어요. 최근에 쓴 글은 다 있어서 주석 이거보시면 지워주시면 감사하겠습니당
         val store = FirebaseFirestore.getInstance()
-
 
         val UserData = store.collection("Posts").document(receivedDocumentId)
         UserData.get()
@@ -69,23 +69,20 @@ class MessageActivity : AppCompatActivity() {
                     val postUseruid = document.getString("uid")//uid
                     bindingImage(image[0])
 
-                    binding.chattittle.text=title
-                    binding.chat.text=nickname
+                    binding.chattittle.text = title
+                    binding.chat.text = nickname
                     //binding.category.text=category
                     ///binding.price.text=price+"원"
-                    binding.region.text=address
+                    binding.region.text = address
 
                     destinationUid = postUseruid
 
                     Log.d("susu", "${postUseruid}")
 
-
                 } else {
                     Log.d("MessageActivity", "문서가 없는 예전글이에요.")
                 }
             }
-
-
 
         val imageView = binding.chatSendBtn
         val editText = binding.chattext
@@ -97,44 +94,38 @@ class MessageActivity : AppCompatActivity() {
 
         setContentView(view)
 
-
-
         uid = Firebase.auth.currentUser?.uid.toString()
         recyclerView = binding.chatRecycleView
 
-        imageView.setOnClickListener{
+        imageView.setOnClickListener {
             Log.d("susu", "$destinationUid")
             val chatModel = ChatModel()
-            chatModel.users.put(uid.toString(),true)
-            chatModel.users.put(destinationUid!!,true)
+            chatModel.users.put(uid.toString(), true)
+            chatModel.users.put(destinationUid!!, true)
 
             val comment = ChatModel.Comment(uid, editText.text.toString(), realTime)
-            if(chatRoomuid == null) {
+            if (chatRoomuid == null) {
                 imageView.isEnabled = false
                 fireDatabase.child("ChatRoom").push().setValue(chatModel).addOnSuccessListener {
                     checkChatRoom()
                     Handler().postDelayed({
-                        fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments").push().setValue(comment)
+                        fireDatabase.child("ChatRoom").child(chatRoomuid.toString())
+                            .child("comments").push().setValue(comment)
                         editText.text = null
                     }, 1000L)
-
                 }
-            }else{
-                fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments").push().setValue(comment)
+            } else {
+                fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
+                    .push().setValue(comment)
                 editText.text = null
-
             }
         }
-
-        backbtn.setOnClickListener{
+        backbtn.setOnClickListener {
             super.onBackPressed()
         }
-
         checkChatRoom()
-
-
-
     }
+
     private fun checkChatRoom() {
         fireDatabase.child("ChatRoom").orderByChild("users/$uid").equalTo(true)
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -154,46 +145,55 @@ class MessageActivity : AppCompatActivity() {
                 }
             })
     }
-    inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
+
+    inner class RecyclerViewAdapter :
+        RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
 
         // firestore에서 destinationUid 를 이용해서 db.collection ~ "Userdata" 로 name 꺼내오기
         private val comments = ArrayList<ChatModel.Comment>()
-        private var chat : Chatting? = null
-        init{
-            fireDatabase.child("users").child(destinationUid.toString()).addListenerForSingleValueEvent(object : ValueEventListener{
-                override fun onCancelled(error: DatabaseError) {
-                }
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    chat = snapshot.getValue<Chatting>()
-                    chat?.name = binding.chat.toString()
-                    getMessageList()
-                }
-            })
+        private var chat: Chatting? = null
+
+        init {
+            fireDatabase.child("users").child(destinationUid.toString())
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        chat = snapshot.getValue<Chatting>()
+                        chat?.name = binding.chat.toString()
+                        getMessageList()
+                    }
+                })
         }
 
-        fun getMessageList(){
-            fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments").addValueEventListener(object : ValueEventListener{
-                override fun onCancelled(error: DatabaseError) {
-                }
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    comments.clear()
-                    for(data in snapshot.children){
-                        val item = data.getValue<ChatModel.Comment>()
-                        comments.add(item!!)
-                        println(comments)
+        fun getMessageList() {
+            fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
                     }
-                    notifyDataSetChanged()
-                    //메세지를 보낼 시 화면을 맨 밑으로 내림
-                    recyclerView?.scrollToPosition(comments.size - 1)
-                }
-            })
+
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        comments.clear()
+                        for (data in snapshot.children) {
+                            val item = data.getValue<ChatModel.Comment>()
+                            comments.add(item!!)
+                            println(comments)
+                        }
+                        notifyDataSetChanged()
+                        //메세지를 보낼 시 화면을 맨 밑으로 내림
+                        recyclerView?.scrollToPosition(comments.size - 1)
+                    }
+                })
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
-            val itemBinding = ChatItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+            val itemBinding =
+                ChatItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
             return MessageViewHolder(itemBinding)
         }
+
         @SuppressLint("RtlHardcoded")
         override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
             val comment = comments[position]
@@ -232,37 +232,30 @@ class MessageActivity : AppCompatActivity() {
             }
         }
 
-
         override fun getItemCount(): Int {
             return comments.size
         }
-
-
-    }
-    fun bindingImage(image:String) {
-
-            val chatpostimage=binding.chatpostimage
-            Log.d("asasas","$chatpostimage")
-            if (image.isNotEmpty()) {
-
-                val imagePath = "$image"
-                storage.reference.child("post").child("${image}").downloadUrl
-                    .addOnSuccessListener { uri ->
-                        Glide.with(this)
-                            .load(uri)
-                            .into(chatpostimage)
-                    }
-                    .addOnFailureListener { exception ->
-                        exception.printStackTrace()
-                        Toast.makeText(this, "이미지 로드 실패", Toast.LENGTH_SHORT).show()
-                    }
-            } else {
-
-            }
-
-
-
     }
 
+    fun bindingImage(image: String) {
 
+        val chatpostimage = binding.chatpostimage
+        Log.d("asasas", "$chatpostimage")
+        if (image.isNotEmpty()) {
+
+            val imagePath = "$image"
+            storage.reference.child("post").child("${image}").downloadUrl
+                .addOnSuccessListener { uri ->
+                    Glide.with(this)
+                        .load(uri)
+                        .into(chatpostimage)
+                }
+                .addOnFailureListener { exception ->
+                    exception.printStackTrace()
+                    Toast.makeText(this, "이미지 로드 실패", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+
+        }
+    }
 }

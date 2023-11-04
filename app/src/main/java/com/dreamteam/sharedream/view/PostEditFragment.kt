@@ -41,7 +41,7 @@ import java.util.Locale
 
 class PostEditFragment : Fragment(), CalenderFragmentDialog.CalendarDataListener {
 
-    private var _binding: FragmentPostEditBinding? = null
+    private var _binding : FragmentPostEditBinding? = null
     private val binding get() = _binding!!
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
@@ -123,7 +123,7 @@ class PostEditFragment : Fragment(), CalenderFragmentDialog.CalendarDataListener
             }
         }
 
-        var editCategory : String = ""
+        var editCategory: String = ""
         when (binding.chipgroup.checkedChipId) {
             R.id.cloths_chip1 -> editCategory = "의류"
             R.id.machine_chip1 -> editCategory = "가전제품"

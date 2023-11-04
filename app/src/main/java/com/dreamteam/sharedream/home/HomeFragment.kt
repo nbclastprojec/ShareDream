@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -66,8 +67,6 @@ class HomeFragment : Fragment() {
             }
         }, emptyList())
 
-        setupRcv()
-
         return binding.root
     }
 
@@ -91,7 +90,6 @@ class HomeFragment : Fragment() {
 
         binding.homeBtnRefreshList.setOnClickListener {
             myPostFeedViewModel.downloadHomePostRcv()
-
         }
 
         binding.floatingActionButton.setOnClickListener {
@@ -101,7 +99,7 @@ class HomeFragment : Fragment() {
                 .addToBackStack(null).commit()
         }
 
-//        setupRcv()
+        setupRcv()
 
         myPostFeedViewModel.downloadHomePostRcv()
 
@@ -128,23 +126,37 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-            viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
-                homePostAdapter.submitList(result)
-                homePostAdapter.notifyDataSetChanged()
-            }
+        }
+        viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
+            homePostAdapter.submitList(result)
+            homePostAdapter.notifyDataSetChanged()
+        }
+        myPostFeedViewModel.postResult.observe(viewLifecycleOwner) { posts ->
+            homePostAdapter.submitList(posts)
+        }
+        categoryViewModel.selectedCategory.observe(viewLifecycleOwner) { selectedCategory ->
+            viewModel.sortCategorys(selectedCategory)
+            Log.d("nyh", "Selected Category in HomeFragment: $selectedCategory")
+
+        }
+        viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
+            homePostAdapter.submitList(result)
+            homePostAdapter.notifyDataSetChanged()
         }
     }
 
-    private fun updateRcv(position: Int, post: PostRcv){
+    private fun updateRcv(position: Int, post: PostRcv) {
         val layoutManager = binding.homeRecycle.layoutManager
-        val scrollPosition = if (layoutManager != null){
+        val scrollPosition = if (layoutManager != null) {
             (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-        } else { 0 }
+        } else {
+            0
+        }
         val newList = homePostAdapter.currentList.toMutableList()
         newList[position] = post
         homePostAdapter.submitList(newList)
 
-        binding.homeRecycle.post{
+        binding.homeRecycle.post {
             binding.homeRecycle.scrollToPosition(scrollPosition)
         }
         val sortSpinner = binding.sortSpinner

@@ -2,11 +2,14 @@ package com.dreamteam.sharedream.viewmodel
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dreamteam.sharedream.FCMService
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.model.LocationData
 import com.dreamteam.sharedream.model.Post
@@ -14,6 +17,7 @@ import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.model.UserData
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
+import com.google.android.play.integrity.internal.e
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -21,6 +25,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +36,7 @@ import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.UUID
 
 class MyPostFeedViewModel : ViewModel() {
     private val db = Firebase.firestore
@@ -85,11 +92,14 @@ class MyPostFeedViewModel : ViewModel() {
     // 포스트 수정된 DB 업로드 , 추가한 이미지 Storage에 업로드
     fun uploadEditPost(uris : MutableList<Any>, post : Post) {
         viewModelScope.launch(Dispatchers.IO) {
-        val imgs : MutableList<String> = mutableListOf()
-        fun getTime(): String {
-            val currentDateTime = Calendar.getInstance().time
-            val dateFormat =
-                SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS", Locale.KOREA).format(currentDateTime)
+            val imgs: MutableList<String> = mutableListOf()
+            fun getTime(): String {
+                val currentDateTime = Calendar.getInstance().time
+                val dateFormat =
+                    SimpleDateFormat(
+                        "yyyy.MM.dd HH:mm:ss.SSS",
+                        Locale.KOREA
+                    ).format(currentDateTime)
 
             return dateFormat
         }
@@ -104,7 +114,8 @@ class MyPostFeedViewModel : ViewModel() {
                         imgs.add(fileName)
                         when (item) {
                             is Uri -> {
-                                storage.reference.child("post").child("${time}_$count").putFile(item)
+                                storage.reference.child("post").child("${time}_$count")
+                                    .putFile(item)
                                     .addOnSuccessListener {
                                         Log.d("xxxx", " Uri Succesful : $it")
                                     }
@@ -112,22 +123,24 @@ class MyPostFeedViewModel : ViewModel() {
                                         Log.d("xxxx", " Uri Failure : $it")
                                     }
                             }
+
                             is URL -> {
                                 val connection = item.openConnection() as HttpURLConnection
                                 connection.connect()
                                 val inputStream = connection.inputStream
-                                storage.reference.child("post").child("${time}_$count").putStream(inputStream)
-                                    .addOnSuccessListener{
+                                storage.reference.child("post").child("${time}_$count")
+                                    .putStream(inputStream)
+                                    .addOnSuccessListener {
                                         Log.d("xxxx", " URL Successful : $it ")
                                     }
-                                    .addOnFailureListener{
+                                    .addOnFailureListener {
                                         Log.d("xxxx", " URL Failure : $it ")
                                     }
                             }
                             else -> {}
                         }
                     }
-                }catch (exception : StorageException){
+                } catch (exception: StorageException) {
                     val errorCode = exception.errorCode
                     Log.d("xxxx", " 파일 업로드 실패 errorCode: ${errorCode}")
                 }
@@ -193,16 +206,21 @@ class MyPostFeedViewModel : ViewModel() {
                             val postRcvList = mutableListOf<PostRcv>()
                             for ( document in querySnapshot.documents){
                                 document.toObject<Post>()?.let { post ->
-                                    convertPostToPostRcv(post,querySnapshot, postRcvList,_postResult)
-                                    Log.d("postpost","$post")
+                                    convertPostToPostRcv(
+                                        post,
+                                        querySnapshot,
+                                        postRcvList,
+                                        _postResult
+                                    )
+                                    Log.d("postpost", "$post")
                                 }
                             }
                         }
                     }.addOnFailureListener {
-                        Log.d("pleaseFail","$it")
+                        Log.d("pleaseFail", "$it")
                     }
 
-            }catch (e: Exception){
+            } catch (e: Exception) {
 
             }
         }
@@ -232,8 +250,10 @@ class MyPostFeedViewModel : ViewModel() {
     }
 
     // Model 형식 Post  -> PostRcv 형식으로 변환
-    private fun convertPostToPostRcv (post: Post, querySnapshot: QuerySnapshot, postRcvList:MutableList<PostRcv>,
-                                      resultLiveData: MutableLiveData<MutableList<PostRcv>>) {
+    private fun convertPostToPostRcv(
+        post: Post, querySnapshot: QuerySnapshot, postRcvList: MutableList<PostRcv>,
+        resultLiveData: MutableLiveData<MutableList<PostRcv>>
+    ) {
         val postImgUris: List<String> = post.imgs
         val postImgList: MutableList<Uri> = mutableListOf()
 
@@ -273,21 +293,27 @@ class MyPostFeedViewModel : ViewModel() {
             }
     }
 
+
     // 내가 쓴 글 목록 받아오기 -  whereEqualTo, orderBy
     fun postFeedDownload() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 db.collection("Posts")
                     .whereEqualTo("uid", Constants.currentUserUid)
-                    .orderBy("timestamp",Query.Direction.DESCENDING)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
                     .get()
                     .addOnSuccessListener { querySnapshot ->
                         if (!querySnapshot.isEmpty) {
                             val documentSnapshot = querySnapshot.documents
-                            val postRcvList : MutableList<PostRcv> = mutableListOf()
+                            val postRcvList: MutableList<PostRcv> = mutableListOf()
                             for (document in documentSnapshot) {
                                 document.toObject<Post>()?.let {
-                                    convertPostToPostRcv(it,querySnapshot,postRcvList,_postFeedResult)
+                                    convertPostToPostRcv(
+                                        it,
+                                        querySnapshot,
+                                        postRcvList,
+                                        _postFeedResult
+                                    )
                                 }
                             }
                             Log.d("xxxx", "postFeedDownload: $postRcvList")
@@ -297,14 +323,14 @@ class MyPostFeedViewModel : ViewModel() {
                         Log.d("xxxx", "postFeedDownload Failure : $it ")
                     }
 
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 Log.d("xxxx", " postFeedDownload Failure = $e ")
             }
         }
     }
 
     // 단일 프로필 이미지 불러오기
-    fun downloadCurrentProfileImg(uid : String){
+    fun downloadCurrentProfileImg(uid: String) {
         storage.reference.child("ProfileImg").child("$uid").downloadUrl
             .addOnSuccessListener {
                 _currentProfileImg.value = it
@@ -312,7 +338,7 @@ class MyPostFeedViewModel : ViewModel() {
     }
 
     // 유저 데이터 가져오기
-    fun downloadUserInfo(uid : String,resultLiveData : MutableLiveData<UserData>){
+    fun downloadUserInfo(uid: String, resultLiveData: MutableLiveData<UserData>) {
         db.collection("UserData").document(uid).get()
             .addOnSuccessListener {
                 resultLiveData.postValue(it.toObject<UserData>())
@@ -320,13 +346,13 @@ class MyPostFeedViewModel : ViewModel() {
     }
 
     // 유저 데이터 수정하기
-    fun uploadEditUserInfo(nickname : String,intro : String){
+    fun uploadEditUserInfo(nickname: String, intro: String) {
         db.collection(USER_DATA).document(Constants.currentUserUid!!)
             .update(
-                "nickname",nickname,
-                "intro",intro
+                "nickname", nickname,
+                "intro", intro
             ).addOnSuccessListener {
-                downloadUserInfo(Constants.currentUserUid!!,_myPageResult)
+                downloadUserInfo(Constants.currentUserUid!!, _myPageResult)
                 Constants.currentUserInfo!!.nickname = nickname
                 Constants.currentUserInfo!!.intro = intro
                 Log.d("xxxx", "uploadEditUserInfo: Successful $it")
@@ -336,7 +362,7 @@ class MyPostFeedViewModel : ViewModel() {
     }
 
     // 유저 프로필 이미지 수정하기
-    fun uploadUserProfileImg(photoUri : Uri) {
+    fun uploadUserProfileImg(photoUri: Uri) {
 
         val uploadTask = storage.reference.child("ProfileImg").child("${Constants.currentUserUid}")
             .putFile(photoUri!!)
@@ -363,24 +389,26 @@ class MyPostFeedViewModel : ViewModel() {
     }
 
     // 관심 목록 추가 or 제거
-    fun addOrSubFavoritePost(postPath: Timestamp){
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun addOrSubFavoritePost(postPath: Timestamp) {
         val uid = Constants.currentUserUid
         db.collection("Posts").whereEqualTo("timestamp", postPath)
             .get()
-            .addOnSuccessListener {querySnapshot ->
+            .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
 
                     val documentSnap = querySnapshot.documents[0]
-                    val likeList : MutableList<String> = mutableListOf()
+                    val likeList: MutableList<String> = mutableListOf()
 
                     likeList.addAll(documentSnap.data?.get("likeUsers") as List<String>)
                     Log.d("xxxx", " Before control LikeUsers List : $likeList")
+                    getTokenFromPost(documentSnap.id)
 
-                    if (likeList.contains(uid)){
+                    if (likeList.contains(uid)) {
                         //todo 이미 좋아요한 유저 이벤트 처리, 본인 게시물 좋아요 버튼 이벤트 처리.
                         Log.d("xxxx", "addFavoritePost: 이미 좋아요한 UID")
                         likeList.remove(uid)
-                        documentSnap.reference.update("likeUsers",likeList)
+                        documentSnap.reference.update("likeUsers", likeList)
                             .addOnSuccessListener {
                                 Log.d("xxxx", " 관심 목록에서 제거 O ")
 
@@ -405,8 +433,42 @@ class MyPostFeedViewModel : ViewModel() {
     }
 
     // todo 관심 목록 추가, 제거 분리하여 관리
-    fun subFavoritePost(){}
-    fun addFavoritePost(){}
+    fun subFavoritePost() {}
+    fun addFavoritePost() {}
+
+    // Detail Page 작성자 게시글 상태 변경
+    fun uploadChangedPostState(timestamp: Timestamp, state: String) {
+        db.collection("Posts").whereEqualTo("timestamp", timestamp).get()
+            .addOnSuccessListener { querySanp ->
+                querySanp.documents[0].reference.update("state", state)
+                    .addOnSuccessListener {
+                        Log.d("xxxx", "uploadChangedPostState: State 변경 성공")
+                    }
+                    .addOnFailureListener {
+                        Log.d("xxxx", "uploadChangedPostState: State 변경 실패 -> $it")
+                    }
+            }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getTokenFromPost(postId: String) {
+        db.collection("Posts")
+            .document(postId)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val token = documentSnapshot.getString("token")
+                    if (token != null) {
+
+                        val notificationTitle = "하이요?"
+                        val notificationBody = "눌렀습니다"
+                        val uniqueMessageId = UUID.randomUUID().toString()
+
+                        // FCM 알림에 추가할 데이터 설정
+                        val notification = mutableMapOf<String, String>()
+                        notification["key1"] = "value1"
+                        notification["key2"] = "value2"
+                        FirebaseMessaging.getInstance().isAutoInitEnabled = true
 
     // Detail Page 작성자 게시글 상태 변경
     fun uploadChangedPostState(timestamp: Timestamp,state: String){
@@ -420,5 +482,26 @@ class MyPostFeedViewModel : ViewModel() {
                         Log.d("xxxx", "uploadChangedPostState: State 변경 실패 -> $it")
                     }
             }
+    }
+                        // FCM 알림을 보내기 위한 데이터 설정
+
+                        val message = RemoteMessage.Builder(token)
+                            .setMessageId(uniqueMessageId)
+                            .setData(notification) // 데이터 추가
+                            .addData("title", notificationTitle) // 알림 제목
+                            .addData("body", notificationBody)
+                            .build()
+                        FirebaseMessaging.getInstance().send(message)
+                        // FCMService의 sendNonotification 함수 호출
+                        Log.d("nyh", "getTokenFromPost: token = $token")
+                        Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
+                    }
+                } else {
+                    Log.d("nyh", "getTokenFromPost: elsefail")
+                }
+            }.addOnFailureListener  {
+                Log.d("nyh", "getTokenFromPost: failurfail")
+
+        }
     }
 }
