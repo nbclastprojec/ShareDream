@@ -125,8 +125,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
 
         }
 
-        // todo 임시로 베너 클릭 시 Map이 나오도록 설정.
-        binding.topMassage.setOnClickListener {
+        binding.editBtnLocationPick.setOnClickListener {
             parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment(EDITABLE))
                 .addToBackStack(null).commit()
         }

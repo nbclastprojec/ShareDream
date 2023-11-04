@@ -200,7 +200,7 @@ class PostEditFragment : Fragment(), CalenderFragmentDialog.CalendarDataListener
         }
 
 
-        binding.topMassage.setOnClickListener {
+        binding.editBtnLocationPick.setOnClickListener {
 
             // 위치 권한 확인 후 없다면 요청, 있다면 MapView
             if (!Util.permissionCheck(this.requireContext())) {

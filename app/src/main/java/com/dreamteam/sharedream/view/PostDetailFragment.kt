@@ -165,12 +165,16 @@ class PostDetailFragment : Fragment() {
 
         // 관심 목록 추가 버튼 클릭 이벤트
         binding.detailBtnAddFavorite.setOnClickListener {
-            Util.showDialog(requireContext(), "관심 목록에 추가", "내 관심 목록에 추가하시겠습니까?") {
-                myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
-                Log.d(
-                    "xxxx",
-                    " detail like btn clicked, post timestamp  =  ${currentPostInfo[0].timestamp}"
-                )
+            if (currentPostInfo[0].uid != Constants.currentUserUid){
+                Util.showDialog(requireContext(), "관심 목록에 추가", "내 관심 목록에 추가하시겠습니까?") {
+                    myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
+                    Log.d(
+                        "xxxx",
+                        " detail like btn clicked, post timestamp  =  ${currentPostInfo[0].timestamp}"
+                    )
+                }
+            } else {
+                Toast.makeText(requireContext(),"게시글 작성자는 관심목록에 추가할 수 없습니다",Toast.LENGTH_SHORT).show()
             }
         }
 

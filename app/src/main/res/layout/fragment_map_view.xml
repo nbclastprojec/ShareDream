@@ -23,7 +23,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
-            android:padding="12dp"
+            android:padding="8dp"
             android:src="@drawable/ic_backbtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +33,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
-            android:padding="12dp"
+            android:padding="8dp"
             android:scaleX="-1"
             android:src="@drawable/ic_backbtn"
             android:visibility="visible"
