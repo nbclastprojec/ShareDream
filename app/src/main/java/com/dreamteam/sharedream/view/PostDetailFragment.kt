@@ -355,27 +355,4 @@ class PostDetailFragment : Fragment() {
         }
         binding.detailIcState.setImageResource(stateIcon)
     }
-    fun getToken() {
-        val db = FirebaseFirestore.getInstance()
-
-        db.collection("posts")
-            .get()
-            .addOnSuccessListener { documents ->
-                val tokens = mutableListOf<String>()
-
-                for (document in documents) {
-                    val token = document.getString("token")
-                    token?.let {
-                        tokens.add(it)
-                    }
-                }
-
-                // tokens 리스트에 모든 "token" 필드 값을 가져옵니다.
-                // 이제 tokens 리스트를 사용하여 원하는 작업을 수행할 수 있습니다.
-            }
-            .addOnFailureListener { exception ->
-                Log.w("nyh", "Error getting documents: ", exception)
-            }
-    }
-
 }

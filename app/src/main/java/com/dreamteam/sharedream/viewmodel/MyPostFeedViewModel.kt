@@ -212,7 +212,7 @@ class MyPostFeedViewModel : ViewModel() {
         return PostRcv(
             post.uid,
             post.title,
-            post.price,
+            post.price.toLong(),
             post.category,
             post.address,
             post.deadline,
@@ -251,7 +251,7 @@ class MyPostFeedViewModel : ViewModel() {
                     var postRcv = PostRcv(
                         uid = post.uid,
                         title = post.title,
-                        price = post.price,
+                        price = post.price.toLong(),
                         category = post.category,
                         address = post.address,
                         deadline = post.deadline,
