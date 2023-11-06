@@ -164,7 +164,9 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
             val post = Post(
                 Constants.currentUserUid!!,
                 binding.editTvTitle.text.toString(),
+
                 binding.editEtvPrice.text.toString().replace(",","").toLong(),
+
                 editCategory,
                 binding.editEtvAddress.text.toString(),
                 //todo ↓ deadline 추가 - 임시로 city 값 넣어둠

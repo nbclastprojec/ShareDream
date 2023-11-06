@@ -68,8 +68,10 @@ class HomePostAdapter(
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price.toString()
+
             postEndDate.text = EndTime(positionItem.endDate)
             postPrice.text = "${positionItem.price}원"
+
 
 
         }

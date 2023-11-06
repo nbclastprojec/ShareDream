@@ -13,8 +13,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
@@ -33,7 +35,10 @@ import com.dreamteam.sharedream.view.MapViewFragment.Companion.READ_ONLY
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -49,6 +54,10 @@ class PostDetailFragment : Fragment() {
     private val currentPostInfo = mutableListOf<PostRcv>()
 
 
+    private var destinationUid: String? = null
+
+
+
     private fun detailPageInfoChange(postRcv: PostRcv) {
         binding.detailId.text = postRcv.nickname
         binding.detailAddress.text = postRcv.address
@@ -62,6 +71,7 @@ class PostDetailFragment : Fragment() {
         stateIconChange()
 
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -349,9 +359,27 @@ class PostDetailFragment : Fragment() {
 
 
     private fun startMessageActivity(documentId: String) {
-        val intent = Intent(requireContext(), MessageActivity::class.java)
-        intent.putExtra("documentId", documentId)
-        startActivity(intent)
+        val myuid =  Firebase.auth.currentUser?.uid.toString()
+        val store = FirebaseFirestore.getInstance()
+        val userData = store.collection("Posts").document(documentId)
+
+        userData.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val postUseruid = document.getString("uid")
+                    destinationUid = postUseruid
+
+                    if (myuid != destinationUid) {
+                        val intent = Intent(requireContext(), MessageActivity::class.java)
+                        intent.putExtra("documentId", documentId)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(requireContext(), "자기 자신에게는 메시지를 보낼 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Log.d("MessageActivity", "문서가 없는 예전글이에요.")
+                }
+            }
     }
 
     private fun time(timestamp: Timestamp): String {

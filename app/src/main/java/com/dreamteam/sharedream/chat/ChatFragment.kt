@@ -2,7 +2,9 @@ package com.dreamteam.sharedream.chat
 
 import android.content.Context
 import android.content.Intent
+import android.net.ParseException
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +24,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.TreeMap
 
 class ChatFragment : Fragment() {
@@ -34,6 +40,8 @@ class ChatFragment : Fragment() {
         }
     }
     private val fireDatabase = FirebaseDatabase.getInstance().reference
+    private val firestore = FirebaseFirestore.getInstance()
+    private val storage = Firebase.storage
 
 
     override fun onAttach(context: Context) {
@@ -46,6 +54,7 @@ class ChatFragment : Fragment() {
     ): View? {
         binding = FragmentChattingroomBinding.inflate(inflater,container,false)
         val view = binding.root
+
 
         val recyclerView = binding.chatfragmentRecyclerview
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -64,6 +73,7 @@ class ChatFragment : Fragment() {
         private val destinationUsers : ArrayList<String> = arrayListOf()
 
         init {
+
             uid = Firebase.auth.currentUser?.uid.toString()
 
             fireDatabase.child("ChatRoom").orderByChild("users/${uid}").equalTo(true)
@@ -94,47 +104,81 @@ class ChatFragment : Fragment() {
         inner class ViewHolder(private val itemBinding: ChattingroomItemBinding) :
             RecyclerView.ViewHolder(itemBinding.root) {
             val imageView: ImageView = itemBinding.chattingroomProfile
+            val time : TextView = itemBinding.chattingDate
             val tittle: TextView = itemBinding.chattingName
             val lastMessage: TextView = itemBinding.chattingMessage
         }
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             var destinationUid: String? = null
-            //채팅방에 있는 유저 모두 체크
+
             for (user in chatModel[position].users.keys) {
                 if (!user.equals(uid)) {
                     destinationUid = user
                     destinationUsers.add(destinationUid)
-                }
-            }
-            fireDatabase.child("users").child("$destinationUid").addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {
+
+                    firestore.collection("UserData").document(destinationUid)
+                    .get()
+                        .addOnSuccessListener { documents ->
+                                val name = documents.getString("nickname")
+
+                                holder.tittle.text = name
+                            Log.d("susu", "name: ${name}")
+
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.d("susu", "Error getting documents: $exception")
+                        }
+
+                    val storageReference = destinationUid?.let { storage.reference.child("ProfileImg").child(it) }
+                    storageReference?.downloadUrl?.addOnSuccessListener { uri ->
+                        Glide.with(holder.itemView.context)
+                            .load(uri)
+                            .into(holder.imageView)
+                    }?.addOnFailureListener { exception ->
+                        Log.e("ChatFragment", "이미지 다운로드 실패: ${exception.message}")
+                    }
                 }
 
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val friend = snapshot.getValue<Chatting>()
-                    Glide.with(holder.itemView.context)
-                        .load(friend?.profileImageUrl)
-                        .apply(RequestOptions().circleCrop())
-                        .into(holder.imageView)
-                    holder.tittle.text = friend?.name
-                }
-            })
+            }
+
+
+
+
+
+
             //메세지 내림차순 정렬 후 마지막 메세지의 키값을 가져옴
             val commentMap = TreeMap<String, ChatModel.Comment>(reverseOrder())
             commentMap.putAll(chatModel[position].comments)
             val lastMessageKey = commentMap.keys.toTypedArray()[0]
+            val inputFormat = SimpleDateFormat("MM월 dd일 HH:mm")
+            val outputFormat = SimpleDateFormat("MM월 dd일 HH:mm")
+            val time = chatModel[position].comments[lastMessageKey]?.time
+            val parsedDate = time?.let { inputFormat.parse(it) }
+            val formattedDate = parsedDate?.let { outputFormat.format(it) }
+
             holder.lastMessage.text = chatModel[position].comments[lastMessageKey]?.message
+            holder.time.text = formattedDate
+
+
 
             //채팅창 선책 시 이동
             holder.itemView.setOnClickListener {
-                val intent = Intent(context, MessageActivity::class.java)
+                val intent = Intent(context, ChatMessageActivity::class.java)
                 intent.putExtra("destinationUid", destinationUsers[position])
                 context?.startActivity(intent)
             }
+
+            holder.itemView.setOnClickListener{
+
+            }
         }
+
 
         override fun getItemCount(): Int {
             return chatModel.size
         }
     }
+
+
+
 }

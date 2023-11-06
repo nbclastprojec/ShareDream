@@ -204,6 +204,8 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
                 val post = Post(
                     Constants.currentUserUid!!,
                     binding.editTvTitle.text.toString(),
+
+
                     binding.editEtvPrice.text.toString().replace(",","").toLong(),
                     category,
                     binding.editEtvAddress.text.toString(),
