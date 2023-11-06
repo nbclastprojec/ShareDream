@@ -129,9 +129,22 @@ class ChatFragment : Fragment() {
                             Log.d("susu", "Error getting documents: $exception")
                         }
 
+                    val storageReference = destinationUid?.let { storage.reference.child("ProfileImg").child(it) }
+                    storageReference?.downloadUrl?.addOnSuccessListener { uri ->
+                        Glide.with(holder.itemView.context)
+                            .load(uri)
+                            .into(holder.imageView)
+                    }?.addOnFailureListener { exception ->
+                        Log.e("ChatFragment", "이미지 다운로드 실패: ${exception.message}")
+                    }
                 }
 
             }
+
+
+
+
+
 
             //메세지 내림차순 정렬 후 마지막 메세지의 키값을 가져옴
             val commentMap = TreeMap<String, ChatModel.Comment>(reverseOrder())

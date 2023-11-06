@@ -200,9 +200,14 @@ class ChatMessageActivity : AppCompatActivity() {
                         name.visibility = View.INVISIBLE
                         layoutMain.gravity = Gravity.RIGHT
                     } else {
-                        Glide.with(itemView.context)
-                            .load(chat?.profileImageUrl)
-                            .into(profile)
+                        val storageReference = destinationUid?.let { storage.reference.child("ProfileImg").child(it) }
+                        storageReference?.downloadUrl?.addOnSuccessListener { uri ->
+                            Glide.with(itemView.context)
+                                .load(uri)
+                                .into(profile)
+                        }?.addOnFailureListener { exception ->
+                            Log.e("MessageActivity", "이미지 다운로드 실패: ${exception.message}")
+                        }
                         message.setBackgroundResource(R.drawable.leftbubble)
                         name.text = chat?.name
                         destination.visibility = View.VISIBLE
