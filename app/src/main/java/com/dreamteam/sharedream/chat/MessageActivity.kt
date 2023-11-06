@@ -94,10 +94,6 @@ class MessageActivity : AppCompatActivity() {
 
         imageView.setOnClickListener {
 
-            if (destinationUid == uid) {
-                // 자기 자신에게 메시지를 보낼 때 Toast 메시지 표시
-                Toast.makeText(this, "자기 자신에게는 메시지를 보낼 수 없습니다.", Toast.LENGTH_SHORT).show()
-            } else {
                 Log.d("susu", "$destinationUid")
                 val chatModel = ChatModel()
                 chatModel.users.put(uid.toString(), true)
@@ -105,7 +101,12 @@ class MessageActivity : AppCompatActivity() {
 
                 val comment = ChatModel.Comment(uid, editText.text.toString(), realTime)
                 if (chatRoomuid == null) {
+
                     imageView.isEnabled = false
+                    Handler().postDelayed({
+                        imageView.isEnabled = true  // 1초 후 버튼 재활성화
+                    }, 1000L)
+
                     fireDatabase.child("ChatRoom").push().setValue(chatModel).addOnSuccessListener {
                         checkChatRoom()
                         Handler().postDelayed({
@@ -116,12 +117,17 @@ class MessageActivity : AppCompatActivity() {
 
                     }
                 } else {
+
+                    imageView.isEnabled = false
+                    Handler().postDelayed({
+                        imageView.isEnabled = true  // 1초 후 버튼 재활성화
+                    }, 1000L)
+
                     fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
                         .push().setValue(comment)
                     editText.text = null
 
                 }
-            }
         }
 
         backbtn.setOnClickListener {

@@ -167,6 +167,10 @@ class ChatFragment : Fragment() {
                 intent.putExtra("destinationUid", destinationUsers[position])
                 context?.startActivity(intent)
             }
+
+            holder.itemView.setOnClickListener{
+
+            }
         }
 
 
