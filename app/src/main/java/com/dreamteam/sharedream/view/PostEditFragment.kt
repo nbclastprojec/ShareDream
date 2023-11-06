@@ -1,6 +1,7 @@
 package com.dreamteam.sharedream.view
 
 import CalenderFragmentDialog
+import EditCalenderFragmentDialog
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,7 +19,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dreamteam.sharedream.NicknameCheckDailogFragment
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
@@ -36,7 +36,8 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class PostEditFragment : Fragment(), CalenderFragmentDialog.CalendarDataListener {
+class PostEditFragment : Fragment(), CalenderFragmentDialog.CalendarDataListener,
+    EditCalenderFragmentDialog.CalendarDataListener {
 
     private var _binding : FragmentPostEditBinding? = null
     private val binding get() = _binding!!
@@ -63,6 +64,10 @@ class PostEditFragment : Fragment(), CalenderFragmentDialog.CalendarDataListener
         super.onViewCreated(view, savedInstanceState)
         setupRcv()
 
+
+
+
+
         // Text Watcher
         convertCurrencyWon(binding.editEtvPrice)
 
@@ -84,7 +89,7 @@ class PostEditFragment : Fragment(), CalenderFragmentDialog.CalendarDataListener
             binding.editEtvAddress.setText("${post.address}")
             binding.editEtvDesc.setText("${post.desc}")
             category = "${post.category}"
-            binding.calender.setText("${post.endDate}")
+            binding.calender.setText(formatDateString(post.endTime))
 
             writePostImgAdapter.submitList(uris)
             writePostImgAdapter.notifyDataSetChanged()
@@ -121,14 +126,14 @@ class PostEditFragment : Fragment(), CalenderFragmentDialog.CalendarDataListener
         }
 
         binding.calender.setOnClickListener {
-            val calenderFragmentDialog = CalenderFragmentDialog()
-            calenderFragmentDialog.setCalendarDataListener(this)
-            calenderFragmentDialog.show(requireFragmentManager(), "CalenderDialog")
+            val editCalenderFragmentDialog = EditCalenderFragmentDialog(formatDateString(currentPost?.endTime ?: ""))
+            editCalenderFragmentDialog.setCalendarDataListener(this)
+            editCalenderFragmentDialog.show(requireFragmentManager(), "CalenderDialog")
         }
 
         // 업로드 하기 todo 게시글 수정 시 기존 이미지 삭제하기
         binding.btnComplete.setOnClickListener {
-            val priceString = binding.editEtvPrice.text.toString()
+            val priceString = binding.editEtvPrice.text.toString().replace(",", "")
             val priceLong = priceString.toLong()
 
             Log.d("xxxx", " postEditFrag 완료 버튼 클릭")
@@ -264,17 +269,44 @@ class PostEditFragment : Fragment(), CalenderFragmentDialog.CalendarDataListener
         super.onDestroyView()
         _binding = null
     }
+
+
+    fun formatDateString(inputDate: String): String {
+        val dateParts = inputDate.split("~")
+
+        if (dateParts.size == 2) {
+            val startDate = dateParts[0].trim()
+            val endDate = dateParts[1].trim()
+
+            val dateFormat = SimpleDateFormat("EEE MM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+            val startDateFormatted = SimpleDateFormat("yyyy년 MM월 dd일", Locale.ENGLISH).format(dateFormat.parse(startDate))
+            val endDateFormatted = SimpleDateFormat("yyyy년 MM월 dd일", Locale.ENGLISH).format(dateFormat.parse(endDate))
+            val resultText = "$startDateFormatted 부터, $endDateFormatted 까지"
+
+            return resultText
+            Log.d("afaaaaaaa",resultText)
+
+        }
+        return inputDate
+    }
+
     override fun onDataSelected(date: Date) {
-        val calendar = Calendar.getInstance()
-        val currentDate = calendar.time
-        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
-        val currentTime = dateFormat.format(currentDate)
-        Log.d("datedate","${date}")
-        val formattedDate = SimpleDateFormat("yyyy년 MM월 dd일").format(date)
-        binding.calender.text =currentTime+"부터, "+formattedDate+"까지"
-        selectedDate = date.toString()
+        val currentDate = currentPost?.endTime
+        val dateParts = currentDate?.split("~")
+        if (dateParts?.size == 2) {
+            val startDate = dateParts[0].trim()
+            val dateFormat = SimpleDateFormat("EEE MM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+            val startDateFormatted = SimpleDateFormat("yyyy년 MM월 dd일", Locale.ENGLISH).format(dateFormat.parse(startDate))
 
-
+            Log.d("datedate", "${date}")
+            val formattedDate = SimpleDateFormat("yyyy년 MM월 dd일").format(date)
+            val endTime =
+                SimpleDateFormat("EEE MM dd HH:mm:ss zzz yyyy", Locale.ENGLISH).format(date)
+            val resultText = "$startDateFormatted 부터, $formattedDate 까지"
+            binding.calender.text = resultText
+            selectedDate = startDate + "~" + endTime
+            Log.d("asasd", selectedDate)
+        }
 
     }
 }

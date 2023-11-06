@@ -1,38 +1,51 @@
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CalendarView
-import androidx.fragment.app.DialogFragment
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import com.dreamteam.sharedream.databinding.FragmentCalenderDialogBinding
+import com.dreamteam.sharedream.databinding.FragmentEditCalenderDialogBinding
+import com.dreamteam.sharedream.view.PostEditFragment
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 
-class CalenderFragmentDialog : DialogFragment() {
-    private var _binding: FragmentCalenderDialogBinding? = null
+class EditCalenderFragmentDialog(private var startDateFormatted: String): DialogFragment() {
+    private var _binding:FragmentEditCalenderDialogBinding? = null
     private val binding get() = _binding!!
     private var dataListener: CalendarDataListener? = null
-    private var selectedDate: Date? = null // 저장된 선택한 날짜
-
+    private var selectedDate: Date? = null
+    private var initialStartDate: Date? = null
 
     @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentCalenderDialogBinding.inflate(inflater, container, false)
+        _binding = FragmentEditCalenderDialogBinding.inflate(inflater, container, false)
+
+
 
         val postCalender: CalendarView = binding.postCalender
-        val currentDate = SimpleDateFormat("yyyy년 MM월 dd일").format(Date())
-        binding.startDate.text = currentDate
+        val startDate = initialStartDate?.let {
+            SimpleDateFormat("yyyy년MM월dd일", Locale.getDefault()).format(it)
+        } ?: extractStartDate(startDateFormatted)
+
+        Log.d("fasafs","$startDate")
+
+        binding.startDate.text = startDate+"부터,"
+
 
         postCalender.setOnDateChangeListener { postCalender, year, month, dayOfMonth ->
             val day: String = "${year}년 ${month + 1}월 ${dayOfMonth}일"
-            binding.endDate.text = day
+            binding.endDate.text = day+"까지"
             selectedDate = Calendar.getInstance().apply { set(year, month, dayOfMonth) }.time
         }
 
@@ -62,7 +75,22 @@ class CalenderFragmentDialog : DialogFragment() {
         fun onDataSelected(date: Date)
     }
 
-    fun setCalendarDataListener(listener: CalendarDataListener) {
+    fun setCalendarDataListener(listener: PostEditFragment) {
         dataListener = listener
     }
+
+    private fun extractStartDate(startDateFormatted: String): String {
+        val parts = startDateFormatted.split("부터,")
+        return if (parts.isNotEmpty()) {
+            parts[0].trim()
+        } else {
+            startDateFormatted
+        }
+    }
+
+
+
+
+
+
 }

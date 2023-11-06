@@ -242,7 +242,7 @@ class MyPostFeedViewModel : ViewModel() {
                         timestamp = post.timestamp,
                         state = post.state,
                         documentId=post.documentId,
-                        endDate = post.endTime
+                        endTime = post.endTime
                     )
 
 

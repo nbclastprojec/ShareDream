@@ -55,38 +55,26 @@
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:cardCornerRadius="80dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cardView"
-        app:layout_constraintStart_toEndOf="@+id/cardView"/>
+
 
 
     <TextView
         android:id="@+id/profile_id"
-        android:layout_width="86dp"
-        android:layout_height="38dp"
+        android:layout_width="182dp"
+        android:layout_height="34dp"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/suitellight"
-        android:gravity="center"
+        android:gravity="start"
         android:text="닉네임"
+        android:textColor="@color/black"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        app:layout_constraintEnd_toEndOf="@+id/profile_text"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="@+id/profile_image"
         app:layout_constraintVertical_bias="0.25" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="님의 프로필"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_id"
-        app:layout_constraintStart_toEndOf="@+id/profile_id"
-        app:layout_constraintTop_toTopOf="@+id/profile_id"
-        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/profile_text"
@@ -94,8 +82,10 @@
         android:layout_height="62dp"
         android:background="@drawable/rounded"
         android:fontFamily="@font/suitellight"
-        android:gravity="start"
+        android:gravity="center"
         android:hint="intro"
+        android:textSize="15sp"
+        android:textColor="@color/black"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/profile_image"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
@@ -106,22 +96,57 @@
         android:id="@+id/your_detail_recyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_text" />
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
     <ImageView
         android:id="@+id/profile_image"
         android:layout_width="110dp"
         android:layout_height="118dp"
         android:layout_marginStart="55dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="28dp"
         android:scaleType="centerCrop"
         android:src="@drawable/loading2"
         app:layout_constraintEnd_toStartOf="@+id/profile_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bar1" />
+        app:layout_constraintTop_toBottomOf="@+id/bar1" /><![CDATA[
+
+    /
+    >
+
+
+
+
+
+
+
+    ]]>
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="269dp"
+        android:text="게시글 목록"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_border_view" />
+
+    <View
+        android:id="@+id/text_border_view"
+        android:layout_width="356dp"
+        android:layout_height="0.6px"
+        android:layout_marginTop="16dp"
+        android:background="#D9D9D9"
+        app:layout_constraintEnd_toEndOf="@+id/profile_text"
+        app:layout_constraintStart_toStartOf="@+id/profile_image"
+        app:layout_constraintTop_toBottomOf="@+id/profile_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

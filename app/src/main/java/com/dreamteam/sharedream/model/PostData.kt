@@ -10,7 +10,7 @@ data class PostData(
     var image: String,
     var uploadDate : String,
     var token : String,
-    val endTime:String
+    val endTime: String
 )
 {
     constructor() : this("","", 0, "", "", "","","","","")

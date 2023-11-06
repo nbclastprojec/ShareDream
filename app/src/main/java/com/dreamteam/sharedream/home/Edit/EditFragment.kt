@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.dreamteam.sharedream.R
@@ -20,7 +19,6 @@ import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.view.adapter.WritePostImageAdapter
-import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -33,7 +31,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import kotlin.concurrent.fixedRateTimer
 
 
 class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
@@ -51,6 +48,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
     private lateinit var writePostImgAdapter: WritePostImageAdapter
 
     private var selectedDate: String =""
+    private var currentTime: String=""
 
     var token: String = ""
 
@@ -87,6 +85,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
             val calenderFragmentDialog = CalenderFragmentDialog()
             calenderFragmentDialog.setCalendarDataListener(this)
             calenderFragmentDialog.show(requireFragmentManager(), "CalenderDialog")
+
         }
         // 게시글 작성 완료
         binding.editBtnComplete.setOnClickListener {
@@ -95,7 +94,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
                     .show()
                 Log.d("xxxx", " Upload Failure ")
             } else if (
-                binding.editTvTitle.text.isEmpty() || binding.editEtvAddress.text.isEmpty() || binding.editEtvDesc.text.isEmpty() || binding.editEtvPrice.text.isEmpty()
+                binding.editTvTitle.text.isEmpty() || binding.editEtvAddress.text.isEmpty() || binding.editEtvDesc.text.isEmpty() || binding.editEtvPrice.text.isEmpty()||binding.calender.text.isEmpty()
             ) {
                 Toast.makeText(requireContext(), " 모든 입력 가능란은 필수 입력사항 입니다.", Toast.LENGTH_SHORT)
                     .show()
@@ -132,12 +131,17 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
     override fun onDataSelected(date: Date) {
         val calendar = Calendar.getInstance()
         val currentDate = calendar.time
-        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.ENGLISH)
         val currentTime = dateFormat.format(currentDate)
+        val startTime = SimpleDateFormat("EEE MM dd HH:mm:ss zzz yyyy", Locale.ENGLISH).format(currentDate)
+
         Log.d("datedate","${date}")
         val formattedDate = SimpleDateFormat("yyyy년 MM월 dd일").format(date)
-        binding.calender.text =currentTime+"부터, "+formattedDate+"까지"
-        selectedDate = date.toString()
+        val endTime=SimpleDateFormat("EEE MM dd HH:mm:ss zzz yyyy", Locale.ENGLISH).format(date)
+            val resultText = "$currentTime 부터, $formattedDate 까지"
+        binding.calender.text =resultText
+        selectedDate = startTime+"~"+endTime
+
 
 
 
@@ -163,7 +167,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 token = task.result
-
+                val endTimeList = listOf(currentTime, selectedDate)
                 val postImg: List<String> = imgs.toList()
                 val postLikeUsers = listOf<String>()
                 val priceString = binding.editEtvPrice.text.toString()
@@ -185,7 +189,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
                     Timestamp.now(),
                     "교환 가능",
                     "",
-                    endTime=selectedDate
+                   selectedDate
 
 
                 )

@@ -17,6 +17,7 @@ import com.dreamteam.sharedream.view.PostDetailFragment
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 
 class YourDetailFragment : Fragment() {
@@ -28,9 +29,11 @@ class YourDetailFragment : Fragment() {
 
 
 
+
     private fun YoureDetailInfo(postRcv: PostRcv) {
         binding.profileId.text = postRcv.nickname
         binding.profileTittle.text = postRcv.nickname + "님의 프로필 입니다."
+
         val UserUid = postRcv.uid
         val firestore = Firebase.firestore
         val documentReference = firestore.collection("UserData").document(UserUid)
@@ -52,6 +55,7 @@ class YourDetailFragment : Fragment() {
     private fun InputInforForRecycler(userUid: String) {
         val db = Firebase.firestore
         val query = db.collection("Posts").whereEqualTo("uid", userUid)
+
 
         query.get()
             .addOnSuccessListener { querySnapshot ->
@@ -88,7 +92,7 @@ class YourDetailFragment : Fragment() {
                                 timestamp = it,
                                 state =state,
                                 documentId = document.id,
-                                endDate = endDate
+                                endTime =endDate
                             )
                             posts.add(post)
                         }
@@ -112,16 +116,22 @@ class YourDetailFragment : Fragment() {
         binding.yourDetailRecyclerView.adapter=adapter
         adapter.onItemClickListener = object : YourDetailRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(item: PostRcv, position: Int) {
+                val imageNames = item.imgs.map { it.toString() }
+                getImageUris(imageNames,
+                    successCallback = { imageUris ->
+                        val updatedItem = item.copy(imgs = imageUris.map { Uri.parse(it) })
+                        myPostFeedViewModel.currentPost.postValue(updatedItem)
 
-                val clickedItem = item
-                Log.d("etwwett", clickedItem.toString())
-                myPostFeedViewModel.setCurrentPost(clickedItem)
+                        val fragment = PostDetailFragment()
+                        val transaction = parentFragmentManager.beginTransaction()
+                        transaction.replace(R.id.frag_edit, fragment)
+                        transaction.addToBackStack(null)
+                        transaction.commit()
+                    },
+                    failureCallback = {
 
-                val fragment = PostDetailFragment()
-                val transaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.frag_edit, fragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
+                    }
+                )
             }
         }
 
@@ -145,5 +155,28 @@ class YourDetailFragment : Fragment() {
         }
 
         return binding.root
+    }
+    private fun getImageUris(imageNames: List<String>, successCallback: (List<String>) -> Unit, failureCallback: () -> Unit) {
+        val storageReference = Firebase.storage.reference.child("post")
+
+        val imageUris = mutableListOf<String>()
+        val totalImages = imageNames.size
+
+        imageNames.forEach { imageName ->
+            val imageReference = storageReference.child(imageName)
+
+            imageReference.downloadUrl
+                .addOnSuccessListener { uri ->
+                    val imageUrl = uri.toString()
+                    imageUris.add(imageUrl)
+
+                    if (imageUris.size == totalImages) {
+                        successCallback(imageUris)
+                    }
+                }
+                .addOnFailureListener {
+                    failureCallback()
+                }
+        }
     }
 }

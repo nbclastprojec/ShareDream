@@ -68,6 +68,7 @@ class HomePostAdapter(
         val allpost = allPosts[position]
         val userId = post.uid
 
+
 //        holder.postheart.setOnClickListener {
 //            val db = FirebaseFirestore.getInstance()
 //            val documentId = post.documentId // 게시물의 ID
@@ -228,7 +229,7 @@ class HomePostAdapter(
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price.toString()
-            postEndDate.text = EndTime(positionItem.endDate)
+            postEndDate.text = EndTime(positionItem.endTime)
             postPrice.text = positionItem.price.toString()+"원"
 
 
@@ -317,21 +318,31 @@ class HomePostAdapter(
         notifyDataSetChanged()
     }
     private fun EndTime(endTime: String): String {
-        val dateFormat = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.US)
-        try {
-            val futureDate = dateFormat.parse(endTime)
-            val currentDate = Date()
-            val diff = futureDate.time - currentDate.time
-            val days = TimeUnit.MILLISECONDS.toDays(diff)//시간을 밀리초로 변한한 뒤 일로변환
-            val hours = TimeUnit.MILLISECONDS.toHours(diff)//시간을 밀리초로 변환한 뒤 시간으로변환
-            val minites = TimeUnit.MILLISECONDS.toMinutes(diff)//분변환
-            return when {
-                days >= 1 -> "$days 일 남음"
-                hours >= 1 -> "$hours 시간 남음"
-                minites >=0 -> "$minites 분 남음"
-                else -> "마감되었습니다!"
+        val dateParts = endTime.split("~")
+
+        if (dateParts.size == 2) {
+            val formattedDate = dateParts[1].trim()
+
+            val dateFormat = SimpleDateFormat("EEE MM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+
+            try {
+                val futureDate = dateFormat.parse(formattedDate)
+                val currentDate = Date()
+                val diff = futureDate.time - currentDate.time
+                val days = TimeUnit.MILLISECONDS.toDays(diff)
+                val hours = TimeUnit.MILLISECONDS.toHours(diff)
+                val minutes = TimeUnit.MILLISECONDS.toMinutes(diff)
+
+                return when {
+                    days >= 1 -> "$days 일 남음"
+                    hours >= 1 -> "$hours 시간 남음"
+                    minutes >= 0 -> "$minutes 분 남음"
+                    else -> "마감되었습니다!"
+                }
+            } catch (e: ParseException) {
+                return "날짜 형식 오류"
             }
-        } catch (e: ParseException) {
+        } else {
             return "날짜 형식 오류"
         }
     }
