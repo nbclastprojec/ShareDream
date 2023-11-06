@@ -13,8 +13,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -29,11 +27,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.concurrent.TimeUnit
 
 class MessageActivity : AppCompatActivity() {
 
@@ -54,28 +50,22 @@ class MessageActivity : AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         val view = binding.root
 
-        val receivedDocumentId = intent.getStringExtra("documentId").toString()//document 아이디 가져왔습니다. 이게 최신글은 document ID가 있어서 이걸로 검색하시면 스토어에 글 바로 연결됩니다. 최신화된지 얼마안되서 있는글도 있고 없는글도 있어요. 최근에 쓴 글은 다 있어서 주석 이거보시면 지워주시면 감사하겠습니당
+        val receivedDocumentId = intent.getStringExtra("documentId").toString()
         val store = FirebaseFirestore.getInstance()
 
 
 
         document = receivedDocumentId
 
-        val UserData = store.collection("Posts").document(receivedDocumentId)
-        UserData.get()
+        val userData = store.collection("Posts").document(receivedDocumentId)
+        userData.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
 
-                    val image = document.get("imgs") as List<String>
                     val nickname = document.getString("nickname")//닉네임
-                    val title = document.getString("title")//제목
                     val postUseruid = document.getString("uid")//uid
-                    bindingImage(image[0])
 
-                    binding.chattittle.text=title
                     binding.chat.text= nickname
-
-
                     destinationUid = postUseruid
 
                     Log.d("susu", "${postUseruid}")
@@ -96,6 +86,8 @@ class MessageActivity : AppCompatActivity() {
         val realTime = dateFormat.format(Date(time)).toString()
         val backbtn = binding.backButtonChat
 
+
+
         setContentView(view)
 
 
@@ -104,11 +96,16 @@ class MessageActivity : AppCompatActivity() {
         recyclerView = binding.chatRecycleView
 
         imageView.setOnClickListener{
+
+            if (destinationUid == uid) {
+                // 자기 자신에게 메시지를 보낼 때 Toast 메시지 표시
+                Toast.makeText(this, "자기 자신에게는 메시지를 보낼 수 없습니다.", Toast.LENGTH_SHORT).show()
+            } else {
             Log.d("susu", "$destinationUid")
             val chatModel = ChatModel()
             chatModel.users.put(uid.toString(),true)
             chatModel.users.put(destinationUid!!,true)
-            chatModel.document = receivedDocumentId
+
             val comment = ChatModel.Comment(uid, editText.text.toString(), realTime)
             if(chatRoomuid == null) {
                 imageView.isEnabled = false
@@ -126,12 +123,14 @@ class MessageActivity : AppCompatActivity() {
 
             }
         }
+        }
 
         backbtn.setOnClickListener{
             super.onBackPressed()
         }
 
         checkChatRoom()
+
 
 
 
@@ -166,10 +165,13 @@ class MessageActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     chat = snapshot.getValue<Chatting>()
                     chat?.name = binding.chat.toString()
+
                     getMessageList()
                 }
             })
         }
+
+
 
         fun getMessageList(){
             fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments").addValueEventListener(object : ValueEventListener{
@@ -218,9 +220,16 @@ class MessageActivity : AppCompatActivity() {
                         name.visibility = View.INVISIBLE
                         layoutMain.gravity = Gravity.RIGHT
                     } else {
-                        Glide.with(itemView.context)
-                            .load(chat?.profileImageUrl)
-                            .into(profile)
+
+                        val storageReference = destinationUid?.let { storage.reference.child("ProfileImg").child(it) }
+                        storageReference?.downloadUrl?.addOnSuccessListener { uri ->
+                            Glide.with(itemView.context)
+                                .load(uri)
+                                .into(profile)
+                        }?.addOnFailureListener { exception ->
+                            Log.e("MessageActivity", "이미지 다운로드 실패: ${exception.message}")
+                        }
+                    }
                         message.setBackgroundResource(R.drawable.leftbubble)
                         name.text = chat?.name
                         destination.visibility = View.VISIBLE
@@ -229,39 +238,17 @@ class MessageActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
 
 
         override fun getItemCount(): Int {
+
             return comments.size
         }
 
 
     }
-    fun bindingImage(image:String) {
-
-        val chatpostimage=binding.chatpostimage
-        Log.d("asasas","$chatpostimage")
-        if (image.isNotEmpty()) {
-
-            val imagePath = "$image"
-            storage.reference.child("post").child("${image}").downloadUrl
-                .addOnSuccessListener { uri ->
-                    Glide.with(this)
-                        .load(uri)
-                        .into(chatpostimage)
-                }
-                .addOnFailureListener { exception ->
-                    exception.printStackTrace()
-                    Toast.makeText(this, "이미지 로드 실패", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-
-        }
 
 
 
     }
 
-
-}

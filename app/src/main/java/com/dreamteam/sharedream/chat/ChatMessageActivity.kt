@@ -44,7 +44,6 @@ class ChatMessageActivity : AppCompatActivity() {
     private var recyclerView : RecyclerView? = null
     private val storage = Firebase.storage
     private lateinit var binding : ActivityChatBinding
-    private var document : String? = null
 
 
 
@@ -53,38 +52,16 @@ class ChatMessageActivity : AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         val view = binding.root
 
-       //val receivedDocumentId = intent.getStringExtra("documentId").toString()
         val store = FirebaseFirestore.getInstance()
         val intentDestinationUid = intent.getStringExtra("destinationUid").toString()
 
 
-
-       // document = receivedDocumentId
-
-       // val UserData = store.collection("Posts").document(receivedDocumentId)
-       // UserData.get()
-         //   .addOnSuccessListener { document ->
-            //    if (document != null) {
-
-                  //  val nickname = document.getString("nickname")//닉네임
-                 //   val title = document.getString("title")//제목
-                  //  val postUseruid = document.getString("uid")//uid
-
-                  //  binding.chattittle.text=title
-                  //  binding.chat.text=nickname
+       destinationUid = intentDestinationUid
 
 
-                   // destinationUid = postUseruid
-
-                   // Log.d("susu", "${postUseruid}")
 
 
-              //  } else {
-                   // Log.d("MessageActivity", "문서가 없는 예전글이에요.")
-               // }
-          //  }
-
-        store.collection("UserData").document(intentDestinationUid)
+        store.collection("UserData").document(destinationUid!!)
             .get()
             .addOnSuccessListener { documents ->
                 if(documents != null){
@@ -113,7 +90,7 @@ class ChatMessageActivity : AppCompatActivity() {
             val chatModel = ChatModel()
             chatModel.users.put(uid.toString(),true)
             chatModel.users.put(destinationUid!!,true)
-            //chatModel.document = receivedDocumentId
+
             val comment = ChatModel.Comment(uid, editText.text.toString(), realTime)
             if(chatRoomuid == null) {
                 imageView.isEnabled = false
@@ -243,30 +220,7 @@ class ChatMessageActivity : AppCompatActivity() {
 
 
     }
-    fun bindingImage(image:String) {
-
-        val chatpostimage=binding.chatpostimage
-        Log.d("asasas","$chatpostimage")
-        if (image.isNotEmpty()) {
-
-            val imagePath = "$image"
-            storage.reference.child("post").child("${image}").downloadUrl
-                .addOnSuccessListener { uri ->
-                    Glide.with(this)
-                        .load(uri)
-                        .into(chatpostimage)
-                }
-                .addOnFailureListener { exception ->
-                    exception.printStackTrace()
-                    Toast.makeText(this, "이미지 로드 실패", Toast.LENGTH_SHORT).show()
-                }
-        } else {
 
         }
 
 
-
-    }
-
-
-}
