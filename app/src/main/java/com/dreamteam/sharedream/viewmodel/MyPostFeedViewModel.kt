@@ -3,21 +3,24 @@ package com.dreamteam.sharedream.viewmodel
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings.Global.getString
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dreamteam.sharedream.FCMService
+import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.home.HomeViewModel
 import com.dreamteam.sharedream.model.LocationData
+import com.dreamteam.sharedream.model.MessageDTO
+import com.dreamteam.sharedream.model.NotificationBody
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.model.UserData
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
-import com.google.android.play.integrity.internal.e
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -25,7 +28,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
@@ -450,8 +452,11 @@ class MyPostFeedViewModel : ViewModel() {
             }
     }
 
+    // Detail Page 작성자 게시글 상태 변경
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTokenFromPost(postId: String) {
+        val homeViewModel = HomeViewModel()
         db.collection("Posts")
             .document(postId)
             .get()
@@ -460,38 +465,41 @@ class MyPostFeedViewModel : ViewModel() {
                     val token = documentSnapshot.getString("token")
                     if (token != null) {
 
+
+//
                         val notificationTitle = "하이요?"
                         val notificationBody = "눌렀습니다"
                         val uniqueMessageId = UUID.randomUUID().toString()
 
-                        // FCM 알림에 추가할 데이터 설정
-                        val notification = mutableMapOf<String, String>()
-                        notification["key1"] = "value1"
-                        notification["key2"] = "value2"
-                        FirebaseMessaging.getInstance().isAutoInitEnabled = true
+                        val time = System.currentTimeMillis()
 
-    // Detail Page 작성자 게시글 상태 변경
-    fun uploadChangedPostState(timestamp: Timestamp,state: String){
-        db.collection("Posts").whereEqualTo("timestamp",timestamp).get()
-            .addOnSuccessListener { querySanp ->
-                querySanp.documents[0].reference.update("state",state)
-                    .addOnSuccessListener {
-                    Log.d("xxxx", "uploadChangedPostState: State 변경 성공")
-                    }
-                    .addOnFailureListener {
-                        Log.d("xxxx", "uploadChangedPostState: State 변경 실패 -> $it")
-                    }
-            }
-    }
-                        // FCM 알림을 보내기 위한 데이터 설정
+                        val data = NotificationBody.NotificationData(
+                            uniqueMessageId,notificationBody)
+                        val body = NotificationBody(token,data)
+                        homeViewModel.sendNotification(body)
 
-                        val message = RemoteMessage.Builder(token)
-                            .setMessageId(uniqueMessageId)
-                            .setData(notification) // 데이터 추가
-                            .addData("title", notificationTitle) // 알림 제목
-                            .addData("body", notificationBody)
-                            .build()
-                        FirebaseMessaging.getInstance().send(message)
+                        // 전송 후 에디트뷰 초기화
+//                        messageEditView.setText("")
+//
+//                        // FCM 알림에 추가할 데이터 설정
+//                        val notification = mutableMapOf<String, String>()
+//                        notification["key1"] = "value1"
+//                        notification["key2"] = "value2"
+//
+//
+//                        // FCM 알림을 보내기 위한 데이터 설정
+//
+//                        val message = RemoteMessage.Builder(token)
+//                            .setMessageId(uniqueMessageId)
+//                            .setData(notification) // 데이터 추가
+//                            .addData("title", notificationTitle) // 알림 제목
+//                            .addData("body", notificationBody)
+//                            .build()
+//                        homeViewModel.sendNotification(message)
+
+//                        val data = NotificationBody.NotificationData(notificationTitle,uniqueMessageId,"")
+//                        val body = NotificationBody(token,data)
+//                        homeViewModel.sendNotification(body)
                         // FCMService의 sendNonotification 함수 호출
                         Log.d("nyh", "getTokenFromPost: token = $token")
                         Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")

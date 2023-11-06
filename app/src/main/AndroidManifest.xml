@@ -21,9 +21,7 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="hzwd7kf4sw"/>
-        <activity
-            android:name=".DetailFrameActivity"
-            android:exported="false" />
+
         <activity
             android:name=".chat.MessageActivity"
             android:exported="false" />

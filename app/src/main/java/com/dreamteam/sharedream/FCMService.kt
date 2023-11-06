@@ -11,6 +11,8 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.app.Person
+import androidx.core.graphics.drawable.IconCompat
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -18,114 +20,255 @@ import com.google.firebase.messaging.RemoteMessage
 
 
 class FCMService : FirebaseMessagingService() {
-    /** 푸시 알림으로 보낼 수 있는 메세지는 2가지
-     * 1. Notification: 앱이 실행중(포그라운드)일 떄만 푸시 알림이 옴
-     * 2. Data: 실행중이거나 백그라운드(앱이 실행중이지 않을때) 알림이 옴 -> TODO: 대부분 사용하는 방식 */
-
-    override fun onNewToken(token: String) {
-        //새로운 token이 생성될 때 마다 호출되는 callback함수
-        Log.d("nyh", "onNewToken: $token")
-        super.onNewToken(token)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        super.onMessageReceived(remoteMessage)
-//        remoteMessage.takeIf { it.data.isNotEmpty() }?.apply { this
-//            //push를 전달받으면 동작해야 할 함수를 호출
 
-
-        // Notification 메시지를 수신할 경우
-        // remoteMessage.notification?.body!! 여기에 내용이 저장되있음
-        // Log.d(TAG, "Notification Message Body: " + remoteMessage.notification?.body!!)
-
-        //받은 remoteMessage의 값 출력해보기. 데이터메세지 / 알림메세지
-        Log.d("nyh", "onMessageReceived Message date : ${remoteMessage}")
-        Log.d("nyh", "onMessageReceived Message noti : ${remoteMessage.notification}")
-        Log.d("nyh", "onMessageReceived:Test ${remoteMessage.notification?.title}")
-
+        // 서버에서 직접 보냈을 때
         if (remoteMessage.notification != null) {
-            //알림생성
-            sendNotification(applicationContext, remoteMessage)
-            Log.d("nyh", "onMessageReceived: ${remoteMessage.notification?.title}")
-            Log.d("nyh", "onMessageReceived: ${remoteMessage.notification?.body}")
-        } else {
-            Log.d("nyh", "onMessageReceived else: $remoteMessage ")
+            sendNotification(
+                remoteMessage.notification?.title,
+                remoteMessage.notification?.body!!
+            )
+        }
 
+        // 다른 기기에서 서버로 보냈을 때
+        else if (remoteMessage.data.isNotEmpty()) {
+            val title = remoteMessage.data["title"]!!
+            val userId = remoteMessage.data["userId"]!!
+            val message = remoteMessage.data["message"]!!
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                sendMessageNotification(title, userId, message)
+            } else {
+                sendNotification(
+                    remoteMessage.notification?.title,
+                    remoteMessage.notification?.body!!
+                )
+            }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun sendNotification(context: Context, remoteMessage: RemoteMessage) {
-        // 알림을 생성할 때는 context를 사용합니다.
+    // Firebase Cloud Messaging Server 가 대기중인 메세지를 삭제 시 호출
+    override fun onDeletedMessages() {
+        super.onDeletedMessages()
+    }
 
-        // channel 설정
-        val channelId = "channelId"
-        val channelName = "channelName"
-        val channelDescription = "channelDescription"
-        val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+    // 메세지가 서버로 전송 성공 했을때 호출
+    override fun onMessageSent(p0: String) {
+        super.onMessageSent(p0)
+    }
 
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    // 메세지가 서버로 전송 실패 했을때 호출
+    override fun onSendError(p0: String, p1: Exception) {
+        super.onSendError(p0, p1)
+    }
 
-        // Android Oreo 이후에는 채널이 필요
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(channelId, channelName, importance).apply {
-                description = channelDescription
-            }
-            notificationManager.createNotificationChannel(channel)
-        }
+    // 새로운 토큰이 생성 될 때 호출
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        sendRegistrationToServer(token)
+    }
 
-        // RequestCode. Id를 고유값으로 지정하여 알림이 개별 표시
-        val uniId: Int = (System.currentTimeMillis() / 7).toInt()
-
-        val intent = Intent(context, MainActivity::class.java)
-
-        for (key in remoteMessage.data.keys) {
-            intent.putExtra(key, remoteMessage.data.getValue(key))
-        }
-
+    // 서버에서 직접 보냈을 때
+    private fun sendNotification(title: String?, body: String) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // 액티비티 중복 생성 방지
         val pendingIntent = PendingIntent.getActivity(
-            context,
-            uniId,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
+            this, 0, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        ) // 일회성
 
-        val notificationBuilder = NotificationCompat.Builder(context, channelId)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(remoteMessage.notification?.title)
-            .setContentText(remoteMessage.notification?.body)
+        val channelId = "channel" // 채널 아이디
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 소리
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            .setContentTitle(title) // 제목
+            .setContentText(body) // 내용
+            .setSmallIcon(R.drawable.fullheart) // 아이콘
             .setAutoCancel(true)
-            .setSound(soundUri)
+            .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
 
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // 오레오 버전 예외처리
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(
+                channelId,
+                "Channel human readable title",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(uniId, notificationBuilder.build())
+        notificationManager.notify(0, notificationBuilder.build()) // 알림 생성
     }
 
-    //Token 가져오기
-    fun getFirebaseToken() {
-        //비동기 방식
-//        FirebaseMessaging.getInstance().token.addOnSuccessListener {
-//            Log.d("nyh", "getFirebaseToken: token =$it")
-//        }
-        //동기방식
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.d(TAG, "nyh Fetching FCM registration token failed ${task.exception}")
-                return@OnCompleteListener
-            }
-            var deviceToken = task.result
-            Log.e(TAG, "nyh token=${deviceToken}")
-        })
+
+    // 다른 기기에서 서버로 보냈을 때
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun sendMessageNotification(title: String, userId: String, body: String) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // 액티비티 중복 생성 방지
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        ) // 일회성
+
+        // messageStyle 로
+        val user: androidx.core.app.Person = Person.Builder()
+            .setName(userId)
+            .setIcon(IconCompat.createWithResource(this, R.drawable.rightbubble))
+            .build()
+
+        val message = NotificationCompat.MessagingStyle.Message(
+            body,
+            System.currentTimeMillis(),
+            user
+        )
+        val messageStyle = NotificationCompat.MessagingStyle(user)
+            .addMessage(message)
+
+
+        val channelId = "channel" // 채널 아이디
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 소리
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            .setContentTitle(title) // 제목
+            .setContentText(body) // 내용
+            .setStyle(messageStyle)
+            .setSmallIcon(R.drawable.fullheart) // 아이콘
+            .setAutoCancel(true)
+            .setSound(defaultSoundUri)
+            .setContentIntent(pendingIntent)
+
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // 오레오 버전 예외처리
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "알림 메세지",
+                NotificationManager.IMPORTANCE_LOW
+            ) // 소리없앰
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        notificationManager.notify(0, notificationBuilder.build()) // 알림 생성
+    }
+
+    // 받은 토큰을 서버로 전송
+    private fun sendRegistrationToServer(token: String) {
+
     }
 }
+//    /** 푸시 알림으로 보낼 수 있는 메세지는 2가지
+//     * 1. Notification: 앱이 실행중(포그라운드)일 떄만 푸시 알림이 옴
+//     * 2. Data: 실행중이거나 백그라운드(앱이 실행중이지 않을때) 알림이 옴 -> TODO: 대부분 사용하는 방식 */
+//
+//    override fun onNewToken(token: String) {
+//        //새로운 token이 생성될 때 마다 호출되는 callback함수
+//        Log.d("nyh", "onNewToken: $token")
+//        super.onNewToken(token)
+//    }
+//
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+//        super.onMessageReceived(remoteMessage)
+////        remoteMessage.takeIf { it.data.isNotEmpty() }?.apply { this
+////            //push를 전달받으면 동작해야 할 함수를 호출
+//
+//
+//        // Notification 메시지를 수신할 경우
+//        // remoteMessage.notification?.body!! 여기에 내용이 저장되있음
+//        // Log.d(TAG, "Notification Message Body: " + remoteMessage.notification?.body!!)
+//
+//        //받은 remoteMessage의 값 출력해보기. 데이터메세지 / 알림메세지
+//        Log.d("nyh", "onMessageReceived Message date : ${remoteMessage}")
+//        Log.d("nyh", "onMessageReceived Message noti : ${remoteMessage.notification}")
+//        Log.d("nyh", "onMessageReceived:Test ${remoteMessage.notification?.title}")
+//
+//        if (remoteMessage.notification != null) {
+//            //알림생성
+//            sendNotification(applicationContext, remoteMessage)
+//            Log.d("nyh", "onMessageReceived: ${remoteMessage.notification?.title}")
+//            Log.d("nyh", "onMessageReceived: ${remoteMessage.notification?.body}")
+//        } else {
+//            Log.d("nyh", "onMessageReceived else: $remoteMessage ")
+//
+//        }
+//    }
+//
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun sendNotification(context: Context, remoteMessage: RemoteMessage) {
+//        // 알림을 생성할 때는 context를 사용합니다.
+//
+//        // channel 설정
+//        val channelId = "channelId"
+//        val channelName = "channelName"
+//        val channelDescription = "channelDescription"
+//        val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+//
+//        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//
+//        // Android Oreo 이후에는 채널이 필요
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val importance = NotificationManager.IMPORTANCE_HIGH
+//            val channel = NotificationChannel(channelId, channelName, importance).apply {
+//                description = channelDescription
+//            }
+//            notificationManager.createNotificationChannel(channel)
+//        }
+//
+//        // RequestCode. Id를 고유값으로 지정하여 알림이 개별 표시
+//        val uniId: Int = (System.currentTimeMillis() / 7).toInt()
+//
+//        val intent = Intent(context, MainActivity::class.java)
+//
+//        for (key in remoteMessage.data.keys) {
+//            intent.putExtra(key, remoteMessage.data.getValue(key))
+//        }
+//
+//        val pendingIntent = PendingIntent.getActivity(
+//            context,
+//            uniId,
+//            intent,
+//            PendingIntent.FLAG_IMMUTABLE
+//        )
+//
+//        val notificationBuilder = NotificationCompat.Builder(context, channelId)
+//            .setPriority(NotificationCompat.PRIORITY_HIGH)
+//            .setSmallIcon(R.mipmap.ic_launcher)
+//            .setContentTitle(remoteMessage.notification?.title)
+//            .setContentText(remoteMessage.notification?.body)
+//            .setAutoCancel(true)
+//            .setSound(soundUri)
+//            .setContentIntent(pendingIntent)
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_DEFAULT)
+//            notificationManager.createNotificationChannel(channel)
+//        }
+//
+//        notificationManager.notify(uniId, notificationBuilder.build())
+//    }
+//
+//    //Token 가져오기
+//    fun getFirebaseToken() {
+//        //비동기 방식
+////        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+////            Log.d("nyh", "getFirebaseToken: token =$it")
+////        }
+//        //동기방식
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+//            if (!task.isSuccessful) {
+//                Log.d(TAG, "nyh Fetching FCM registration token failed ${task.exception}")
+//                return@OnCompleteListener
+//            }
+//            var deviceToken = task.result
+//            Log.e(TAG, "nyh token=${deviceToken}")
+//        })
+//    }
+//}
 //    @RequiresApi(Build.VERSION_CODES.O)
 //    override fun onMessageReceived(remoteMessage: RemoteMessage) {
 //        super.onMessageReceived(remoteMessage)

@@ -3,6 +3,9 @@ package com.dreamteam.sharedream.home
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.dreamteam.sharedream.Util.FcmRetrofitInstance
+import com.dreamteam.sharedream.model.MessageDTO
+import com.dreamteam.sharedream.model.NotificationBody
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.google.android.gms.tasks.Task
@@ -11,11 +14,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.google.firebase.storage.storage
+import okhttp3.ResponseBody
+import retrofit2.Response
+
 
 class HomeRepository {
     private val firestore = FirebaseFirestore.getInstance()
     private val storege = Firebase.storage
+    val myResponse : MutableLiveData<Response<ResponseBody>> = MutableLiveData() // 메세지 수신 정보
 
     fun categorySort(category: String, callback: (List<PostRcv>) -> Unit) {
         val postCollection = firestore.collection("Posts")
@@ -91,11 +97,43 @@ class HomeRepository {
                     if (!inserted) {
                         postRcvList.add(postRcv)
                     }
-
                     if (postRcvList.size == querySnapshot.size()) {
                         callback(postRcvList) // 변환한 목록을 콜백으로 반환
                     }
                 }
             }
     }
+    suspend fun sendNotification(notification: NotificationBody) {
+        // RemoteMessage를 그대로 사용하여 FCM 메시지를 보냅니다.
+        myResponse.value = FcmRetrofitInstance.fcmApi.sendNotification(notification)
+    }
+//    fun uploadChat(messageDTO: MessageDTO){
+//
+//        // 채팅 저장
+//        firestore.collection("chat")
+//            .document(messageDTO.fromUid.toString())
+//            .collection(messageDTO.toUid.toString())
+//            .document(messageDTO.timestamp.toString())
+//            .set(messageDTO)
+//        firestore.collection("chat")
+//            .document(messageDTO.toUid.toString())
+//            .collection(messageDTO.fromUid.toString())
+//            .document(messageDTO.timestamp.toString())
+//            .set(messageDTO)
+//
+//
+//        // 채팅방 리스트 저장
+//        var name = ""
+//        if(messageDTO.fromUid.toString() < messageDTO.toUid.toString()){
+//            name = "${messageDTO.fromUid}_${messageDTO.toUid.toString()}"
+//        }
+//        else if(messageDTO.fromUid.toString() > messageDTO.toUid.toString()){
+//            name = "${messageDTO.toUid}_${messageDTO.fromUid.toString()}"
+//        }
+//        val chatPerson = arrayListOf(messageDTO.fromUid.toString(),messageDTO.toUid.toString())
+//        val chatList = ChatListDTO(messageDTO.fromUid,messageDTO.toUid
+//            ,messageDTO.content,messageDTO.timestamp,chatPerson)
+//        fireStore.collection("chatList")
+//            .document(name).set(chatList)
+//    }
 }
