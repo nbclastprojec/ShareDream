@@ -12,9 +12,3 @@ interface FCMInterface {
         @Body notification: NotificationBody
     ) : Response<ResponseBody>
 }
-//}
-//    @POST("fcm/send")
-//    suspend fun sendNotification(
-//        @Body notification: RemoteMessage
-//    ) : Response<ResponseBody>
-//}

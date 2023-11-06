@@ -17,9 +17,10 @@ object FcmRetrofitInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-    val fcmApi : FCMInterface by lazy {
+    val fcmApi: FCMInterface by lazy {
         retrofit.create(FCMInterface::class.java)
     }
+
     //Client
     private fun provideOkHttpClient(
         interceptor: AppInterceptor
@@ -29,7 +30,6 @@ object FcmRetrofitInstance {
             build()
         }
 
-    //헤더추가
     class AppInterceptor : Interceptor {
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain)

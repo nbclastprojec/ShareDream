@@ -474,9 +474,11 @@ class MyPostFeedViewModel : ViewModel() {
                         val time = System.currentTimeMillis()
 
                         val data = NotificationBody.NotificationData(
-                            uniqueMessageId,notificationBody)
+                            notificationTitle,notificationBody)
                         val body = NotificationBody(token,data)
+                        Log.d("nyh", "getTokenFromPost: send value of body $body")
                         homeViewModel.sendNotification(body)
+
 
                         // 전송 후 에디트뷰 초기화
 //                        messageEditView.setText("")

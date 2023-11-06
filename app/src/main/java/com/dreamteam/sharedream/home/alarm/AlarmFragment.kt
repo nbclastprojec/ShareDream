@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dreamteam.sharedream.Util.Constants.currentUserUid
+import com.dreamteam.sharedream.Util.Constants.Constants.currentUserUid
 import com.dreamteam.sharedream.databinding.FragmentAlarmBinding
 import com.dreamteam.sharedream.model.Post
 import com.google.firebase.auth.ktx.auth

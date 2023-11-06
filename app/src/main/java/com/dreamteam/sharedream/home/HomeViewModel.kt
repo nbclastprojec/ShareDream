@@ -36,6 +36,7 @@ class HomeViewModel : ViewModel() {
     fun sendNotification(notification: NotificationBody) {
         viewModelScope.launch {
             homeRepository.sendNotification(notification)
+            Log.d("nyh", "sendNotification homeViewmodel :$notification")
         }
     }
 //    fun uploadChat(messageDTO: MessageDTO){

@@ -104,9 +104,12 @@ class HomeRepository {
             }
     }
     suspend fun sendNotification(notification: NotificationBody) {
-        // RemoteMessage를 그대로 사용하여 FCM 메시지를 보냅니다.
         myResponse.value = FcmRetrofitInstance.fcmApi.sendNotification(notification)
+        Log.d("nyh", "sendNotification Repo: $notification")
+
     }
+
+
 //    fun uploadChat(messageDTO: MessageDTO){
 //
 //        // 채팅 저장
