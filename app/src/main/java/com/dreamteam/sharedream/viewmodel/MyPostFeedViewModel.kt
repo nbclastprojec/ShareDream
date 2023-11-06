@@ -474,12 +474,13 @@ class MyPostFeedViewModel : ViewModel() {
                     if (token != null) {
                         val notificationTitle = "하이요?"
                         val notificationBody = "눌렀습니다"
-//                        val uniqueMessageId = UUID.randomUUID().toString()
+                        val userId = "아이디"
+
 //
 //                        val time = System.currentTimeMillis()
 
                         val data = NotificationBody.NotificationData(
-                            notificationTitle, notificationBody
+                            notificationTitle, notificationBody,userId
                         )
                         val body = NotificationBody(token, data)
                         Log.d("nyh", "getTokenFromPost: send value of body $body")

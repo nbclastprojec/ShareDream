@@ -186,9 +186,8 @@ class PostDetailFragment : Fragment() {
             if (currentPostInfo[0].uid != Constants.currentUserUid) {
                 Util.showDialog(requireContext(), "관심 목록에 추가", "내 관심 목록에 추가하시겠습니까?") {
                     myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
-
                     myPostFeedViewModel.getTokenFromPost(currentPostInfo[0].documentId)
-                    Log.d("nyh", "onViewCreated:???")
+
                     myPostFeedViewModel.myResponse.observe(viewLifecycleOwner){
                         Log.d("nyh", "onViewCreated: $it")
                     }

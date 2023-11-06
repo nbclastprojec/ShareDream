@@ -22,6 +22,7 @@ import com.google.firebase.messaging.RemoteMessage
 class FCMService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
+        Log.d("nyh", "onMessageReceived: $remoteMessage")
         // 서버에서 직접 보냈을 때
         if (remoteMessage.notification != null) {
             sendNotification(
@@ -33,11 +34,12 @@ class FCMService : FirebaseMessagingService() {
         // 다른 기기에서 서버로 보냈을 때
         else if (remoteMessage.data.isNotEmpty()) {
             val title = remoteMessage.data["title"]!!
-            val userId = remoteMessage.data["userId"]!!
             val message = remoteMessage.data["message"]!!
+            val userId = remoteMessage.data["userId"]!!
+            Log.d("nyh", "onMessageReceived: ")
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                sendMessageNotification(title, userId, message)
+                sendMessageNotification(title,message,userId)
             } else {
                 sendNotification(
                     remoteMessage.notification?.title,
@@ -106,7 +108,7 @@ class FCMService : FirebaseMessagingService() {
 
     // 다른 기기에서 서버로 보냈을 때
     @RequiresApi(Build.VERSION_CODES.P)
-    private fun sendMessageNotification(title: String, userId: String, body: String) {
+    private fun sendMessageNotification(title: String, userId:String, body: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // 액티비티 중복 생성 방지
         val pendingIntent = PendingIntent.getActivity(
@@ -149,7 +151,7 @@ class FCMService : FirebaseMessagingService() {
                 channelId,
                 "알림 메세지",
                 NotificationManager.IMPORTANCE_LOW
-            ) // 소리없앰
+            )
             notificationManager.createNotificationChannel(channel)
         }
 
