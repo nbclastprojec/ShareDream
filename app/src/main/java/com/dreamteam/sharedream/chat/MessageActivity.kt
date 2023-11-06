@@ -261,5 +261,4 @@ class MessageActivity : AppCompatActivity() {
         }
     }
 
-    }
-}
+
