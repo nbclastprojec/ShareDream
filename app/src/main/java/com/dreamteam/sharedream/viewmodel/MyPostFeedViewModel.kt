@@ -464,19 +464,20 @@ class MyPostFeedViewModel : ViewModel() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTokenFromPost(postId: String) {
 
+
         val postRef = db.collection("Posts").document(postId)
 
         postRef
             .get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
+                    val post = Post()
                     val token = documentSnapshot.getString("token")
                     if (token != null) {
-                        val notificationTitle = "하이요?"
-                        val notificationBody = "눌렀습니다"
+                        val notificationTitle = post.title+"에 관심이 추가되었습니다."
+                        val notificationBody = "확인해 주세요"
                         val userId = "아이디"
 
-//
 //                        val time = System.currentTimeMillis()
 
                         val data = NotificationBody.NotificationData(
@@ -485,9 +486,14 @@ class MyPostFeedViewModel : ViewModel() {
                         val body = NotificationBody(token, data)
                         Log.d("nyh", "getTokenFromPost: send value of body $body")
                         sendNotification(body)
+                        pushList(mapOf(
+                            "title" to notificationTitle,
+                            "substitle" to userId
 
+                        ))
                         Log.d("nyh", "getTokenFromPost: token = $token")
                         Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
+
                     }
                 } else {
                     Log.d("nyh", "getTokenFromPost: elsefail")
@@ -504,4 +510,18 @@ class MyPostFeedViewModel : ViewModel() {
             Log.d("nyh", "sendNotification postViewmodel :$notification")
         }
     }
+    fun pushList(notiPost: Map<String,String>){
+        val post = Post()
+        val notiPost = mapOf(
+            "title" to post.title,
+            "subtitle" to post.nickname
+        )
+
+        db.collection("Notification")
+            .add(notiPost)
+            .addOnSuccessListener {
+                Log.d("nyh", "pushList: $notiPost")
+            }
+    }
+
 }

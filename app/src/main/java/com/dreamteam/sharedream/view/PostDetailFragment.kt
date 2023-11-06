@@ -298,7 +298,7 @@ class PostDetailFragment : Fragment() {
                     "${postState.text}"
                 )
 
-                // 홈 게시글 목록에 게시글 변경된 상태 변경하기d
+                // 홈 게시글 목록에 게시글 변경된 상태 변경하기
                 val revisedPost = currentPostInfo[0].copy(state = "${postState.text}")
                 myPostFeedViewModel.setRevisedPost(revisedPost)
             }
@@ -353,7 +353,11 @@ class PostDetailFragment : Fragment() {
                 val documentId = parts[1].substring(0, endIndex)
                 startMessageActivity(documentId)
                 Log.d("afafafafafa", "$documentId ")
+            }else {
+                Log.d("nyh", "getUserInformation: $parts")
             }
+        } else {
+            Log.d("nyh", "getUserInformation: $parts")
         }
     }
 

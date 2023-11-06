@@ -65,8 +65,6 @@ class MessageActivity : AppCompatActivity() {
                     val nickname = document.getString("nickname")//닉네임
                     val postUseruid = document.getString("uid")//uid
 
-
-                
                     binding.chat.text = nickname
                     destinationUid = postUseruid
 
