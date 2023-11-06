@@ -21,16 +21,16 @@ import retrofit2.Response
 class HomeRepository {
     private val firestore = FirebaseFirestore.getInstance()
     private val storege = Firebase.storage
-    val myResponse : MutableLiveData<Response<ResponseBody>> = MutableLiveData() // 메세지 수신 정보
+    val myResponse: MutableLiveData<Response<ResponseBody>> = MutableLiveData()
 
     fun categorySort(category: String, callback: (List<PostRcv>) -> Unit) {
         val postCollection = firestore.collection("Posts")
         Log.d("nyh", "categorySort: Repository category = $category")
 
-        val query = if (category.isNullOrEmpty() || category == "전체"){
+        val query = if (category.isNullOrEmpty() || category == "전체") {
             postCollection
-        }else {
-            postCollection.whereEqualTo("category",category)
+        } else {
+            postCollection.whereEqualTo("category", category)
         }
         query.get()
             .addOnSuccessListener { querySnapshot ->
@@ -46,6 +46,7 @@ class HomeRepository {
                 }
             }
     }
+
     private fun convertPostToPostRcv(
         post: Post,
         querySnapshot: QuerySnapshot,
@@ -103,11 +104,14 @@ class HomeRepository {
                 }
             }
     }
-    suspend fun sendNotification(notification: NotificationBody) {
-        myResponse.value = FcmRetrofitInstance.fcmApi.sendNotification(notification)
-        Log.d("nyh", "sendNotification Repo: $notification")
 
-    }
+    suspend fun sendNotification(notification: NotificationBody) {
+        try {
+            myResponse.value = FcmRetrofitInstance.fcmApi.sendNotification(notification)
+            Log.d("nyh", "sendNotification Repo: $notification")
+        } catch (e: Exception) {
+            Log.e("nyh", "Failed to send FCM message: ${e.message}")
+        }
 
 
 //    fun uploadChat(messageDTO: MessageDTO){
@@ -139,4 +143,5 @@ class HomeRepository {
 //        fireStore.collection("chatList")
 //            .document(name).set(chatList)
 //    }
+    }
 }

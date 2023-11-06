@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.dreamteam.sharedream.R
@@ -117,6 +118,10 @@ class PostDetailFragment : Fragment() {
         val adapter = DetailBannerImgAdapter(imgs)
         viewPager.adapter = adapter
 
+        myPostFeedViewModel.myResponse.observe(viewLifecycleOwner){
+            Log.d("nyh", "onViewCreated: $it")
+        }
+
         return binding.root
     }
 
@@ -131,7 +136,7 @@ class PostDetailFragment : Fragment() {
                 Log.d("xxxx", " 일치 ?: ${it[0].timestamp == currentPostInfo[0].timestamp} ")
                 Log.d("xxxx", " 전체 LiveData : ${it} 바뀐 Livedata ${it[0].likeUsers}")
                 binding.detailTvLikeCount.text = "${it[0].likeUsers.size}"
-                homeViewmodel.myResponse.observe(viewLifecycleOwner) {
+                myPostFeedViewModel.myResponse.observe(viewLifecycleOwner) {
                     Log.d("nyh", "onViewCreated: pushObserve $it")
                 }
 
@@ -182,7 +187,12 @@ class PostDetailFragment : Fragment() {
                 Util.showDialog(requireContext(), "관심 목록에 추가", "내 관심 목록에 추가하시겠습니까?") {
                     myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
 
-                    Log.d("nyh", "getTokenFromPost: $it")
+                    myPostFeedViewModel.getTokenFromPost(currentPostInfo[0].documentId)
+                    Log.d("nyh", "onViewCreated:???")
+                    myPostFeedViewModel.myResponse.observe(viewLifecycleOwner){
+                        Log.d("nyh", "onViewCreated: $it")
+                    }
+
                     Log.d(
                         "xxxx",
                         " detail like btn clicked, post timestamp  =  ${currentPostInfo[0].timestamp}"
