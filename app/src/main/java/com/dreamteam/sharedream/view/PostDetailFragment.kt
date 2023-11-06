@@ -21,6 +21,7 @@ import coil.load
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
+import com.dreamteam.sharedream.YourDetailPage
 import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
 import com.dreamteam.sharedream.model.Post
@@ -229,6 +230,13 @@ class PostDetailFragment : Fragment() {
                 binding.detailBtnSubFavorite.visibility = View.GONE
             }
 
+        }
+        binding.datailProfile.setOnClickListener {
+            val yourDetailFragment=YourDetailPage()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frag_edit,yourDetailFragment)
+                .addToBackStack(null)
+                .commit()
         }
 
 

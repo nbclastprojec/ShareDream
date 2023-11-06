@@ -21,6 +21,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -165,19 +166,31 @@ class HomePostAdapter(
 
 
     private fun EndTime(endTime: String): String {
-        val dateFormat = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.US)
-        try {
-            val futureDate = dateFormat.parse(endTime)
-            val currentDate = Date()
-            val diff = futureDate.time - currentDate.time
-            val days = TimeUnit.MILLISECONDS.toDays(diff)//시간을 밀리초로 변한한 뒤 일로변환
-            val hours = TimeUnit.MILLISECONDS.toHours(diff)//시간을 밀리초로 변환한 뒤 시간으로변환
-            return when {
-                days >= 1 -> "$days 일 남음"
-                hours >= 1 -> "$hours 시간 남음"
-                else -> "마감직전!"
+        val dateParts = endTime.split("~")
+
+        if (dateParts.size == 2) {
+            val formattedDate = dateParts[1].trim()
+
+            val dateFormat = SimpleDateFormat("EEE MM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+
+            try {
+                val futureDate = dateFormat.parse(formattedDate)
+                val currentDate = Date()
+                val diff = futureDate.time - currentDate.time
+                val days = TimeUnit.MILLISECONDS.toDays(diff)
+                val hours = TimeUnit.MILLISECONDS.toHours(diff)
+                val minutes = TimeUnit.MILLISECONDS.toMinutes(diff)
+
+                return when {
+                    days >= 1 -> "$days 일 남음"
+                    hours >= 1 -> "$hours 시간 남음"
+                    minutes >= 0 -> "$minutes 분 남음"
+                    else -> "마감되었습니다!"
+                }
+            } catch (e: ParseException) {
+                return "날짜 형식 오류"
             }
-        } catch (e: java.text.ParseException) {
+        } else {
             return "날짜 형식 오류"
         }
     }

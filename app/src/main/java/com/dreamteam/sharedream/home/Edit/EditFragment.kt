@@ -109,7 +109,7 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
                     .show()
                 Log.d("xxxx", " Upload Failure ")
             } else if (
-                binding.editTvTitle.text.isEmpty() || binding.editEtvAddress.text.isEmpty() || binding.editEtvDesc.text.isEmpty() || binding.editEtvPrice.text.isEmpty()
+                binding.editTvTitle.text.isEmpty() || binding.editEtvAddress.text.isEmpty() || binding.editEtvDesc.text.isEmpty() || binding.editEtvPrice.text.isEmpty()||binding.calender.text.isEmpty()
             ) {
                 Toast.makeText(requireContext(), " 모든 입력 가능란은 필수 입력사항 입니다.", Toast.LENGTH_SHORT)
                     .show()
@@ -155,12 +155,19 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
     override fun onDataSelected(date: Date) {
         val calendar = Calendar.getInstance()
         val currentDate = calendar.time
-        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.ENGLISH)
         val currentTime = dateFormat.format(currentDate)
+        val startTime = SimpleDateFormat("EEE MM dd HH:mm:ss zzz yyyy", Locale.ENGLISH).format(currentDate)
+
         Log.d("datedate","${date}")
         val formattedDate = SimpleDateFormat("yyyy년 MM월 dd일").format(date)
-        binding.calender.text =currentTime+"부터, "+formattedDate+"까지"
-        selectedDate = date.toString()
+        val endTime=SimpleDateFormat("EEE MM dd HH:mm:ss zzz yyyy", Locale.ENGLISH).format(date)
+        val resultText = "$currentTime 부터, $formattedDate 까지"
+        binding.calender.text =resultText
+        selectedDate = startTime+"~"+endTime
+
+
+
 
     }
 
