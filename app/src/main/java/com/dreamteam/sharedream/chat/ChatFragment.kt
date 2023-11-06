@@ -111,17 +111,22 @@ class ChatFragment : Fragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             var destinationUid: String? = null
 
+
+
             for (user in chatModel[position].users.keys) {
                 if (!user.equals(uid)) {
                     destinationUid = user
+                    Log.d("susu", "onBindViewHolder: ${destinationUid}")
                     destinationUsers.add(destinationUid)
 
                     firestore.collection("UserData").document(destinationUid)
                     .get()
                         .addOnSuccessListener { documents ->
+
                                 val name = documents.getString("nickname")
 
                                 holder.tittle.text = name
+
                             Log.d("susu", "name: ${name}")
 
                         }
@@ -168,9 +173,6 @@ class ChatFragment : Fragment() {
                 context?.startActivity(intent)
             }
 
-            holder.itemView.setOnClickListener{
-
-            }
         }
 
 

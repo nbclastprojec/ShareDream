@@ -41,6 +41,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.Date
+import kotlin.math.log
 
 @Suppress("DEPRECATION")
 class PostDetailFragment : Fragment() {
@@ -298,7 +299,7 @@ class PostDetailFragment : Fragment() {
                     "${postState.text}"
                 )
 
-                // 홈 게시글 목록에 게시글 변경된 상태 변경하기
+                // 홈 게시글 목록에 게시글 변경된 상태 변경하기d
                 val revisedPost = currentPostInfo[0].copy(state = "${postState.text}")
                 myPostFeedViewModel.setRevisedPost(revisedPost)
             }
@@ -350,40 +351,27 @@ class PostDetailFragment : Fragment() {
         if (parts.size > 1) {
             val endIndex = parts[1].indexOf(")")
             if (endIndex != -1) {
-                val documentId = parts[1].substring(0, endIndex)
-                startMessageActivity(documentId)
-                Log.d("afafafafafa", "$documentId ")
+                val documnetUid = parts[1].substring(0, 20)
+                startMessageActivity(documnetUid)
+                Log.d("afafafafafa", "${parts} ")
+                Log.d("afafafafafa", "${documnetUid} ")
             }else {
-                Log.d("nyh", "getUserInformation: $parts")
+                Log.d("susu", "getUserInformation: ${parts}")
+
             }
         } else {
-            Log.d("nyh", "getUserInformation: $parts")
+            Log.d("susu", "getUserInformation: ${parts}")
+
         }
     }
 
 
-    private fun startMessageActivity(documentId: String) {
-        val myuid =  Firebase.auth.currentUser?.uid.toString()
-        val store = FirebaseFirestore.getInstance()
-        val userData = store.collection("Posts").document(documentId)
+    private fun startMessageActivity(documnetUid: String) {
+       val intent = Intent(requireContext(), MessageActivity::class.java)
+        intent.putExtra("documnetUid", documnetUid)
+        Log.d("susu", "startMessageActivity: ${documnetUid}")
+        startActivity(intent)
 
-        userData.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    val postUseruid = document.getString("uid")
-                    destinationUid = postUseruid
-
-                    if (myuid != destinationUid) {
-                        val intent = Intent(requireContext(), MessageActivity::class.java)
-                        intent.putExtra("documentId", documentId)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(requireContext(), "자기 자신에게는 메시지를 보낼 수 없습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Log.d("MessageActivity", "문서가 없는 예전글이에요.")
-                }
-            }
     }
 
     private fun time(timestamp: Timestamp): String {

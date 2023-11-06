@@ -49,7 +49,9 @@ class MessageActivity : AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         val view = binding.root
 
-        val receivedDocumentId = intent.getStringExtra("documentId").toString()
+        val receivedDocumentId = intent.getStringExtra("documnetUid").toString()
+        Log.d("susu", "onCreate: ${receivedDocumentId}")
+
         val store = FirebaseFirestore.getInstance()
 
 
@@ -64,6 +66,10 @@ class MessageActivity : AppCompatActivity() {
 
                     val nickname = document.getString("nickname")//닉네임
                     val postUseruid = document.getString("uid")//uid
+                    Log.d("susu", "onCreate: ${postUseruid}")
+
+
+
 
                     binding.chat.text = nickname
                     destinationUid = postUseruid
