@@ -206,7 +206,7 @@ class ChatMessageActivity : AppCompatActivity() {
                                 .load(uri)
                                 .into(profile)
                         }?.addOnFailureListener { exception ->
-                            Log.e("MessageActivity", "이미지 다운로드 실패: ${exception.message}")
+                            Log.e("ChatMessageActivity", "이미지 다운로드 실패: ${exception.message}")
                         }
                         message.setBackgroundResource(R.drawable.leftbubble)
                         name.text = chat?.name
