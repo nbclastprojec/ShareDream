@@ -3,21 +3,25 @@ package com.dreamteam.sharedream.viewmodel
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings.Global.getString
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dreamteam.sharedream.FCMService
+import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.home.HomeRepository
+import com.dreamteam.sharedream.home.HomeViewModel
 import com.dreamteam.sharedream.model.LocationData
+import com.dreamteam.sharedream.model.MessageDTO
+import com.dreamteam.sharedream.model.NotificationBody
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.model.UserData
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
-import com.google.android.play.integrity.internal.e
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -25,7 +29,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
@@ -56,11 +59,11 @@ class MyPostFeedViewModel : ViewModel() {
 
     // 관심 목록 ( 좋아요 ) 추가 시 데이터 변경
     private val _likeUserChangeResult = MutableLiveData<MutableList<PostRcv>>()
-    val likeUserChangeResult : LiveData<MutableList<PostRcv>> get() = _likeUserChangeResult
+    val likeUserChangeResult: LiveData<MutableList<PostRcv>> get() = _likeUserChangeResult
 
     // 게시글 목록 Rcv 클릭한 아이템 작성자 프로필 이미지 가져오기 / 마이 페이지 프로필 이미지와 같은 단일 프로필 이미지 로딩
     private val _currentProfileImg = MutableLiveData<Uri>()
-    val currentProfileImg : LiveData<Uri> get() = _currentProfileImg
+    val currentProfileImg: LiveData<Uri> get() = _currentProfileImg
 
     // Home Frag 게시글 정보 LiveData
     private val _postResult = MutableLiveData<MutableList<PostRcv>>()
@@ -68,29 +71,32 @@ class MyPostFeedViewModel : ViewModel() {
 
     // myPage 사용자 정보
     private val _myPageResult = MutableLiveData<UserData>()
-    val myPageResult : MutableLiveData<UserData> get() = _myPageResult
+    val myPageResult: MutableLiveData<UserData> get() = _myPageResult
 
     // userPage 다른 유저 사용자 정보
     private val _userPageResult = MutableLiveData<UserData>()
-    val userPageResult : MutableLiveData<UserData> get() = _userPageResult
+    val userPageResult: MutableLiveData<UserData> get() = _userPageResult
 
     // 게시글 목록 Rcv 클릭한 아이템 정보 받아오기
     private val _currentPost = MutableLiveData<PostRcv>()
-    val currentPost : MutableLiveData<PostRcv> get() = _currentPost
+    val currentPost: MutableLiveData<PostRcv> get() = _currentPost
 
     // 수정 페이지 이동 시 기존에 작성 되어 있던 정보 불러오기
     var currentPostToEditPage = MutableLiveData<PostRcv>()
 
     // 게시글 수정 시 디테일 페이지 데이터 변경
     private val _editPostResult = MutableLiveData<PostRcv>()
-    val editPostResult : MutableLiveData<PostRcv> get() = _editPostResult
+    val editPostResult: MutableLiveData<PostRcv> get() = _editPostResult
 
     // MapView 데이터 이동하기
     private val _locationResult = MutableLiveData<LocationData>()
-    val locationResult : MutableLiveData<LocationData> get() = _locationResult
+    val locationResult: MutableLiveData<LocationData> get() = _locationResult
+
+    private val homeRepository = HomeRepository()
+    val myResponse = homeRepository.myResponse
 
     // 포스트 수정된 DB 업로드 , 추가한 이미지 Storage에 업로드
-    fun uploadEditPost(uris : MutableList<Any>, post : Post) {
+    fun uploadEditPost(uris: MutableList<Any>, post: Post) {
         viewModelScope.launch(Dispatchers.IO) {
             val imgs: MutableList<String> = mutableListOf()
             fun getTime(): String {
@@ -101,14 +107,15 @@ class MyPostFeedViewModel : ViewModel() {
                         Locale.KOREA
                     ).format(currentDateTime)
 
-            return dateFormat
-        }
-        val time = getTime()
-        uris?.let { uriAndUrl ->
-            Log.d("xxxx", "imageUpload 1. uris : $uris")
+                return dateFormat
+            }
+
+            val time = getTime()
+            uris?.let { uriAndUrl ->
+                Log.d("xxxx", "imageUpload 1. uris : $uris")
                 try {
-                    var count : Int = 0
-                    for (item in uriAndUrl){ // index in uriAndUrl로 하면 작동이 안됨.
+                    var count: Int = 0
+                    for (item in uriAndUrl) { // index in uriAndUrl로 하면 작동이 안됨.
                         count++
                         val fileName = "${time}_$count"
                         imgs.add(fileName)
@@ -137,6 +144,7 @@ class MyPostFeedViewModel : ViewModel() {
                                         Log.d("xxxx", " URL Failure : $it ")
                                     }
                             }
+
                             else -> {}
                         }
                     }
@@ -145,35 +153,35 @@ class MyPostFeedViewModel : ViewModel() {
                     Log.d("xxxx", " 파일 업로드 실패 errorCode: ${errorCode}")
                 }
 
-            // timestamp 기준으로 수정하는 게시글 data를 가져와 변경된 게시글로 수정
-            post.imgs = imgs
-            db.collection("Posts").whereEqualTo("timestamp",post.timestamp).get()
-                .addOnSuccessListener {querySnapshot ->
-                    Log.d("xxxx", "uploadEditPost: 해당 게시글 $querySnapshot")
-                    if (!querySnapshot.isEmpty){
-                        querySnapshot.documents[0].reference.set(post)
-                            .addOnSuccessListener {
-                                Log.d("xxxx", "imageUpload: 게시글 수정 완료 ")
-                            }
-                            .addOnFailureListener {
-                                Log.d("xxxx", "uploadEditPost: 게시글 수정 실패 $it")
-                            }
+                // timestamp 기준으로 수정하는 게시글 data를 가져와 변경된 게시글로 수정
+                post.imgs = imgs
+                db.collection("Posts").whereEqualTo("timestamp", post.timestamp).get()
+                    .addOnSuccessListener { querySnapshot ->
+                        Log.d("xxxx", "uploadEditPost: 해당 게시글 $querySnapshot")
+                        if (!querySnapshot.isEmpty) {
+                            querySnapshot.documents[0].reference.set(post)
+                                .addOnSuccessListener {
+                                    Log.d("xxxx", "imageUpload: 게시글 수정 완료 ")
+                                }
+                                .addOnFailureListener {
+                                    Log.d("xxxx", "uploadEditPost: 게시글 수정 실패 $it")
+                                }
+                        }
                     }
-                }
-                .addOnFailureListener {
-                    Log.d("xxxx", "uploadEditPost: 초기 실패 $it")
-                }
-        }
+                    .addOnFailureListener {
+                        Log.d("xxxx", "uploadEditPost: 초기 실패 $it")
+                    }
+            }
         }
     }
 
     // 게시글 수정 완료 시 디테일 페이지에 데이터 넘겨주기.
-    fun setRevisedPost(postRcv : PostRcv){
+    fun setRevisedPost(postRcv: PostRcv) {
         _editPostResult.value = postRcv
     }
 
     // 게시물 디테일 정보 받아오기
-    fun setCurrentPost(postRcv : PostRcv){
+    fun setCurrentPost(postRcv: PostRcv) {
         _currentPost.value = (postRcv)
     }
 
@@ -184,27 +192,27 @@ class MyPostFeedViewModel : ViewModel() {
 
     // 기존 데이터 제거하기
     @SuppressLint("NullSafeMutableLiveData")
-    fun cleanLocationResult(){
+    fun cleanLocationResult() {
         _locationResult.postValue(null)
     }
 
     // 위치 정보 넘기기, 받기
-    fun setLocationInfo(locationData: LocationData){
+    fun setLocationInfo(locationData: LocationData) {
         _locationResult.postValue(locationData)
     }
 
     // Home Frag 전체 게시글 DB 받아오기
-    fun downloadHomePostRcv(){
+    fun downloadHomePostRcv() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 db.collection("Posts")
-                    .orderBy("timestamp",Query.Direction.DESCENDING)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
                     .get()
                     .addOnSuccessListener { querySnapshot ->
-                        Log.d("please","$querySnapshot")
+                        Log.d("please", "$querySnapshot")
                         if (!querySnapshot.isEmpty) {
                             val postRcvList = mutableListOf<PostRcv>()
-                            for ( document in querySnapshot.documents){
+                            for (document in querySnapshot.documents) {
                                 document.toObject<Post>()?.let { post ->
                                     convertPostToPostRcv(
                                         post,
@@ -271,17 +279,17 @@ class MyPostFeedViewModel : ViewModel() {
                 if (postImgUris.size == postImgList.size) {
 
                     // Post -> PostRcv
-                    val postRcv = postToPostRcv(post,postImgList)
+                    val postRcv = postToPostRcv(post, postImgList)
 
                     var inserted = false
-                    for ( index in postRcvList.indices){
-                        if (postRcv.timestamp > postRcvList[index].timestamp){
+                    for (index in postRcvList.indices) {
+                        if (postRcv.timestamp > postRcvList[index].timestamp) {
                             postRcvList.add(index, postRcv)
                             inserted = true
                             break
                         }
                     }
-                    if (!inserted){
+                    if (!inserted) {
                         postRcvList.add(postRcv)
                     }
 
@@ -377,13 +385,13 @@ class MyPostFeedViewModel : ViewModel() {
     }
 
     // 디테일 수정 or 관심 목록 추가 후 수정된 detailPage 확인
-    private fun downloadNewDetailPost(postPath: Timestamp){
-        db.collection("Posts").whereEqualTo("timestamp",postPath)
+    private fun downloadNewDetailPost(postPath: Timestamp) {
+        db.collection("Posts").whereEqualTo("timestamp", postPath)
             .get()
-            .addOnSuccessListener {querySnapshot ->
-                val postRcvList : MutableList<PostRcv> = mutableListOf()
+            .addOnSuccessListener { querySnapshot ->
+                val postRcvList: MutableList<PostRcv> = mutableListOf()
                 querySnapshot.toObjects<Post>()?.let {
-                    convertPostToPostRcv(it[0],querySnapshot,postRcvList,_likeUserChangeResult)
+                    convertPostToPostRcv(it[0], querySnapshot, postRcvList, _likeUserChangeResult)
                 }
             }
     }
@@ -403,6 +411,7 @@ class MyPostFeedViewModel : ViewModel() {
                     likeList.addAll(documentSnap.data?.get("likeUsers") as List<String>)
                     Log.d("xxxx", " Before control LikeUsers List : $likeList")
                     getTokenFromPost(documentSnap.id)
+                    Log.d("nyh", "addOrSubFavoritePost: $documentSnap")
 
                     if (likeList.contains(uid)) {
                         //todo 이미 좋아요한 유저 이벤트 처리, 본인 게시물 좋아요 버튼 이벤트 처리.
@@ -420,16 +429,16 @@ class MyPostFeedViewModel : ViewModel() {
                             }
                     } else {
                         likeList.add(uid!!)
-                        documentSnap.reference.update("likeUsers",likeList).addOnSuccessListener {
-                            Log.d("xxxx", " 좋아요 버튼 클릭 Successful, 좋아요 List에 UID 추가 " )
+                        documentSnap.reference.update("likeUsers", likeList).addOnSuccessListener {
+                            Log.d("xxxx", " 좋아요 버튼 클릭 Successful, 좋아요 List에 UID 추가 ")
                             downloadNewDetailPost(postPath)
-                            }
+                        }
                             .addOnFailureListener {
                                 Log.d("xxxx", " 좋아요 버튼 클릭 Failure 좋아요 List에 추가 X = $it ")
                             }
-                        }
                     }
                 }
+            }
     }
 
     // todo 관심 목록 추가, 제거 분리하여 관리
@@ -450,58 +459,49 @@ class MyPostFeedViewModel : ViewModel() {
             }
     }
 
+    // Detail Page 작성자 게시글 상태 변경
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTokenFromPost(postId: String) {
-        db.collection("Posts")
-            .document(postId)
+
+        val postRef = db.collection("Posts").document(postId)
+
+        postRef
             .get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
                     val token = documentSnapshot.getString("token")
                     if (token != null) {
-
                         val notificationTitle = "하이요?"
                         val notificationBody = "눌렀습니다"
-                        val uniqueMessageId = UUID.randomUUID().toString()
+                        val userId = "아이디"
 
-                        // FCM 알림에 추가할 데이터 설정
-                        val notification = mutableMapOf<String, String>()
-                        notification["key1"] = "value1"
-                        notification["key2"] = "value2"
-                        FirebaseMessaging.getInstance().isAutoInitEnabled = true
+//
+//                        val time = System.currentTimeMillis()
 
-    // Detail Page 작성자 게시글 상태 변경
-    fun uploadChangedPostState(timestamp: Timestamp,state: String){
-        db.collection("Posts").whereEqualTo("timestamp",timestamp).get()
-            .addOnSuccessListener { querySanp ->
-                querySanp.documents[0].reference.update("state",state)
-                    .addOnSuccessListener {
-                    Log.d("xxxx", "uploadChangedPostState: State 변경 성공")
-                    }
-                    .addOnFailureListener {
-                        Log.d("xxxx", "uploadChangedPostState: State 변경 실패 -> $it")
-                    }
-            }
-    }
-                        // FCM 알림을 보내기 위한 데이터 설정
+                        val data = NotificationBody.NotificationData(
+                            notificationTitle, notificationBody,userId
+                        )
+                        val body = NotificationBody(token, data)
+                        Log.d("nyh", "getTokenFromPost: send value of body $body")
+                        sendNotification(body)
 
-                        val message = RemoteMessage.Builder(token)
-                            .setMessageId(uniqueMessageId)
-                            .setData(notification) // 데이터 추가
-                            .addData("title", notificationTitle) // 알림 제목
-                            .addData("body", notificationBody)
-                            .build()
-                        FirebaseMessaging.getInstance().send(message)
-                        // FCMService의 sendNonotification 함수 호출
                         Log.d("nyh", "getTokenFromPost: token = $token")
                         Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
                     }
                 } else {
                     Log.d("nyh", "getTokenFromPost: elsefail")
                 }
-            }.addOnFailureListener  {
+            }.addOnFailureListener {
                 Log.d("nyh", "getTokenFromPost: failurfail")
 
+            }
+    }
+
+    fun sendNotification(notification: NotificationBody) {
+        viewModelScope.launch {
+            homeRepository.sendNotification(notification)
+            Log.d("nyh", "sendNotification postViewmodel :$notification")
         }
     }
 }

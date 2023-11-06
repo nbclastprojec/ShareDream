@@ -4,17 +4,20 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.dreamteam.sharedream.model.MessageDTO
+import com.dreamteam.sharedream.model.NotificationBody
 import com.dreamteam.sharedream.model.PostRcv
+import com.google.firebase.messaging.RemoteMessage
+import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
     private val homeRepository = HomeRepository()
 
+
     private val _refreshData = MutableLiveData<Boolean>()
     val refreshData: MutableLiveData<Boolean>
         get() = _refreshData
-
-    private val _sortData = MutableLiveData<List<PostRcv?>>()
-    val sortData: LiveData<List<PostRcv?>> = _sortData
 
     private val _sortCategory = MutableLiveData<List<PostRcv?>>()
     val sortCategory: LiveData<List<PostRcv?>> = _sortCategory
@@ -30,4 +33,7 @@ class HomeViewModel : ViewModel() {
             Log.d("nyh", "HomeViewModel sortCategorys: $result")
         }
     }
+//    fun uploadChat(messageDTO: MessageDTO){
+//        homeRepository.uploadChat(messageDTO)
+//    }
 }

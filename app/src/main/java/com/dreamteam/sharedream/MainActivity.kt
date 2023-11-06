@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream
 
+import android.app.Application
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
