@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,30 +13,26 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.bumptech.glide.Glide
-import com.dreamteam.sharedream.FCMService
 import com.dreamteam.sharedream.adapter.DifferCallback
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.databinding.WriteItemBinding
-import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.ktx.storage
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.UUID
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 
 @Suppress("DEPRECATION")
 class HomePostAdapter(
     private val context: Context,
     private val postClick: PostClick,
-    private val allPosts: List<PostRcv>
+    private var allPosts: List<PostRcv>
 ) :
     ListAdapter<PostRcv, HomePostAdapter.HomePostRcvViewHolder>(DifferCallback.differCallback) {
 
@@ -61,159 +57,7 @@ class HomePostAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: HomePostRcvViewHolder, position: Int) {
         val post = currentList[position]
-        val allpost = allPosts[position]
-        val userId = post.uid
 
-//        holder.postheart.setOnClickListener {
-//            val db = FirebaseFirestore.getInstance()
-//            val documentId = post.documentId // 게시물의 ID
-//            val userId = post.uid // 게시물의 작성자 ID
-//
-//            // Firestore에서 게시물 정보 가져오기
-//            db.collection("Posts").document(documentId).get()
-//                .addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        val document = task.result
-//                        if (document != null && document.exists()) {
-//
-//                            // 게시물 작성자의 FCM 토큰 가져오기
-//                            val writerToken = post.token
-//
-//                            // "좋아요" 누른 사용자와 게시글 작성자 구별
-//                            if (userId == post.uid) {
-//                                val nickname = allpost.nickname
-//                                val notificationTitle = "$nickname 님이 ${allpost.title}글을 좋아합니다."
-//                                val notificationBody = "얼른 가서 확인 해 보세요!"
-//                                val uniqueMessageId = UUID.randomUUID().toString()
-//
-//
-//                                // FCM 알림에 추가할 데이터 설정
-//                                val data = mutableMapOf<String, String>()
-//                                data["key1"] = "value1"
-//                                data["key2"] = "value2"
-//                                Log.d("nyh", "onBindViewHolder: ${writerToken}")
-//                                Log.d("nyh", "onBindViewHolder: ${userId}")
-//
-//
-//                                FirebaseMessaging.getInstance().isAutoInitEnabled = true
-//
-//                                // FCM 알림을 보내기 위한 데이터 설정
-//                                val message = RemoteMessage.Builder(writerToken)
-//                                    .setMessageId(uniqueMessageId)
-//                                    .setData(data)
-//                                    .addData("title", notificationTitle)
-//                                    .addData("body", notificationBody)
-//                                    .build()
-//
-//                                // FCM 알림 전송
-//                                FirebaseMessaging.getInstance().send(message)
-//                            }
-//                        } else {
-//                            println("Document not found")
-//                        }
-//                    } else {
-//                        val error = task.exception
-//                        println("Error getting document: $error")
-//                    }
-//                }
-
-
-//        holder.postheart.setOnClickListener {
-//
-////            onRecyclerViewItemClicked(post.documentId)
-//
-//            val functions = FirebaseFunctions.getInstance()
-//
-//            val db = FirebaseFirestore.getInstance()
-//            val documentId = post.documentId // 가져올 문서의 ID
-//
-//            db.collection("Posts").document(documentId).get()
-//                .addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        val document = task.result
-//                        if (document != null && document.exists()) {
-//
-//                            val writerToken = document.getString("token")
-////                            val documentData = document.data
-//                            if (userId != post.token) {
-//                                val nickname = allpost.nickname
-//                                val notificationTitle = "$nickname 님이 ${allpost.title}글을 좋아합니다."
-//                                val notificationBody = "얼른 가서 확인 해 보세요!"
-//                                val uniqueMessageId = UUID.randomUUID().toString()
-//
-//                                // FCM 알림에 추가할 데이터 설정
-//                                val data = mutableMapOf<String, String>()
-//                                data["key1"] = "value1"
-//                                data["key2"] = "value2"
-////            FirebaseMessaging.getInstance().isAutoInitEnabled = true
-//
-//                                // FCM 알림을 보내기 위한 데이터 설정
-//
-//
-//                                val token = post.token
-//                                Log.d("nyh", "onBindViewHolder: $token")
-//
-//                                val message = RemoteMessage.Builder(token)
-//                                    .setMessageId(uniqueMessageId)
-//                                    .setData(data) // 데이터 추가
-//                                    .addData("title", notificationTitle) // 알림 제목
-//                                    .addData("body", notificationBody)
-//                                    .build()
-//                                Log.d("nyh", "onBindViewHolder: token === $token")
-//                                FirebaseMessaging.getInstance().send(message)
-//                                // FCMService의 sendNonotification 함수 호출
-//                                val fcmService = FCMService()
-//                                fcmService.sendNonotification(writerToken,message)
-//
-//                            }
-//
-//
-//                            Log.d("nyh", "onBindViewHolder: ${document.id}")
-//                        } else {
-//                            println("Document not found")
-//                        }
-//                    } else {
-//                        val error = task.exception
-//                        println("Error getting document: $error")
-//                    }
-//                }
-            // 알림 제목과 내용 설정
-
-//            val nickname = allpost.nickname
-//            val notificationTitle = "$nickname 님이 ${allpost.title}글을 좋아합니다."
-//            val notificationBody = "얼른 가서 확인 해 보세요!"
-//            val uniqueMessageId = UUID.randomUUID().toString()
-//
-//            // FCM 알림에 추가할 데이터 설정
-//            val data = mutableMapOf<String, String>()
-//            data["key1"] = "value1"
-//            data["key2"] = "value2"
-////            FirebaseMessaging.getInstance().isAutoInitEnabled = true
-//
-//            // FCM 알림을 보내기 위한 데이터 설정
-//
-//
-//            val token = post.token
-//            Log.d("nyh", "onBindViewHolder: $token")
-//
-//            val message = RemoteMessage.Builder(token)
-//                .setMessageId(uniqueMessageId)
-//                .setData(data) // 데이터 추가
-//                .addData("title", notificationTitle) // 알림 제목
-//                .addData("body", notificationBody)
-//                .build()
-//            Log.d("nyh", "onBindViewHolder: token === $token")
-//            FirebaseMessaging.getInstance().send(message)
-//            // FCMService의 sendNonotification 함수 호출
-//            val fcmService = FCMService()
-//            fcmService.sendNonotification(context,message)
-            // FCM 알림을 보내기 위한 데이터 설정
-            // FCMService의 sendNonotification 함수 호출
-//                    val fcmService = FCMService()
-//                    fcmService.sendNonotification(context, notificationTitle, notificationBody, data)
-
-
-//        }
         holder.itemView.setOnClickListener {
             postClick?.postClick(post)
         }
@@ -225,10 +69,33 @@ class HomePostAdapter(
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price.toString()
 
+            postEndDate.text = EndTime(positionItem.endDate)
+            postPrice.text = "${positionItem.price}원"
+
+
+
         }
 
         holder.bind(positionItem.imgs[0], positionItem.timestamp)
     }
+    fun sortPriceAsc(){
+        val sortedItems = currentList.sortedBy { it.price }
+        submitList(sortedItems)
+    }
+    fun sortPriceDesc(){
+        val sortedItems =  currentList.sortedByDescending { it.price }
+        submitList(sortedItems)
+    }
+    fun sortLikeAsc() {
+        val sortedItem = currentList.sortedBy { it.likeUsers.size }
+        submitList(sortedItem)
+    }
+
+    fun filteredPrice(minPrice:Long, maxPrice: Long){
+        val filteredList = currentList.filter { it.price in minPrice .. maxPrice}
+        submitList(filteredList)
+    }
+
 
     inner class HomePostRcvViewHolder(binding: WriteItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -239,10 +106,28 @@ class HomePostAdapter(
         val postImg: ImageView = binding.writeImage
 //        val postheart: ImageView = binding.btnHeart
         val postDate: TextView = binding.writePageDate
+        val postEndDate:TextView=binding.endDate
+
+        val postStateBgClosed: ImageView = binding.itemImgStateClosed
+        val postStateBgPutOff: ImageView = binding.itemImgStatePutOff
+        val postStateBgReservation : ImageView = binding.itemImgStateReservation
 
 
         fun bind(imagePath: Uri, timestamp: Timestamp) {
             postImg.load(imagePath)
+
+            when (currentList[position].state){
+                "교환 가능" -> {
+                    postStateBgClosed.visibility = View.INVISIBLE
+                    postStateBgPutOff.visibility = View.INVISIBLE
+                    postStateBgReservation.visibility = View.INVISIBLE
+                }
+                "교환 보류" -> postStateBgPutOff.visibility = View.VISIBLE
+                "예약 중" -> postStateBgReservation.visibility = View.VISIBLE
+                "교환 완료" -> postStateBgClosed.visibility = View.VISIBLE
+                else -> return
+            }
+
             val date: Date = timestamp.toDate()
             // 1. 날짜 형식으로 만들기
             // timestamp를 Date 객체로 변환
@@ -280,32 +165,40 @@ class HomePostAdapter(
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun onCategorySelected(category: String) {
 
-        if (category.isEmpty()) {
-            submitList(allItems)
+
+    private fun EndTime(endTime: String): String {
+        val dateParts = endTime.split("~")
+
+        if (dateParts.size == 2) {
+            val formattedDate = dateParts[1].trim()
+
+            val dateFormat = SimpleDateFormat("EEE MM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+
+            try {
+                val futureDate = dateFormat.parse(formattedDate)
+                val currentDate = Date()
+                val diff = futureDate.time - currentDate.time
+                val days = TimeUnit.MILLISECONDS.toDays(diff)
+                val hours = TimeUnit.MILLISECONDS.toHours(diff)
+                val minutes = TimeUnit.MILLISECONDS.toMinutes(diff)
+
+                return when {
+                    days >= 1 -> "$days 일 남음"
+                    hours >= 1 -> "$hours 시간 남음"
+                    minutes >= 0 -> "$minutes 분 남음"
+                    else -> "마감되었습니다!"
+                }
+            } catch (e: ParseException) {
+                return "날짜 형식 오류"
+            }
         } else {
-            // 카테고리에 따라 게시물을 필터링하고 어댑터를 업데이트합니다.
-            val filteredList = allItems.filter { it.category == category }
-            submitList(filteredList)
+            return "날짜 형식 오류"
         }
-        notifyDataSetChanged()
     }
-
-//    private fun likeClick(position: Int) {
-//        val tsDoc = db.collection("posts").document(postUidList[position])
-//        db.runTransaction {
-//            val post = it.get(tsDoc).toObject(Post::class.java)
-//
-//            if (post!!.likeUsers.isNotEmpty()) {
-//                post.likeUsers.remove(uid)
-//            } else {
-//                post.bookmark[uid!!] = true
-//            }
-//
-//            it.set(tsDoc, post)
-//        }
-//    }
-
+    fun setData(data:List<PostRcv>){
+        if(data.isNotEmpty()){
+            allPosts = ArrayList(data)
+        }
+    }
 }

@@ -44,20 +44,34 @@
             android:text="청동도끼 사용해서 이제 필요 없어요 :)"
             android:textSize="14sp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
         <TextView
             android:id="@+id/write_category"
-            android:layout_width="253dp"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:gravity="left"
             android:text="카테고리 : 도구"
             android:textSize="14sp" />
+        <TextView
+            android:id="@+id/end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1일남음"
+            android:textSize="14sp"
+            />
+
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="10dp">
+            android:paddingTop="5dp">
 
             <TextView
                 android:id="@+id/textView3"
@@ -101,13 +115,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/write_image"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/loading2" />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/write_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/loading2" />
+
+            <ImageView
+                android:id="@+id/item_img_state_closed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/soldout_bg_color"
+                android:src="@drawable/bg_state_img_closed_white"
+                android:visibility="invisible"
+                />
+
+            <ImageView
+                android:id="@+id/item_img_state_reservation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/soldout_bg_color"
+                android:src="@drawable/bg_state_img_reservation_white"
+                android:visibility="invisible"
+                />
+
+            <ImageView
+                android:id="@+id/item_img_state_put_off"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/soldout_bg_color"
+                android:src="@drawable/bg_state_img_put_off_white"
+                android:visibility="invisible"
+                />
+
+
+        </FrameLayout>
+
 
         <!--        <ImageView-->
         <!--            android:id="@+id/btn_heart"-->

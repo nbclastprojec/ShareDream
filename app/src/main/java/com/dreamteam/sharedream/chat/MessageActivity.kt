@@ -43,6 +43,7 @@ class MessageActivity : AppCompatActivity() {
     private var document: String? = null
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
@@ -57,17 +58,26 @@ class MessageActivity : AppCompatActivity() {
 
         val userData = store.collection("Posts").document(receivedDocumentId)
         userData.get()
+
+        val receivedDocumentId = intent.getStringExtra("documentId")
+            .toString()//document 아이디 가져왔습니다. 이게 최신글은 document ID가 있어서 이걸로 검색하시면 스토어에 글 바로 연결됩니다. 최신화된지 얼마안되서 있는글도 있고 없는글도 있어요. 최근에 쓴 글은 다 있어서 주석 이거보시면 지워주시면 감사하겠습니당
+        val store = FirebaseFirestore.getInstance()
+
+        val UserData = store.collection("Posts").document(receivedDocumentId)
+        UserData.get()
+
             .addOnSuccessListener { document ->
                 if (document != null) {
 
                     val nickname = document.getString("nickname")//닉네임
                     val postUseruid = document.getString("uid")//uid
 
+
+                
                     binding.chat.text = nickname
                     destinationUid = postUseruid
 
                     Log.d("susu", "${postUseruid}")
-
 
                 } else {
                     Log.d("MessageActivity", "문서가 없는 예전글이에요.")
@@ -86,8 +96,6 @@ class MessageActivity : AppCompatActivity() {
 
 
         setContentView(view)
-
-
 
         uid = Firebase.auth.currentUser?.uid.toString()
         recyclerView = binding.chatRecycleView
@@ -133,7 +141,6 @@ class MessageActivity : AppCompatActivity() {
         backbtn.setOnClickListener {
             super.onBackPressed()
         }
-
         checkChatRoom()
 
 
@@ -174,8 +181,7 @@ class MessageActivity : AppCompatActivity() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         chat = snapshot.getValue<Chatting>()
                         chat?.name = binding.chat.toString()
-
-                        getMessageList()
+     getMessageList()
                     }
                 })
         }
@@ -262,6 +268,5 @@ class MessageActivity : AppCompatActivity() {
         }
     }
 
-
-
-
+    }
+}

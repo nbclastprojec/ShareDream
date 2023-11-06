@@ -1,19 +1,18 @@
 package com.dreamteam.sharedream
 
+import android.app.Application
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.ActivityMainBinding
-import com.dreamteam.sharedream.home.Edit.EditActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.dreamteam.sharedream.home.HomeAdapter

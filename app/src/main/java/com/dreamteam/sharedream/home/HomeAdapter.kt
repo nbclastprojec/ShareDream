@@ -53,7 +53,7 @@ class HomeAdapter(private val context: Context) :
                 homeDataItem.clear()
                 homeDataItem.addAll(newData)
                 //filterByCategory을 처음에 가져와서 여기서 써줘야 돌아간다!!
-                filterByCategory("")
+//                filterByCategory("")
                 notifyDataSetChanged()
             }
             .addOnFailureListener { e ->
@@ -76,20 +76,7 @@ class HomeAdapter(private val context: Context) :
 
     //선택되지 않았을 땐 전체데이터 설정, else는 filter
     @SuppressLint("NotifyDataSetChanged")
-    fun filterByCategory(category: String) {
-        if (category.isEmpty()) {
-            Log.d("nyh", "filterByCategory: ${filteredDataItem.size}")
-            Log.d("nyh", "filterByCategory: ${filteredDataItem}")
-            filteredDataItem = homeDataItem // 전체 데이터 표시
-        } else {
-            filteredDataItem = homeDataItem.filter { it.category == category }
-            Log.d("nyh", "filterByCategory else: ${filteredDataItem.size}")
-            Log.d("nyh", "filterByCategory else : ${filteredDataItem}")
-        }
-        notifyDataSetChanged()
-    }
 
-    @SuppressLint("SuspiciousIndentation")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val homeItem = filteredDataItem[position]
@@ -97,7 +84,7 @@ class HomeAdapter(private val context: Context) :
         val storage = Firebase.storage
         val fileName = homeItem.image
         val storageRef = storage.getReference("image").child(fileName)
-        val downloadTask = storageRef.downloadUrl
+
 
 
        // holder.button.setOnClickListener {
@@ -132,20 +119,6 @@ class HomeAdapter(private val context: Context) :
         //
         //        }
 
-
-            downloadTask.addOnSuccessListener { uri ->
-                Glide.with(context)
-                    .load(uri)
-                    .into(homeHolder.image)
-            }.addOnFailureListener {
-                Log.e(
-                    "HomeAdpate",
-                    "nyh Glade imageDownload fail homeitem.image =  ${homeItem.image}"
-                )
-                Log.e("HomeAdpate", "nyh Glade imageDownload fail it =  $it")
-                Log.d("nyh", "onBindViewHolder: $storageRef")
-                Log.d("nyh", "onBindViewHolder: $fileName")
-            }
 
             homeHolder.title.text = homeItem.title
             homeHolder.subtitle.text = homeItem.mainText

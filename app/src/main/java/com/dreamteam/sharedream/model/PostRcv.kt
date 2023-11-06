@@ -18,6 +18,31 @@ data class PostRcv(
     val token: String,
     val timestamp: Timestamp,
     val state : String,
-    val documentId:String
+    val documentId:String,
+    val locationLatLng : List<Double>,
+    val locationKeyword : List<String>,
+    val endDate:String,
 
-)
+) {
+    constructor() : this(
+        "",
+        "",
+        0,
+        "",
+        "",
+        "",
+        "",
+        listOf(),
+        "",
+        listOf(),
+        "",
+        Timestamp.now(),
+        "",
+        "",
+        listOf(),
+        listOf(),
+        ""
+    )
+
+
+}

@@ -12,7 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="TextView"
+        android:textSize="25sp"
+        android:text="카테고리"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,6 +23,8 @@
         android:id="@+id/chipgroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,62 +32,256 @@
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/all"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
+            android:text="전체"
+            android:gravity="center"
+            app:singleSelection="false"
+            android:checkable="true"
+            android:textSize="15sp"
+            app:chipStrokeWidth="1dp"
+            android:background="@color/white"
+            />
+        <com.google.android.material.chip.Chip
             android:id="@+id/cloths_chip"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
             android:checkable="true"
             android:text="의류"
-            android:textSize="12sp" />
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:textSize="15sp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/machine_chip"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
             android:checkable="true"
             android:text="가전제품"
-            android:textSize="12sp" />
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:textSize="15sp" />
 
 
         <com.google.android.material.chip.Chip
             android:id="@+id/sport_chip"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
             android:checkable="true"
             android:text="스포츠"
-            android:textSize="12sp" />
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:textSize="15sp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/art_chip"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
             android:checkable="true"
             android:text="예술"
-            android:textSize="12sp" />
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:textSize="15sp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/book_chip"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
             android:checkable="true"
             android:text="독서"
-            android:textSize="12sp" />
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:textSize="15sp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/beauty_chip"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
             android:checkable="true"
             android:text="뷰티"
-            android:textSize="12sp" />
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:textSize="15sp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/toy_chip"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
             android:checkable="true"
             android:text="문구"
-            android:textSize="12sp" />
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:textSize="15sp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/furniture"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
+            android:text="가구"
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:checkable="true"
+            android:textSize="15sp"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/life"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
+            android:text="생활"
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:checkable="true"
+            android:textSize="15sp"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/food"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
+            android:text="식품"
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:checkable="true"
+            android:textSize="15sp"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/kids"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:text="유아동/출산"
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:checkable="true"
+            android:textSize="15sp"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/pet"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="반려동물용품"
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:textSize="15sp"
+            android:checkable="true"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/etc"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
+            android:text="기타"
+            app:chipStrokeWidth="1dp"
+            app:singleSelection="false"
+            android:textSize="15sp"
+            android:checkable="true"
+            />
     </com.google.android.material.chip.ChipGroup>
+
+    <View
+        android:id="@+id/view119"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/gray900"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chipgroup" />
+
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="값어치"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view119" />
+
+    <TextView
+        android:id="@+id/max10000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:text="0~10,000원"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/view200"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+    <TextView
+        android:id="@+id/max30000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:clickable="true"
+        android:text="10,000~30,000원"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view200"
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+    <TextView
+        android:id="@+id/max50000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:clickable="true"
+        android:text="30,000~50,000원"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/view200"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/max10000" />
+
+    <TextView
+        android:id="@+id/max100000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:clickable="true"
+        android:text="50,000~100,000원"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view200"
+        app:layout_constraintTop_toBottomOf="@+id/max30000" />
+
+    <TextView
+        android:id="@+id/max150000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:clickable="true"
+        android:text="100,000~150,000원"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/view200"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/max50000" />
+
+    <TextView
+        android:id="@+id/maxfull"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:clickable="true"
+        android:text="그 이상"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view200"
+        app:layout_constraintTop_toBottomOf="@+id/max100000" />
+
+    <View
+        android:id="@+id/view200"
+        android:layout_marginTop="10dp"
+        android:layout_width="1dp"
+        android:layout_height="120dp"
+        android:background="@color/gray900"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

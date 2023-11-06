@@ -13,20 +13,26 @@
 
         <ImageView
             android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="58dp"
+            android:layout_marginTop="38dp"
             android:layout_marginEnd="29dp"
             android:layout_marginBottom="38dp"
             android:src="@drawable/loginbox_first"
             app:layout_constraintBottom_toBottomOf="@+id/btnProfileImgEdit"
-            app:layout_constraintEnd_toEndOf="@+id/btnProfileImgEdit" />
+            app:layout_constraintEnd_toEndOf="@+id/btnProfileImgEdit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/btnProfileImgEdit"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="76dp"
+            android:layout_marginBottom="80dp"
             android:src="@drawable/loginbox_first"
+            app:layout_constraintBottom_toTopOf="@+id/btn_googleLogin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,14 +67,14 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_googleLogin"
-            android:layout_width="356dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="50dp"
             android:background="@drawable/loginbtn_2"
-            android:paddingLeft="10dp"
             android:drawableLeft="@drawable/btn_google"
             android:fontFamily="@font/suitebold"
             android:gravity="center"
+            android:paddingLeft="10dp"
             android:text="구글로 로그인하기"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
