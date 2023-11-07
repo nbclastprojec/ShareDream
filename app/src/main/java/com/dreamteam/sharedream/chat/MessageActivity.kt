@@ -1,6 +1,10 @@
 package com.dreamteam.sharedream.chat
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -18,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.ActivityChatBinding
+import com.dreamteam.sharedream.databinding.ChatDialogBinding
 import com.dreamteam.sharedream.databinding.ChatItemBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -41,8 +46,7 @@ class MessageActivity : AppCompatActivity() {
     private val storage = Firebase.storage
     private lateinit var binding: ActivityChatBinding
     private var document: String? = null
-
-
+    private var myCustomDialog: MyCustomDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,33 +58,22 @@ class MessageActivity : AppCompatActivity() {
 
         val store = FirebaseFirestore.getInstance()
 
-
-
         document = receivedDocumentId
 
         val UserData = store.collection("Posts").document(receivedDocumentId)
         UserData.get()
-
             .addOnSuccessListener { document ->
                 if (document != null) {
-
-                    val nickname = document.getString("nickname")//닉네임
-                    val postUseruid = document.getString("uid")//uid
+                    val nickname = document.getString("nickname") // 닉네임
+                    val postUseruid = document.getString("uid") // uid
                     Log.d("susu", "onCreate: ${postUseruid}")
-
-
-
-
                     binding.chat.text = nickname
                     destinationUid = postUseruid
-
                     Log.d("susu", "${postUseruid}")
-
                 } else {
                     Log.d("MessageActivity", "문서가 없는 예전글이에요.")
                 }
             }
-
 
         val imageView = binding.chatSendBtn
         val editText = binding.chattext
@@ -90,49 +83,39 @@ class MessageActivity : AppCompatActivity() {
         val realTime = dateFormat.format(Date(time)).toString()
         val backbtn = binding.backButtonChat
 
-
-
         setContentView(view)
 
         uid = Firebase.auth.currentUser?.uid.toString()
         recyclerView = binding.chatRecycleView
 
         imageView.setOnClickListener {
-
-                Log.d("susu", "$destinationUid")
-                val chatModel = ChatModel()
-                chatModel.users.put(uid.toString(), true)
-                chatModel.users.put(destinationUid!!, true)
-
-                val comment = ChatModel.Comment(uid, editText.text.toString(), realTime)
-                if (chatRoomuid == null) {
-
-                    imageView.isEnabled = false
+            Log.d("susu", "$destinationUid")
+            val chatModel = ChatModel()
+            chatModel.users.put(uid.toString(), true)
+            chatModel.users.put(destinationUid!!, true)
+            val comment = ChatModel.Comment(uid, editText.text.toString(), realTime)
+            if (chatRoomuid == null) {
+                imageView.isEnabled = false
+                Handler().postDelayed({
+                    imageView.isEnabled = true // 1초 후 버튼 재활성화
+                }, 1000L)
+                fireDatabase.child("ChatRoom").push().setValue(chatModel).addOnSuccessListener {
+                    checkChatRoom()
                     Handler().postDelayed({
-                        imageView.isEnabled = true  // 1초 후 버튼 재활성화
+                        fireDatabase.child("ChatRoom").child(chatRoomuid.toString())
+                            .child("comments").push().setValue(comment)
+                        editText.text = null
                     }, 1000L)
-
-                    fireDatabase.child("ChatRoom").push().setValue(chatModel).addOnSuccessListener {
-                        checkChatRoom()
-                        Handler().postDelayed({
-                            fireDatabase.child("ChatRoom").child(chatRoomuid.toString())
-                                .child("comments").push().setValue(comment)
-                            editText.text = null
-                        }, 1000L)
-
-                    }
-                } else {
-
-                    imageView.isEnabled = false
-                    Handler().postDelayed({
-                        imageView.isEnabled = true  // 1초 후 버튼 재활성화
-                    }, 1000L)
-
-                    fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
-                        .push().setValue(comment)
-                    editText.text = null
-
                 }
+            } else {
+                imageView.isEnabled = false
+                Handler().postDelayed({
+                    imageView.isEnabled = true // 1초 후 버튼 재활성화
+                }, 1000L)
+                fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
+                    .push().setValue(comment)
+                editText.text = null
+            }
         }
 
         backbtn.setOnClickListener {
@@ -140,14 +123,28 @@ class MessageActivity : AppCompatActivity() {
         }
         checkChatRoom()
 
+        val listBtn = binding.listbtn
 
+        listBtn.setOnClickListener {
+            val myCustomDialog = MyCustomDialog(this, object : CustomDialogInterface {
+                override fun onDeleteBtnClicked() {
+                    deleteChatRoom()
+                    myCustomDialog?.dismiss()
+                }
+
+                override fun onCancelBtnClicked() {
+                    myCustomDialog?.dismiss()
+                }
+            })
+            myCustomDialog.show()
+        }
     }
 
     private fun checkChatRoom() {
         fireDatabase.child("ChatRoom").orderByChild("users/$uid").equalTo(true)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -163,8 +160,20 @@ class MessageActivity : AppCompatActivity() {
             })
     }
 
-    inner class RecyclerViewAdapter :
-        RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
+    private fun deleteChatRoom() {
+        if (chatRoomuid != null) {
+            fireDatabase.child("ChatRoom").child(chatRoomuid!!).removeValue().addOnSuccessListener {
+                Toast.makeText(this, "채팅방이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                chatRoomuid = null
+                recyclerView?.adapter?.notifyDataSetChanged()
+            }.addOnFailureListener { e ->
+                Log.e("MessageActivity", "채팅방 삭제 실패: ${e.message}")
+            }
+        }
+    }
+
+
+    inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
 
         private val comments = ArrayList<ChatModel.Comment>()
         private var chat: Chatting? = null
@@ -173,21 +182,22 @@ class MessageActivity : AppCompatActivity() {
             fireDatabase.child("users").child(destinationUid.toString())
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
+                        // Handle error
                     }
 
                     override fun onDataChange(snapshot: DataSnapshot) {
                         chat = snapshot.getValue<Chatting>()
                         chat?.name = binding.chat.toString()
-     getMessageList()
+                        getMessageList()
                     }
                 })
         }
-
 
         fun getMessageList() {
             fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
+                        // Handle error
                     }
 
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -197,7 +207,7 @@ class MessageActivity : AppCompatActivity() {
                             comments.add(item!!)
                         }
                         notifyDataSetChanged()
-                        //메세지를 보낼 시 화면을 맨 밑으로 내림
+                        // 메세지를 보낼 시 화면을 맨 밑으로 내림
                         recyclerView?.scrollToPosition(comments.size - 1)
                     }
                 })
@@ -251,18 +261,45 @@ class MessageActivity : AppCompatActivity() {
                         name.visibility = View.VISIBLE
                         layoutMain.gravity = Gravity.LEFT
                     }
-
                 }
             }
         }
 
-            override fun getItemCount(): Int {
-
-                return comments.size
-            }
-
-
+        override fun getItemCount(): Int {
+            return comments.size
         }
     }
 
+    interface CustomDialogInterface {
+        fun onDeleteBtnClicked()
+        fun onCancelBtnClicked()
+    }
 
+    inner class MyCustomDialog(
+        context: Context,
+        private val customDialogInterface: CustomDialogInterface
+    ) : Dialog(context) {
+
+        private var Binding: ChatDialogBinding? = null
+        private val binding get() = Binding!!
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            Binding = ChatDialogBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+
+            window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            binding.dialogTitleTv.text = "채팅방 나가기"
+            binding.dialogDescTv.text= "채팅방을 나가시겠습니까?"
+            binding.dialogDescTv2.text = "채팅방을 나가면 대화내용이 모두 삭제되고 \n 채팅 목록이 삭제됩니다."
+
+            binding.dialogCancelBtn.setOnClickListener {
+                customDialogInterface.onCancelBtnClicked()
+            }
+            binding.dialogBtn.setOnClickListener {
+                customDialogInterface.onDeleteBtnClicked()
+            }
+        }
+    }
+}
