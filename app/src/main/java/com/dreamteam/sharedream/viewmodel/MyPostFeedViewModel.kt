@@ -410,7 +410,7 @@ class MyPostFeedViewModel : ViewModel() {
 
                     likeList.addAll(documentSnap.data?.get("likeUsers") as List<String>)
                     Log.d("xxxx", " Before control LikeUsers List : $likeList")
-                    getTokenFromPost(documentSnap.id)
+//                    getTokenFromPost(documentSnap.id)
                     Log.d("nyh", "addOrSubFavoritePost: $documentSnap")
 
                     if (likeList.contains(uid)) {
@@ -464,30 +464,52 @@ class MyPostFeedViewModel : ViewModel() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTokenFromPost(postId: String) {
 
+
         val postRef = db.collection("Posts").document(postId)
 
         postRef
             .get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
+
                     val token = documentSnapshot.getString("token")
                     if (token != null) {
-                        val notificationTitle = "하이요?"
-                        val notificationBody = "눌렀습니다"
-                        val userId = "아이디"
-
-//
-//                        val time = System.currentTimeMillis()
-
+                        val notificationTitle = currentPost.value?.title ?: "제목"
+                        val notificationBody = "이 게시글에 좋아요가 있습니다."
+                        val userId = Constants.currentUserInfo!!.nickname
+//                        myPageResult.value?.nickname ?: "사용자 이름"
                         val data = NotificationBody.NotificationData(
-                            notificationTitle, notificationBody,userId
+                            notificationTitle!!, notificationBody,userId!!
                         )
                         val body = NotificationBody(token, data)
                         Log.d("nyh", "getTokenFromPost: send value of body $body")
                         sendNotification(body)
 
+                        val notiLIst = hashMapOf(
+                            "title" to notificationTitle,
+                            "nickname" to userId,
+                            "uid" to currentPost.value?.uid,
+                            "imgs" to currentPost.value?.imgs,
+                            "time" to currentPost.value?.timestamp,
+                            "documentId" to "?"
+                            
+                        )
+                        db.collection("notifyList")
+                            .add(notiLIst)
+                            .addOnSuccessListener { task ->
+                                val documentId = task.id
+                                val updatedData = mapOf("documentId" to documentId)
+                                Log.d("nyh", "getTokenFromPost: $task")
+                                db.collection("notifyList")
+                                    .document(documentId) // 생성된 documentId를 가리키는 참조
+                                    .update(updatedData) // documentId 필드를 업데이트
+                                    .addOnSuccessListener {
+                                        Log.d("nyh", "getTokenFromPost: $documentId")
+                                    }
+                            }
                         Log.d("nyh", "getTokenFromPost: token = $token")
                         Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
+
                     }
                 } else {
                     Log.d("nyh", "getTokenFromPost: elsefail")

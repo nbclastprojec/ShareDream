@@ -4,12 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.dreamteam.sharedream.model.MessageDTO
-import com.dreamteam.sharedream.model.NotificationBody
 import com.dreamteam.sharedream.model.PostRcv
-import com.google.firebase.messaging.RemoteMessage
-import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
     private val homeRepository = HomeRepository()
