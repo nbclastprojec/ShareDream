@@ -282,7 +282,7 @@ class ChatMessageActivity : AppCompatActivity() {
 
                 binding.dialogTitleTv.text = "채팅방 나가기"
                 binding.dialogDescTv.text= "채팅방을 나가시겠습니까?"
-                binding.dialogDescTv2.text = "채팅방을 나가면 대화내용이 모두 삭제되고 \\n 채팅 목록이 삭제됩니다."
+                binding.dialogDescTv2.text = "채팅방을 나가면 대화내용이 모두 삭제되고 \n 채팅 목록이 삭제됩니다."
 
                 binding.dialogCancelBtn.setOnClickListener {
                     customDialogInterface.onCancelBtnClicked()

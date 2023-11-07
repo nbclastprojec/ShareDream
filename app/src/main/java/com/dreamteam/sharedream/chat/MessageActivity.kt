@@ -144,7 +144,7 @@ class MessageActivity : AppCompatActivity() {
         fireDatabase.child("ChatRoom").orderByChild("users/$uid").equalTo(true)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
-                    // Handle error
+
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
