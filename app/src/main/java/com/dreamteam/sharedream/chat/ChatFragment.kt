@@ -67,8 +67,7 @@ class ChatFragment : Fragment() {
         }
 
 
-        val chatRoomRef = fireDatabase.child("ChatRoom").orderByChild("users/$uid").equalTo(true)
-        chatRoomRef.addValueEventListener(object : ValueEventListener {
+        fireDatabase.child("ChatRoom").orderByChild("users/$uid").equalTo(true).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 chatModel.clear()
                 for (data in snapshot.children) {

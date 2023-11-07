@@ -122,6 +122,7 @@ class ChatMessageActivity : AppCompatActivity() {
             val myCustomDialog = MyCustomDialog(this, object : CustomDialogInterface {
                 override fun onDeleteBtnClicked() {
                     deleteChatRoom()
+                    roomOut()
                     myCustomDialog?.dismiss()
                 }
 
@@ -165,6 +166,9 @@ class ChatMessageActivity : AppCompatActivity() {
         }
     }
 
+    private fun roomOut(){
+        onBackPressed()
+    }
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
 
         private val comments = ArrayList<ChatModel.Comment>()
