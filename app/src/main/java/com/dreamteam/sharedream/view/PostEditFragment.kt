@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.EditCalenderDialog
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.ToastMsg
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.FragmentPostEditBinding
@@ -140,7 +141,7 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
             R.id.pet1 -> editCategory = "반려동물용품"
             R.id.etc1 -> editCategory = "기타"
             else -> {
-                Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
+                ToastMsg.makeToast(requireContext(),"카테고리를 선택해주세요.")
 
             }
         }

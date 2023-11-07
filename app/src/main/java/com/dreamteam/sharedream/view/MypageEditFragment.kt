@@ -16,6 +16,7 @@ import androidx.fragment.app.activityViewModels
 import coil.load
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.ToastMsg
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.databinding.FragmentMypageEditProfileBinding
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
@@ -74,12 +75,12 @@ class MyPageEditFragment : Fragment() {
                 myPostFeedViewModel.uploadUserProfileImg(photoUri!!)
                 myPostFeedViewModel.uploadEditUserInfo(nickname, intro)
 
-                Toast.makeText(this.context, "회원정보가 수정되었습니다", Toast.LENGTH_SHORT).show()
+                ToastMsg.makeToast(requireContext(),"회원정보가 수정되었습니다.")
                 parentFragmentManager.popBackStack()
 
             } else {
                 myPostFeedViewModel.uploadEditUserInfo(nickname, intro)
-                Toast.makeText(this.context, "회원정보가 수정되었습니다", Toast.LENGTH_SHORT).show()
+                ToastMsg.makeToast(requireContext(),"회원정보가 수정되었습니다.")
                 parentFragmentManager.popBackStack()
             }
 

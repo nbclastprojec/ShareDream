@@ -24,6 +24,7 @@ import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.ToastMsg
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.YourDetailPage
 import com.dreamteam.sharedream.chat.MessageActivity
@@ -104,7 +105,7 @@ class PostDetailFragment : Fragment() {
             // 관심 목록에 있는 아이템일 경우 binding
             if (it.likeUsers.contains(Constants.currentUserUid)) {
                 binding.detailBtnSubFavorite.visibility = View.VISIBLE
-                binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
+                binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
             } else {
                 binding.detailBtnSubFavorite.visibility = View.GONE
             }
@@ -155,7 +156,7 @@ class PostDetailFragment : Fragment() {
                 // 관심 목록에 있는 아이템일 경우 binding
                 if (it[0].likeUsers.contains(Constants.currentUserUid)) {
                     binding.detailBtnSubFavorite.visibility = View.VISIBLE
-                    binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
+                    binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
                 } else {
                     binding.detailBtnSubFavorite.visibility = View.GONE
                     binding.detailLike.setImageResource(R.drawable.like)
@@ -183,7 +184,7 @@ class PostDetailFragment : Fragment() {
                         .addToBackStack(null).commit()
                 }
             } else {
-                Toast.makeText(requireContext(), "거래장소가 지정되지 않았습니다", Toast.LENGTH_SHORT).show()
+                ToastMsg.makeToast(requireContext(),"거래장소가 지정되지 않았습니다")
             }
         }
 
@@ -210,8 +211,7 @@ class PostDetailFragment : Fragment() {
                     )
                 }
             } else {
-                Toast.makeText(requireContext(), "게시글 작성자는 관심목록에 추가할 수 없습니다", Toast.LENGTH_SHORT)
-                    .show()
+                ToastMsg.makeToast(requireContext(),"작성자는 북마크에 추가할 수 없습니다")
             }
         }
 
@@ -255,7 +255,7 @@ class PostDetailFragment : Fragment() {
 
             // 관심 목록에 있는 아이템의 경우 아이콘 변경 및 관심 목록 제거 버튼 표시
             if (post.likeUsers.contains(Constants.currentUserUid)) {
-                binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
+                binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
                 binding.detailBtnSubFavorite.visibility = View.VISIBLE
             } else {
                 binding.detailLike.setImageResource(R.drawable.like)
