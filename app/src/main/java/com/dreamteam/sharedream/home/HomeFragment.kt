@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import android.widget.LinearLayout
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -59,14 +58,13 @@ class HomeFragment : Fragment() {
         homePostAdapter = HomePostAdapter(requireContext(), object : PostClick {
             override fun postClick(post: PostRcv) {
                 myPostFeedViewModel.setCurrentPost(post)
-
                 parentFragmentManager.beginTransaction().add(
                     R.id.frag_edit,
                     PostDetailFragment()
                 ).addToBackStack(null).commit()
             }
         }, emptyList())
-
+        setupRcv()
         return binding.root
     }
 
@@ -127,6 +125,7 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
         viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
             homePostAdapter.submitList(result)
             homePostAdapter.notifyDataSetChanged()
@@ -139,25 +138,14 @@ class HomeFragment : Fragment() {
             Log.d("nyh", "Selected Category in HomeFragment: $selectedCategory")
 
         }
+        categoryViewModel.seletedPrice.observe(viewLifecycleOwner) { priceRange ->
+            val minPrice = priceRange.first
+            val maxPrice = priceRange.second
+            homePostAdapter.filteredPrice(minPrice, maxPrice)
+        }
         viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
             homePostAdapter.submitList(result)
             homePostAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun updateRcv(position: Int, post: PostRcv) {
-        val layoutManager = binding.homeRecycle.layoutManager
-        val scrollPosition = if (layoutManager != null) {
-            (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-        } else {
-            0
-        }
-        val newList = homePostAdapter.currentList.toMutableList()
-        newList[position] = post
-        homePostAdapter.submitList(newList)
-
-        binding.homeRecycle.post {
-            binding.homeRecycle.scrollToPosition(scrollPosition)
         }
         val sortSpinner = binding.sortSpinner
         sortSpinner.adapter = ArrayAdapter.createFromResource(
@@ -186,13 +174,23 @@ class HomeFragment : Fragment() {
                 viewModel.sortCategorys("")
             }
         }
-        categoryViewModel.seletedPrice.observe(viewLifecycleOwner) { priceRange ->
-            val minPrice = priceRange.first
-            val maxPrice = priceRange.second
-            homePostAdapter.filteredPrice(minPrice, maxPrice)
-        }
     }
 
+    private fun updateRcv(position: Int, post: PostRcv) {
+        val layoutManager = binding.homeRecycle.layoutManager
+        val scrollPosition = if (layoutManager != null) {
+            (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        } else {
+            0
+        }
+        val newList = homePostAdapter.currentList.toMutableList()
+        newList[position] = post
+        homePostAdapter.submitList(newList)
+
+        binding.homeRecycle.post {
+            binding.homeRecycle.scrollToPosition(scrollPosition)
+        }
+    }
     fun setupRcv() {
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) { posts ->
             val rcvList: List<PostRcv> = posts
@@ -221,7 +219,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
     fun checkNickName(uid: String) {
         val fireStore = FirebaseFirestore.getInstance()
         val UserData = fireStore.collection("UserData")
