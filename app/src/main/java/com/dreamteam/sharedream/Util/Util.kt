@@ -3,6 +3,8 @@ package com.dreamteam.sharedream.Util
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
@@ -38,5 +40,12 @@ object Util {
             }
         }
         return true
+    }
+
+    fun hideKeypad(context: Context,view:View){
+        // 키보드 입력창 내리기
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

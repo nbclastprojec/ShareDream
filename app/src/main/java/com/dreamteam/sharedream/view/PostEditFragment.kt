@@ -199,6 +199,7 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
 
             myPostFeedViewModel.uploadEditPost(uriAndUrlList, post)
 
+            Util.hideKeypad(requireContext(),binding.root)
             parentFragmentManager.popBackStack()
         }
 
@@ -210,13 +211,16 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
                 ActivityCompat.requestPermissions(requireActivity(), Util.PERMISSIONS, 5000)
             }
             else {
+                Util.hideKeypad(requireContext(),binding.root)
                 parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment(EDITABLE))
                     .addToBackStack(null).commit()
             }
+
         }
 
         // 뒤로가기 버튼
         binding.btnBack.setOnClickListener {
+            Util.hideKeypad(requireContext(),binding.root)
             Log.d("xxxx", " edit frag 뒤로가기 버튼 클릭 ")
             parentFragmentManager.popBackStack()
         }
@@ -251,7 +255,8 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
         writePostImgAdapter = WritePostImageAdapter(object : ImgClick {
             override fun imgClick(uri: Uri) {
                 Log.d("xxxx", "imgClicked: ${uri} , whole uris : $uris")
-                // todo 아이템 클릭 시 다이얼로그 or 삭제 버튼
+
+                // ViewPager 아이템 클릭 시 삭제 확인 다이얼로그
                 Util.showDialog(requireContext(), "이미지 삭제", "선택한 이미지를 삭제 하시겠습니까?") {
                     uris.remove(uri)
                     binding.imageCount.text = "${uris.size}/10"
