@@ -34,16 +34,18 @@ import java.util.TreeMap
 class ChatFragment : Fragment() {
 
     private lateinit var binding : FragmentChattingroomBinding
+    private val chatModel = ArrayList<ChatModel>()
+    private var uid : String? = null
+    private val destinationUsers : ArrayList<String> = arrayListOf()
+
+    private val fireDatabase = FirebaseDatabase.getInstance().reference
+    private val firestore = FirebaseFirestore.getInstance()
+    private val storage = Firebase.storage
     companion object {
         fun newInstance(): ChatFragment {
             return ChatFragment()
         }
     }
-    private val fireDatabase = FirebaseDatabase.getInstance().reference
-    private val firestore = FirebaseFirestore.getInstance()
-    private val storage = Firebase.storage
-
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
     }
@@ -64,13 +66,27 @@ class ChatFragment : Fragment() {
             parentFragmentManager.beginTransaction().remove(this).commit()
         }
 
+
+        fireDatabase.child("ChatRoom").orderByChild("users/$uid").equalTo(true).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                chatModel.clear()
+                for (data in snapshot.children) {
+                    chatModel.add(data.getValue<ChatModel>()!!)
+                }
+                recyclerView.adapter?.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("ChatFragment", "채팅 데이터를 가져오는 데 실패했습니다: $error")
+            }
+        })
+
+
         return view
     }
 
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>(){
-        private val chatModel = ArrayList<ChatModel>()
-        private var uid : String? = null
-        private val destinationUsers : ArrayList<String> = arrayListOf()
+
 
         init {
 
@@ -145,10 +161,6 @@ class ChatFragment : Fragment() {
                 }
 
             }
-
-
-
-
 
 
             //메세지 내림차순 정렬 후 마지막 메세지의 키값을 가져옴

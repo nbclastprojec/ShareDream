@@ -355,13 +355,7 @@ class PostDetailFragment : Fragment() {
                 startMessageActivity(documnetUid)
                 Log.d("afafafafafa", "${parts} ")
                 Log.d("afafafafafa", "${documnetUid} ")
-            }else {
-                Log.d("susu", "getUserInformation: ${parts}")
-
             }
-        } else {
-            Log.d("susu", "getUserInformation: ${parts}")
-
         }
     }
 
