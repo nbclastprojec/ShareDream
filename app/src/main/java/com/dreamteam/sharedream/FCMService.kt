@@ -12,19 +12,28 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.graphics.drawable.IconCompat
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class FCMService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        val db = Firebase.firestore
 
-        Log.d("nyh", "onMessageReceived: $remoteMessage")
+        Log.d("nyh", "onMessageReceived:  $remoteMessage")
         // 서버에서 직접 보냈을 때
         if (remoteMessage.notification != null) {
             sendNotification(
                 remoteMessage.notification?.title,
                 remoteMessage.notification?.body!!
             )
+            val getNotiList = hashMapOf(
+                "title" to remoteMessage.notification?.title,
+                "body" to remoteMessage.notification?.body
+            )
+            db.collection("AlamList")
+                .add(getNotiList)
         }
 
         // 다른 기기에서 서버로 보냈을 때
@@ -115,7 +124,7 @@ class FCMService : FirebaseMessagingService() {
         // messageStyle 로
         val user: androidx.core.app.Person = Person.Builder()
             .setName(userId)
-            .setIcon(IconCompat.createWithResource(this, R.drawable.rightbubble))
+            .setIcon(IconCompat.createWithResource(this, R.drawable.trade))
             .build()
 
         val message = NotificationCompat.MessagingStyle.Message(
@@ -129,11 +138,12 @@ class FCMService : FirebaseMessagingService() {
 
         val channelId = "channel" // 채널 아이디
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 소리
+
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setContentTitle(title) // 제목
             .setContentText(body) // 내용
             .setStyle(messageStyle)
-            .setSmallIcon(R.drawable.fullheart) // 아이콘
+            .setSmallIcon(R.drawable.trade) // 아이콘
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
