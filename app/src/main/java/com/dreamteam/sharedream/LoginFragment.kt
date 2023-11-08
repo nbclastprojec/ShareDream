@@ -39,6 +39,13 @@ class LoginFragment : Fragment() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
+        binding.btnBack.setOnClickListener {
+            val mainLogInMainFragment=LogInMainFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,mainLogInMainFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
 
         binding.tvFindID.setOnClickListener {
             val findEmailFragment=FindEmailWithIdFragment()
@@ -68,7 +75,7 @@ class LoginFragment : Fragment() {
                                         } else {
                                             Toast.makeText(
                                                 requireContext(),
-                                                "로그인 실패: ${loginTask.exception?.message}",
+                                                "아이디 및 비밀번호를 잘못 입력하셨습니다.",
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                         }

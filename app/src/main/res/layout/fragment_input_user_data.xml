@@ -13,33 +13,26 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="5dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="265dp"
             android:src="@drawable/trade"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
-            app:layout_constraintEnd_toStartOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="@+id/textView" />
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="원활한 어플 사용을 위해 필수정보를 입력해 주세요!"
-            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.588"
+            app:layout_constraintHeight_percent="0.07"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            tools:ignore="NotSibling" />
-
+            app:layout_constraintTop_toTopOf="@+id/textView" />
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="44dp"
             android:text="필수 입력사항"
+            android:layout_marginEnd="110dp"
+            android:layout_marginStart="150dp"
+            app:layout_constraintHeight_percent="0.05"
             android:textColor="@color/black"
             android:fontFamily="@font/suitesemibold"
             android:textSize="25sp"
@@ -49,10 +42,30 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="DuplicateIds" />
 
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:text="원활한 어플 사용을 위해 필수정보를 입력해 주세요!"
+            android:gravity="center"
+            android:textSize="20sp"
+            app:layout_constraintHeight_percent="0.040"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.588"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            tools:ignore="NotSibling" />
+
+
+
         <EditText
             android:id="@+id/edit_number"
-            android:layout_width="320dp"
-            android:layout_height="40dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            app:layout_constraintHeight_percent="0.055"
             android:layout_marginTop="10dp"
             android:paddingLeft="10dp"
             android:background="@drawable/login_editbox"
@@ -65,8 +78,11 @@
 
         <EditText
             android:id="@+id/edit_nickName"
-            android:layout_width="320dp"
-            android:layout_height="40dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.055"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
             android:background="@drawable/login_editbox"
             android:ems="10"
             android:paddingLeft="10dp"
@@ -79,26 +95,31 @@
 
         <TextView
             android:id="@+id/nickName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="10dp"
-            android:textColor="@color/black"
             android:text="닉네임"
-            android:textSize="13sp"
+            android:textColor="@color/black"
+            app:layout_constraintHeight_percent="0.04"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40dp"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_number" />
 
         <TextView
             android:id="@+id/userNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            app:layout_constraintHeight_percent="0.045"
             android:layout_marginTop="72dp"
-
-            android:textColor="@color/black"
             android:text="전화번호"
-            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -221,11 +242,14 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_signup"
-            android:layout_width="359dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            app:layout_constraintHeight_percent="0.065"
             android:layout_marginTop="50dp"
             android:background="@drawable/loginbtn"
-            android:text="교환하러가기"
+            android:text="입력하였으며 약관에 동의합니다."
             android:fontFamily="sans-serif"
             android:textColor="@color/white"
             android:textSize="20sp"

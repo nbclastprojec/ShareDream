@@ -219,7 +219,7 @@ class MapViewFragment(private val state:String) : Fragment(), OnMapReadyCallback
             // 현재 위치
             locationSource =
                 FusedLocationSource(this@MapViewFragment, LOCATION_PERMISSION_REQUEST_CODE)
-            locationTrackingMode = LocationTrackingMode.NoFollow
+            locationTrackingMode = LocationTrackingMode.Follow
 
         }
     }
