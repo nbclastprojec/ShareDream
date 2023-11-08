@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.databinding.MyalarmBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -18,14 +17,12 @@ import com.google.firebase.storage.ktx.storage
 class AlarmPostAdapter(private val context: Context) :
     RecyclerView.Adapter<AlarmPostAdapter.AlarmHolder>() {
     private var alarmItem: List<AlarmPost?> = emptyList()
-    private val storage = Firebase.storage
 
     fun setData(data: List<AlarmPost?>) {
         alarmItem = data
         notifyDataSetChanged()
         Log.d("nyh", "setData: $data")
     }
-
 
     @Suppress("DEPRECATION")
     inner class AlarmHolder(val binding: MyalarmBinding) :
@@ -44,9 +41,9 @@ class AlarmPostAdapter(private val context: Context) :
             if (post.imgs.isNotEmpty()) {
                 val imageUrl = post.imgs.first()
                 alarmImage.load(imageUrl)
-            } else {
             }
         }
+
         @SuppressLint("NotifyDataSetChanged")
         private fun deleteItem() {
             val post = alarmItem[position]
@@ -75,7 +72,7 @@ class AlarmPostAdapter(private val context: Context) :
 
         init {
             binding.btnDelete.setOnClickListener {
-                deleteItem() // btn_delete 버튼 클릭 시 아이템 삭제 함수 호출
+                deleteItem()
             }
         }
     }
@@ -100,12 +97,4 @@ class AlarmPostAdapter(private val context: Context) :
             Log.e("nyh", "onBindViewHolder: Data is empty at position $position")
         }
     }
-
-//    fun removeItem(position:Int){
-//        if (position in 0 until alarmItem.size) {
-//            alarmItem.removeAt(position)
-//            notifyItemRemoved(position)
-//        }
-//    }
-
 }
