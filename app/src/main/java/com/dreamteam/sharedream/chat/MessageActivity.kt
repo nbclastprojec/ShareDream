@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
@@ -89,32 +90,38 @@ class MessageActivity : AppCompatActivity() {
         recyclerView = binding.chatRecycleView
 
         imageView.setOnClickListener {
-            Log.d("susu", "$destinationUid")
-            val chatModel = ChatModel()
-            chatModel.users.put(uid.toString(), true)
-            chatModel.users.put(destinationUid!!, true)
-            val comment = ChatModel.Comment(uid, editText.text.toString(), realTime)
-            if (chatRoomuid == null) {
-                imageView.isEnabled = false
-                Handler().postDelayed({
-                    imageView.isEnabled = true // 1초 후 버튼 재활성화
-                }, 1000L)
-                fireDatabase.child("ChatRoom").push().setValue(chatModel).addOnSuccessListener {
-                    checkChatRoom()
+
+            val messageText = editText.text.toString().trim()
+            if (messageText.isNotEmpty()) {
+                Log.d("susu", "$destinationUid")
+                val chatModel = ChatModel()
+                chatModel.users.put(uid.toString(), true)
+                chatModel.users.put(destinationUid!!, true)
+                val comment = ChatModel.Comment(uid, editText.text.toString(), realTime)
+                if (chatRoomuid == null) {
+                    imageView.isEnabled = false
                     Handler().postDelayed({
-                        fireDatabase.child("ChatRoom").child(chatRoomuid.toString())
-                            .child("comments").push().setValue(comment)
-                        editText.text = null
+                        imageView.isEnabled = true // 1초 후 버튼 재활성화
                     }, 1000L)
+                    fireDatabase.child("ChatRoom").push().setValue(chatModel).addOnSuccessListener {
+                        checkChatRoom()
+                        Handler().postDelayed({
+                            fireDatabase.child("ChatRoom").child(chatRoomuid.toString())
+                                .child("comments").push().setValue(comment)
+                            editText.text = null
+                        }, 1000L)
+                    }
+                } else {
+                    imageView.isEnabled = false
+                    Handler().postDelayed({
+                        imageView.isEnabled = true // 1초 후 버튼 재활성화
+                    }, 1000L)
+                    fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
+                        .push().setValue(comment)
+                    editText.text = null
                 }
             } else {
-                imageView.isEnabled = false
-                Handler().postDelayed({
-                    imageView.isEnabled = true // 1초 후 버튼 재활성화
-                }, 1000L)
-                fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
-                    .push().setValue(comment)
-                editText.text = null
+                Toast.makeText(this,"메세지를 입력하세요.",Toast.LENGTH_LONG).show()
             }
         }
 
@@ -129,6 +136,7 @@ class MessageActivity : AppCompatActivity() {
             val myCustomDialog = MyCustomDialog(this, object : CustomDialogInterface {
                 override fun onDeleteBtnClicked() {
                     deleteChatRoom()
+                    roomOut()
                     myCustomDialog?.dismiss()
                 }
 
@@ -162,16 +170,21 @@ class MessageActivity : AppCompatActivity() {
 
     private fun deleteChatRoom() {
         if (chatRoomuid != null) {
-            fireDatabase.child("ChatRoom").child(chatRoomuid!!).removeValue().addOnSuccessListener {
-                Toast.makeText(this, "채팅방이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                chatRoomuid = null
-                recyclerView?.adapter?.notifyDataSetChanged()
-            }.addOnFailureListener { e ->
-                Log.e("MessageActivity", "채팅방 삭제 실패: ${e.message}")
+            uid?.let {
+                fireDatabase.child("ChatRoom").child(chatRoomuid!!).child(it).removeValue().addOnSuccessListener {
+                    Toast.makeText(this, "채팅방이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    chatRoomuid = null
+                    recyclerView?.adapter?.notifyDataSetChanged()
+                }.addOnFailureListener { e ->
+                    Log.e("MessageActivity", "채팅방 삭제 실패: ${e.message}")
+                }
             }
         }
     }
 
+    private fun roomOut(){
+        onBackPressed()
+    }
 
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
 

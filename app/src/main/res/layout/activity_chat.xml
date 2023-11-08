@@ -7,22 +7,27 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_recycleView"
-        android:layout_width="384dp"
-        android:layout_height="720dp"
+        android:layout_width="398dp"
+        android:layout_height="606dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
 
-        app:layout_constraintBottom_toTopOf="@+id/chatlayout"
+        android:layout_marginRight="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bar1" />
 
     <ImageView
         android:id="@+id/backButton_chat"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="0dp"
+        android:layout_height="00dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/chat_recycleView"
+        app:layout_constraintEnd_toStartOf="@+id/chat"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_backbtn" />
@@ -32,10 +37,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
-        android:fontFamily="@font/suitesemibold"
+        android:fontFamily="@font/suiteregular"
         android:text="김우가우가"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -55,7 +60,6 @@
         android:id="@+id/chatlayout"
         android:layout_width="406dp"
         android:layout_height="44dp"
-        android:layout_marginBottom="2dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,6 +72,7 @@
             android:layout_height="42dp"
 
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:background="@drawable/loginbtn_2"
             android:fontFamily="@font/bbing"
             android:gravity="center_vertical"
@@ -87,11 +92,16 @@
 
     <ImageView
         android:id="@+id/listbtn"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="90dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/chat_recycleView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.948"
+        app:layout_constraintStart_toEndOf="@+id/chat"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_chat_dot" />
 
