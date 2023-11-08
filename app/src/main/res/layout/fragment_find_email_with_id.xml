@@ -45,6 +45,7 @@
         <EditText
             android:id="@+id/edit_email"
             android:layout_width="0dp"
+            android:paddingStart="10dp"
             android:layout_height="0dp"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="12dp"
@@ -81,7 +82,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="168dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="40dp"
             android:text="전화번호"
             android:textColor="@color/black"
@@ -89,27 +90,25 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.03"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_email" />
 
         <EditText
             android:id="@+id/edit_number"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginRight="40dp"
             android:layout_marginStart="40dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="51dp"
-            app:layout_constraintHeight_percent="0.055"
-
+            android:paddingStart="10dp"
 
             android:background="@drawable/login_editbox"
             android:ems="10"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.055"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_email"
+            app:layout_constraintTop_toBottomOf="@+id/textView7"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         <ImageView
@@ -157,6 +156,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginRight="40dp"
             android:layout_marginBottom="64dp"
+            android:fontFamily="sans-serif"
             android:background="@drawable/loginbtn"
             android:gravity="center"
             android:text="돌아가기"
@@ -178,6 +178,7 @@
             android:layout_marginBottom="120dp"
             android:background="@drawable/loginbtn"
             android:gravity="center"
+            android:fontFamily="sans-serif"
             android:text="아이디 찾기"
             android:textColor="@color/white"
             android:textSize="18sp"

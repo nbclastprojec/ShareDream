@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,8 +15,10 @@ class AgreeFragment : DialogFragment() {
     private val binding get() = _binding!!
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isCancelable = false
 
     }
 
@@ -23,15 +26,15 @@ class AgreeFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentAgreeBinding.inflate(inflater, container, false)
 
         binding.agreeBtn.setOnClickListener {
             dismiss()
         }
-
         return binding.root
     }
+
+
 
 
 }
