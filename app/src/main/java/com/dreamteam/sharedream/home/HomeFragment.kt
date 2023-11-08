@@ -18,6 +18,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.NicknameCheckDailogFragment
+import com.dreamteam.sharedream.Util.ToastMsg
 import com.dreamteam.sharedream.adapter.PostClick
 import com.dreamteam.sharedream.home.Edit.EditFragment
 import com.dreamteam.sharedream.model.PostRcv
@@ -236,7 +237,7 @@ class HomeFragment : Fragment() {
                     }
                 }
             } else {
-                Toast.makeText(context, "닉네임 설정 오류 에러", Toast.LENGTH_SHORT).show()
+                ToastMsg.makeToast(requireContext(),"닉네임 설정이 올바르지 않습니다.")
             }
         }
     }

@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.ToastMsg
 import com.dreamteam.sharedream.databinding.FragmentMapViewBinding
 import com.dreamteam.sharedream.model.LocationData
 import com.dreamteam.sharedream.model.PostRcv
@@ -131,7 +132,7 @@ class MapViewFragment(private val state:String) : Fragment(), OnMapReadyCallback
                     Log.d("xxxx", " setLocationInfo ! ${locationInfo} ")
                     parentFragmentManager.popBackStack()
                 }
-            } ?: Toast.makeText(requireContext(), "위치를 다시 선택해주세요", Toast.LENGTH_SHORT).show()
+            } ?: ToastMsg.makeToast(requireContext(),"위치를 다시 선택해주세요.")
         }
     }
 
@@ -219,8 +220,12 @@ class MapViewFragment(private val state:String) : Fragment(), OnMapReadyCallback
             // 현재 위치
             locationSource =
                 FusedLocationSource(this@MapViewFragment, LOCATION_PERMISSION_REQUEST_CODE)
-            locationTrackingMode = LocationTrackingMode.NoFollow
 
+            if (initCameraPosition == LatLng(37.655798, 126.7748480)){
+                locationTrackingMode = LocationTrackingMode.Follow
+            }else{
+                locationTrackingMode = LocationTrackingMode.NoFollow
+            }
         }
     }
 
