@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.ActivityChatBinding
 import com.dreamteam.sharedream.databinding.ChatDialogBinding
@@ -261,6 +263,7 @@ class MessageActivity : AppCompatActivity() {
                         storageReference?.downloadUrl?.addOnSuccessListener { uri ->
                             Glide.with(itemView.context)
                                 .load(uri)
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
                                 .into(profile)
                         }?.addOnFailureListener { exception ->
                             Log.e("MessageActivity", "이미지 다운로드 실패: ${exception.message}")
