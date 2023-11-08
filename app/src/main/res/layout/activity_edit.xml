@@ -462,7 +462,7 @@
                     android:layout_marginBottom="1dp"
                     android:ems="10"
                     android:gravity="start"
-                    android:hint="상세정보를 입력해주세요1111."
+                    android:hint="상세정보를 입력해주세요."
                     android:inputType="textMultiLine"
                     android:maxLines="20"
                     android:textColorHint="@color/hint_color"
