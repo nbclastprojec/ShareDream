@@ -11,26 +11,31 @@
 
         <TextView
             android:id="@+id/object"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="9dp"
             android:fontFamily="@font/suitebold"
             android:text="목적"
             android:textColor="@color/black"
-            android:textSize="18dp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/objectSub"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.02"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/objectSub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.075"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:textSize="15sp"
             android:text="@string/serviceSub"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,14 +43,18 @@
 
         <TextView
             android:id="@+id/service"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.02"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:text="서비스"
+
+            android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="18dp"
+            android:textSize="18sp"
+            android:fontFamily="@font/suitebold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,11 +62,13 @@
 
         <TextView
             android:id="@+id/serviceSub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.175"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:textSize="15sp"
             android:text="@string/service"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,14 +76,15 @@
 
         <TextView
             android:id="@+id/posting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.02"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:text="약관의 게시와 효력, 개정"
             android:textColor="@color/black"
-            android:textSize="18dp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -80,11 +92,13 @@
 
         <TextView
             android:id="@+id/postingSub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.35"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:textSize="15sp"
             android:text="@string/postingSub"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -93,7 +107,7 @@
 
         <TextView
             android:id="@+id/ad"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
@@ -108,21 +122,26 @@
 
         <TextView
             android:id="@+id/adSub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:textSize="15sp"
+            app:layout_constraintHeight_percent="0.15"
             android:text="@string/adSub"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ad" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/agree_btn"
-            android:layout_width="328dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_height="0dp"
             android:layout_marginTop="20dp"
+            app:layout_constraintHeight_percent="0.03"
             android:background="@drawable/loginbtn"
             android:gravity="center"
             android:text="확인하였습니다."
@@ -130,7 +149,8 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/adSub" />
+            app:layout_constraintTop_toBottomOf="@+id/adSub"
+            app:layout_constraintWidth_percent="0.8"/>
 
         <View
             android:layout_width="match_parent"
@@ -139,7 +159,8 @@
             android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/agree_btn" />
+            app:layout_constraintTop_toBottomOf="@+id/agree_btn"
+            />
 
 
 

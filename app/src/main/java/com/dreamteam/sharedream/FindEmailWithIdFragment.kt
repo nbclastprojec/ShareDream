@@ -34,6 +34,14 @@ class FindEmailWithIdFragment : Fragment() {
     ): View? {
         binding = FragmentFindEmailWithIdBinding.inflate(inflater, container, false)
 
+        binding.backBtn.setOnClickListener {
+            val mainLogInMainFragment=LogInMainFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,mainLogInMainFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
         binding.btnFindId.setOnClickListener {
             val email = binding.editEmail.text.toString()
             val number = binding.editNumber.text.toString()

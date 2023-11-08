@@ -86,27 +86,34 @@ class ChatMessageActivity : AppCompatActivity() {
         uid = Firebase.auth.currentUser?.uid.toString()
         recyclerView = binding.chatRecycleView
 
-        imageView.setOnClickListener{
-            Log.d("susu", "$destinationUid")
-            val chatModel = ChatModel()
-            chatModel.users.put(uid.toString(),true)
-            chatModel.users.put(destinationUid!!,true)
+        imageView.setOnClickListener {
+            val messageText = editText.text.toString().trim()
+            if (messageText.isNotEmpty()) {
+                Log.d("susu", "$destinationUid")
+                val chatModel = ChatModel()
+                chatModel.users.put(uid.toString(), true)
+                chatModel.users.put(destinationUid!!, true)
 
-            val comment = ChatModel.Comment(uid, editText.text.toString(), realTime)
-            if(chatRoomuid == null) {
-                imageView.isEnabled = false
-                fireDatabase.child("ChatRoom").push().setValue(chatModel).addOnSuccessListener {
-                    checkChatRoom()
-                    Handler().postDelayed({
-                        fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments").push().setValue(comment)
-                        editText.text = null
-                    }, 1000L)
+                val comment = ChatModel.Comment(uid, editText.text.toString(), realTime)
+                if (chatRoomuid == null) {
+                    imageView.isEnabled = false
+                    fireDatabase.child("ChatRoom").push().setValue(chatModel).addOnSuccessListener {
+                        checkChatRoom()
+                        Handler().postDelayed({
+                            fireDatabase.child("ChatRoom").child(chatRoomuid.toString())
+                                .child("comments").push().setValue(comment)
+                            editText.text = null
+                        }, 1000L)
+
+                    }
+                } else {
+                    fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
+                        .push().setValue(comment)
+                    editText.text = null
 
                 }
-            }else{
-                fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments").push().setValue(comment)
-                editText.text = null
-
+            }else {
+                Toast.makeText(this,"메세지를 입력하세요.",Toast.LENGTH_LONG).show()
             }
         }
 
@@ -156,12 +163,14 @@ class ChatMessageActivity : AppCompatActivity() {
 
     private fun deleteChatRoom() {
         if (chatRoomuid != null) {
-            fireDatabase.child("ChatRoom").child(chatRoomuid!!).removeValue().addOnSuccessListener {
-                Toast.makeText(this, "채팅방이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                chatRoomuid = null
-                recyclerView?.adapter?.notifyDataSetChanged()
-            }.addOnFailureListener { e ->
-                Log.e("MessageActivity", "채팅방 삭제 실패: ${e.message}")
+            uid?.let {
+                fireDatabase.child("ChatRoom").child(chatRoomuid!!).child(it).removeValue().addOnSuccessListener {
+                    Toast.makeText(this, "채팅방이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    chatRoomuid = null
+                    recyclerView?.adapter?.notifyDataSetChanged()
+                }.addOnFailureListener { e ->
+                    Log.e("MessageActivity", "채팅방 삭제 실패: ${e.message}")
+                }
             }
         }
     }

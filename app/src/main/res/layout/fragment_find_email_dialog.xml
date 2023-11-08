@@ -8,17 +8,16 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="131dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="131dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         android:fontFamily="@font/suitesemibold"
         android:text="아이디를 찾았어요!"
+        app:layout_constraintHeight_percent="0.055"
         android:textColor="@color/black"
-        android:textSize="25dp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.194"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,22 +48,27 @@
 
     <TextView
         android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:layout_constraintHeight_percent="0.035"
         android:layout_marginTop="12dp"
-        android:text="혹시 비밀번호를 잊으셨나요?"
         android:fontFamily="@font/suitesemibold"
+        android:text="혹시 비밀번호를 잊으셨나요?"
         android:textColor="@color/black"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/show_id"
-        app:layout_constraintStart_toStartOf="@+id/show_id"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/show_id" />
 
     <TextView
         android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.03"
         android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textSize="15sp"
         android:text="아래의 버튼을 눌러 비밀번호를 찾을 수 있습니다!"
         app:layout_constraintEnd_toEndOf="@+id/textView16"
         app:layout_constraintStart_toStartOf="@+id/textView16"
@@ -72,8 +76,11 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/find_password_btn"
-        android:layout_width="330dp"
-        android:layout_height="40dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.05"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/loginbtn"
         android:fontFamily="@font/suitesemibold"
@@ -81,23 +88,26 @@
         android:text="비밀번호 찾으러가기"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView17"
-        app:layout_constraintStart_toStartOf="@+id/textView17"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_login"
-        android:layout_width="330dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+      android:layout_marginTop="20dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
         android:background="@drawable/loginbtn"
+        android:fontFamily="@font/suitesemibold"
         android:gravity="center"
         android:text="로그인 하러가기"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:fontFamily="@font/suitesemibold"
-        app:layout_constraintEnd_toEndOf="@+id/find_password_btn"
-        app:layout_constraintStart_toStartOf="@+id/find_password_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/find_password_btn" />
 
     <TextView

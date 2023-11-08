@@ -49,6 +49,7 @@ dependencies {
 
     // 네이버 Maps SDK
     implementation("com.naver.maps:map-sdk:3.17.0")
+    implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.19")
 
     // Firebase SDK
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
