@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.MyPageFavoritePost"
     android:background="@color/white"
     android:clickable="true">
 
     <ImageView
-        android:id="@+id/my_post_feed_btn_back"
+        android:id="@+id/my_favorite_btn_back"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="100dp"
@@ -26,7 +27,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         android:fontFamily="@font/suitesemibold"
-        android:text="내가 쓴 글"
+        android:text="관심 목록"
         android:textColor="@color/black"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/my_post_feed_rcv"

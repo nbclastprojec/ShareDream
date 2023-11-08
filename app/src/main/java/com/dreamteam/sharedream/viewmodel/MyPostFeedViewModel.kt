@@ -95,6 +95,9 @@ class MyPostFeedViewModel : ViewModel() {
     private val homeRepository = HomeRepository()
     val myResponse = homeRepository.myResponse
 
+    private val _favoritePostResult = MutableLiveData<MutableList<PostRcv>>()
+    val favoritePostResult : MutableLiveData<MutableList<PostRcv>> get() = _favoritePostResult
+
     // 포스트 수정된 DB 업로드 , 추가한 이미지 Storage에 업로드
     fun uploadEditPost(uris: MutableList<Any>, post: Post) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -159,8 +162,13 @@ class MyPostFeedViewModel : ViewModel() {
                     .addOnSuccessListener { querySnapshot ->
                         Log.d("xxxx", "uploadEditPost: 해당 게시글 $querySnapshot")
                         if (!querySnapshot.isEmpty) {
+                            val previousImg = querySnapshot.documents[0].data?.get("imgs") as List<String>
                             querySnapshot.documents[0].reference.set(post)
                                 .addOnSuccessListener {
+                                    for (index in previousImg.indices){
+                                        deletePreviousImg("post",previousImg[index])
+                                    }
+
                                     Log.d("xxxx", "imageUpload: 게시글 수정 완료 ")
                                 }
                                 .addOnFailureListener {
@@ -171,6 +179,50 @@ class MyPostFeedViewModel : ViewModel() {
                     .addOnFailureListener {
                         Log.d("xxxx", "uploadEditPost: 초기 실패 $it")
                     }
+            }
+        }
+    }
+
+    // 이미지 수정 시 이전 이미지 storage에서 삭제
+    private fun deletePreviousImg(path:String,detailPath:String){
+        storage.reference.child(path).child(detailPath).delete()
+            .addOnSuccessListener {
+                Log.d("xxxx", "deletePreviousImg Successful ")
+            }.addOnFailureListener {
+                Log.d("xxxx", "deletePreviousImg Failure: $it ")
+            }
+    }
+
+    // 유저 관심 목록/북마크 게시글 불러오기
+    fun downloadFavoritePost(){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                db.collection("Posts")
+                    .whereArrayContains("likeUsers", Constants.currentUserUid!!)
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        if (!querySnapshot.isEmpty) {
+                            val documentSnapshot = querySnapshot.documents
+                            val postRcvList: MutableList<PostRcv> = mutableListOf()
+                            for (document in documentSnapshot) {
+                                document.toObject<Post>()?.let {
+                                    convertPostToPostRcv(
+                                        it,
+                                        querySnapshot,
+                                        postRcvList,
+                                        _favoritePostResult
+                                    )
+                                }
+                            }
+                            Log.d("xxxx", "favorite post download : $postRcvList")
+                        }
+                    }
+                    .addOnFailureListener {
+                        Log.d("xxxx", "favorite post download Failure : $it ")
+                    }
+
+            } catch (e: Exception) {
+                Log.d("xxxx", " favorite post download Failure = $e ")
             }
         }
     }

@@ -16,6 +16,8 @@ import androidx.fragment.app.activityViewModels
 import coil.load
 import com.bumptech.glide.Glide
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.ToastMsg
+import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.databinding.FragmentMypageEditProfileBinding
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -73,27 +75,23 @@ class MyPageEditFragment : Fragment() {
                 myPostFeedViewModel.uploadUserProfileImg(photoUri!!)
                 myPostFeedViewModel.uploadEditUserInfo(nickname, intro)
 
-                Toast.makeText(this.context, "회원정보가 수정되었습니다", Toast.LENGTH_SHORT).show()
+                ToastMsg.makeToast(requireContext(),"회원정보가 수정되었습니다.")
                 parentFragmentManager.popBackStack()
 
             } else {
                 myPostFeedViewModel.uploadEditUserInfo(nickname, intro)
-                Toast.makeText(this.context, "회원정보가 수정되었습니다", Toast.LENGTH_SHORT).show()
+                ToastMsg.makeToast(requireContext(),"회원정보가 수정되었습니다.")
                 parentFragmentManager.popBackStack()
             }
 
             // 키보드 입력창 내리기
-            val inputMethodManager =
-                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
+            Util.hideKeypad(requireContext(),binding.root)
         }
 
         // 뒤로가기 버튼
         binding.backButtonProfile.setOnClickListener {
             // 키보드 입력 창 내리기
-            val inputMethodManager =
-                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
+            Util.hideKeypad(requireContext(),binding.root)
             parentFragmentManager.popBackStack()
         }
     }
