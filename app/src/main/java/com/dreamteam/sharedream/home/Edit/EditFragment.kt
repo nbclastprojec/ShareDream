@@ -11,10 +11,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
 import com.dreamteam.sharedream.model.LocationData
@@ -123,8 +125,15 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
         }
 
         binding.editBtnLocationPick.setOnClickListener {
-            parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment(EDITABLE))
-                .addToBackStack(null).commit()
+            // 위치 권한 확인 후 없다면 요청, 있다면 MapView
+            if (!Util.permissionCheck(this.requireContext())) {
+                ActivityCompat.requestPermissions(requireActivity(), Util.PERMISSIONS, 5000)
+            }
+            else {
+                Util.hideKeypad(requireContext(),binding.root)
+                parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment(EDITABLE))
+                    .addToBackStack(null).commit()
+            }
         }
 
         // 뒤로가기 버튼
@@ -204,6 +213,8 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
                 val post = Post(
                     Constants.currentUserUid!!,
                     binding.editTvTitle.text.toString(),
+
+
                     binding.editEtvPrice.text.toString().replace(",","").toLong(),
                     category,
                     binding.editEtvAddress.text.toString(),
@@ -291,6 +302,13 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
         writePostImgAdapter = WritePostImageAdapter(object : ImgClick {
             override fun imgClick(uri: Uri) {
                 Log.d("xxxx", "imgClicked: ${uri} , whole uris : $uris")
+                // 아이템 클릭 시 다이얼로그
+                Util.showDialog(requireContext(), "이미지 삭제", "선택한 이미지를 삭제 하시겠습니까?") {
+                    uris.remove(uri)
+                    binding.imageCount.text = "${uris.size}/10"
+                    writePostImgAdapter.notifyDataSetChanged()
+                }
+
             }
 
         })

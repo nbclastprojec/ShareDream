@@ -25,6 +25,7 @@ data class Post(
     val endTime:String
 ) : Serializable
 {
+
     constructor() : this("","", 0, "", "", "","", listOf(),"", listOf(),"",Timestamp.now(),"","",
         listOf(), listOf(),""
     )

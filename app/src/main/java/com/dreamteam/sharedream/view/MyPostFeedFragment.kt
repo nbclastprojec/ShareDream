@@ -57,7 +57,7 @@ class MyPostFeedFragment : Fragment() {
         }
 
 
-        binding.backButtonWritepage.setOnClickListener {
+        binding.myPostFeedBtnBack.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
     }

@@ -13,26 +13,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.ToastMsg
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.YourDetailPage
 import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
+import com.dreamteam.sharedream.home.HomeViewModel
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.MapViewFragment.Companion.READ_ONLY
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.Date
+import kotlin.math.log
 
 @Suppress("DEPRECATION")
 class PostDetailFragment : Fragment() {
@@ -41,7 +51,14 @@ class PostDetailFragment : Fragment() {
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
 
+    private val homeViewmodel: HomeViewModel by activityViewModels()
+
     private val currentPostInfo = mutableListOf<PostRcv>()
+
+
+    private var destinationUid: String? = null
+
+
 
     private fun detailPageInfoChange(postRcv: PostRcv) {
         binding.detailId.text = postRcv.nickname
@@ -56,6 +73,7 @@ class PostDetailFragment : Fragment() {
         stateIconChange()
 
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,7 +105,7 @@ class PostDetailFragment : Fragment() {
             // 관심 목록에 있는 아이템일 경우 binding
             if (it.likeUsers.contains(Constants.currentUserUid)) {
                 binding.detailBtnSubFavorite.visibility = View.VISIBLE
-                binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
+                binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
             } else {
                 binding.detailBtnSubFavorite.visibility = View.GONE
             }
@@ -113,9 +131,14 @@ class PostDetailFragment : Fragment() {
         val adapter = DetailBannerImgAdapter(imgs)
         viewPager.adapter = adapter
 
+        myPostFeedViewModel.myResponse.observe(viewLifecycleOwner){
+            Log.d("nyh", "onViewCreated: $it")
+        }
+
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -126,11 +149,14 @@ class PostDetailFragment : Fragment() {
                 Log.d("xxxx", " 일치 ?: ${it[0].timestamp == currentPostInfo[0].timestamp} ")
                 Log.d("xxxx", " 전체 LiveData : ${it} 바뀐 Livedata ${it[0].likeUsers}")
                 binding.detailTvLikeCount.text = "${it[0].likeUsers.size}"
+                myPostFeedViewModel.myResponse.observe(viewLifecycleOwner) {
+                    Log.d("nyh", "onViewCreated: pushObserve $it")
+                }
 
                 // 관심 목록에 있는 아이템일 경우 binding
                 if (it[0].likeUsers.contains(Constants.currentUserUid)) {
                     binding.detailBtnSubFavorite.visibility = View.VISIBLE
-                    binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
+                    binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
                 } else {
                     binding.detailBtnSubFavorite.visibility = View.GONE
                     binding.detailLike.setImageResource(R.drawable.like)
@@ -158,7 +184,7 @@ class PostDetailFragment : Fragment() {
                         .addToBackStack(null).commit()
                 }
             } else {
-                Toast.makeText(requireContext(),"거래장소가 지정되지 않았습니다",Toast.LENGTH_SHORT).show()
+                ToastMsg.makeToast(requireContext(),"거래장소가 지정되지 않았습니다")
             }
         }
 
@@ -170,16 +196,22 @@ class PostDetailFragment : Fragment() {
 
         // 관심 목록 추가 버튼 클릭 이벤트
         binding.detailBtnAddFavorite.setOnClickListener {
-            if (currentPostInfo[0].uid != Constants.currentUserUid){
+            if (currentPostInfo[0].uid != Constants.currentUserUid) {
                 Util.showDialog(requireContext(), "관심 목록에 추가", "내 관심 목록에 추가하시겠습니까?") {
                     myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
+                    myPostFeedViewModel.getTokenFromPost(currentPostInfo[0].documentId)
+
+                    myPostFeedViewModel.myResponse.observe(viewLifecycleOwner){
+                        Log.d("nyh", "onViewCreated: $it")
+                    }
+
                     Log.d(
                         "xxxx",
                         " detail like btn clicked, post timestamp  =  ${currentPostInfo[0].timestamp}"
                     )
                 }
             } else {
-                Toast.makeText(requireContext(),"게시글 작성자는 관심목록에 추가할 수 없습니다",Toast.LENGTH_SHORT).show()
+                ToastMsg.makeToast(requireContext(),"작성자는 북마크에 추가할 수 없습니다")
             }
         }
 
@@ -223,7 +255,7 @@ class PostDetailFragment : Fragment() {
 
             // 관심 목록에 있는 아이템의 경우 아이콘 변경 및 관심 목록 제거 버튼 표시
             if (post.likeUsers.contains(Constants.currentUserUid)) {
-                binding.detailLike.setImageResource(R.drawable.detail_ic_test_fill_heart)
+                binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
                 binding.detailBtnSubFavorite.visibility = View.VISIBLE
             } else {
                 binding.detailLike.setImageResource(R.drawable.like)
@@ -319,18 +351,21 @@ class PostDetailFragment : Fragment() {
         if (parts.size > 1) {
             val endIndex = parts[1].indexOf(")")
             if (endIndex != -1) {
-                val documentId = parts[1].substring(0, endIndex)
-                startMessageActivity(documentId)
-                Log.d("afafafafafa", "$documentId ")
+                val documnetUid = parts[1].substring(0, 20)
+                startMessageActivity(documnetUid)
+                Log.d("afafafafafa", "${parts} ")
+                Log.d("afafafafafa", "${documnetUid} ")
             }
         }
     }
 
 
-    private fun startMessageActivity(documentId: String) {
-        val intent = Intent(requireContext(), MessageActivity::class.java)
-        intent.putExtra("documentId", documentId)
+    private fun startMessageActivity(documnetUid: String) {
+       val intent = Intent(requireContext(), MessageActivity::class.java)
+        intent.putExtra("documnetUid", documnetUid)
+        Log.d("susu", "startMessageActivity: ${documnetUid}")
         startActivity(intent)
+
     }
 
     private fun time(timestamp: Timestamp): String {

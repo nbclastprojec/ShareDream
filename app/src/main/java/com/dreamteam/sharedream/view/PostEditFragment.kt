@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.EditCalenderDialog
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.ToastMsg
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.FragmentPostEditBinding
@@ -140,7 +141,7 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
             R.id.pet1 -> editCategory = "반려동물용품"
             R.id.etc1 -> editCategory = "기타"
             else -> {
-                Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
+                ToastMsg.makeToast(requireContext(),"카테고리를 선택해주세요.")
 
             }
         }
@@ -164,7 +165,9 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
             val post = Post(
                 Constants.currentUserUid!!,
                 binding.editTvTitle.text.toString(),
+
                 binding.editEtvPrice.text.toString().replace(",","").toLong(),
+
                 editCategory,
                 binding.editEtvAddress.text.toString(),
                 //todo ↓ deadline 추가 - 임시로 city 값 넣어둠
@@ -197,6 +200,7 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
 
             myPostFeedViewModel.uploadEditPost(uriAndUrlList, post)
 
+            Util.hideKeypad(requireContext(),binding.root)
             parentFragmentManager.popBackStack()
         }
 
@@ -208,13 +212,16 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
                 ActivityCompat.requestPermissions(requireActivity(), Util.PERMISSIONS, 5000)
             }
             else {
+                Util.hideKeypad(requireContext(),binding.root)
                 parentFragmentManager.beginTransaction().add(R.id.frag_edit, MapViewFragment(EDITABLE))
                     .addToBackStack(null).commit()
             }
+
         }
 
         // 뒤로가기 버튼
         binding.btnBack.setOnClickListener {
+            Util.hideKeypad(requireContext(),binding.root)
             Log.d("xxxx", " edit frag 뒤로가기 버튼 클릭 ")
             parentFragmentManager.popBackStack()
         }
@@ -249,7 +256,8 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
         writePostImgAdapter = WritePostImageAdapter(object : ImgClick {
             override fun imgClick(uri: Uri) {
                 Log.d("xxxx", "imgClicked: ${uri} , whole uris : $uris")
-                // todo 아이템 클릭 시 다이얼로그 or 삭제 버튼
+
+                // ViewPager 아이템 클릭 시 삭제 확인 다이얼로그
                 Util.showDialog(requireContext(), "이미지 삭제", "선택한 이미지를 삭제 하시겠습니까?") {
                     uris.remove(uri)
                     binding.imageCount.text = "${uris.size}/10"
