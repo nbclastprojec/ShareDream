@@ -98,8 +98,6 @@ class HomeFragment : Fragment() {
                 .addToBackStack(null).commit()
         }
 
-        setupRcv()
-
         myPostFeedViewModel.downloadHomePostRcv()
 
         binding.btnFilter.setOnClickListener {
@@ -167,7 +165,7 @@ class HomeFragment : Fragment() {
                     0 -> viewModel.sortCategorys("")
                     1 -> homePostAdapter.sortPriceDesc()
                     2 -> homePostAdapter.sortPriceAsc()
-                    3 -> homePostAdapter.sortLikeAsc()
+                    3 -> homePostAdapter.sortLikeDesc()
                 }
             }
 
@@ -194,19 +192,6 @@ class HomeFragment : Fragment() {
     }
     fun setupRcv() {
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) { posts ->
-            val rcvList: List<PostRcv> = posts
-
-            homePostAdapter = HomePostAdapter(requireContext(), object : PostClick {
-                override fun postClick(post: PostRcv) {
-                    myPostFeedViewModel.setCurrentPost(post)
-
-                    parentFragmentManager.beginTransaction().add(
-                        R.id.frag_edit,
-                        PostDetailFragment()
-                    ).addToBackStack(null).commit()
-                }
-            }, rcvList)
-
             binding.homeRecycle.apply {
                 setHasFixedSize(true)
                 layoutManager =

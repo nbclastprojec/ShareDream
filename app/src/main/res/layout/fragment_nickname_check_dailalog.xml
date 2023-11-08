@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".NickNacmeCheckDialogFragment">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,13 +14,13 @@
         <TextView
             android:id="@+id/textView18"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.045"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginStart="18dp"
             android:layout_marginEnd="17dp"
             android:text="어플에서 사용할 닉네임을 정해주세요!"
             android:textSize="25dp"
+            android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,10 +40,11 @@
         <TextView
             android:id="@+id/nickName"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginEnd="40dp"
             android:layout_marginTop="24dp"
+            android:textColor="@color/black"
             android:text="닉네임"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,11 +55,12 @@
         <EditText
             android:id="@+id/edit_nickName"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.055"
+            android:layout_height="wrap_content"
+            android:hint="당신의 닉네임을 반드시 정해주세요"
             android:layout_marginEnd="40dp"
             android:layout_marginStart="40dp"
             android:layout_marginTop="4dp"
+            android:paddingStart="10dp"
             android:background="@drawable/login_editbox"
             android:ems="10"
             android:inputType="text"
@@ -71,7 +72,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/nickNameCreateBtn"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintHeight_percent="0.055"
             android:layout_marginEnd="40dp"
             android:layout_marginStart="40dp"

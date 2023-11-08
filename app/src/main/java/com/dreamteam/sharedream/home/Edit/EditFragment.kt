@@ -3,6 +3,8 @@ package com.dreamteam.sharedream.home.Edit
 import CalenderFragmentDialog
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -33,6 +35,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -87,6 +90,24 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
         }
 
         setupRcv()
+        val priceEditText = binding.editEtvPrice
+        priceEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (count > 0) {
+                    val cleanString = s?.toString()?.replace("[^\\d]".toRegex(), "")
+                    val formattedString = cleanString?.let { formatPrice(it) }
+                    priceEditText.removeTextChangedListener(this) // 이벤트 리스너를 임시로 제거
+                    priceEditText.setText(formattedString)
+                    if (formattedString != null) {
+                        priceEditText.setSelection(formattedString.length)
+                    }
+                    priceEditText.addTextChangedListener(this) // 이벤트 리스너 다시 추가
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         return binding.root
     }
@@ -121,7 +142,6 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
             } else {
                 imageUpload()
             }
-
         }
 
         binding.editBtnLocationPick.setOnClickListener {
@@ -213,8 +233,6 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
                 val post = Post(
                     Constants.currentUserUid!!,
                     binding.editTvTitle.text.toString(),
-
-
                     binding.editEtvPrice.text.toString().replace(",","").toLong(),
                     category,
                     binding.editEtvAddress.text.toString(),
@@ -326,6 +344,14 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
             SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS", Locale.KOREA).format(currentDateTime)
 
         return dateFormat
+    }
+    private fun formatPrice(input: String): String {
+        if (input.isNotEmpty()) {
+            val price = input.replace("[^\\d]".toRegex(), "").toLongOrNull() ?: 0
+            val formattedPrice = DecimalFormat("#,###").format(price)
+            return formattedPrice
+        }
+        return input // 빈 문자열이나 숫자가 아닌 문자가 입력된 경우 그대로 반환
     }
 }
 

@@ -22,6 +22,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -65,33 +66,36 @@ class HomePostAdapter(
 
         val positionItem = currentList[position]
         holder.apply {
+            val decimalFormat = DecimalFormat("#,###")
+            val formattedPrice = decimalFormat.format(positionItem.price)
+            postPrice.text = "${formattedPrice}원"
             postCategory.text = "${positionItem.category}"
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
-            postPrice.text = positionItem.price.toString()
             postEndDate.text = EndTime(positionItem.endDate)
-            postPrice.text = "${positionItem.price}원"
-
         }
 
         holder.bind(positionItem.imgs[0], positionItem.timestamp)
     }
-    fun sortPriceAsc(){
+
+    fun sortPriceAsc() {
         val sortedItems = currentList.sortedBy { it.price }
         Log.d("nyh", "sortPriceAsc: click")
         submitList(sortedItems)
     }
-    fun sortPriceDesc(){
-        val sortedItems =  currentList.sortedByDescending { it.price }
+
+    fun sortPriceDesc() {
+        val sortedItems = currentList.sortedByDescending { it.price }
         submitList(sortedItems)
     }
-    fun sortLikeAsc() {
-        val sortedItem = currentList.sortedBy { it.likeUsers.size }
+
+    fun sortLikeDesc() {
+        val sortedItem = currentList.sortedByDescending { it.likeUsers.size }
         submitList(sortedItem)
     }
 
-    fun filteredPrice(minPrice:Long, maxPrice: Long){
-        val filteredList = currentList.filter { it.price in minPrice .. maxPrice}
+    fun filteredPrice(minPrice: Long, maxPrice: Long) {
+        val filteredList = currentList.filter { it.price in minPrice..maxPrice }
         submitList(filteredList)
     }
 
@@ -103,24 +107,26 @@ class HomePostAdapter(
         val postPrice: TextView = binding.writePrice
         val postCategory: TextView = binding.writeCategory
         val postImg: ImageView = binding.writeImage
-//        val postheart: ImageView = binding.btnHeart
+
+        //        val postheart: ImageView = binding.btnHeart
         val postDate: TextView = binding.writePageDate
-        val postEndDate:TextView=binding.endDate
+        val postEndDate: TextView = binding.endDate
 
         val postStateBgClosed: ImageView = binding.itemImgStateClosed
         val postStateBgPutOff: ImageView = binding.itemImgStatePutOff
-        val postStateBgReservation : ImageView = binding.itemImgStateReservation
+        val postStateBgReservation: ImageView = binding.itemImgStateReservation
 
 
         fun bind(imagePath: Uri, timestamp: Timestamp) {
             postImg.load(imagePath)
 
-            when (currentList[position].state){
+            when (currentList[position].state) {
                 "교환 가능" -> {
                     postStateBgClosed.visibility = View.INVISIBLE
                     postStateBgPutOff.visibility = View.INVISIBLE
                     postStateBgReservation.visibility = View.INVISIBLE
                 }
+
                 "교환 보류" -> postStateBgPutOff.visibility = View.VISIBLE
                 "예약 중" -> postStateBgReservation.visibility = View.VISIBLE
                 "교환 완료" -> postStateBgClosed.visibility = View.VISIBLE
@@ -165,7 +171,6 @@ class HomePostAdapter(
     }
 
 
-
     private fun EndTime(endTime: String): String {
         val dateParts = endTime.split("~")
 
@@ -195,8 +200,9 @@ class HomePostAdapter(
             return "날짜 형식 오류"
         }
     }
-    fun setData(data:List<PostRcv>){
-        if(data.isNotEmpty()){
+
+    fun setData(data: List<PostRcv>) {
+        if (data.isNotEmpty()) {
             allPosts = ArrayList(data)
         }
     }

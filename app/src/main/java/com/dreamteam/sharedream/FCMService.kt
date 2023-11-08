@@ -85,7 +85,9 @@ class FCMService : FirebaseMessagingService() {
         ) // 일회성
 
         val channelId = "channel" // 채널 아이디
+        val importance = NotificationManager.IMPORTANCE_HIGH
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 소리
+
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setContentTitle(title) // 제목
             .setContentText(body) // 내용
@@ -93,6 +95,7 @@ class FCMService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
+
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -102,7 +105,7 @@ class FCMService : FirebaseMessagingService() {
             val channel = NotificationChannel(
                 channelId,
                 "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT
+                importance
             )
             notificationManager.createNotificationChannel(channel)
         }
@@ -156,7 +159,7 @@ class FCMService : FirebaseMessagingService() {
             val channel = NotificationChannel(
                 channelId,
                 "알림 메세지",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_HIGH
             )
             notificationManager.createNotificationChannel(channel)
         }
