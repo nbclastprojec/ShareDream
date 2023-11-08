@@ -3,7 +3,6 @@ package com.dreamteam.sharedream.home.alarm
 import AlarmPost
 import android.util.Log
 import com.dreamteam.sharedream.Util.Constants
-import com.dreamteam.sharedream.model.PostRcv
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -36,24 +35,16 @@ class AlarmRepo {
             }
     }
 
-    fun getPostDetail(callback: (List<PostRcv>) -> Unit) {
-        db.collection("Posts")
-            .whereEqualTo("documentId", Constants.currentDocumentId)
-            .get()
-            .addOnSuccessListener { task ->
-                val detailList = mutableListOf<PostRcv>()
+    fun deleteItem(collectionName: String, documentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        val collectionReference = db.collection(collectionName)
 
-                for (i in task.documents) {
-                    val data = i.toObject(PostRcv::class.java)
-                    data?.let {
-                        detailList.add(it)
-                    }
-                }
-                callback(detailList)
+        collectionReference.document(documentId)
+            .delete()
+            .addOnSuccessListener {
+                onSuccess()
             }
             .addOnFailureListener { e ->
-                Log.e("nyh", "getPostDetail: failure", e)
+                onFailure(e)
             }
     }
-
 }
