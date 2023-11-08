@@ -163,8 +163,8 @@ class ChatMessageActivity : AppCompatActivity() {
 
     private fun deleteChatRoom() {
         if (chatRoomuid != null) {
-            uid?.let {
-                fireDatabase.child("ChatRoom").child(chatRoomuid!!).child(it).removeValue().addOnSuccessListener {
+
+            fireDatabase.child("ChatRoom").child(chatRoomuid!!).removeValue().addOnSuccessListener {
                     Toast.makeText(this, "채팅방이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                     chatRoomuid = null
                     recyclerView?.adapter?.notifyDataSetChanged()
@@ -173,7 +173,6 @@ class ChatMessageActivity : AppCompatActivity() {
                 }
             }
         }
-    }
 
     private fun roomOut(){
         onBackPressed()
