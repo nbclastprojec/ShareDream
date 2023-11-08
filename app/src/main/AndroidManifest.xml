@@ -25,11 +25,11 @@
         <activity
             android:name=".chat.MessageActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".chat.ChatMessageActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".LogInActivity"
             android:exported="true">
