@@ -14,6 +14,7 @@ import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.chat.ChatFragment
 import com.dreamteam.sharedream.databinding.FragmentMypageBinding
+import com.dreamteam.sharedream.view.MyPageFavoritePost
 import com.dreamteam.sharedream.view.MyPostFeedFragment
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -64,13 +65,13 @@ class MyPageFragment : Fragment() {
         myPostFeedViewModel.downloadCurrentProfileImg(Constants.currentUserUid!!)
 
         // 변경된 자기소개, 닉네임 반영
-        myPostFeedViewModel.myPageResult.observe(viewLifecycleOwner){
+        myPostFeedViewModel.myPageResult.observe(viewLifecycleOwner) {
             binding.mypageIntro.text = it.intro
             binding.mypageId.text = it.nickname
         }
 
         // 수정된 이미지로 변경
-        myPostFeedViewModel.currentProfileImg.observe(viewLifecycleOwner){
+        myPostFeedViewModel.currentProfileImg.observe(viewLifecycleOwner) {
             binding.mypageImage.load(it)
         }
 
@@ -110,28 +111,34 @@ class MyPageFragment : Fragment() {
                 .replace(R.id.frag_edit, ChatFragment()).addToBackStack(null).commit()
         }
 
+        binding.btnMyFavoriteList.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frag_edit, MyPageFavoritePost()).addToBackStack(null).commit()
+        }
+
 
     }
+
     private fun downloadProfileImg() {
         val downloadTask = storage.reference.child("ProfileImg").child(Constants.currentUserUid!!)
             .downloadUrl
-        downloadTask.addOnSuccessListener{
+        downloadTask.addOnSuccessListener {
             Log.d("xxxx", "downloadTask Successful uri : $it")
             if (it != null)
                 Glide.with(this)
                     .load(it)
                     .into(binding.mypageImage)
-        }.addOnFailureListener{
+        }.addOnFailureListener {
             Log.d("xxxx", "downloadTask Failure Exception : $it")
         }
 
     }
 
-    fun downloadProfileInfo(){
+    fun downloadProfileInfo() {
         db.collection("UserData")
             .document("${Constants.currentUserUid}")
             .get()
-            .addOnSuccessListener{
+            .addOnSuccessListener {
                 val nickname = it.data?.get("nickname") as String
                 val intro = it.data?.get("intro") as String
                 Log.d("xxxx", " nickname : $nickname ")
@@ -146,22 +153,24 @@ class MyPageFragment : Fragment() {
             }
     }
 
-    private fun deleteUserAccount (){
+    private fun deleteUserAccount() {
 
-        Util.showDialog(requireContext(),"회원 탈퇴","회원 탈퇴 시 기존 정보를 다시 복구할 수 없습니다.") {
+        Util.showDialog(requireContext(), "회원 탈퇴", "회원 탈퇴 시 기존 정보를 다시 복구할 수 없습니다.") {
             auth.signOut()
             auth.currentUser!!.delete()
-            startActivity(Intent(activity,LogInActivity::class.java))
-            requireActivity().finish()}
+            startActivity(Intent(activity, LogInActivity::class.java))
+            requireActivity().finish()
+        }
     }
 
     private fun signOut() {
 
 
-        Util.showDialog(requireContext(),"로그아웃 ","로그아웃 하시겠습니까?") {
+        Util.showDialog(requireContext(), "로그아웃 ", "로그아웃 하시겠습니까?") {
             auth.signOut()
-            startActivity(Intent(activity,LogInActivity::class.java))
-            requireActivity().finish()}
+            startActivity(Intent(activity, LogInActivity::class.java))
+            requireActivity().finish()
+        }
 
 
     }

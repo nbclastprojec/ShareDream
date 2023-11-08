@@ -309,10 +309,12 @@
 
     <ImageView
         android:id="@+id/backButton_mypage"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="100dp"
+        android:padding="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/bar1"
+        app:layout_constraintEnd_toStartOf="@+id/mypage_tittle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_backbtn" />
@@ -320,12 +322,14 @@
     <TextView
         android:id="@+id/mypage_tittle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="12dp"
-        android:fontFamily="sans-serif"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/suitesemibold"
         android:text="나의 드림"
         android:textColor="@color/black"
         android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/bar1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -334,12 +338,12 @@
         android:id="@+id/bar1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="56dp"
         android:background="#D9D9D9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_tittle" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.cardview.widget.CardView

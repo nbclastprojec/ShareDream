@@ -25,49 +25,45 @@
             <TextView
                 android:id="@+id/top_massage"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
                 android:fontFamily="@font/suiteregular"
                 android:text="교환글 수정"
                 android:textColor="#000000"
-                android:textSize="20dp"
+                android:textSize="25dp"
+                app:layout_constraintBottom_toTopOf="@+id/scrollView4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/btn_back"
-                android:layout_width="0dp"
+                android:layout_width="56dp"
                 android:layout_height="0dp"
-                android:layout_marginEnd="110dp"
-                android:padding="8dp"
+                android:padding="12dp"
                 android:src="@drawable/ic_backbtn"
                 app:layout_constraintBottom_toTopOf="@+id/scrollView4"
-                app:layout_constraintEnd_toStartOf="@+id/top_massage"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/btn_complete"
-                android:layout_width="0dp"
+                android:layout_width="56dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="110dp"
-                android:paddingVertical="8dp"
-                android:paddingHorizontal="12dp"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_toolbar_btn_comlete_nborder"
                 android:text="TextView"
                 app:layout_constraintBottom_toTopOf="@+id/scrollView4"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/top_massage"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/ic_toolbar_btn_comlete_nborder"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <ScrollView
                 android:id="@+id/scrollView4"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="56dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -84,7 +80,6 @@
                         android:id="@+id/view"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="15dp"
                         android:background="@color/gray900"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -153,16 +148,15 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:hint="제목을 입력해주세요"
                         android:background="@null"
-                        android:maxLines="1"
+                        android:hint="제목을 입력해주세요"
                         android:maxLength="20"
+                        android:maxLines="1"
                         android:textColorHint="@color/hint_color"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/view10" />
-
 
 
                     <View
@@ -197,14 +191,14 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:gravity="center_vertical"
-                        android:inputType="number"
-                        android:hint="값어치를 입력해주세요"
                         android:background="@null"
+                        android:gravity="center_vertical"
+                        android:hint="값어치를 입력해주세요"
+                        android:inputType="number"
                         android:maxLines="1"
-                        android:visibility="invisible"
                         android:textColorHint="@color/hint_color"
                         android:textSize="16sp"
+                        android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="@+id/edit_etv_price"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -256,9 +250,9 @@
                         android:layout_marginBottom="16dp"
                         android:background="@null"
                         android:gravity="center_vertical"
-                        android:maxLines="1"
                         android:hint="거래장소를 지정해주세요"
                         android:maxLength="20"
+                        android:maxLines="1"
                         android:textColorHint="@color/hint_color"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toTopOf="@+id/calender"
@@ -271,9 +265,9 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
+                        android:gravity="center_vertical"
                         android:text="지도에서 선택하기"
                         android:textSize="14sp"
-                        android:gravity="center_vertical"
                         app:layout_constraintBottom_toBottomOf="@+id/edit_etv_address"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/edit_etv_address"
@@ -289,7 +283,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/edit_etv_address" />
-
 
 
                     <com.google.android.material.chip.ChipGroup
@@ -360,54 +353,54 @@
                             android:checkable="true"
                             android:text="문구"
                             android:textSize="15sp" />
+
                         <com.google.android.material.chip.Chip
                             android:id="@+id/furniture1"
                             android:layout_width="wrap_content"
                             android:layout_height="45dp"
                             android:checkable="true"
                             android:text="가구"
-                            android:textSize="15sp"
-                            />
+                            android:textSize="15sp" />
+
                         <com.google.android.material.chip.Chip
                             android:id="@+id/life1"
                             android:layout_width="wrap_content"
                             android:layout_height="45dp"
                             android:checkable="true"
                             android:text="생활"
-                            android:textSize="15sp"
-                            />
+                            android:textSize="15sp" />
+
                         <com.google.android.material.chip.Chip
                             android:id="@+id/food1"
                             android:layout_width="wrap_content"
                             android:layout_height="45dp"
-                            android:text="식품"
                             android:checkable="true"
-                            android:textSize="15sp"
-                            />
+                            android:text="식품"
+                            android:textSize="15sp" />
+
                         <com.google.android.material.chip.Chip
                             android:id="@+id/kids1"
                             android:layout_width="wrap_content"
                             android:layout_height="45dp"
-                            android:text="유아동/출산"
                             android:checkable="true"
-                            android:textSize="15sp"
-                            />
+                            android:text="유아동/출산"
+                            android:textSize="15sp" />
+
                         <com.google.android.material.chip.Chip
                             android:id="@+id/pet1"
                             android:layout_width="wrap_content"
                             android:layout_height="45dp"
-                            android:text="반려동물용품"
                             android:checkable="true"
-                            android:textSize="15sp"
-                            />
+                            android:text="반려동물용품"
+                            android:textSize="15sp" />
+
                         <com.google.android.material.chip.Chip
                             android:id="@+id/etc1"
                             android:layout_width="wrap_content"
                             android:layout_height="45dp"
-                            android:text="기타"
                             android:checkable="true"
-                            android:textSize="15sp"
-                            />
+                            android:text="기타"
+                            android:textSize="15sp" />
                     </com.google.android.material.chip.ChipGroup>
 
                     <EditText
@@ -439,9 +432,9 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:background="@null"
-                        android:paddingStart="8dp"
                         android:gravity="center_vertical"
                         android:hint="교환할 기간을 선택해 주세요."
+                        android:paddingStart="8dp"
                         android:textColorHint="@color/hint_color"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toTopOf="@+id/divider2"
@@ -467,8 +460,7 @@
                         app:layout_constraintBottom_toTopOf="@+id/edit_etv_desc"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/calender"
-                        />
+                        app:layout_constraintTop_toBottomOf="@id/calender" />
 
                     <View
                         android:id="@+id/divider3"
@@ -479,7 +471,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/chipgroup" />
-
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
