@@ -245,6 +245,7 @@ class ChatMessageActivity : AppCompatActivity() {
                     message.text = comment.message
                     time.text = comment.time
                     if (comment.uid == uid) {
+                        profile.visibility = View.INVISIBLE
                         message.setBackgroundResource(R.drawable.rightbubble)
                         name.visibility = View.INVISIBLE
                         layoutMain.gravity = Gravity.RIGHT

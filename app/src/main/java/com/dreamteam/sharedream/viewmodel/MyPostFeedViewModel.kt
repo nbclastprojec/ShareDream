@@ -3,19 +3,15 @@ package com.dreamteam.sharedream.viewmodel
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Build
-import android.provider.Settings.Global.getString
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.home.HomeRepository
-import com.dreamteam.sharedream.home.HomeViewModel
 import com.dreamteam.sharedream.model.LocationData
-import com.dreamteam.sharedream.model.MessageDTO
 import com.dreamteam.sharedream.model.NotificationBody
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
@@ -29,7 +25,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +34,6 @@ import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import java.util.UUID
 
 class MyPostFeedViewModel : ViewModel() {
     private val db = Firebase.firestore
@@ -165,9 +159,9 @@ class MyPostFeedViewModel : ViewModel() {
                             val previousImg = querySnapshot.documents[0].data?.get("imgs") as List<String>
                             querySnapshot.documents[0].reference.set(post)
                                 .addOnSuccessListener {
-                                    for (index in previousImg.indices){
-                                        deletePreviousImg("post",previousImg[index])
-                                    }
+//                                    for (index in previousImg.indices){
+//                                        deletePreviousImg("post",previousImg[index])
+//                                    }
 
                                     Log.d("xxxx", "imageUpload: 게시글 수정 완료 ")
                                 }

@@ -201,7 +201,6 @@ class HomeFragment : Fragment() {
                         false
                     )
                 adapter = homePostAdapter
-                addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
             }
         }
     }

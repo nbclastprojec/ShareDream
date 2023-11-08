@@ -22,7 +22,7 @@
                 android:id="@+id/chat_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/example" />
+                android:src="@drawable/profile_circle" />
         </LinearLayout>
 
         <LinearLayout

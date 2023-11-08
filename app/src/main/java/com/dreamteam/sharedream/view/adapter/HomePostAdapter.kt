@@ -38,8 +38,7 @@ class HomePostAdapter(
 ) :
     ListAdapter<PostRcv, HomePostAdapter.HomePostRcvViewHolder>(DifferCallback.differCallback) {
 
-    private val storage = Firebase.storage
-    private val allItems = allPosts
+
     private var db = Firebase.firestore
 
     init {

@@ -8,14 +8,6 @@
     android:clickable="true"
     >
 
-    <ImageView
-        android:id="@+id/imageView18"
-        android:layout_width="409dp"
-        android:layout_height="64dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/add_sp" />
 
     <TextView
         android:id="@+id/btn_signout"
@@ -270,16 +262,6 @@
         app:layout_constraintEnd_toStartOf="@+id/imageView8"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/bar1" />
-
-    <ImageView
-        android:id="@+id/mypage_setting"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_3" />
 
     <ImageView
         android:id="@+id/backButton_mypage"
