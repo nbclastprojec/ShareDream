@@ -7,23 +7,65 @@
     android:background="@color/white"
     android:clickable="true">
 
+    <ImageView
+        android:id="@+id/my_post_feed_btn_back"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="100dp"
+        android:padding="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/bar1"
+        app:layout_constraintEnd_toStartOf="@+id/tv_my_favorite_post_tittle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_backbtn" />
+
+    <TextView
+        android:id="@+id/tv_my_favorite_post_tittle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/suitesemibold"
+        android:text="내가 쓴 글"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/my_post_feed_rcv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/bar1"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginTop="56dp"
+        android:background="#D9D9D9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        >
 
         <ImageView
             android:id="@+id/my_post_feed_img_notify_notfound"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/my_post_feed_not_found"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
     </FrameLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_post_feed_rcv"
         android:layout_width="match_parent"
@@ -35,37 +77,7 @@
         tools:listitem="@layout/write_item"/>
 
 
-    <ImageView
-        android:id="@+id/backButton_writepage"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_backbtn" />
 
-    <TextView
-        android:id="@+id/my_post_feed_tittle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:fontFamily="@font/suitesemibold"
-        android:text="내가 쓴 글"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/bar1"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_marginTop="15dp"
-        android:background="#D9D9D9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_post_feed_tittle" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,18 +1,18 @@
-//import java.io.Serializable
-//
-//data class AlarmPost(
-//    val uid: String,
-//    val title: String,
-//    val price: String,
-//    val category: String,
-//    val address: String,
-//    val deadline: String,
-//    val desc: String,
-//    var imgs: List<String>,
-//    val nickname: String,
-//    val likeUsers: List<String>,
-//    val token: String,
-//    val documentId: String
-//) : Serializable {
-//    constructor() : this("", "", "", "", "", "", "", listOf(), "", listOf(), "", "")
-//}
+import android.net.Uri
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentId
+import java.io.Serializable
+
+data class AlarmPost(
+    val uid: String,
+    val title: String,
+    var imgs: List<String>,
+    val nickname: String,
+    val timestamp: Timestamp,
+    val documentId: String
+) : Serializable {
+
+    constructor() : this(
+        "", "", listOf(), "", Timestamp.now(),""
+    )
+}

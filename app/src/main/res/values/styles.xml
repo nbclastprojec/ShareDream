@@ -7,4 +7,9 @@
         </item>
     </style>
 
+    <style name="CustomChipHoice" parent="@style/Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chip_bg_state_color</item>
+        <item name="android:textColor">@color/chip_text_state_color</item>
+    </style>
+
 </resources>

@@ -12,26 +12,14 @@
         android:layout_height="match_parent">
 
 
-        <EditText
-            android:id="@+id/editTextText3"
-            android:layout_width="300dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:background="@drawable/edit_searchbox"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <View
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/gray900"
-            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/alarmRecycler"
