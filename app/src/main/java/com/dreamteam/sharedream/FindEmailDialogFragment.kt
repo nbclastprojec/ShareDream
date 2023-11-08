@@ -41,8 +41,11 @@ class FindEmailDialogFragment : DialogFragment() {
 
         binding.btnLogin.setOnClickListener {
             dismiss()
-            val intent = Intent(requireContext(), LogInMainFragment::class.java)
-            startActivity(intent)
+            val loginFragment = LogInMainFragment()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, loginFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
         }
 
         return binding.root
