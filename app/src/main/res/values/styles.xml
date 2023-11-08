@@ -11,5 +11,8 @@
         <item name="chipBackgroundColor">@color/chip_bg_state_color</item>
         <item name="android:textColor">@color/chip_text_state_color</item>
     </style>
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">18sp</item>
+    </style>
 
 </resources>

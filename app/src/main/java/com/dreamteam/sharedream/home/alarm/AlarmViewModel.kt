@@ -23,15 +23,4 @@ class AlarmViewModel : ViewModel() {
 
         }
     }
-
-    fun deleteItem(collectionName: String, documentId: String) {
-        alarmRepo.deleteItem(collectionName, documentId,
-            onSuccess = {
-
-            },
-            onFailure = { e ->
-                Log.e("nyh", "deleteItem failure: $e")
-            }
-        )
-    }
 }

@@ -41,13 +41,10 @@ class AlarmRepo {
         collectionReference.document(documentId)
             .delete()
             .addOnSuccessListener {
-                // 삭제 성공 시 처리
                 onSuccess()
             }
             .addOnFailureListener { e ->
-                // 삭제 실패 시 처리
                 onFailure(e)
             }
     }
-
 }

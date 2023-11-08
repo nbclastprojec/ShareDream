@@ -13,7 +13,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dreamteam.sharedream.MyPageFragment
 import com.dreamteam.sharedream.R
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.FragmentSeachBinding
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.view.PostDetailFragment
@@ -131,6 +133,17 @@ class SeachFragment : Fragment() {
                 // 선택된 Post를 초기화
                 searchViewModel.resetSelectedPost()
             }
+        }
+
+        binding.button2.setOnClickListener {
+            parentFragmentManager.beginTransaction().remove(this).commit()
+        }
+        binding.imageView5.setOnClickListener {
+            parentFragmentManager.beginTransaction().remove(this).commit()
+        }
+        binding.btnHome.setOnClickListener {
+            parentFragmentManager.beginTransaction().add(R.id.frag_edit, MyPageFragment())
+                .addToBackStack(null).commit()
         }
     }
 }

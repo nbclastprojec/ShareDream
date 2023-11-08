@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var homeAdapter: HomeAdapter
     private val auth: FirebaseAuth = Firebase.auth
-    private val db : FirebaseFirestore = Firebase.firestore
+    private val db: FirebaseFirestore = Firebase.firestore
 
     init {
         Constants.currentUserUid = auth.currentUser!!.uid
@@ -47,14 +47,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("xxxx", "MainACtivityOnCreate: ${Constants.currentUserUid} ")
         Log.isLoggable("Glide", Log.DEBUG)
 
-        //FCM설정, Token값 가져오기
-        //FCMService().getFirebaseToken()
-        //PostNotification 대응
         checkAppPushNotification()
-
-        //사용 안하면 삭제하기
-        //DynamicLink 수신확인
-//        initDynamicLink()
 
 
         homeAdapter = HomeAdapter(this)
@@ -66,17 +59,6 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = viewpagerFragmentAdapter
 
         val tabTitles = listOf("교환하기", "내소식")
-
-  /*      if (intent.hasExtra("open_fragment")) {
-            val fragmentToOpen = intent.getStringExtra("open_fragment")
-            if (fragmentToOpen == "alarm_fragment") {
-                val transaction = supportFragmentManager.beginTransaction()
-               // val alarmFragment = AlarmFragment()
-                val alarmFragmentIndex = 1
-                viewPager.setCurrentItem(alarmFragmentIndex, true)
-                transaction.replace(R.id.viewPager, alarmFragment)
-            }
-        }*/
 
         TabLayoutMediator(
             tabLayout,
@@ -92,8 +74,6 @@ class MainActivity : AppCompatActivity() {
                 .commit()
 
         }
-
-
 
         binding.btnHome.setOnClickListener {
             Log.d("xxxx", " MainActivity Mypage Btn Click ${Constants.currentUserInfo}")
@@ -116,12 +96,9 @@ class MainActivity : AppCompatActivity() {
             permissionPostNotification.launch("android.permission.POST_NOTIFICATIONS")
             return
         }
-
-        // 권한이 있을 때
-        // TODO: 권한이 허용된 경우에 실행할 작업을 정의하세요
     }
 
-    /** 권한 요청 */
+
     private val permissionPostNotification =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -131,18 +108,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    /** DynamicLink */
-//    private fun initDynamicLink() {
-//        val dynamicLinkData = intent.extras
-//        if (dynamicLinkData != null) {
-//            var dataStr = "DynamicLink 수신받은 값\n"
-//            for (key in dynamicLinkData.keySet()) {
-//                dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
-//            }
-//
-//            binding.textView13.text = dataStr
-//        }
-//    }
     override fun onNewIntent(intent: Intent?) {
         Log.e("YMC", "nyh MainActivity onNewIntent")
         super.onNewIntent(intent)

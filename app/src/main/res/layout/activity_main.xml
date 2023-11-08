@@ -130,6 +130,7 @@
                 app:layout_constraintTop_toTopOf="@+id/view"
                 app:tabIndicatorColor="@color/red"
                 app:tabIndicatorHeight="3dp"
+                app:tabTextAppearance="@style/TabLayoutTextStyle"
                 app:tabSelectedTextColor="@color/red">
 
                 <com.google.android.material.tabs.TabItem
