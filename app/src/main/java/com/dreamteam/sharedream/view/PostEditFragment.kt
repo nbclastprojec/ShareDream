@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.EditCalenderDialog
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.DuplicateClickListener
 import com.dreamteam.sharedream.Util.ToastMsg
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.adapter.ImgClick
@@ -125,26 +126,6 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
             }
         }
 
-        var editCategory: String = ""
-        when (binding.chipgroup.checkedChipId) {
-            R.id.cloths_chip1 -> editCategory = "의류"
-            R.id.machine_chip1 -> editCategory = "가전제품"
-            R.id.sport_chip1 -> editCategory = "스포츠"
-            R.id.art_chip1 -> editCategory = "예술"
-            R.id.book_chip1 -> editCategory = "독서"
-            R.id.beauty_chip1 -> editCategory = "뷰티"
-            R.id.toy_chip1 -> editCategory = "문구"
-            R.id.furniture1 -> editCategory = "가구"
-            R.id.life1 -> editCategory = "생활"
-            R.id.food1 -> editCategory = "식품"
-            R.id.kids1 -> editCategory = "유아동/출산"
-            R.id.pet1 -> editCategory = "반려동물용품"
-            R.id.etc1 -> editCategory = "기타"
-            else -> {
-                ToastMsg.makeToast(requireContext(),"카테고리를 선택해주세요.")
-            }
-        }
-
         // 거래장소 변경 내용 반영
         myPostFeedViewModel.locationResult.observe(viewLifecycleOwner){
             it?.let {
@@ -155,52 +136,84 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
         }
 
 
-        // 업로드 하기 todo 게시글 수정 시 기존 이미지 삭제하기
-        binding.btnComplete.setOnClickListener {
-            Log.d("xxxx", " 수정 완료 버튼 클릭, 수정된 카테고리 : $editCategory")
-            Log.d("xxxx", " postEditFrag 완료 버튼 클릭")
-            // 게시글 수정을 감지하여 현재 포스트 정보를 변경해주는 Listener 추가 - 디테일 페이지를 닫을 시 stop
-//            myPostFeedViewModel.startListening(currentPost!!.timestamp)
-            val post = Post(
-                Constants.currentUserUid!!,
-                binding.editTvTitle.text.toString(),
-                binding.editEtvPrice.text.toString().replace(",","").toLong(),
-                editCategory,
-                binding.editEtvAddress.text.toString(),
-                //todo ↓ deadline 추가 - 임시로 city 값 넣어둠
-                binding.editEtvAddress.text.toString(),
-                binding.editEtvDesc.text.toString(),
-                listOf(),
-                Constants.currentUserInfo!!.nickname,
-                currentPost!!.likeUsers,
-                currentPost!!.token,
-                currentPost!!.timestamp,
-                currentPost!!.state,
-                currentPost!!.documentId,
-                listOf(locationLatLng!!.latLng.latitude,locationLatLng!!.latLng.longitude),
-                currentPost!!.locationKeyword,
-                selectedDate,
-            )
-            Log.d("nyh", "onViewCreated: ")
+        // 업로드 하기
+        binding.btnComplete.notDoubleClick {
 
-            // 디테일 페이지로 수정 된 게시글 정보 이동하기
-            myPostFeedViewModel.setRevisedPost(myPostFeedViewModel.postToPostRcv(post, uris))
-            Log.d("xxxx", "onViewCreated: ${uris}")
 
-            val uriAndUrlList = mutableListOf<Any>()
-            uriAndUrlList.addAll(uris)
-            for (index in uriAndUrlList.indices) {
-                if (currentPost!!.imgs.contains(uriAndUrlList[index])) {
-                    uriAndUrlList[index] = (URI(uriAndUrlList[index].toString()).toURL())
-                } else {
+            if (uris.isNotEmpty()){
+
+                var editCategory: String = ""
+                when (binding.chipgroup.checkedChipId) {
+                    R.id.cloths_chip1 -> editCategory = "의류"
+                    R.id.machine_chip1 -> editCategory = "가전제품"
+                    R.id.sport_chip1 -> editCategory = "스포츠"
+                    R.id.art_chip1 -> editCategory = "예술"
+                    R.id.book_chip1 -> editCategory = "독서"
+                    R.id.beauty_chip1 -> editCategory = "뷰티"
+                    R.id.toy_chip1 -> editCategory = "문구"
+                    R.id.furniture1 -> editCategory = "가구"
+                    R.id.life1 -> editCategory = "생활"
+                    R.id.food1 -> editCategory = "식품"
+                    R.id.kids1 -> editCategory = "유아동/출산"
+                    R.id.pet1 -> editCategory = "반려동물용품"
+                    R.id.etc1 -> editCategory = "기타"
+                    else -> {
+                        ToastMsg.makeToast(requireContext(),"카테고리를 선택해주세요.")
+
+                    }
                 }
+
+                Log.d("xxxx", " 수정 완료 버튼 클릭, 수정된 카테고리 : $editCategory")
+                Log.d("xxxx", " postEditFrag 완료 버튼 클릭")
+                // 게시글 수정을 감지하여 현재 포스트 정보를 변경해주는 Listener 추가 - 디테일 페이지를 닫을 시 stop
+//            myPostFeedViewModel.startListening(currentPost!!.timestamp)
+                val post = Post(
+                    Constants.currentUserUid!!,
+                    binding.editTvTitle.text.toString(),
+
+                    binding.editEtvPrice.text.toString().replace(",","").toLong(),
+
+                    editCategory,
+                    binding.editEtvAddress.text.toString(),
+                    //todo ↓ deadline 추가 - 임시로 city 값 넣어둠
+                    binding.editEtvAddress.text.toString(),
+                    binding.editEtvDesc.text.toString(),
+                    listOf(),
+                    Constants.currentUserInfo!!.nickname,
+                    currentPost!!.likeUsers,
+                    currentPost!!.token,
+                    currentPost!!.timestamp,
+                    currentPost!!.state,
+                    currentPost!!.documentId,
+                    listOf(locationLatLng!!.latLng.latitude,locationLatLng!!.latLng.longitude),
+                    currentPost!!.locationKeyword,
+                    selectedDate,
+                )
+
+                // 디테일 페이지로 수정 된 게시글 정보 이동하기
+                myPostFeedViewModel.setRevisedPost(myPostFeedViewModel.postToPostRcv(post, uris))
+                Log.d("xxxx", "onViewCreated: ${uris}")
+
+                val uriAndUrlList = mutableListOf<Any>()
+                uriAndUrlList.addAll(uris)
+                for (index in uriAndUrlList.indices) {
+                    if (currentPost!!.imgs.contains(uriAndUrlList[index])) {
+                        uriAndUrlList[index] = (URI(uriAndUrlList[index].toString()).toURL())
+                    } else {
+                    }
+                }
+
+                myPostFeedViewModel.uploadEditPost(uriAndUrlList, post)
+
+                Util.hideKeypad(requireContext(),binding.root)
+                parentFragmentManager.popBackStack()
+            } else {
+                ToastMsg.makeToast(requireContext(),"이미지를 1개 이상 업로드 해주셔야 합니다.")
             }
-
-            myPostFeedViewModel.uploadEditPost(uriAndUrlList, post)
-
-            Util.hideKeypad(requireContext(),binding.root)
-            parentFragmentManager.popBackStack()
         }
+//        binding.btnComplete.setOnClickListener {
+//
+//        }
 
 
         binding.editBtnLocationPick.setOnClickListener {
@@ -272,6 +285,13 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
             adapter = writePostImgAdapter
         }
     }
+
+    // 중복 클릭 방지 기능
+    private fun View.notDoubleClick(click: (View) -> Unit){
+        val listener = DuplicateClickListener {click(it)}
+        setOnClickListener(listener)
+    }
+
 
     private fun convertCurrencyWon(editText: EditText) = with(binding) {
         var result = ""

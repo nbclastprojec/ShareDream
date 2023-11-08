@@ -101,9 +101,9 @@ class MyPageFragment : Fragment() {
         }
 
         // 회원 탈퇴 버튼
-        binding.btnDeleteAccount.setOnClickListener {
-            deleteUserAccount()
-        }
+//        binding.btnDeleteAccount.setOnClickListener {
+//            deleteUserAccount()
+//        }
 
         // 내 채팅 목록 버튼 클릭 이벤트
         binding.btnChatlist.setOnClickListener {

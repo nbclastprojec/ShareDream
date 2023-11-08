@@ -8,42 +8,13 @@
     android:clickable="true"
     >
 
-    <TextView
-        android:id="@+id/btn_delete_account"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="190dp"
-        android:fontFamily="@font/bbing"
-        android:gravity="center_vertical"
-        android:paddingStart="42dp"
-        android:text="회원탈퇴"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/logout_icon3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/logout_icon3"
-        app:layout_constraintTop_toBottomOf="@+id/btn_signout" />
-
-    <ImageView
-        android:id="@+id/logout_icon3"
-        android:layout_width="28dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_signout"
-        app:srcCompat="@drawable/xkfxhl" />
-
     <ImageView
         android:id="@+id/imageView18"
         android:layout_width="409dp"
         android:layout_height="64dp"
-        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_delete_account"
         app:srcCompat="@drawable/add_sp" />
 
     <TextView
@@ -243,26 +214,7 @@
 <!--            android:textSize="12sp" />-->
 <!--    </LinearLayout>-->
 
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="26dp"
-        android:layout_height="29dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bar1"
-        app:srcCompat="@drawable/circle_white" />
 
-    <ImageView
-        android:id="@+id/mypage_editButton"
-        android:layout_width="15dp"
-        android:layout_height="18dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
-        app:layout_constraintEnd_toEndOf="@+id/imageView8"
-        app:layout_constraintStart_toStartOf="@+id/imageView8"
-        app:layout_constraintTop_toTopOf="@+id/imageView8"
-        app:srcCompat="@drawable/pencil"
-        />
 
     <TextView
         android:id="@+id/mypage_intro"
@@ -278,6 +230,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/mypage_id" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="4dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bar1"
+        app:srcCompat="@drawable/circle_white" />
+
+    <ImageView
+        android:id="@+id/mypage_editButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
+        app:layout_constraintEnd_toEndOf="@+id/imageView8"
+        app:layout_constraintStart_toStartOf="@+id/imageView8"
+        app:layout_constraintTop_toTopOf="@+id/imageView8"
+        app:srcCompat="@drawable/pencil"
+        />
 
     <TextView
         android:id="@+id/mypage_id"

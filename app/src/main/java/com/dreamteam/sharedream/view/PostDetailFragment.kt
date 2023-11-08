@@ -118,6 +118,7 @@ class PostDetailFragment : Fragment() {
 
                 imgs.clear()
                 imgs.addAll(changedPost.imgs)
+
             }
         }
 

@@ -211,11 +211,7 @@ class MapViewFragment(private val state:String) : Fragment(), OnMapReadyCallback
                 Log.d("xxxx", " currentPost 없을 때")
             }
 
-            // 카메라 초기 위치 지정, 애니메이션
-            moveCamera(
-                CameraUpdate.scrollTo(initCameraPosition)
-                    .animate(CameraAnimation.Fly, 1000)
-            )
+
 
             // 현재 위치
             locationSource =
@@ -227,6 +223,11 @@ class MapViewFragment(private val state:String) : Fragment(), OnMapReadyCallback
                 locationTrackingMode = LocationTrackingMode.Follow
             }else{
                 locationTrackingMode = LocationTrackingMode.NoFollow
+                // 카메라 초기 위치 지정, 애니메이션
+                moveCamera(
+                    CameraUpdate.scrollTo(initCameraPosition)
+                        .animate(CameraAnimation.Fly, 1000)
+                )
             }
         }
     }

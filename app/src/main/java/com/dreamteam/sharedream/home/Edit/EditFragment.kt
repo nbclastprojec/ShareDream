@@ -18,6 +18,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.DuplicateClickListener
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.adapter.ImgClick
 import com.dreamteam.sharedream.databinding.ActivityEditBinding
@@ -126,7 +127,11 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
             calenderFragmentDialog.show(requireFragmentManager(), "CalenderDialog")
         }
         // 게시글 작성 완료
-        binding.editBtnComplete.setOnClickListener {
+//        binding.editBtnComplete.setOnClickListener {
+//
+//        }
+
+        binding.editBtnComplete.notDoubleClick {
             if (binding.imageCount.text == "0/10") {
                 Toast.makeText(requireContext(), " 이미지는 1장 이상 업로드 해야합니다. ", Toast.LENGTH_SHORT)
                     .show()
@@ -195,9 +200,12 @@ class EditFragment : Fragment() , CalenderFragmentDialog.CalendarDataListener {
         binding.calender.text =resultText
         selectedDate = startTime+"~"+endTime
 
+    }
 
-
-
+    // 중복 클릭 방지 기능
+    private fun View.notDoubleClick(click: (View) -> Unit){
+        val listener = DuplicateClickListener {click(it)}
+        setOnClickListener(listener)
     }
 
     // 게시글 업로드 기능 - downloadUserInfo()에서 실행
