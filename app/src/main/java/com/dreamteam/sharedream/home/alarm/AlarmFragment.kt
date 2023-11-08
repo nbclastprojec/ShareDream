@@ -9,7 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dreamteam.sharedream.R
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.FragmentAlarmBinding
+import com.dreamteam.sharedream.model.PostRcv
+import com.dreamteam.sharedream.view.PostDetailFragment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -55,5 +59,53 @@ class AlarmFragment : Fragment() {
         }
         viewModel.getNotiList()
 
+        viewModel.getDetailList()
+
+        viewModel.detailData.observe(viewLifecycleOwner) { detailData ->
+
+            val bundle = Bundle()
+            bundle.putSerializable("detailData", ArrayList(detailData))
+
+            val postDetailFragment = PostDetailFragment()
+            postDetailFragment.arguments = bundle
+
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.frag_edit, postDetailFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+        }
     }
 }
+//
+//    fun getPostDetail(callback: (List<PostRcv>) -> Unit) {
+//        db.collection("Posts")
+//            .whereEqualTo("documentId", Constants.currentDocumentId)
+//            .get()
+//            .addOnSuccessListener { task ->
+//                val detailList = mutableListOf<PostRcv>()
+//
+//                for (i in task.documents) {
+//                    val data = i.toObject(PostRcv::class.java)
+//                    data?.let {
+//                        detailList.add(it)
+//                    }
+//                }
+//
+//                // 데이터를 번들에 포장
+//                val bundle = Bundle()
+//                bundle.putSerializable("detailData", ArrayList(detailList))
+//
+//                // 번들을 다음 프래그먼트로 전달
+//                val postDetailFragment = PostDetailFragment()
+//                postDetailFragment.arguments = bundle
+//
+//                val transaction = parentFragmentManager.beginTransaction()
+//                transaction.replace(R.id.frag_edit, postDetailFragment)
+//                transaction.addToBackStack(null)
+//                transaction.commit()
+//            }
+//            .addOnFailureListener { e ->
+//                Log.e("nyh", "getPostDetail: failure", e)
+//            }
+//    }

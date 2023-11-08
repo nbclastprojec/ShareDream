@@ -536,6 +536,7 @@ class MyPostFeedViewModel : ViewModel() {
                         val body = NotificationBody(token, data)
                         Log.d("nyh", "getTokenFromPost: send value of body $body")
                         sendNotification(body)
+                        val documentId = currentPost.value!!.documentId
 
                         val notiLIst = hashMapOf(
                             "title" to notificationTitle,
@@ -543,21 +544,22 @@ class MyPostFeedViewModel : ViewModel() {
                             "uid" to currentPost.value?.uid,
                             "imgs" to currentPost.value?.imgs,
                             "time" to currentPost.value?.timestamp,
-                            "documentId" to "?"
+                            "documentId" to documentId
                             
                         )
-                        db.collection("notifyList")
-                            .add(notiLIst)
+                        db.collection("notifyList").document(documentId)
+                            .set(notiLIst)
                             .addOnSuccessListener { task ->
-                                val documentId = task.id
-                                val updatedData = mapOf("documentId" to documentId)
+//                                val documentId = task.id
+//                                val updatedData = mapOf("documentId" to documentId)
+//                                Log.d("nyh", "getTokenFromPost: $task")
+//                                db.collection("notifyList")
+//                                    .document(documentId) // 생성된 documentId를 가리키는 참조
+//                                    .update(updatedData) // documentId 필드를 업데이트
+//                                    .addOnSuccessListener {
+//                                        Log.d("nyh", "getTokenFromPost: $documentId")
+//                                    }
                                 Log.d("nyh", "getTokenFromPost: $task")
-                                db.collection("notifyList")
-                                    .document(documentId) // 생성된 documentId를 가리키는 참조
-                                    .update(updatedData) // documentId 필드를 업데이트
-                                    .addOnSuccessListener {
-                                        Log.d("nyh", "getTokenFromPost: $documentId")
-                                    }
                             }
                         Log.d("nyh", "getTokenFromPost: token = $token")
                         Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")

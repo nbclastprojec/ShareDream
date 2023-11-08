@@ -55,6 +55,7 @@ class SearchRepository {
 
     }
 
+
     fun sortLikeUsersHigh(title: String,callback: (List<Post>) -> Unit) {
         val postCollection = firestore.collection("Posts")
 

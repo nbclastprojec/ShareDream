@@ -127,21 +127,5 @@ class HomeRepository {
 //            .collection(messageDTO.fromUid.toString())
 //            .document(messageDTO.timestamp.toString())
 //            .set(messageDTO)
-//
-//
-//        // 채팅방 리스트 저장
-//        var name = ""
-//        if(messageDTO.fromUid.toString() < messageDTO.toUid.toString()){
-//            name = "${messageDTO.fromUid}_${messageDTO.toUid.toString()}"
-//        }
-//        else if(messageDTO.fromUid.toString() > messageDTO.toUid.toString()){
-//            name = "${messageDTO.toUid}_${messageDTO.fromUid.toString()}"
-//        }
-//        val chatPerson = arrayListOf(messageDTO.fromUid.toString(),messageDTO.toUid.toString())
-//        val chatList = ChatListDTO(messageDTO.fromUid,messageDTO.toUid
-//            ,messageDTO.content,messageDTO.timestamp,chatPerson)
-//        fireStore.collection("chatList")
-//            .document(name).set(chatList)
-//    }
     }
 }

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dreamteam.sharedream.model.PostRcv
 
 class AlarmViewModel : ViewModel() {
 
@@ -12,6 +13,10 @@ class AlarmViewModel : ViewModel() {
 
     private val _notiData: MutableLiveData<List<AlarmPost?>> = MutableLiveData()
     val notiData: LiveData<List<AlarmPost?>> = _notiData
+
+    private val _detailData: MutableLiveData<List<PostRcv>> = MutableLiveData()
+
+    val detailData: LiveData<List<PostRcv>> = _detailData
 
 
 
@@ -24,14 +29,9 @@ class AlarmViewModel : ViewModel() {
         }
     }
 
-    fun deleteItem(collectionName: String, documentId: String) {
-        alarmRepo.deleteItem(collectionName, documentId,
-            onSuccess = {
-
-            },
-            onFailure = { e ->
-                Log.e("nyh", "deleteItem failure: $e")
-            }
-        )
+    fun getDetailList() {
+        alarmRepo.getPostDetail { result ->
+            _detailData.postValue(result)
+        }
     }
 }
