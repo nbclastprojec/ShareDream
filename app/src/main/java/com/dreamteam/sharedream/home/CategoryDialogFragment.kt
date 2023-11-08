@@ -1,11 +1,14 @@
 package com.dreamteam.sharedream.home
 
 
+import android.app.Dialog
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.dreamteam.sharedream.databinding.FragmentCategoryDialogBinding
@@ -77,5 +80,20 @@ class CategoryDialogFragment : DialogFragment() {
                 viewModel.onPriceSelected(minPrice, maxPrice)
             }
         }
+        binding.button.setOnClickListener {
+            dismiss()
+        }
+    }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = Dialog(requireContext())
+
+        val layoutParams = WindowManager.LayoutParams()
+        layoutParams.copyFrom(dialog.window?.attributes)
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog.show()
+        dialog.window?.attributes = layoutParams
+
+        return dialog
     }
 }
