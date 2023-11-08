@@ -60,15 +60,18 @@
             android:textSize="36sp"
             app:layout_constraintBottom_toBottomOf="@+id/btnProfileImgEdit"
             app:layout_constraintEnd_toEndOf="@+id/btnProfileImgEdit"
-            app:layout_constraintHorizontal_bias="0.623"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="@+id/btnProfileImgEdit"
             app:layout_constraintTop_toTopOf="@+id/btnProfileImgEdit"
-            app:layout_constraintVertical_bias="0.427" />
+            app:layout_constraintVertical_bias="0.487" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_googleLogin"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            app:layout_constraintHeight_percent="0.065"
             android:layout_marginTop="50dp"
             android:background="@drawable/loginbtn_2"
             android:drawableLeft="@drawable/btn_google"
@@ -83,8 +86,11 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_login"
-            android:layout_width="359dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.065"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="11dp"
             android:text="로그인 하기"
             android:fontFamily="@font/suitebold"

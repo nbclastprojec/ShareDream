@@ -26,6 +26,14 @@ class SendPasswordFragment : Fragment() {
         auth= FirebaseAuth.getInstance()
         binding= FragmentSendPasswordBinding.inflate(inflater,container,false)
 
+        binding.backBtn.setOnClickListener {
+            val mainLogInMainFragment=LogInMainFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,mainLogInMainFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
         binding.btnLogin.setOnClickListener {
             val email = binding.editEmail.text.toString()
             if (check()) {

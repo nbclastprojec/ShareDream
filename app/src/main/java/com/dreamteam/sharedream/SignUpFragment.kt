@@ -49,6 +49,13 @@ class SignUpFragment : Fragment() {
     ): View? {
         binding= FragmentSignupBinding.inflate(inflater,container,false)
         auth = FirebaseAuth.getInstance()
+        binding.backButton.setOnClickListener {
+            val mainLogInMainFragment=LogInMainFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,mainLogInMainFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
 
 
         binding.agree1.setOnClickListener{
