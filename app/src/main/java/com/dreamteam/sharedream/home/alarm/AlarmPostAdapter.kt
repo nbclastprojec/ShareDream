@@ -9,9 +9,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dreamteam.sharedream.databinding.MyalarmBinding
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class AlarmPostAdapter(private val context: Context) :
@@ -33,7 +36,40 @@ class AlarmPostAdapter(private val context: Context) :
         val alarmNickname = binding.notinickname
         val alarmTime = binding.txtTime
 
-        fun bind(post: AlarmPost) {
+        fun bind(post: AlarmPost, timestamp: Timestamp) {
+
+            val date: Date = timestamp.toDate()
+
+
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+//            postDate.text = dateFormat.format(date)
+
+            // 2. 현재 날짜, 시간 기준으로 만들기 ( 1시간 전, 2일 전, 1달 전)
+            val currentDateTime: Date = Date()
+            val diff: Long = currentDateTime.time - date.time
+            // 분 단위 차이
+            val minutes: Long = diff / (1000 * 60)
+            val hours: Long = minutes / 60
+            val day: Long = hours / 24
+            val week: Long = day / 7
+            val month: Long = day / 31
+            val year: Long = month / 12
+
+            val result: String =
+                when {
+                    minutes < 1 -> "방금 전"
+                    minutes < 60 -> "${minutes}분 전"
+                    hours < 24 -> "${hours}시간 전"
+                    day in 1..6 -> "${day}일 전"
+                    day in 7..13 -> "지난 주"
+                    day in 14..30 -> "${week}주 전"
+                    month in 1..12 -> "${month}달 전"
+                    year in 1..100 -> "${year}년 전"
+                    else -> "${dateFormat.format(date)}"
+                }
+            alarmTime.text = result
+
             alarmTitle.text = post.title
             alarmNickname.text = post.nickname
             alarmTime.text = post.timestamp.toDate().time.toString()
@@ -91,7 +127,7 @@ class AlarmPostAdapter(private val context: Context) :
         val post = alarmItem?.getOrNull(position)
 
         if (post != null) {
-            holder.bind(post)
+            holder.bind(post, post.timestamp)
             Log.d("nyh", "onBindViewHolder: $alarmItem")
         } else {
             Log.e("nyh", "onBindViewHolder: Data is empty at position $position")

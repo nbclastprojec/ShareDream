@@ -142,7 +142,6 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
             R.id.etc1 -> editCategory = "기타"
             else -> {
                 ToastMsg.makeToast(requireContext(),"카테고리를 선택해주세요.")
-
             }
         }
 
@@ -165,9 +164,7 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
             val post = Post(
                 Constants.currentUserUid!!,
                 binding.editTvTitle.text.toString(),
-
                 binding.editEtvPrice.text.toString().replace(",","").toLong(),
-
                 editCategory,
                 binding.editEtvAddress.text.toString(),
                 //todo ↓ deadline 추가 - 임시로 city 값 넣어둠
@@ -184,6 +181,7 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
                 currentPost!!.locationKeyword,
                 selectedDate,
             )
+            Log.d("nyh", "onViewCreated: ")
 
             // 디테일 페이지로 수정 된 게시글 정보 이동하기
             myPostFeedViewModel.setRevisedPost(myPostFeedViewModel.postToPostRcv(post, uris))

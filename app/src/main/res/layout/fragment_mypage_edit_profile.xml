@@ -80,10 +80,6 @@
 
     </androidx.cardview.widget.CardView>
 
-
-
-
-
     <TextView
         android:id="@+id/profile_id"
         android:layout_width="300dp"
