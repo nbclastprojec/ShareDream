@@ -22,25 +22,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="8dp"
         android:layout_weight="1"
-        android:textColor="@color/black"
         android:fontFamily="@font/suitellight"
         android:text="필터"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/btn_filter"
+        android:layout_marginRight="35dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/btn_filter"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="5dp"
+        android:paddingTop="2dp"
+        android:paddingLeft="5dp"
         android:layout_marginEnd="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/filter"
+        app:layout_constraintBottom_toBottomOf="@+id/filter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/filter"
+        app:layout_constraintTop_toTopOf="@+id/filter" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,15 +65,12 @@ class HomePostAdapter(
 
         val positionItem = currentList[position]
         holder.apply {
-            postCategory.text = "카테고리 : ${positionItem.category}"
+            postCategory.text = "${positionItem.category}"
             postTitle.text = positionItem.title
             postDesc.text = positionItem.desc
             postPrice.text = positionItem.price.toString()
-
             postEndDate.text = EndTime(positionItem.endDate)
             postPrice.text = "${positionItem.price}원"
-
-
 
         }
 
@@ -80,6 +78,7 @@ class HomePostAdapter(
     }
     fun sortPriceAsc(){
         val sortedItems = currentList.sortedBy { it.price }
+        Log.d("nyh", "sortPriceAsc: click")
         submitList(sortedItems)
     }
     fun sortPriceDesc(){
