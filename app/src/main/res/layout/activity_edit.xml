@@ -212,7 +212,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/edit_tv_category" />
 
-                <EditText
+                <TextView
                     android:id="@+id/edit_etv_address"
                     android:layout_width="0dp"
                     android:layout_height="24dp"
@@ -222,7 +222,7 @@
                     android:layout_marginBottom="16dp"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:hint="거래장소를 지정해주세요"
+                    android:hint="거래장소를 지정해주세요."
                     android:maxLength="20"
                     android:maxLines="1"
                     android:textColorHint="@color/hint_color"
@@ -239,6 +239,7 @@
                     android:layout_marginEnd="16dp"
                     android:gravity="center_vertical"
                     android:text="지도에서 선택하기"
+                    android:textColor="@color/mainred"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_etv_address"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -311,6 +312,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="의류"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
                     <com.google.android.material.chip.Chip
@@ -319,6 +323,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="가전제품"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
 
@@ -328,6 +335,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="스포츠"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
                     <com.google.android.material.chip.Chip
@@ -336,6 +346,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="예술"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
                     <com.google.android.material.chip.Chip
@@ -344,6 +357,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="독서"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
                     <com.google.android.material.chip.Chip
@@ -352,6 +368,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="뷰티"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
                     <com.google.android.material.chip.Chip
@@ -360,6 +379,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="문구"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
                     <com.google.android.material.chip.Chip
@@ -368,6 +390,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="가구"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
                     <com.google.android.material.chip.Chip
@@ -376,6 +401,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="생활"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
                     <com.google.android.material.chip.Chip
@@ -384,6 +412,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="식품"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
                     <com.google.android.material.chip.Chip
@@ -392,6 +423,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="유아동/출산"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
                     <com.google.android.material.chip.Chip
@@ -400,6 +434,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="반려동물용품"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
 
                     <com.google.android.material.chip.Chip
@@ -408,6 +445,9 @@
                         android:layout_height="45dp"
                         android:checkable="true"
                         android:text="기타"
+                        style="@style/CustomChipHoice"
+                        app:chipStrokeColor="@color/gray900"
+                        app:chipStrokeWidth="1dp"
                         android:textSize="15sp" />
                 </com.google.android.material.chip.ChipGroup>
 
@@ -422,7 +462,7 @@
                     android:layout_marginBottom="1dp"
                     android:ems="10"
                     android:gravity="start"
-                    android:hint="상세정보를 입력해주세요1111."
+                    android:hint="상세정보를 입력해주세요."
                     android:inputType="textMultiLine"
                     android:maxLines="20"
                     android:textColorHint="@color/hint_color"

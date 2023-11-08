@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.Toast
 import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.FragmentSignupBinding
@@ -34,6 +35,8 @@ class SignUpFragment : Fragment() {
     private lateinit var binding:FragmentSignupBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var storage : FirebaseStorage
+    private var checkcehckbox1 = false
+    private var checkcehckbox2 = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +50,11 @@ class SignUpFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val agreeFragment = AgreeFragment()
+        agreeFragment.setTargetFragment(this, 0)
+
+        val personalAgree = PersonalAgree()
+        personalAgree.setTargetFragment(this, 0)
         binding= FragmentSignupBinding.inflate(inflater,container,false)
         auth = FirebaseAuth.getInstance()
         binding.backButton.setOnClickListener {
@@ -58,13 +66,17 @@ class SignUpFragment : Fragment() {
         }
 
 
-        binding.agree1.setOnClickListener{
-            val agreeDialog=AgreeFragment()
-            agreeDialog.show(requireActivity().supportFragmentManager,"Agree1")
+        binding.agree1.setOnClickListener {
+            val agreeDialog = AgreeFragment()
+            agreeDialog.show(requireActivity().supportFragmentManager, "Agree1")
+            checkcehckbox1 = true
+            updateCheckBox()
         }
-        binding.agree2.setOnClickListener{
-            val agreeDialog=PersonalAgree()
-            agreeDialog.show(requireActivity().supportFragmentManager,"Agree2")
+        binding.agree2.setOnClickListener {
+            val agreeDialog = PersonalAgree()
+            agreeDialog.show(requireActivity().supportFragmentManager, "Agree2")
+            checkcehckbox2 = true
+            updateCheckBox()
         }
 
 
@@ -199,7 +211,6 @@ class SignUpFragment : Fragment() {
                     "number" to binding.editPhoneNumber.text.toString(),
                     "id" to binding.eidtId.text.toString(),
                     "nickname" to "닉네임 설정 필요",
-                    "intro" to "자기소개가 아직 입력되지 않았습니다.",
                 )
 
                 userDocument.set(userData).addOnSuccessListener {
@@ -250,6 +261,13 @@ class SignUpFragment : Fragment() {
 
         return Uri.fromFile(file)
     }
+    private fun updateCheckBox() {
+        if (checkcehckbox1 && checkcehckbox2) {
+            binding.checkBox.isChecked = true
+        }
+    }
+
+
 }
 
 

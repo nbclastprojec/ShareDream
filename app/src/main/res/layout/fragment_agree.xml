@@ -128,7 +128,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:textSize="15sp"
-            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintHeight_percent="0.16"
             android:text="@string/adSub"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
