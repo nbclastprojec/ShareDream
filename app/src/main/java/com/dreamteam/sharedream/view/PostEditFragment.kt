@@ -126,27 +126,6 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
             }
         }
 
-        var editCategory: String = ""
-        when (binding.chipgroup.checkedChipId) {
-            R.id.cloths_chip1 -> editCategory = "의류"
-            R.id.machine_chip1 -> editCategory = "가전제품"
-            R.id.sport_chip1 -> editCategory = "스포츠"
-            R.id.art_chip1 -> editCategory = "예술"
-            R.id.book_chip1 -> editCategory = "독서"
-            R.id.beauty_chip1 -> editCategory = "뷰티"
-            R.id.toy_chip1 -> editCategory = "문구"
-            R.id.furniture1 -> editCategory = "가구"
-            R.id.life1 -> editCategory = "생활"
-            R.id.food1 -> editCategory = "식품"
-            R.id.kids1 -> editCategory = "유아동/출산"
-            R.id.pet1 -> editCategory = "반려동물용품"
-            R.id.etc1 -> editCategory = "기타"
-            else -> {
-                ToastMsg.makeToast(requireContext(),"카테고리를 선택해주세요.")
-
-            }
-        }
-
         // 거래장소 변경 내용 반영
         myPostFeedViewModel.locationResult.observe(viewLifecycleOwner){
             it?.let {
@@ -157,9 +136,33 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
         }
 
 
-        // 업로드 하기 todo 게시글 수정 시 기존 이미지 삭제하기
+        // 업로드 하기
         binding.btnComplete.notDoubleClick {
+
+
             if (uris.isNotEmpty()){
+
+                var editCategory: String = ""
+                when (binding.chipgroup.checkedChipId) {
+                    R.id.cloths_chip1 -> editCategory = "의류"
+                    R.id.machine_chip1 -> editCategory = "가전제품"
+                    R.id.sport_chip1 -> editCategory = "스포츠"
+                    R.id.art_chip1 -> editCategory = "예술"
+                    R.id.book_chip1 -> editCategory = "독서"
+                    R.id.beauty_chip1 -> editCategory = "뷰티"
+                    R.id.toy_chip1 -> editCategory = "문구"
+                    R.id.furniture1 -> editCategory = "가구"
+                    R.id.life1 -> editCategory = "생활"
+                    R.id.food1 -> editCategory = "식품"
+                    R.id.kids1 -> editCategory = "유아동/출산"
+                    R.id.pet1 -> editCategory = "반려동물용품"
+                    R.id.etc1 -> editCategory = "기타"
+                    else -> {
+                        ToastMsg.makeToast(requireContext(),"카테고리를 선택해주세요.")
+
+                    }
+                }
+
                 Log.d("xxxx", " 수정 완료 버튼 클릭, 수정된 카테고리 : $editCategory")
                 Log.d("xxxx", " postEditFrag 완료 버튼 클릭")
                 // 게시글 수정을 감지하여 현재 포스트 정보를 변경해주는 Listener 추가 - 디테일 페이지를 닫을 시 stop
@@ -286,7 +289,7 @@ class PostEditFragment : Fragment(), EditCalenderDialog.CalendarDataListener {
     // 중복 클릭 방지 기능
     private fun View.notDoubleClick(click: (View) -> Unit){
         val listener = DuplicateClickListener {click(it)}
-        setOnClickListener(click)
+        setOnClickListener(listener)
     }
 
 
