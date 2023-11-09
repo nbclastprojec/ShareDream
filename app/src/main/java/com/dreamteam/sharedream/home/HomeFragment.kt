@@ -112,17 +112,19 @@ class HomeFragment : Fragment() {
             viewModel.sortCategorys(selectedCategory)
             Log.d("nyh", "Selected Category in HomeFragment: $selectedCategory")
 
-            // 게시물 수정 시 Home Fragment 에 해당 게시글 수정 반영
-            myPostFeedViewModel.editPostResult.observe(viewLifecycleOwner) {
-                val currentPostList = homePostAdapter.currentList.toMutableList()
-                for (index in currentPostList.indices) {
-                    if (currentPostList[index].timestamp == it.timestamp) {
-                        currentPostList[index] = it
-                        Log.d("xxxx", " Rcv Item Change = $currentPostList")
-                        updateRcv(index, it)
-                    }
+        }
+
+        // 게시물 수정 시 Home Fragment 에 해당 게시글 수정 반영
+        myPostFeedViewModel.editPostResult.observe(viewLifecycleOwner) {
+            val currentPostList = homePostAdapter.currentList.toMutableList()
+            for (index in currentPostList.indices) {
+                if (currentPostList[index].timestamp == it.timestamp) {
+                    currentPostList[index] = it
+                    Log.d("xxxx", " Rcv Item Change = $currentPostList")
+                    updateRcv(index, it)
                 }
             }
+
         }
 
         viewModel.sortCategory.observe(viewLifecycleOwner) { result ->
@@ -190,6 +192,7 @@ class HomeFragment : Fragment() {
             binding.homeRecycle.scrollToPosition(scrollPosition)
         }
     }
+
     fun setupRcv() {
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) { posts ->
             binding.homeRecycle.apply {
@@ -204,6 +207,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     fun checkNickName(uid: String) {
         val fireStore = FirebaseFirestore.getInstance()
         val UserData = fireStore.collection("UserData")
@@ -221,7 +225,7 @@ class HomeFragment : Fragment() {
                     }
                 }
             } else {
-                ToastMsg.makeToast(requireContext(),"닉네임 설정이 올바르지 않습니다.")
+                ToastMsg.makeToast(requireContext(), "닉네임 설정이 올바르지 않습니다.")
             }
         }
     }
