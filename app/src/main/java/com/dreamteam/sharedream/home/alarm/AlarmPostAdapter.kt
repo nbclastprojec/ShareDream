@@ -27,7 +27,6 @@ class AlarmPostAdapter(
     interface OnItemClickListener {
         fun onItemClick(post: AlarmPost)
     }
-
     fun setData(data: List<AlarmPost?>) {
         alarmItem = data
         notifyDataSetChanged()
@@ -76,7 +75,6 @@ class AlarmPostAdapter(
             alarmTime.text = result
             alarmTitle.text = post.title
             alarmNickname.text = post.nickname
-            alarmTime.text = post.timestamp.toDate().time.toString()
 
             if (post.imgs.isNotEmpty()) {
                 val imageUrl = post.imgs.first()
@@ -88,7 +86,7 @@ class AlarmPostAdapter(
         private fun deleteItem() {
             val post = alarmItem[position]
             if (post != null) {
-                val documentId = post.documentId
+                val myDocuId = post.myDocuId
 
                 if (alarmItem is MutableList) {
                     (alarmItem as MutableList).removeAt(position)
@@ -97,12 +95,12 @@ class AlarmPostAdapter(
 
                 val db = Firebase.firestore
                 db.collection("notifyList")
-                    .document(documentId)
+                    .document(myDocuId)
                     .delete()
                     .addOnSuccessListener {
                         notifyDataSetChanged()
                         Log.d("nyh", "deleteItem: 삭제완료")
-                        Log.d("nyh", "deleteItem: $documentId")
+                        Log.d("nyh", "deleteItem: $myDocuId")
                     }
                     .addOnFailureListener { e ->
                         Log.e("nyh", "deleteItem: $e")

@@ -9,10 +9,11 @@ data class AlarmPost(
     var imgs: List<String>,
     val nickname: String,
     val timestamp: Timestamp,
-    val documentId: String
+    val documentId: String,
+    val myDocuId : String
 ) : Serializable {
 
     constructor() : this(
-        "", "", listOf(), "", Timestamp.now(),""
+        "", "", listOf(), "", Timestamp.now(),"",""
     )
 }

@@ -9,7 +9,5 @@ class ChatModel(
 ){
 
 
-
-
     class Comment(val uid: String? = null, val message: String? = null, val time: String? = null)
 }

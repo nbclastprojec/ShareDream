@@ -1,8 +1,8 @@
 package com.dreamteam.sharedream.home.alarm
 
 import AlarmPost
-import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,17 +13,23 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentAlarmBinding
+import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.PostDetailFragment
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 
 class AlarmFragment : Fragment() {
 
     val auth = Firebase.auth
     val db = Firebase.firestore
+    val storage = Firebase.storage
 
     private lateinit var alarmadapter: AlarmPostAdapter
     private lateinit var binding: FragmentAlarmBinding
@@ -50,55 +56,56 @@ class AlarmFragment : Fragment() {
             override fun onItemClick(post: AlarmPost) {
                 viewModel.onPostClicked(post)
                 viewModel.selectedPost.observe(viewLifecycleOwner) { selectedPost ->
-                    Log.d("nyh", "onItemClick: ${selectedPost?.documentId}")
+                    Log.d("nyh", "onItemClick: docuId = ${selectedPost?.documentId}")
                     if (selectedPost != null) {
                         val docuId = selectedPost.documentId
+                        Log.d("nyh", "onItemClick: docuId = $docuId")
                         db.collection("Posts").whereEqualTo("documentId", docuId)
                             .get()
                             .addOnSuccessListener { querySnapshot ->
                                 val detailList = mutableListOf<PostRcv>()
 
                                 for (i in querySnapshot.documents) {
-                                    val data = i.toObject(PostRcv::class.java)
+                                    val data = i.toObject(Post::class.java)
                                     data?.let {
-                                        detailList.add(it)
+                                        convertPostToPostRcv(
+                                            it,
+                                            querySnapshot,
+                                            detailList
+                                        ) { convertedData ->
+                                            if (convertedData.isNotEmpty()) {
+                                                val selectedPost =
+                                                    convertedData.firstOrNull { it.documentId == docuId }
+                                                if (selectedPost != null) {
+                                                    val postDetailFragment = PostDetailFragment()
+
+                                                    // Post 객체를 Bundle에 추가하여 PostDetailFragment로 전달
+                                                    val args = Bundle()
+                                                    args.putSerializable("post", selectedPost)
+                                                    postDetailFragment.arguments = args
+                                                    Log.d("nyh", "onViewCreated: 전달하는 args $args")
+
+                                                    val transaction =
+                                                        parentFragmentManager.beginTransaction()
+                                                    transaction.replace(
+                                                        R.id.frag_edit,
+                                                        postDetailFragment
+                                                    )
+                                                    transaction.addToBackStack(null)
+                                                    transaction.commit()
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-
-                                if (detailList.isNotEmpty()) {
-                                    val selectedPost = detailList.firstOrNull { it.documentId == docuId }
-                                    if (selectedPost != null) {
-                                        val postDetailFragment = PostDetailFragment()
-
-                                        // Post 객체를 Bundle에 추가하여 PostDetailFragment로 전달
-                                        val args = Bundle()
-                                        args.putSerializable("post", selectedPost)
-                                        postDetailFragment.arguments = args
-                                        Log.d("nyh", "onViewCreated: 전달하는 args $args")
-
-                                        val transaction = parentFragmentManager.beginTransaction()
-                                        transaction.replace(R.id.frag_edit, postDetailFragment)
-                                        transaction.addToBackStack(null)
-                                        transaction.commit()
-                                    } else {
-                                        Log.d("nyh", "onItemClick: selectedPost from Firestore is null")
-                                    }
-                                } else {
-                                    Log.d("nyh", "onItemClick: Firestore data is empty")
-                                }
                             }
-                            .addOnFailureListener { e ->
-                                Log.e("nyh", "Error fetching Firestore data: $e")
-                            }
-                    } else {
-                        // Handle the case where selectedPost is null
-                        Log.d("nyh", "onItemClick: selectedPost is null")
                     }
                 }
             }
         })
 
-        binding.alarmRecycler.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        binding.alarmRecycler.layoutManager =
+            LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         binding.alarmRecycler.adapter = alarmadapter
 
         viewModel.notiData.observe(viewLifecycleOwner) { notiList ->
@@ -108,6 +115,70 @@ class AlarmFragment : Fragment() {
             }
         }
         viewModel.getNotiList()
+
+
+        // 여기서 더 이상 중복 observe가 없음
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
+
+    private fun convertPostToPostRcv(
+        post: Post,
+        querySnapshot: QuerySnapshot,
+        postRcvList: MutableList<PostRcv>,
+        callback: (List<PostRcv>) -> Unit
+    ) {
+        val postImgUris: List<String> = post.imgs
+        val postImgList: MutableList<Uri> = mutableListOf()
+
+        val downloadTasks = mutableListOf<Task<Uri>>()
+        for (uri in postImgUris) {
+            val downloadTask = storage.reference.child("post").child(uri).downloadUrl
+            downloadTasks.add(downloadTask)
+        }
+
+        Tasks.whenAllSuccess<Uri>(downloadTasks)
+            .addOnSuccessListener { uriList ->
+                postImgList.addAll(uriList)
+
+                if (postImgUris.size == postImgList.size) {
+                    var postRcv = PostRcv(
+                        uid = post.uid,
+                        title = post.title,
+                        price = post.price.toString().replace(",", "").toLong(),
+                        category = post.category,
+                        address = post.address,
+                        deadline = post.deadline,
+                        desc = post.desc,
+                        imgs = postImgList,
+                        nickname = post.nickname,
+                        likeUsers = post.likeUsers,
+                        token = post.token,
+                        timestamp = post.timestamp,
+                        state = post.state,
+                        documentId = post.documentId,
+                        locationLatLng = post.locationLatLng,
+                        locationKeyword = post.locationKeyword,
+                        endDate = post.endTime
+                    )
+
+                    var inserted = false
+                    for (index in postRcvList.indices) {
+                        if (postRcv.timestamp > postRcvList[index].timestamp) {
+                            postRcvList.add(index, postRcv)
+                            inserted = true
+                            break
+                        }
+                    }
+                    if (!inserted) {
+                        postRcvList.add(postRcv)
+                    }
+                    if (postRcvList.size == querySnapshot.size()) {
+                        callback(postRcvList) // 변환한 목록을 콜백으로 반환
+                    }
+                }
+            }
+    }
 }

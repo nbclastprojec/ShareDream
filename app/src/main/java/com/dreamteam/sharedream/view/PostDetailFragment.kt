@@ -2,9 +2,7 @@ package com.dreamteam.sharedream.view
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
-import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,14 +10,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.dreamteam.sharedream.R
@@ -30,19 +24,14 @@ import com.dreamteam.sharedream.YourDetailPage
 import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
 import com.dreamteam.sharedream.home.HomeViewModel
-import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.MapViewFragment.Companion.READ_ONLY
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.Date
-import kotlin.math.log
+
 
 @Suppress("DEPRECATION")
 class PostDetailFragment : Fragment() {
@@ -51,14 +40,7 @@ class PostDetailFragment : Fragment() {
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
 
-    private val homeViewmodel: HomeViewModel by activityViewModels()
-
     private val currentPostInfo = mutableListOf<PostRcv>()
-
-
-    private var destinationUid: String? = null
-
-
 
     private fun detailPageInfoChange(postRcv: PostRcv) {
         binding.detailId.text = postRcv.nickname
@@ -71,7 +53,6 @@ class PostDetailFragment : Fragment() {
         binding.detailpageTime.text = "${time(postRcv.timestamp)}"
         binding.detailTvItemState.text = postRcv.state
         stateIconChange()
-
     }
 
 
@@ -81,8 +62,7 @@ class PostDetailFragment : Fragment() {
     ): View? {
         _binding = FragmentPostDetailBinding.inflate(inflater, container, false)
 
-
-        val imgs = mutableListOf<Uri>()
+        var imgs = mutableListOf<Uri>()
         myPostFeedViewModel.currentPost.observe(viewLifecycleOwner) {
             detailPageInfoChange(it)
 
@@ -95,6 +75,7 @@ class PostDetailFragment : Fragment() {
 
             currentPostInfo.add(it)
             Log.d("xxxx", " detail Page PostInfo : $currentPostInfo")
+
             imgs.addAll(it.imgs)
 
             // 수정 버튼 visibility
@@ -109,6 +90,40 @@ class PostDetailFragment : Fragment() {
             } else {
                 binding.detailBtnSubFavorite.visibility = View.GONE
             }
+        }
+        val post = arguments?.getSerializable("post") as PostRcv?
+
+        if (post != null) {
+            currentPostInfo.clear()
+            currentPostInfo.add(post)
+
+            binding.detailId.text = post.nickname
+            binding.detailAddress.text = post.address
+            binding.detailpageTitle.text = post.title
+            binding.detailpageCategory.text = post.category
+            binding.detailpageExplain.text = post.desc
+            binding.detailMoney.text = "${post.price} 원"
+            binding.detailTvLikeCount.text = "${post.likeUsers.size}"
+            binding.detailpageTime.text = time(post.timestamp)
+            imgs = post.imgs.toMutableList()
+
+
+            myPostFeedViewModel.downloadCurrentProfileImg(post.uid)
+            if (post.uid == Constants.currentUserUid) {
+                binding.detailBtnEditPost.visibility = View.VISIBLE
+            } else {
+                binding.detailBtnEditPost.visibility = View.GONE
+            }
+
+            // 관심 목록에 있는 아이템의 경우 아이콘 변경 및 관심 목록 제거 버튼 표시
+            if (post.likeUsers.contains(Constants.currentUserUid)) {
+                binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
+                binding.detailBtnSubFavorite.visibility = View.VISIBLE
+            } else {
+                binding.detailLike.setImageResource(R.drawable.like)
+                binding.detailBtnSubFavorite.visibility = View.GONE
+            }
+
         }
 
         // 게시물 수정 시 디테일 페이지 View 업데이트
@@ -132,9 +147,7 @@ class PostDetailFragment : Fragment() {
         val adapter = DetailBannerImgAdapter(imgs)
         viewPager.adapter = adapter
 
-        myPostFeedViewModel.myResponse.observe(viewLifecycleOwner){
-            Log.d("nyh", "onViewCreated: $it")
-        }
+
 
         return binding.root
     }
@@ -146,6 +159,11 @@ class PostDetailFragment : Fragment() {
 
         // 관심목록 추가 시 카운트에 반영
         myPostFeedViewModel.likeUserChangeResult.observe(viewLifecycleOwner) {
+            Log.d(
+                "nyh LifecycleState",
+                "Observer added in state: ${viewLifecycleOwner.lifecycle.currentState}"
+            )
+
             if (it[0].timestamp == currentPostInfo[0].timestamp) {
                 Log.d("xxxx", " 일치 ?: ${it[0].timestamp == currentPostInfo[0].timestamp} ")
                 Log.d("xxxx", " 전체 LiveData : ${it} 바뀐 Livedata ${it[0].likeUsers}")
@@ -185,7 +203,7 @@ class PostDetailFragment : Fragment() {
                         .addToBackStack(null).commit()
                 }
             } else {
-                ToastMsg.makeToast(requireContext(),"거래장소가 지정되지 않았습니다")
+                ToastMsg.makeToast(requireContext(), "거래장소가 지정되지 않았습니다")
             }
         }
 
@@ -202,7 +220,7 @@ class PostDetailFragment : Fragment() {
                     myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
                     myPostFeedViewModel.getTokenFromPost(currentPostInfo[0].documentId)
 
-                    myPostFeedViewModel.myResponse.observe(viewLifecycleOwner){
+                    myPostFeedViewModel.myResponse.observe(viewLifecycleOwner) {
                         Log.d("nyh", "onViewCreated: $it")
                     }
 
@@ -212,7 +230,7 @@ class PostDetailFragment : Fragment() {
                     )
                 }
             } else {
-                ToastMsg.makeToast(requireContext(),"작성자는 북마크에 추가할 수 없습니다")
+                ToastMsg.makeToast(requireContext(), "작성자는 북마크에 추가할 수 없습니다")
             }
         }
 
@@ -233,49 +251,20 @@ class PostDetailFragment : Fragment() {
             getUserInformation()
         }
 
-        val post = arguments?.getSerializable("post") as PostRcv?
 
-        if (post != null) {
-            currentPostInfo.clear()
-            currentPostInfo.add(post)
-
-            binding.detailId.text = post.nickname
-            binding.detailId.text = post.nickname
-            binding.detailAddress.text = post.address
-            binding.detailpageTitle.text = post.title
-            binding.detailpageCategory.text = post.category
-            binding.detailpageExplain.text = post.desc
-            binding.detailMoney.text = "${post.price} 원"
-            binding.detailTvLikeCount.text = "${post.likeUsers.size}"
-            binding.detailpageTime.text = time(post.timestamp)
-
-            myPostFeedViewModel.downloadCurrentProfileImg(post.uid)
-
-            if (post.uid == Constants.currentUserUid) {
-                binding.detailBtnEditPost.visibility = View.VISIBLE
-            } else {
-                binding.detailBtnEditPost.visibility = View.GONE
-            }
-
-            // 관심 목록에 있는 아이템의 경우 아이콘 변경 및 관심 목록 제거 버튼 표시
-            if (post.likeUsers.contains(Constants.currentUserUid)) {
-                binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
-                binding.detailBtnSubFavorite.visibility = View.VISIBLE
-            } else {
-                binding.detailLike.setImageResource(R.drawable.like)
-                binding.detailBtnSubFavorite.visibility = View.GONE
-            }
-
-        }
         binding.datailProfile.setOnClickListener {
-            val yourDetailFragment=YourDetailPage()
-            val transaction=requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frag_edit,yourDetailFragment)
+            val yourDetailFragment = YourDetailPage()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frag_edit, yourDetailFragment)
                 .addToBackStack(null)
                 .commit()
         }
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
     private fun stateIconChange() {
@@ -365,7 +354,7 @@ class PostDetailFragment : Fragment() {
 
 
     private fun startMessageActivity(documnetUid: String) {
-       val intent = Intent(requireContext(), MessageActivity::class.java)
+        val intent = Intent(requireContext(), MessageActivity::class.java)
         intent.putExtra("documnetUid", documnetUid)
         Log.d("susu", "startMessageActivity: ${documnetUid}")
         startActivity(intent)

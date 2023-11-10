@@ -34,6 +34,4 @@ class AlarmRepo {
                 Log.d("nyh", "getMyalarm fail : $exception")
             }
     }
-
-
 }

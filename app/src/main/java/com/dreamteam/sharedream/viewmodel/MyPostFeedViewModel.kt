@@ -543,15 +543,15 @@ class MyPostFeedViewModel : ViewModel() {
                         db.collection("notifyList")
                             .add(notiLIst)
                             .addOnSuccessListener { task ->
-//                                val documentId = task.id
-//                                val updatedData = mapOf("documentId" to documentId)
-//                                Log.d("nyh", "getTokenFromPost: $task")
-//                                db.collection("notifyList")
-//                                    .document(documentId)
-//                                    .update(updatedData)
-//                                    .addOnSuccessListener {
-//                                        Log.d("nyh", "getTokenFromPost: $documentId")
-//                                    }
+                                val myDocuId = task.id
+                                val updatedData = mapOf("myDocuId" to myDocuId)
+                                Log.d("nyh", "getTokenFromPost: $task")
+                                db.collection("notifyList")
+                                    .document(myDocuId)
+                                    .update(updatedData)
+                                    .addOnSuccessListener {
+                                        Log.d("nyh", "getTokenFromPost: $documentId")
+                                    }
                                 Log.d("nyh", "getTokenFromPost: $task")
                             }
                         Log.d("nyh", "getTokenFromPost: token = $token")
@@ -573,4 +573,5 @@ class MyPostFeedViewModel : ViewModel() {
             Log.d("nyh", "sendNotification postViewmodel :$notification")
         }
     }
+
 }
