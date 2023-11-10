@@ -112,6 +112,7 @@ class AlarmFragment : Fragment() {
             notiList?.let {
                 Log.d("nyh", "onViewCreated notiList: $notiList")
                 alarmadapter.setData(notiList)
+                alarmadapter.notifyDataSetChanged()
             }
         }
         viewModel.getNotiList()
