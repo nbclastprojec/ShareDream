@@ -282,7 +282,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/example" />
+            android:src="@drawable/profile_circle" />
 
     </androidx.cardview.widget.CardView>
 

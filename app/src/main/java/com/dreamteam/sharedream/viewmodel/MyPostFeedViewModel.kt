@@ -530,26 +530,28 @@ class MyPostFeedViewModel : ViewModel() {
                         val body = NotificationBody(token, data)
                         Log.d("nyh", "getTokenFromPost: send value of body $body")
                         sendNotification(body)
+                        val documentId = currentPost.value?.documentId
 
                         val notiLIst = hashMapOf(
                             "title" to notificationTitle,
                             "nickname" to userId,
                             "uid" to currentPost.value?.uid,
                             "imgs" to currentPost.value?.imgs,
-                            "time" to Timestamp.now()
+                            "time" to Timestamp.now(),
+                            "documentId" to documentId
                         )
                         db.collection("notifyList")
                             .add(notiLIst)
                             .addOnSuccessListener { task ->
-                                val documentId = task.id
-                                val updatedData = mapOf("documentId" to documentId)
-                                Log.d("nyh", "getTokenFromPost: $task")
-                                db.collection("notifyList")
-                                    .document(documentId)
-                                    .update(updatedData)
-                                    .addOnSuccessListener {
-                                        Log.d("nyh", "getTokenFromPost: $documentId")
-                                    }
+//                                val documentId = task.id
+//                                val updatedData = mapOf("documentId" to documentId)
+//                                Log.d("nyh", "getTokenFromPost: $task")
+//                                db.collection("notifyList")
+//                                    .document(documentId)
+//                                    .update(updatedData)
+//                                    .addOnSuccessListener {
+//                                        Log.d("nyh", "getTokenFromPost: $documentId")
+//                                    }
                                 Log.d("nyh", "getTokenFromPost: $task")
                             }
                         Log.d("nyh", "getTokenFromPost: token = $token")

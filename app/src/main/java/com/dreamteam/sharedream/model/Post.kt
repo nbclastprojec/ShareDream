@@ -23,6 +23,7 @@ data class Post(
     val locationLatLng: List<Double>,
     val locationKeyword : List<String>,
     val endTime:String
+
 ) : Serializable
 {
 

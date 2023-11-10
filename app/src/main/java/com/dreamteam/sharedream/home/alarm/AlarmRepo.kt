@@ -35,16 +35,5 @@ class AlarmRepo {
             }
     }
 
-    fun deleteItem(collectionName: String, documentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        val collectionReference = db.collection(collectionName)
 
-        collectionReference.document(documentId)
-            .delete()
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener { e ->
-                onFailure(e)
-            }
-    }
 }

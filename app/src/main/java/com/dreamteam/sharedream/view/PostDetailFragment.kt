@@ -233,9 +233,12 @@ class PostDetailFragment : Fragment() {
             getUserInformation()
         }
 
-        val post = arguments?.getSerializable("post") as Post?
+        val post = arguments?.getSerializable("post") as PostRcv?
 
         if (post != null) {
+            currentPostInfo.clear()
+            currentPostInfo.add(post)
+
             binding.detailId.text = post.nickname
             binding.detailId.text = post.nickname
             binding.detailAddress.text = post.address
