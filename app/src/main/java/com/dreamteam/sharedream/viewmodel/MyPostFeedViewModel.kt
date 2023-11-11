@@ -509,8 +509,6 @@ class MyPostFeedViewModel : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTokenFromPost(postId: String) {
-
-
         val postRef = db.collection("Posts").document(postId)
 
         postRef

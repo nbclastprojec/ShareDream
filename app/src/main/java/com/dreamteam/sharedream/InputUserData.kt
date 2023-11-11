@@ -15,10 +15,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 
 class InputUserData : Fragment() {
     private lateinit var binding:FragmentInputUserDataBinding
     private lateinit var auth:FirebaseAuth
+    var token: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,38 +56,46 @@ class InputUserData : Fragment() {
     fun getInformation(number: String, nickname: String) {
         val currentUser = FirebaseAuth.getInstance().currentUser
 
-        if (currentUser != null) {
-            val uid = currentUser.uid
-            val email = currentUser.email
-            val index = email?.indexOf("@")
-            val id = if (index != null && index >= 0) {
-                email.substring(0, index)
-            } else {
-                Toast.makeText(requireContext(),"이메일 확인오류",Toast.LENGTH_SHORT).show()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                token = task.result
+
+                if (currentUser != null) {
+                    val uid = currentUser.uid
+                    val email = currentUser.email
+                    val index = email?.indexOf("@")
+                    val id = if (index != null && index >= 0) {
+                        email.substring(0, index)
+                    } else {
+                        Toast.makeText(requireContext(), "이메일 확인오류", Toast.LENGTH_SHORT).show()
+                    }
+
+                    val userData = hashMapOf(
+                        "email" to email,
+                        "number" to number,
+                        "nickname" to nickname,
+                        "id" to id,
+                        "token" to token
+
+                    )
+
+                    val db = FirebaseFirestore.getInstance()
+                    val userCollection = db.collection("UserData")
+                    val document = userCollection.document(uid)
+
+                    document.set(userData)
+                        .addOnSuccessListener {
+                            val intent = Intent(requireContext(), MainActivity::class.java)
+                            startActivity(intent)
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(requireContext(), "데이터 저장 실패: $e", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                } else {
+                    Toast.makeText(requireContext(), "Input Error", Toast.LENGTH_SHORT).show()
+                }
             }
-
-            val userData = hashMapOf(
-                "email" to email,
-                "number" to number,
-                "nickname" to nickname,
-                "id" to id
-
-            )
-
-            val db = FirebaseFirestore.getInstance()
-            val userCollection = db.collection("UserData")
-            val document = userCollection.document(uid)
-
-            document.set(userData)
-                .addOnSuccessListener {
-                    val intent = Intent(requireContext(), MainActivity::class.java)
-                    startActivity(intent)
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(requireContext(), "데이터 저장 실패: $e", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(requireContext(), "Input Error", Toast.LENGTH_SHORT).show()
         }
     }
     @SuppressLint("SuspiciousIndentation")
