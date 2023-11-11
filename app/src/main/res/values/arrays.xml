@@ -2,6 +2,7 @@
 <resources>
     <string-array name="inquiry_category">
         <item>이용 문의</item>
+        <item>회원 탈퇴 요청</item>
         <item>계정 오류 문의</item>
         <item>게시글 오류 문의</item>
         <item>악성 사용자 신고</item>
