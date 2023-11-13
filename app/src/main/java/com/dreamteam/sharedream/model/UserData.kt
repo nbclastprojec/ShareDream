@@ -6,11 +6,9 @@ data class UserData (
     var intro : String,
     val email : String,
     val number : String,
-
-
-
+    val token : String
 
 )
 {
-    constructor() :this("","","","","")
+    constructor() :this("","","","","", "")
 }

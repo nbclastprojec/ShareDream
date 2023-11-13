@@ -3,6 +3,7 @@ package com.dreamteam.sharedream
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +21,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 class InputUserData : Fragment() {
     private lateinit var binding:FragmentInputUserDataBinding
     private lateinit var auth:FirebaseAuth
-    var token: String = ""
+    var token = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +37,8 @@ class InputUserData : Fragment() {
             if (check()) {
                 val nickname = binding.editNickName.text.toString()
                 val number = binding.editNumber.text.toString()
-                getInformation(number, nickname)
+                getInformation(number, nickname,token)
+                Log.d("nyh", "onCreateView: $token")
             }
         }
         binding.agree1.setOnClickListener{
@@ -48,24 +50,25 @@ class InputUserData : Fragment() {
             agreeDialog.show(requireActivity().supportFragmentManager,"Agree2")
         }
 
-
-
-
         return binding.root
     }
-    fun getInformation(number: String, nickname: String) {
+    fun getInformation(number: String, nickname: String, token: String) {
         val currentUser = FirebaseAuth.getInstance().currentUser
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                token = task.result
+
+                Log.d("nyh", "getInformation:token $token")
 
                 if (currentUser != null) {
+                    val token = task.result
                     val uid = currentUser.uid
                     val email = currentUser.email
                     val index = email?.indexOf("@")
                     val id = if (index != null && index >= 0) {
                         email.substring(0, index)
+                        Log.d("nyh", "getInformation:token $token")
+
                     } else {
                         Toast.makeText(requireContext(), "이메일 확인오류", Toast.LENGTH_SHORT).show()
                     }
@@ -96,6 +99,8 @@ class InputUserData : Fragment() {
                     Toast.makeText(requireContext(), "Input Error", Toast.LENGTH_SHORT).show()
                 }
             }
+        }.addOnFailureListener {e ->
+            Log.d("nyh", "getInformation: fail $e ")
         }
     }
     @SuppressLint("SuspiciousIndentation")

@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
@@ -196,35 +197,46 @@ class SignUpFragment : Fragment() {
     }
     private fun createAccount(){
         auth.createUserWithEmailAndPassword(binding.editEmail.text.toString(),binding.editPassword.text.toString()).addOnCompleteListener {
-            if(it.isSuccessful){
-                val user=auth.currentUser
-                val uid=user?.uid
-                val firestore=FirebaseFirestore.getInstance()
-                val userCollection=firestore.collection("UserData")
-                val userDocument = userCollection.document(uid?:"")
-                Constants.currentUserUid = auth.currentUser!!.uid
-                Log.d("xxxx", "createAccount: ${Constants.currentUserUid}")
+            if (it.isSuccessful) {
+                val user = auth.currentUser
+                val uid = user?.uid
+                val firestore = FirebaseFirestore.getInstance()
+                val userCollection = firestore.collection("UserData")
+                val userDocument = userCollection.document(uid ?: "")
+                FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val token = task.result
+                        Log.d("nyh", "createAccount: token = $token")
+
+                        Constants.currentUserUid = auth.currentUser!!.uid
+                        Log.d("xxxx", "createAccount: ${Constants.currentUserUid}")
 
 
-                val userData= hashMapOf(
-                    "email" to binding.editEmail.text.toString(),
-                    "number" to binding.editPhoneNumber.text.toString(),
-                    "id" to binding.eidtId.text.toString(),
-                    "nickname" to "닉네임 설정 필요",
-                )
+                        val userData = hashMapOf(
+                            "email" to binding.editEmail.text.toString(),
+                            "number" to binding.editPhoneNumber.text.toString(),
+                            "id" to binding.eidtId.text.toString(),
+                            "nickname" to "닉네임 설정 필요",
+                            "token" to token
+                        )
 
-                userDocument.set(userData).addOnSuccessListener {
-                    Toast.makeText(requireContext(),"회원가입 성공",Toast.LENGTH_SHORT).show()
+                        userDocument.set(userData).addOnSuccessListener {
+                            Toast.makeText(requireContext(), "회원가입 성공", Toast.LENGTH_SHORT).show()
 
-                    imageUpload()
-                }
-                    .addOnFailureListener { e->
+                            imageUpload()
+                        }
+                            .addOnFailureListener { e ->
 
-                        Toast.makeText(requireContext(),"회원가입 실패",Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "회원가입 실패", Toast.LENGTH_SHORT)
+                                    .show()
+
+                            }
+
 
                     }
-
-
+                }.addOnFailureListener { e ->
+                    Log.d("nyh", "createAccount: gail $e")
+                }
             }
         }
     }
