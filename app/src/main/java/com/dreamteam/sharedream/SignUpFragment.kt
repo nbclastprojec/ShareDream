@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -32,11 +33,12 @@ import java.io.FileOutputStream
 
 
 class SignUpFragment : Fragment() {
-    private lateinit var binding:FragmentSignupBinding
+    private lateinit var binding: FragmentSignupBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var storage : FirebaseStorage
+    private lateinit var storage: FirebaseStorage
     private var checkcehckbox1 = false
     private var checkcehckbox2 = false
+    private var signUpListener: ListenerRegistration? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,12 +57,12 @@ class SignUpFragment : Fragment() {
 
         val personalAgree = PersonalAgree()
         personalAgree.setTargetFragment(this, 0)
-        binding= FragmentSignupBinding.inflate(inflater,container,false)
+        binding = FragmentSignupBinding.inflate(inflater, container, false)
         auth = FirebaseAuth.getInstance()
         binding.backButton.setOnClickListener {
-            val mainLogInMainFragment=LogInMainFragment()
-            val transaction=requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container,mainLogInMainFragment)
+            val mainLogInMainFragment = LogInMainFragment()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, mainLogInMainFragment)
             transaction.addToBackStack(null)
             transaction.commit()
         }
@@ -86,14 +88,14 @@ class SignUpFragment : Fragment() {
             check()
 
 
-            }
+        }
 
 
 
         return binding.root
     }
 
-    private fun check():Boolean {
+    private fun check(): Boolean {
         val checkbox = binding.checkBox
         val email = binding.editEmail.text.toString()
         val password = binding.editPassword.text.toString()
@@ -129,11 +131,12 @@ class SignUpFragment : Fragment() {
             Toast.makeText(requireContext(), "약관동의를 체크해주세요.", Toast.LENGTH_SHORT).show()
             return false
         } else {
-           checkEmailAndId(email, id)
+            checkEmailAndId(email, id)
 
         }
         return true
     }
+
     private fun isValidPassword(password: String): Boolean {
         val pattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{7,}\$".toRegex()
         return pattern.matches(password)
@@ -151,7 +154,6 @@ class SignUpFragment : Fragment() {
                 binding.editEmail.error = "이미 등록된 이메일 주소입니다."
 
 
-
             }
         }.addOnFailureListener { e ->
 
@@ -160,33 +162,54 @@ class SignUpFragment : Fragment() {
     }
 
 
-    fun special(text:String):Boolean{
-        val specialWord= setOf('!','@','#','$','%','^','&','*','(',')','_','-','<','>','=','+','?')//특수문자
-        return text.any{it in specialWord//비밀번호 중 하나(any)라도 문자 안에 특수문자(speacialWord)가 포함되어있으면 true반환
+    fun special(text: String): Boolean {
+        val specialWord = setOf(
+            '!',
+            '@',
+            '#',
+            '$',
+            '%',
+            '^',
+            '&',
+            '*',
+            '(',
+            ')',
+            '_',
+            '-',
+            '<',
+            '>',
+            '=',
+            '+',
+            '?'
+        )//특수문자
+        return text.any {
+            it in specialWord//비밀번호 중 하나(any)라도 문자 안에 특수문자(speacialWord)가 포함되어있으면 true반환
         }
 
     }
-    fun phone(text: String):Boolean{
-        return text.all {it.isDigit()}
+
+    fun phone(text: String): Boolean {
+        return text.all { it.isDigit() }
     }
+
     private fun checkId(id: String) {
         val firestore = FirebaseFirestore.getInstance()
         val UserData = firestore.collection("UserData")
-        UserData.whereEqualTo("id", id).addSnapshotListener{ snapshots, b ->
-            if(snapshots?.documents?.isEmpty() == true){
+        signUpListener = UserData.whereEqualTo("id", id).addSnapshotListener { snapshots, b ->
+            if (snapshots?.documents?.isEmpty() == true) {
                 Toast.makeText(requireContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
                 auth.signOut()
-                val loginFragment=LoginFragment()
-                val transaction=requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container,loginFragment)
+                val loginFragment = LoginFragment()
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container, loginFragment)
                 transaction.addToBackStack(null)
                 transaction.commit()
 
-                Log.d("taskTest","tastTest")
+                Log.d("taskTest", "tastTest")
                 createAccount()
-            }else{
-                Log.d("taskTestTwo","tastTest")
-                binding.eidtId.error="중복된 아이디가 존재합니다."
+            } else {
+                Log.d("taskTestTwo", "tastTest")
+                binding.eidtId.error = "중복된 아이디가 존재합니다."
             }
 
 
@@ -194,19 +217,29 @@ class SignUpFragment : Fragment() {
 
 
     }
-    private fun createAccount(){
-        auth.createUserWithEmailAndPassword(binding.editEmail.text.toString(),binding.editPassword.text.toString()).addOnCompleteListener {
-            if(it.isSuccessful){
-                val user=auth.currentUser
-                val uid=user?.uid
-                val firestore=FirebaseFirestore.getInstance()
-                val userCollection=firestore.collection("UserData")
-                val userDocument = userCollection.document(uid?:"")
+
+    override fun onStop() {
+        super.onStop()
+        signUpListener?.remove()
+        signUpListener = null
+    }
+
+    private fun createAccount() {
+        auth.createUserWithEmailAndPassword(
+            binding.editEmail.text.toString(),
+            binding.editPassword.text.toString()
+        ).addOnCompleteListener {
+            if (it.isSuccessful) {
+                val user = auth.currentUser
+                val uid = user?.uid
+                val firestore = FirebaseFirestore.getInstance()
+                val userCollection = firestore.collection("UserData")
+                val userDocument = userCollection.document(uid ?: "")
                 Constants.currentUserUid = auth.currentUser!!.uid
                 Log.d("xxxx", "createAccount: ${Constants.currentUserUid}")
 
 
-                val userData= hashMapOf(
+                val userData = hashMapOf(
                     "email" to binding.editEmail.text.toString(),
                     "number" to binding.editPhoneNumber.text.toString(),
                     "id" to binding.eidtId.text.toString(),
@@ -214,13 +247,13 @@ class SignUpFragment : Fragment() {
                 )
 
                 userDocument.set(userData).addOnSuccessListener {
-                    Toast.makeText(requireContext(),"회원가입 성공",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "회원가입 성공", Toast.LENGTH_SHORT).show()
 
                     imageUpload()
                 }
-                    .addOnFailureListener { e->
+                    .addOnFailureListener { e ->
 
-                        Toast.makeText(requireContext(),"회원가입 실패",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "회원가입 실패", Toast.LENGTH_SHORT).show()
 
                     }
 
@@ -228,6 +261,7 @@ class SignUpFragment : Fragment() {
             }
         }
     }
+
     private fun imageUpload() {
 
         val defaultImageUri: Uri = drawableToUri(requireContext(), R.drawable.profile_circle)
@@ -261,6 +295,7 @@ class SignUpFragment : Fragment() {
 
         return Uri.fromFile(file)
     }
+
     private fun updateCheckBox() {
         if (checkcehckbox1 && checkcehckbox2) {
             binding.checkBox.isChecked = true
