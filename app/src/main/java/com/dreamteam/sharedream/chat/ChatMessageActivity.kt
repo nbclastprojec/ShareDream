@@ -288,7 +288,7 @@ class ChatMessageActivity : AppCompatActivity() {
                                 .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
                                 .into(imageMessages)
                             imageMessages.visibility = View.VISIBLE
-                            message.setBackgroundResource(R.drawable.rightbubble)
+                            message.setBackgroundResource(R.drawable.chatmine)
                             layoutMain.gravity = Gravity.RIGHT
                             profile.visibility = View.INVISIBLE
                             name.visibility = View.INVISIBLE
@@ -296,7 +296,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             imageMessages.visibility = View.GONE
                             profile.visibility = View.INVISIBLE
                             name.visibility = View.INVISIBLE
-                            message.setBackgroundResource(R.drawable.rightbubble)
+                            message.setBackgroundResource(R.drawable.chatmine)
                             layoutMain.gravity = Gravity.RIGHT
                         }
                     }else {
@@ -318,14 +318,14 @@ class ChatMessageActivity : AppCompatActivity() {
                                 .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                                 .into(imageMessages)
                             imageMessages.visibility = View.VISIBLE
-                            message.setBackgroundResource(R.drawable.leftbubble)
+                            message.setBackgroundResource(R.drawable.chat_other)
                             name.text = chat?.name
                             destination.visibility = View.VISIBLE
                             name.visibility = View.VISIBLE
                             layoutMain.gravity = Gravity.LEFT
                         } else {
                             imageMessages.visibility = View.GONE
-                            message.setBackgroundResource(R.drawable.leftbubble)
+                            message.setBackgroundResource(R.drawable.chat_other)
                             name.text = chat?.name
                             destination.visibility = View.VISIBLE
                             name.visibility = View.VISIBLE
