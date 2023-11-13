@@ -308,16 +308,33 @@ class ChatMessageActivity : AppCompatActivity() {
                                 .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
                                 .into(profile)
                         }?.addOnFailureListener { exception ->
-                            Log.e("ChatMessageActivity", "이미지 다운로드 실패: ${exception.message}")
+                            Log.e("MessageActivity", "이미지 다운로드 실패: ${exception.message}")
                         }
-                        message.setBackgroundResource(R.drawable.leftbubble)
-                        name.text = chat?.name
-                        destination.visibility = View.VISIBLE
-                        name.visibility = View.VISIBLE
-                        layoutMain.gravity = Gravity.LEFT
+
+                        if (comment.imageUrl?.isNotEmpty() == true) {
+                            message.visibility = View.GONE
+                            Glide.with(itemView.context)
+                                .load(comment.imageUrl)
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .into(imageMessages)
+                            imageMessages.visibility = View.VISIBLE
+                            message.setBackgroundResource(R.drawable.leftbubble)
+                            name.text = chat?.name
+                            destination.visibility = View.VISIBLE
+                            name.visibility = View.VISIBLE
+                            layoutMain.gravity = Gravity.LEFT
+                        } else {
+                            imageMessages.visibility = View.GONE
+                            message.setBackgroundResource(R.drawable.leftbubble)
+                            name.text = chat?.name
+                            destination.visibility = View.VISIBLE
+                            name.visibility = View.VISIBLE
+                            layoutMain.gravity = Gravity.LEFT
+                        }
                     }
                 }
             }
+
         }
 
 
