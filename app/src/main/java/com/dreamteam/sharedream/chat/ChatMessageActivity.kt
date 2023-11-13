@@ -315,7 +315,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             message.visibility = View.GONE
                             Glide.with(itemView.context)
                                 .load(comment.imageUrl)
-                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                                 .into(imageMessages)
                             imageMessages.visibility = View.VISIBLE
                             message.setBackgroundResource(R.drawable.leftbubble)
