@@ -338,10 +338,11 @@ class MessageActivity : AppCompatActivity() {
 
                         val token = documentSnapshot.getString("token")
                         if (token != null) {
-                            val userId = Constants.currentUserInfo!!.nickname
+                            var chat: Chatting? = null
+                            val userId =chat?.name
                             val notificationTitle= ""
                             val notificationBody = "${userId}님이 채팅을 보냈어요!"
-
+                            Log.d("nyh", "getTokenFromUser: $userId")
     //
                             val data = NotificationBody.NotificationData(
                                 notificationTitle!!, notificationBody,userId!!
@@ -349,7 +350,6 @@ class MessageActivity : AppCompatActivity() {
                             val body = NotificationBody(token, data)
                             Log.d("nyh", "getTokenFromPost: send value of body $body")
                             postFeedViewModel.sendNotification(body)
-
 
                             val notiLIst = hashMapOf(
                                 "title" to notificationTitle,
