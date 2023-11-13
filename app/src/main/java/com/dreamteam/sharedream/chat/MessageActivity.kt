@@ -3,8 +3,10 @@ package com.dreamteam.sharedream.chat
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -50,6 +52,7 @@ class MessageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding
     private var document: String? = null
     private var myCustomDialog: MyCustomDialog? = null
+    private val PICK_IMAGE_REQUEST = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +72,6 @@ class MessageActivity : AppCompatActivity() {
         val otherlistButoon = binding.otherListIc
         val otherlistLayout = binding.otherListLayout
         val backButtonOtherList = binding.backbuttonOtherlist
-        val recyclerViewOtherList = binding.recyclerviewOther
         val backButtonPlus = binding.backButtonPlus
         val plusLayout = binding.plusLayout
 
@@ -182,7 +184,9 @@ class MessageActivity : AppCompatActivity() {
         backButtonPlus.setOnClickListener {
             plusLayout.visibility = View.GONE
         }
-
+        imageButton.setOnClickListener {
+            openGallery()
+        }
 
     }
 
@@ -284,16 +288,33 @@ class MessageActivity : AppCompatActivity() {
             val destination: LinearLayout = itemBinding.messageItemLayoutDestination
             val layoutMain: LinearLayout = itemBinding.messageItemLinearlayoutMain
             val time: TextView = itemBinding.chatDate
+            val imageMessages : ImageView = itemBinding.imageMessage
 
             fun bind(comment: ChatModel.Comment) {
                 with(itemBinding) {
                     message.text = comment.message
                     time.text = comment.time
                     if (comment.uid == uid) {
-                        profile.visibility = View.INVISIBLE
-                        message.setBackgroundResource(R.drawable.rightbubble)
-                        name.visibility = View.INVISIBLE
-                        layoutMain.gravity = Gravity.RIGHT
+                        if (comment.imageUrl?.isNotEmpty() == true) {
+                            message.visibility = View.GONE
+                            Glide.with(itemView.context)
+                                .load(comment.imageUrl)
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .into(imageMessages)
+                            imageMessages.visibility = View.VISIBLE
+                            message.setBackgroundResource(R.drawable.rightbubble)
+                            layoutMain.gravity = Gravity.RIGHT
+                            profile.visibility = View.INVISIBLE
+                            name.visibility = View.INVISIBLE
+                        } else {
+                            imageMessages.visibility = View.GONE
+                            profile.visibility = View.INVISIBLE
+                            name.visibility = View.INVISIBLE
+                            message.setBackgroundResource(R.drawable.rightbubble)
+                            layoutMain.gravity = Gravity.RIGHT
+                        }
+
+
                     } else {
                         val storageReference =
                             destinationUid?.let { storage.reference.child("ProfileImg").child(it) }
@@ -306,14 +327,30 @@ class MessageActivity : AppCompatActivity() {
                             Log.e("MessageActivity", "이미지 다운로드 실패: ${exception.message}")
                         }
 
-                        message.setBackgroundResource(R.drawable.leftbubble)
-                        name.text = chat?.name
-                        destination.visibility = View.VISIBLE
-                        name.visibility = View.VISIBLE
-                        layoutMain.gravity = Gravity.LEFT
+                        if (comment.imageUrl?.isNotEmpty() == true) {
+                            message.visibility = View.GONE
+                            Glide.with(itemView.context)
+                                .load(comment.imageUrl)
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .into(imageMessages)
+                            imageMessages.visibility = View.VISIBLE
+                            message.setBackgroundResource(R.drawable.leftbubble)
+                            name.text = chat?.name
+                            destination.visibility = View.VISIBLE
+                            name.visibility = View.VISIBLE
+                            layoutMain.gravity = Gravity.LEFT
+                        } else {
+                            imageMessages.visibility = View.GONE
+                            message.setBackgroundResource(R.drawable.leftbubble)
+                            name.text = chat?.name
+                            destination.visibility = View.VISIBLE
+                            name.visibility = View.VISIBLE
+                            layoutMain.gravity = Gravity.LEFT
+                        }
                     }
                 }
             }
+
         }
 
         override fun getItemCount(): Int {
@@ -353,4 +390,48 @@ class MessageActivity : AppCompatActivity() {
             }
         }
     }
-}
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
+            val imageUri = data.data
+            uploadImage(imageUri)
+        }
+    }
+    private fun uploadImage(imageUri: Uri?) {
+        if (imageUri != null) {
+            val storageReference = storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
+            storageReference.putFile(imageUri)
+                .addOnSuccessListener { taskSnapshot ->
+                    // 이미지 업로드 성공 시 처리
+                    val imageUrl = imageUri.toString()
+                    Log.d("susu", "uploadImage: ${imageUrl}")
+
+                    sendMessageWithImage(imageUrl)
+                }
+                .addOnFailureListener { exception ->
+                    // 이미지 업로드 실패 시 처리
+                    Log.e("MessageActivity", "이미지 업로드 실패: ${exception.message}")
+                }
+        }
+    }
+
+    private fun sendMessageWithImage(imageUrl: String) {
+        val time = System.currentTimeMillis()
+        val dateFormat = SimpleDateFormat("MM월 dd일 hh:mm")
+        val realTime = dateFormat.format(Date(time)).toString()
+
+        val comment = ChatModel.Comment(uid, "", realTime, imageUrl)
+        fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
+                .push().setValue(comment)
+        }
+    }
+
+
