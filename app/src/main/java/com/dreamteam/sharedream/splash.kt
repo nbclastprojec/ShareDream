@@ -15,6 +15,7 @@
     import android.view.animation.AnimationUtils
     import android.widget.ImageView
     import android.widget.TextView
+    import androidx.appcompat.app.AppCompatDelegate
     import com.dreamteam.sharedream.databinding.ActivitySplashBinding
 
     class splash : AppCompatActivity() {
@@ -29,6 +30,8 @@
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
 
+            // 다크모드 제한
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
             _binding= ActivitySplashBinding.inflate(layoutInflater)
             setContentView(binding.root)

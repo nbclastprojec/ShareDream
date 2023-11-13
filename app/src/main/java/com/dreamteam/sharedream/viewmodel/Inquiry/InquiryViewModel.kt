@@ -10,8 +10,6 @@ import kotlinx.coroutines.launch
 
 class InquiryViewModel(private val inquiryRepository: InquiryRepository) : ViewModel() {
 
-
-
     fun uploadInquiry(inquiryData: InquiryData){
         viewModelScope.launch(Dispatchers.IO){
             try {

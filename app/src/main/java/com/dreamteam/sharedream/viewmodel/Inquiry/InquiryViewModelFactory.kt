@@ -7,9 +7,10 @@ import java.lang.IllegalArgumentException
 class InquiryViewModelFactory(private val inquiryRepository: InquiryRepository)
     :ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(InquiryViewModel::class.java)){
-            return InquiryViewModel(inquiryRepository) as T
+        return when {
+            modelClass.isAssignableFrom(InquiryViewModel::class.java) ->  InquiryViewModel(inquiryRepository) as T
+
+            else -> throw IllegalArgumentException("Unknown InquiryViewModel")
         }
-        throw IllegalArgumentException("Unknown InquiryViewModel")
     }
 }

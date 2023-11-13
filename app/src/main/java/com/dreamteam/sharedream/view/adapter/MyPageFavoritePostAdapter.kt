@@ -3,7 +3,9 @@ package com.dreamteam.sharedream.view.adapter
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -14,6 +16,7 @@ import com.dreamteam.sharedream.databinding.WriteItemBinding
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.MyPageFavoritePost
 
+@Suppress("DEPRECATION")
 class MyPageFavoritePostAdapter(private val postClick: PostClick) :
     ListAdapter<PostRcv, MyPageFavoritePostAdapter.MyPageFavoritePostViewHolder>(DifferCallback.differCallback) {
 
@@ -25,8 +28,25 @@ class MyPageFavoritePostAdapter(private val postClick: PostClick) :
         val category = binding.writeCategory
         val image = binding.writeImage
 
+        val postStateBgClosed: ImageView = binding.itemImgStateClosed
+        val postStateBgPutOff: ImageView = binding.itemImgStatePutOff
+        val postStateBgReservation: ImageView = binding.itemImgStateReservation
+
         fun bind(imagePath: Uri) {
             image.load(imagePath)
+
+            when (currentList[layoutPosition].state) {
+                "교환 가능" -> {
+                    postStateBgClosed.visibility = View.INVISIBLE
+                    postStateBgPutOff.visibility = View.INVISIBLE
+                    postStateBgReservation.visibility = View.INVISIBLE
+                }
+
+                "교환 보류" -> postStateBgPutOff.visibility = View.VISIBLE
+                "예약 중" -> postStateBgReservation.visibility = View.VISIBLE
+                "교환 완료" -> postStateBgClosed.visibility = View.VISIBLE
+                else -> return
+            }
         }
     }
 

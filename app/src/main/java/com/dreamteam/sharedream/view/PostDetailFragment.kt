@@ -40,6 +40,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.math.log
@@ -60,13 +61,15 @@ class PostDetailFragment : Fragment() {
 
 
 
+    private val decimalFormat = DecimalFormat("#,###")
+
     private fun detailPageInfoChange(postRcv: PostRcv) {
         binding.detailId.text = postRcv.nickname
         binding.detailAddress.text = postRcv.address
         binding.detailpageTitle.text = postRcv.title
         binding.detailpageCategory.text = postRcv.category
         binding.detailpageExplain.text = postRcv.desc
-        binding.detailMoney.text = "${postRcv.price} 원"
+        binding.detailMoney.text = "${decimalFormat.format(postRcv.price)} 원"
         binding.detailTvLikeCount.text = "${postRcv.likeUsers.size}"
         binding.detailpageTime.text = "${time(postRcv.timestamp)}"
         binding.detailTvItemState.text = postRcv.state
@@ -80,7 +83,6 @@ class PostDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPostDetailBinding.inflate(inflater, container, false)
-
 
         val imgs = mutableListOf<Uri>()
         myPostFeedViewModel.currentPost.observe(viewLifecycleOwner) {
@@ -235,6 +237,7 @@ class PostDetailFragment : Fragment() {
 
         val post = arguments?.getSerializable("post") as Post?
 
+
         if (post != null) {
             binding.detailId.text = post.nickname
             binding.detailId.text = post.nickname
@@ -242,7 +245,7 @@ class PostDetailFragment : Fragment() {
             binding.detailpageTitle.text = post.title
             binding.detailpageCategory.text = post.category
             binding.detailpageExplain.text = post.desc
-            binding.detailMoney.text = "${post.price} 원"
+            binding.detailMoney.text = "${decimalFormat.format(post.price)} 원"
             binding.detailTvLikeCount.text = "${post.likeUsers.size}"
             binding.detailpageTime.text = time(post.timestamp)
 
