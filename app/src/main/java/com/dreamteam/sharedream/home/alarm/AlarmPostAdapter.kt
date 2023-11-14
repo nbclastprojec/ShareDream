@@ -115,6 +115,10 @@ class AlarmPostAdapter(
         }
     }
 
+//    override fun getItemViewType(position: Int): Int {
+//        return datas[position].type
+//    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = MyalarmBinding.inflate(inflater, parent, false)

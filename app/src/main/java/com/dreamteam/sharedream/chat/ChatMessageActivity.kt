@@ -518,7 +518,7 @@ class ChatMessageActivity : AppCompatActivity() {
         val myResponse: MutableLiveData<Response<ResponseBody>> = MutableLiveData()
         try {
             myResponse.value = FcmRetrofitInstance.fcmApi.sendNotification(notification)
-            Log.d("nyh", "sendNotification Repo: $notification")
+            Log.d("nyh", "sendNotification chat Repochat: $notification")
         } catch (e: Exception) {
             Log.e("nyh", "Failed to send FCM message: ${e.message}")
         }

@@ -75,7 +75,6 @@ class MessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
         val view = binding.root
-
         val imageView = binding.chatSendBtn
         val editText = binding.chattext
 
@@ -515,7 +514,7 @@ class MessageActivity : AppCompatActivity() {
         val myResponse: MutableLiveData<Response<ResponseBody>> = MutableLiveData()
         try {
             myResponse.value = FcmRetrofitInstance.fcmApi.sendNotification(notification)
-            Log.d("nyh", "sendNotification Repo: $notification")
+            Log.d("nyh", "sendNotification Repo mesagAc: $notification")
         } catch (e: Exception) {
             Log.e("nyh", "Failed to send FCM message: ${e.message}")
         }
