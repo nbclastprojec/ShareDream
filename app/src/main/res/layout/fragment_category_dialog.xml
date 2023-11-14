@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="0dp">
 
@@ -245,7 +245,7 @@
         android:id="@+id/max10000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:textColor="@color/black"
@@ -309,6 +309,7 @@
         android:layout_width="1dp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:background="@color/gray700"
         app:layout_constraintStart_toEndOf="@+id/max100000"
         app:layout_constraintTop_toTopOf="@+id/max100000" />
@@ -317,6 +318,7 @@
         android:id="@+id/view150000"
         android:layout_width="1dp"
         android:layout_height="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         android:background="@color/gray700"
         app:layout_constraintStart_toEndOf="@+id/max150000"
@@ -339,6 +341,7 @@
         android:layout_width="1dp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:background="@color/gray700"
         app:layout_constraintStart_toEndOf="@+id/max10000"
         app:layout_constraintTop_toTopOf="@+id/max10000" />
@@ -347,6 +350,7 @@
         android:id="@+id/view30000"
         android:layout_width="1dp"
         android:layout_height="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         android:background="@color/gray700"
         app:layout_constraintStart_toEndOf="@+id/max30000"
@@ -354,14 +358,15 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
-        android:background="@drawable/catecomplebtn_drawble"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="150dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/catecomplebtn_drawble"
         android:text="확인"
         android:textSize="16sp"
-        android:layout_marginHorizontal="150dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/max150000" />

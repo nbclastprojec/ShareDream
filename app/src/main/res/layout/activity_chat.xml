@@ -23,9 +23,10 @@
         android:id="@+id/backButton_chat"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="350dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="360dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/chat_recycleView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
-        android:fontFamily="@font/bbing"
+        android:fontFamily="sans-serif-medium"
         android:text="김우가우가"
         android:textColor="@color/black"
         android:textSize="25sp"
@@ -60,7 +61,7 @@
         android:id="@+id/chatlayout"
         android:layout_width="406dp"
         android:layout_height="44dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +72,9 @@
             android:id="@+id/plubtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
+            android:layout_gravity="center"
             app:srcCompat="@drawable/ic_chat_plus" />
 
         <EditText
@@ -79,23 +82,21 @@
             android:id="@+id/chattext"
             android:layout_width="277dp"
             android:layout_height="42dp"
-
+            android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/loginbtn_2"
+            android:background="@drawable/chat_file"
             android:fontFamily="@font/bbing"
             android:gravity="center_vertical"
-            android:hint="메세지를 입력하세요."
-            android:paddingLeft="12dp"
-            android:textColorHint="#D9D9D9" />
+            android:paddingLeft="15dp" />
 
         <ImageView
             android:id="@+id/chatSendBtn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:foregroundGravity="center"
             android:src="@drawable/send" />
     </LinearLayout>
 
@@ -103,14 +104,15 @@
         android:id="@+id/listbtn"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="350dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginStart="360dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="33dp"
         app:layout_constraintBottom_toTopOf="@+id/chat_recycleView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_chat_dot" />
+        app:srcCompat="@drawable/ic_x" />
 
     <LinearLayout
         android:id="@+id/plus_layout"
@@ -125,31 +127,26 @@
 
         <ImageView
             android:id="@+id/backButton_plus"
-            android:layout_width="84dp"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_backbtn" />
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/image_ic"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:src="@drawable/ic_image" />
 
-            <ImageView
-                android:id="@+id/image_ic"
-                android:layout_width="226dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_image" />
-
-            <ImageView
-                android:id="@+id/other_list_ic"
-                android:layout_width="241dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_chat_otherlist" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/chat_image_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="갤러리" />
 
     </LinearLayout>
 
