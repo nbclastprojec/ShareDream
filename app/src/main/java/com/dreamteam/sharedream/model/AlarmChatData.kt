@@ -10,3 +10,8 @@ data class AlarmChatData(
     val myDocuId: String? = null,
     val timestamp: Timestamp
 )
+{
+    constructor() : this(
+        "", "", "", "", Timestamp.now()
+    )
+}

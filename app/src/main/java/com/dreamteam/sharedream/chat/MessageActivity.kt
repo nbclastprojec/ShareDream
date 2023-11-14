@@ -513,10 +513,7 @@ class MessageActivity : AppCompatActivity() {
             storageReference.putFile(imageUri)
                 .addOnSuccessListener { taskSnapshot ->
                     // 이미지 업로드 성공 시 처리
-                    val imageUrl = imageUri.toString()
-                    Log.d("susu", "uploadImage: ${imageUrl}")
-
-                    sendMessageWithImage(imageUrl)
+                    sendMessageWithImage(imageUri)
                 }
                 .addOnFailureListener { exception ->
                     // 이미지 업로드 실패 시 처리
