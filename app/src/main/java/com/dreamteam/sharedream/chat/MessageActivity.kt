@@ -21,7 +21,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
@@ -32,9 +35,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.FcmRetrofitInstance
 import com.dreamteam.sharedream.databinding.ActivityChatBinding
 import com.dreamteam.sharedream.databinding.ChatDialogBinding
 import com.dreamteam.sharedream.databinding.ChatItemBinding
+import com.dreamteam.sharedream.home.HomeRepository
 import com.dreamteam.sharedream.model.NotificationBody
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
@@ -49,7 +54,10 @@ import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -64,7 +72,7 @@ class MessageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding
     private var document: String? = null
     private var myCustomDialog: MyCustomDialog? = null
-    private val postFeedViewModel =MyPostFeedViewModel()
+    private val postFeedViewModel: MyPostFeedViewModel by viewModels()
     private val db = Firebase.firestore
     private val PICK_IMAGE_REQUEST = 1
     private val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1001
@@ -153,7 +161,7 @@ class MessageActivity : AppCompatActivity() {
                     getTokenFromUser()
                 }
             } else {
-                Toast.makeText(this,"메세지를 입력하세요.",Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "메세지를 입력하세요.", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -208,7 +216,7 @@ class MessageActivity : AppCompatActivity() {
     }
 
     private fun externalImageAccess() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){ // 13 이상일 경우 if문 실행
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // 13 이상일 경우 if문 실행
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.READ_EXTERNAL_STORAGE
@@ -222,7 +230,7 @@ class MessageActivity : AppCompatActivity() {
             } else {
                 openGallery()
             }
-        }else{
+        } else {
             openGallery()
         }
     }
@@ -250,20 +258,21 @@ class MessageActivity : AppCompatActivity() {
     private fun deleteChatRoom() {
         if (chatRoomuid != null) {
             fireDatabase.child("ChatRoom").child(chatRoomuid!!).removeValue().addOnSuccessListener {
-                    Toast.makeText(this, "채팅방이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                    chatRoomuid = null
-                    recyclerView?.adapter?.notifyDataSetChanged()
-                }.addOnFailureListener { e ->
-                    Log.e("MessageActivity", "채팅방 삭제 실패: ${e.message}")
-                }
+                Toast.makeText(this, "채팅방이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                chatRoomuid = null
+                recyclerView?.adapter?.notifyDataSetChanged()
+            }.addOnFailureListener { e ->
+                Log.e("MessageActivity", "채팅방 삭제 실패: ${e.message}")
             }
         }
+    }
 
-    private fun roomOut(){
+    private fun roomOut() {
         onBackPressed()
     }
 
-    inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
+    inner class RecyclerViewAdapter :
+        RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
 
         private val comments = ArrayList<ChatModel.Comment>()
         private var chat: Chatting? = null
@@ -325,7 +334,7 @@ class MessageActivity : AppCompatActivity() {
             val destination: LinearLayout = itemBinding.messageItemLayoutDestination
             val layoutMain: LinearLayout = itemBinding.messageItemLinearlayoutMain
             val time: TextView = itemBinding.chatDate
-            val imageMessages : ImageView = itemBinding.imageMessage
+            val imageMessages: ImageView = itemBinding.imageMessage
 
             fun bind(comment: ChatModel.Comment) {
                 with(itemBinding) {
@@ -415,7 +424,7 @@ class MessageActivity : AppCompatActivity() {
             window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
             binding.dialogTitleTv.text = "채팅방 나가기"
-            binding.dialogDescTv.text= "채팅방을 나가시겠습니까?"
+            binding.dialogDescTv.text = "채팅방을 나가시겠습니까?"
             binding.dialogDescTv2.text = "채팅방을 나가면 대화내용이 모두 삭제되고 \n 채팅 목록이 삭제됩니다."
 
             binding.dialogCancelBtn.setOnClickListener {
@@ -426,6 +435,7 @@ class MessageActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun getTokenFromUser() {
 
         val postRef = destinationUid?.let { db.collection("UserData").document(it) }
@@ -439,40 +449,52 @@ class MessageActivity : AppCompatActivity() {
                         val token = documentSnapshot.getString("token")
                         if (token != null) {
                             val userId = Constants.currentUserInfo?.nickname
-                            val notificationTitle= ""
+                            val notificationTitle = "채팅알림"
                             val notificationBody = "${userId}님이 채팅을 보냈어요!"
                             Log.d("nyh", " userId: $userId")
                             Log.d("nyh", " token: $token")
-    //
+                            //
                             val data = NotificationBody.NotificationData(
-                                notificationTitle!!, notificationBody,userId!!
+                                notificationTitle!!, notificationBody, userId!!
                             )
                             val body = NotificationBody(token, data)
                             Log.d("nyh", "getTokenFromPost: send value of body $body")
                             postFeedViewModel.sendNotification(body)
 
-                            val notiLIst = hashMapOf(
-                                "title" to notificationTitle,
-                                "nickname" to userId,
-                                "uid" to destinationUid,
-                                "time" to Timestamp.now(),
-                            )
-                            db.collection("notifyChatList")
-                                .add(notiLIst)
-                                .addOnSuccessListener { task ->
-                                    val myDocuId = task.id
-                                    val updatedData = mapOf("myDocuId" to myDocuId)
-                                    Log.d("nyh", "getTokenFromPost: $task")
-                                    db.collection("notifyList")
-                                        .document(myDocuId)
-                                        .update(updatedData)
-                                        .addOnSuccessListener {
-                                        }
-                                    Log.d("nyh", "getTokenFromPost: $task")
-                                }
-                            Log.d("nyh", "getTokenFromPost: token = $token")
-                            Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
+                            storage.reference.child("ProfileImg").child("$uid").downloadUrl
+                                .addOnSuccessListener { image ->
+                                    val profile = image
 
+                                    val profileImageUrl = profile
+                                    Log.d(
+                                        "nyh","getTokenFromUser profileImageUrl: $profileImageUrl"
+                                    )
+                                    Log.d("nyh", "getTokenFromUser profile: $profile")
+                                    val notiLIst = hashMapOf(
+                                        "title" to notificationTitle,
+                                        "body" to notificationBody,
+                                        "nickname" to userId,
+                                        "uid" to destinationUid,
+                                        "time" to Timestamp.now(),
+                                        "profileImageUrl" to profileImageUrl
+                                    )
+                                    db.collection("notifyChatList")
+                                        .add(notiLIst)
+                                        .addOnSuccessListener { task ->
+                                            val myDocuId = task.id
+                                            val updatedData = mapOf("myDocuId" to myDocuId)
+                                            Log.d("nyh", "getTokenFromPost:docuId $myDocuId")
+                                            db.collection("notifyChatList")
+                                                .document(myDocuId)
+                                                .update(updatedData)
+                                                .addOnSuccessListener {
+                                                }
+                                            Log.d("nyh", "getTokenFromPost: $task")
+                                        }
+                                    Log.d("nyh", "getTokenFromPost: token = $token")
+                                    Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
+
+                                }
                         }
                     } else {
                         Log.d("nyh", "getTokenFromPost: elsefail")
@@ -498,15 +520,14 @@ class MessageActivity : AppCompatActivity() {
             uploadImage(imageUri)
         }
     }
+
     private fun uploadImage(imageUri: Uri?) {
         if (imageUri != null) {
-            val storageReference = storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
+            val storageReference =
+                storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
             storageReference.putFile(imageUri)
                 .addOnSuccessListener { taskSnapshot ->
                     // 이미지 업로드 성공 시 처리
-                    val imageUrl = imageUri.toString()
-                    Log.d("susu", "uploadImage: ${imageUrl}")
-
                     sendMessageWithImage(imageUri)
                 }
                 .addOnFailureListener { exception ->
@@ -517,7 +538,8 @@ class MessageActivity : AppCompatActivity() {
     }
 
     private fun sendMessageWithImage(imageUri: Uri) {
-        val storageReference = storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
+        val storageReference =
+            storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
 
         storageReference.putFile(imageUri)
             .addOnSuccessListener { taskSnapshot ->
@@ -539,6 +561,6 @@ class MessageActivity : AppCompatActivity() {
                 Log.e("MessageActivity", "이미지 업로드 실패: ${exception.message}")
             }
     }
-    }
+}
 
 

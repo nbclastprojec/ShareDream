@@ -133,7 +133,7 @@ class PostDetailFragment : Fragment() {
                 binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
                 binding.detailBtnSubFavorite.visibility = View.VISIBLE
             } else {
-                binding.detailLike.setImageResource(R.drawable.like)
+                binding.detailLike.setImageResource(R.drawable.icn_bookmark)
                 binding.detailBtnSubFavorite.visibility = View.GONE
             }
 
@@ -188,7 +188,7 @@ class PostDetailFragment : Fragment() {
                     binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
                 } else {
                     binding.detailBtnSubFavorite.visibility = View.GONE
-                    binding.detailLike.setImageResource(R.drawable.like)
+                    binding.detailLike.setImageResource(R.drawable.icn_bookmark)
                 }
             }
         }
@@ -278,20 +278,46 @@ class PostDetailFragment : Fragment() {
 
         }
 
+        val post = arguments?.getSerializable("post") as PostRcv?
 
+        if (post != null) {
+            binding.detailId.text = post.nickname
+            binding.detailId.text = post.nickname
+            binding.detailAddress.text = post.address
+            binding.detailpageTitle.text = post.title
+            binding.detailpageCategory.text = post.category
+            binding.detailpageExplain.text = post.desc
+            binding.detailMoney.text = "${post.price} 원"
+            binding.detailTvLikeCount.text = "${post.likeUsers.size}"
+            binding.detailpageTime.text = time(post.timestamp)
+
+            myPostFeedViewModel.downloadCurrentProfileImg(post.uid)
+
+            if (post.uid == Constants.currentUserUid) {
+                binding.detailBtnEditPost.visibility = View.VISIBLE
+            } else {
+                binding.detailBtnEditPost.visibility = View.GONE
+            }
+
+            // 관심 목록에 있는 아이템의 경우 아이콘 변경 및 관심 목록 제거 버튼 표시
+            if (post.likeUsers.contains(Constants.currentUserUid)) {
+                binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
+                binding.detailBtnSubFavorite.visibility = View.VISIBLE
+            } else {
+                binding.detailLike.setImageResource(R.drawable.icn_bookmark)
+                binding.detailBtnSubFavorite.visibility = View.GONE
+            }
+
+        }
         binding.datailProfile.setOnClickListener {
-            val yourDetailFragment = YourDetailPage()
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frag_edit, yourDetailFragment)
+            val yourDetailFragment=YourDetailPage()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frag_edit,yourDetailFragment)
                 .addToBackStack(null)
                 .commit()
         }
 
 
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 
     private fun stateIconChange() {
@@ -381,7 +407,7 @@ class PostDetailFragment : Fragment() {
 
 
     private fun startMessageActivity(documnetUid: String) {
-        val intent = Intent(requireContext(), MessageActivity::class.java)
+       val intent = Intent(requireContext(), MessageActivity::class.java)
         intent.putExtra("documnetUid", documnetUid)
         Log.d("susu", "startMessageActivity: ${documnetUid}")
         startActivity(intent)

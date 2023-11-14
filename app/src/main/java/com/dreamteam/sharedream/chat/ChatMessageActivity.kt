@@ -24,6 +24,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -31,6 +33,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.FcmRetrofitInstance
 import com.dreamteam.sharedream.databinding.ActivityChatBinding
 import com.dreamteam.sharedream.databinding.ChatDialogBinding
 import com.dreamteam.sharedream.databinding.ChatItemBinding
@@ -47,6 +50,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -484,44 +490,56 @@ class ChatMessageActivity : AppCompatActivity() {
                             val userId =Constants.currentUserInfo?.nickname
                             val notificationTitle= ""
                             val notificationBody = "${userId}님이 채팅을 보냈어요!"
-                            Log.d("nyh", "getTokenFromUser useId: $userId")
-                            Log.d("nyh", "getTokenFromUser: token: $token")
+                            Log.d("nyh chatmessageActivity", "getTokenFromUser useId: $userId")
+                            Log.d("nyh chatmessageActivity", "getTokenFromUser: token: $token")
                             //
                             val data = NotificationBody.NotificationData(
                                 notificationTitle!!, notificationBody,userId!!
                             )
                             val body = NotificationBody(token, data)
-                            Log.d("nyh", "getTokenFromPost: send value of body $body")
+                            Log.d("nyh chatmessageActivity", "getTokenFromPost: send value of body $body")
                             postFeedViewModel.sendNotification(body)
 
-                            val notiLIst = hashMapOf(
-                                "title" to notificationTitle,
-                                "nickname" to userId,
-                                "uid" to destinationUid,
-                                "time" to Timestamp.now(),
-                            )
-                            db.collection("notifyChatList")
-                                .add(notiLIst)
-                                .addOnSuccessListener { task ->
-                                    val myDocuId = task.id
-                                    val updatedData = mapOf("myDocuId" to myDocuId)
-                                    Log.d("nyh", "getTokenFromPost: $task")
-                                    db.collection("notifyList")
-                                        .document(myDocuId)
-                                        .update(updatedData)
-                                        .addOnSuccessListener {
-                                        }
-                                    Log.d("nyh", "getTokenFromPost: $task")
-                                }
-                            Log.d("nyh", "getTokenFromPost: token = $token")
-                            Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
+                            storage.reference.child("ProfileImg").child("$uid").downloadUrl
+                                .addOnSuccessListener { image ->
+                                    val profile = image
 
+                                    val profileImageUrl = profile
+                                    Log.d(
+                                        "nyh","getTokenFromUser profileImageUrl: $profileImageUrl"
+                                    )
+                                    Log.d("nyh", "getTokenFromUser profile: $profile")
+                                    val notiLIst = hashMapOf(
+                                        "title" to notificationTitle,
+                                        "body" to notificationBody,
+                                        "nickname" to userId,
+                                        "uid" to destinationUid,
+                                        "time" to Timestamp.now(),
+                                        "profileImageUrl" to profileImageUrl
+                                    )
+                                    db.collection("notifyChatList")
+                                        .add(notiLIst)
+                                        .addOnSuccessListener { task ->
+                                            val myDocuId = task.id
+                                            val updatedData = mapOf("myDocuId" to myDocuId)
+                                            Log.d("nyh", "getTokenFromPost:docuId $myDocuId")
+                                            db.collection("notifyChatList")
+                                                .document(myDocuId)
+                                                .update(updatedData)
+                                                .addOnSuccessListener {
+                                                }
+                                            Log.d("nyh", "getTokenFromPost: $task")
+                                        }
+                                    Log.d("nyh", "getTokenFromPost: token = $token")
+                                    Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
+
+                                }
                         }
                     } else {
-                        Log.d("nyh", "getTokenFromPost: elsefail")
+                        Log.d("nyh chatmessageActivity", "getTokenFromPost: elsefail")
                     }
                 }.addOnFailureListener {
-                    Log.d("nyh", "getTokenFromPost: failurfail")
+                    Log.d("nyh chatmessageActivity", "getTokenFromPost: failurfail")
                 }
         }
 
