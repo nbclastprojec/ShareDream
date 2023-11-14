@@ -15,6 +15,7 @@ import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.Util.Util
 import com.dreamteam.sharedream.chat.ChatFragment
 import com.dreamteam.sharedream.databinding.FragmentMypageBinding
+import com.dreamteam.sharedream.view.InquiryFragment
 import com.dreamteam.sharedream.view.MyPageFavoritePost
 import com.dreamteam.sharedream.view.MyPostFeedFragment
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
@@ -109,6 +110,10 @@ class MyPageFragment : Fragment() {
         binding.btnDeleteAccount.setOnClickListener {
             deleteUserAccount()
         }
+        // 1:1 문의하기 버튼
+        binding.btnInquiry.setOnClickListener {
+            parentFragmentManager.beginTransaction().replace(R.id.frag_edit,InquiryFragment()).addToBackStack(null).commit()
+        }
 
         // 내 채팅 목록 버튼 클릭 이벤트
         binding.btnChatlist.setOnClickListener {
@@ -116,6 +121,7 @@ class MyPageFragment : Fragment() {
                 .replace(R.id.frag_edit, ChatFragment()).addToBackStack(null).commit()
         }
 
+        // 내 관심 목록으로 이동 버튼
         binding.btnMyFavoriteList.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frag_edit, MyPageFavoritePost()).addToBackStack(null).commit()
@@ -236,12 +242,9 @@ class MyPageFragment : Fragment() {
 
 
     }
-    
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

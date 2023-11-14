@@ -233,7 +233,6 @@
 <!--    </LinearLayout>-->
 
 
-
     <TextView
         android:id="@+id/mypage_intro"
         android:layout_width="260dp"
@@ -241,10 +240,13 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
+        android:ellipsize="end"
         android:fontFamily="sans-serif"
-        android:maxLines="3"
-        android:text="나의 설명 나의 설명 나의 설명 나의 설명"
-        android:textSize="14sp"
+        android:maxLines="2"
+        android:gravity="center_vertical"
+        android:text="자기소개 입니다."
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/mypage_id" />
