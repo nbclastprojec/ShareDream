@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.dreamteam.sharedream.R
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.ActivityChatBinding
 import com.dreamteam.sharedream.databinding.ChatDialogBinding
 import com.dreamteam.sharedream.databinding.ChatItemBinding
@@ -423,9 +424,9 @@ class ChatMessageActivity : AppCompatActivity() {
         fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
             .push().setValue(comment)
     }
-    fun getTokenFromUser() {
+    private fun getTokenFromUser() {
         val db = Firebase.firestore
-        val postRef = uid?.let { db.collection("UserData").document(it) }
+        val postRef = destinationUid?.let { db.collection("UserData").document(it) }
 
         if (postRef != null) {
             postRef
@@ -435,11 +436,11 @@ class ChatMessageActivity : AppCompatActivity() {
 
                         val token = documentSnapshot.getString("token")
                         if (token != null) {
-                            var chat: Chatting? = null
-                            val userId =chat?.name
+                            val userId =Constants.currentUserInfo?.nickname
                             val notificationTitle= ""
                             val notificationBody = "${userId}님이 채팅을 보냈어요!"
-                            Log.d("nyh", "getTokenFromUser: $userId")
+                            Log.d("nyh", "getTokenFromUser useId: $userId")
+                            Log.d("nyh", "getTokenFromUser: token: $token")
                             //
                             val data = NotificationBody.NotificationData(
                                 notificationTitle!!, notificationBody,userId!!
@@ -451,7 +452,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             val notiLIst = hashMapOf(
                                 "title" to notificationTitle,
                                 "nickname" to userId,
-                                "uid" to uid,
+                                "uid" to destinationUid,
                                 "time" to Timestamp.now(),
                             )
                             db.collection("notifyChatList")

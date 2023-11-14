@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.dreamteam.sharedream.chat.Chatting
 import com.dreamteam.sharedream.databinding.MyalarmBinding
+import com.dreamteam.sharedream.model.AlarmChatData
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -20,12 +20,12 @@ class AlarmAdapter2(
 //    private val itemClickListener: AlarmAdapter2.OnItemClickListener
 ) :
     RecyclerView.Adapter<AlarmAdapter2.AlarmHolder2>() {
-    private var chatItem: List<Chatting?> = emptyList()
-
-    //    interface OnItemClickListener {
-//        fun onItemClick(post: AlarmPost)
+    private var chatItem: List<AlarmChatData?> = emptyList()
+//
+//        interface OnItemClickListener {
+//        fun onItemClick(post: AlarmChatData)
 //    }
-    fun setData(data: List<Chatting?>) {
+    fun setData(data: List<AlarmChatData?>) {
         chatItem = data
         notifyDataSetChanged()
         Log.d("nyh", "setData: $data")
@@ -39,11 +39,11 @@ class AlarmAdapter2(
         val alarmNickname = binding.notinickname
         val alarmTime = binding.txtTime
 
-        fun bind(chatPost: Chatting, timestamp: Timestamp) {
+        fun bind(chatPost: AlarmChatData, timestamp: Timestamp) {
 
             val date: Date = timestamp.toDate()
             val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-
+//
 //            postDate.text = dateFormat.format(date)
 
             // 2. 현재 날짜, 시간 기준으로 만들기 ( 1시간 전, 2일 전, 1달 전)

@@ -144,6 +144,7 @@ class MessageActivity : AppCompatActivity() {
                     fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
                         .push().setValue(comment)
                     editText.text = null
+                    getTokenFromUser()
                 }
             } else {
                 Toast.makeText(this,"메세지를 입력하세요.",Toast.LENGTH_LONG).show()
@@ -399,8 +400,9 @@ class MessageActivity : AppCompatActivity() {
             }
         }
     }
-    fun getTokenFromUser() {
-        val postRef = uid?.let { db.collection("UserData").document(it) }
+    private fun getTokenFromUser() {
+
+        val postRef = destinationUid?.let { db.collection("UserData").document(it) }
 
         if (postRef != null) {
             postRef
@@ -410,11 +412,11 @@ class MessageActivity : AppCompatActivity() {
 
                         val token = documentSnapshot.getString("token")
                         if (token != null) {
-                            var chat: Chatting? = null
-                            val userId =chat?.name
+                            val userId = Constants.currentUserInfo?.nickname
                             val notificationTitle= ""
                             val notificationBody = "${userId}님이 채팅을 보냈어요!"
-                            Log.d("nyh", "getTokenFromUser: $userId")
+                            Log.d("nyh", " userId: $userId")
+                            Log.d("nyh", " token: $token")
     //
                             val data = NotificationBody.NotificationData(
                                 notificationTitle!!, notificationBody,userId!!
@@ -426,7 +428,7 @@ class MessageActivity : AppCompatActivity() {
                             val notiLIst = hashMapOf(
                                 "title" to notificationTitle,
                                 "nickname" to userId,
-                                "uid" to uid,
+                                "uid" to destinationUid,
                                 "time" to Timestamp.now(),
                             )
                             db.collection("notifyChatList")

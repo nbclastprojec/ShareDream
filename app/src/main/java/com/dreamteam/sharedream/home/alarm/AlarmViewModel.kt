@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dreamteam.sharedream.chat.Chatting
+import com.dreamteam.sharedream.model.AlarmChatData
 import com.dreamteam.sharedream.model.PostRcv
 
 class AlarmViewModel : ViewModel() {
@@ -18,8 +19,8 @@ class AlarmViewModel : ViewModel() {
     private val _selectedPost = MutableLiveData<AlarmPost?>()
     val selectedPost: LiveData<AlarmPost?> = _selectedPost
 
-    private val _notiChatData: MutableLiveData<List<Chatting?>> = MutableLiveData()
-    val notiChatData: LiveData<List<Chatting?>> = _notiChatData
+    private val _notiChatData: MutableLiveData<List<AlarmChatData?>> = MutableLiveData()
+    val notiChatData: LiveData<List<AlarmChatData?>> = _notiChatData
 
 
     fun getNotiList() {
