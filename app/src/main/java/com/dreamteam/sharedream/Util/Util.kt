@@ -55,7 +55,7 @@ object Util {
 class DuplicateClickListener(private val click: (View) -> Unit) : View.OnClickListener {
 
     companion object {
-        private const val CLICK_INTERVAL = 1000
+        private const val CLICK_INTERVAL = 10000
     }
 
     private var lastClickedTime: Long = 0L

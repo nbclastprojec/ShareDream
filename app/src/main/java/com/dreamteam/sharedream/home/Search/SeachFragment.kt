@@ -89,6 +89,7 @@ class SeachFragment : Fragment() {
                 val query = p0.toString()
                 if (query.isNotEmpty()) {
                     searchViewModel.performSearch(query)
+                    searchViewModel.findCity(query)
                     Log.d("nyh", "afterTextChanged: $p0 // $query ")
                 } else {
                     Log.d("nyh", "afterTextChanged else: $p0 // $query")
