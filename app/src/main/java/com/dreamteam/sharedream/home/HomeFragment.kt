@@ -1,5 +1,6 @@
 package com.dreamteam.sharedream.home
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -12,11 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
-import android.widget.LinearLayout
-import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.NicknameCheckDailogFragment
 import com.dreamteam.sharedream.Util.ToastMsg
 import com.dreamteam.sharedream.adapter.PostClick
@@ -83,9 +82,17 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+
+            DieDialog()
+        }
+        callback.isEnabled = true
+
+
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         val uid = auth.currentUser?.uid.toString()
         checkNickName(uid)
+
 
         binding.homeBtnRefreshList.setOnClickListener {
             myPostFeedViewModel.downloadHomePostRcv()
@@ -225,4 +232,18 @@ class HomeFragment : Fragment() {
             }
         }
     }
+    private fun DieDialog() {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("종료")
+        alertDialogBuilder.setMessage("정말로 종료하시겠습니까?")
+        alertDialogBuilder.setPositiveButton("예") { _, _ ->
+            requireActivity().finish()
+        }
+        alertDialogBuilder.setNegativeButton("아니오") { _, _ ->
+
+        }
+        alertDialogBuilder.create().show()
+    }
+
+
 }
