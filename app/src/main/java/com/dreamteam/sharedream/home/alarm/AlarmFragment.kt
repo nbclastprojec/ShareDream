@@ -55,6 +55,7 @@ class AlarmFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        alarmchatAdapter = AlarmAdapter2(mContext)
         alarmadapter = AlarmPostAdapter(mContext, object : AlarmPostAdapter.OnItemClickListener {
             override fun onItemClick(post: AlarmPost) {
                 viewModel.onPostClicked(post)
