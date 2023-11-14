@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -188,12 +189,14 @@ class ChatMessageActivity : AppCompatActivity() {
             plusLayout.visibility = View.GONE
         }
         imageButton.setOnClickListener {
+
             externalImageAccess()
         }
 
     }
 
     private fun externalImageAccess() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){ // 13 이상일 경우 if문 실행
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_EXTERNAL_STORAGE
@@ -207,6 +210,9 @@ class ChatMessageActivity : AppCompatActivity() {
         } else {
             openGallery()
         }
+     }else{
+        openGallery()
+    }
     }
 
 
