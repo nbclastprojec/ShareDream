@@ -490,14 +490,14 @@ class ChatMessageActivity : AppCompatActivity() {
                             val userId =Constants.currentUserInfo?.nickname
                             val notificationTitle= ""
                             val notificationBody = "${userId}님이 채팅을 보냈어요!"
-                            Log.d("nyh", "getTokenFromUser useId: $userId")
-                            Log.d("nyh", "getTokenFromUser: token: $token")
+                            Log.d("nyh chatmessageActivity", "getTokenFromUser useId: $userId")
+                            Log.d("nyh chatmessageActivity", "getTokenFromUser: token: $token")
                             //
                             val data = NotificationBody.NotificationData(
                                 notificationTitle!!, notificationBody,userId!!
                             )
                             val body = NotificationBody(token, data)
-                            Log.d("nyh", "getTokenFromPost: send value of body $body")
+                            Log.d("nyh chatmessageActivity", "getTokenFromPost: send value of body $body")
 
                             lifecycleScope.launch {
                                 sendNotification(body)
@@ -505,6 +505,7 @@ class ChatMessageActivity : AppCompatActivity() {
 
                             val notiLIst = hashMapOf(
                                 "title" to notificationTitle,
+                                "body" to notificationBody,
                                 "nickname" to userId,
                                 "uid" to destinationUid,
                                 "time" to Timestamp.now(),
@@ -514,23 +515,23 @@ class ChatMessageActivity : AppCompatActivity() {
                                 .addOnSuccessListener { task ->
                                     val myDocuId = task.id
                                     val updatedData = mapOf("myDocuId" to myDocuId)
-                                    Log.d("nyh", "getTokenFromPost: $task")
-                                    db.collection("notifyList")
+                                    Log.d("nyh chatmessageActivity", " getTokenFromPost: docuId $myDocuId")
+                                    db.collection("notifyChatList")
                                         .document(myDocuId)
                                         .update(updatedData)
                                         .addOnSuccessListener {
+                                            Log.d("nyh", "getTokenFromPost:sucussss $myDocuId")
                                         }
-                                    Log.d("nyh", "getTokenFromPost: $task")
                                 }
-                            Log.d("nyh", "getTokenFromPost: token = $token")
-                            Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
+                            Log.d("nyh chatmessageActivity", "getTokenFromPost: token = $token")
+                            Log.d("nyh chatmessageActivity", "getTokenFromPost: suc title =$notificationTitle")
 
                         }
                     } else {
-                        Log.d("nyh", "getTokenFromPost: elsefail")
+                        Log.d("nyh chatmessageActivity", "getTokenFromPost: elsefail")
                     }
                 }.addOnFailureListener {
-                    Log.d("nyh", "getTokenFromPost: failurfail")
+                    Log.d("nyh chatmessageActivity", "getTokenFromPost: failurfail")
                 }
         }
 
@@ -539,9 +540,9 @@ class ChatMessageActivity : AppCompatActivity() {
         val myResponse: MutableLiveData<Response<ResponseBody>> = MutableLiveData()
         try {
             myResponse.value = FcmRetrofitInstance.fcmApi.sendNotification(notification)
-            Log.d("nyh", "sendNotification chat Repochat: $notification")
+            Log.d("nyh chatmessageActivity", "sendNotification chat Repochat: $notification")
         } catch (e: Exception) {
-            Log.e("nyh", "Failed to send FCM message: ${e.message}")
+            Log.e("nyh chatmessageActivity", "Failed to send FCM message: ${e.message}")
         }
     }
 }

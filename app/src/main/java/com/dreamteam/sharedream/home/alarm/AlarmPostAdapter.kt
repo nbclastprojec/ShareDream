@@ -174,12 +174,14 @@ class AlarmPostAdapter(
                     else -> "${dateFormat.format(date)}"
                 }
             alarmTime.text = result
-            alarmTitle.text = "채팅신청이 도착했습니다."
-            alarmNickname.text = chatPost.name
+            alarmTitle.text = chatPost.title
+            alarmNickname.text = chatPost.nickname
 
             if (chatPost.profileImageUrl?.isNotEmpty() == true) {
-                val imageUrl = chatPost.profileImageUrl.first()
+                val imageUrl = chatPost.profileImageUrl
                 alarmImage.load(imageUrl)
+            } else {
+                alarmImage.setImageResource(R.drawable.profile_circle)
             }
         }
 
