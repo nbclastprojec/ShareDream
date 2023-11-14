@@ -23,7 +23,7 @@
 이미지 클릭 시 플레이 스토어로 이동합니다.
 <br>
 
-[![](https://raw.githubusercontent.com/nbclastprojec/ShareDream/c64c85c4d14aa199f0bbafed552a673635c99730/ReadmeImg/playstoreAppIcon.svg)](https://play.google.com/store/apps/details?id=com.dreamteam.sharedream)
+[![](https://raw.githubusercontent.com/nbclastprojec/ShareDream/43cff170db79d09d3c9f63aff727592b531cc937/ReadmeImg/playstoreAppLink2.svg)](https://play.google.com/store/apps/details?id=com.dreamteam.sharedream)
 <br><br><br>
 
 # Contributors
