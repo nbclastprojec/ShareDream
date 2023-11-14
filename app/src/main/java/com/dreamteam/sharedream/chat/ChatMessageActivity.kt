@@ -23,6 +23,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -30,6 +32,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.FcmRetrofitInstance
 import com.dreamteam.sharedream.databinding.ActivityChatBinding
 import com.dreamteam.sharedream.databinding.ChatDialogBinding
 import com.dreamteam.sharedream.databinding.ChatItemBinding
@@ -46,6 +49,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -471,7 +477,10 @@ class ChatMessageActivity : AppCompatActivity() {
                             )
                             val body = NotificationBody(token, data)
                             Log.d("nyh", "getTokenFromPost: send value of body $body")
-                            postFeedViewModel.sendNotification(body)
+
+                            lifecycleScope.launch {
+                                sendNotification(body)
+                            }
 
                             val notiLIst = hashMapOf(
                                 "title" to notificationTitle,
@@ -504,6 +513,15 @@ class ChatMessageActivity : AppCompatActivity() {
                 }
         }
 
+    }
+    private suspend fun sendNotification(notification: NotificationBody) {
+        val myResponse: MutableLiveData<Response<ResponseBody>> = MutableLiveData()
+        try {
+            myResponse.value = FcmRetrofitInstance.fcmApi.sendNotification(notification)
+            Log.d("nyh", "sendNotification Repo: $notification")
+        } catch (e: Exception) {
+            Log.e("nyh", "Failed to send FCM message: ${e.message}")
+        }
     }
 }
 

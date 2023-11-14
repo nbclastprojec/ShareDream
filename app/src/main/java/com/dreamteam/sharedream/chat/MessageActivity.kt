@@ -18,7 +18,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,9 +30,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.Util.FcmRetrofitInstance
 import com.dreamteam.sharedream.databinding.ActivityChatBinding
 import com.dreamteam.sharedream.databinding.ChatDialogBinding
 import com.dreamteam.sharedream.databinding.ChatItemBinding
+import com.dreamteam.sharedream.home.HomeRepository
 import com.dreamteam.sharedream.model.NotificationBody
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
@@ -44,7 +49,10 @@ import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -59,7 +67,7 @@ class MessageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding
     private var document: String? = null
     private var myCustomDialog: MyCustomDialog? = null
-    private val postFeedViewModel =MyPostFeedViewModel()
+    private val postFeedViewModel: MyPostFeedViewModel by viewModels()
     private val db = Firebase.firestore
     private val PICK_IMAGE_REQUEST = 1
 
@@ -413,7 +421,7 @@ class MessageActivity : AppCompatActivity() {
                         val token = documentSnapshot.getString("token")
                         if (token != null) {
                             val userId = Constants.currentUserInfo?.nickname
-                            val notificationTitle= ""
+                            val notificationTitle= "채팅알림"
                             val notificationBody = "${userId}님이 채팅을 보냈어요!"
                             Log.d("nyh", " userId: $userId")
                             Log.d("nyh", " token: $token")
@@ -423,10 +431,12 @@ class MessageActivity : AppCompatActivity() {
                             )
                             val body = NotificationBody(token, data)
                             Log.d("nyh", "getTokenFromPost: send value of body $body")
-                            postFeedViewModel.sendNotification(body)
-
+                            lifecycleScope.launch {
+                                sendNotification(body)
+                            }
                             val notiLIst = hashMapOf(
                                 "title" to notificationTitle,
+                                "body" to notificationBody,
                                 "nickname" to userId,
                                 "uid" to destinationUid,
                                 "time" to Timestamp.now(),
@@ -448,6 +458,7 @@ class MessageActivity : AppCompatActivity() {
                             Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
 
                         }
+
                     } else {
                         Log.d("nyh", "getTokenFromPost: elsefail")
                     }
@@ -499,6 +510,16 @@ class MessageActivity : AppCompatActivity() {
         fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
                 .push().setValue(comment)
         }
+
+    private suspend fun sendNotification(notification: NotificationBody) {
+        val myResponse: MutableLiveData<Response<ResponseBody>> = MutableLiveData()
+        try {
+            myResponse.value = FcmRetrofitInstance.fcmApi.sendNotification(notification)
+            Log.d("nyh", "sendNotification Repo: $notification")
+        } catch (e: Exception) {
+            Log.e("nyh", "Failed to send FCM message: ${e.message}")
+        }
     }
 
+}
 

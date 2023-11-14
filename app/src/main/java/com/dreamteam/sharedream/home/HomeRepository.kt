@@ -111,20 +111,5 @@ class HomeRepository {
         } catch (e: Exception) {
             Log.e("nyh", "Failed to send FCM message: ${e.message}")
         }
-
-
-//    fun uploadChat(messageDTO: MessageDTO){
-//
-//        // 채팅 저장
-//        firestore.collection("chat")
-//            .document(messageDTO.fromUid.toString())
-//            .collection(messageDTO.toUid.toString())
-//            .document(messageDTO.timestamp.toString())
-//            .set(messageDTO)
-//        firestore.collection("chat")
-//            .document(messageDTO.toUid.toString())
-//            .collection(messageDTO.fromUid.toString())
-//            .document(messageDTO.timestamp.toString())
-//            .set(messageDTO)
     }
 }
