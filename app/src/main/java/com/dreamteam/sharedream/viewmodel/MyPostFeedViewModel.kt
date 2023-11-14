@@ -572,4 +572,9 @@ class MyPostFeedViewModel : ViewModel() {
         }
     }
 
+
+    // 디테일 페이지에서 관심목록, 채팅 상호작용 시 해당 게시물이 삭제된 상태인지 확인
+    fun checkPostState(timestamp: Timestamp):Task<QuerySnapshot> {
+        return db.collection("Posts").whereEqualTo("timestamp", timestamp).get()
+    }
 }

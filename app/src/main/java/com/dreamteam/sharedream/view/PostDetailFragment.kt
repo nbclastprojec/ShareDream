@@ -2,7 +2,9 @@ package com.dreamteam.sharedream.view
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -10,10 +12,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.dreamteam.sharedream.R
@@ -24,14 +30,19 @@ import com.dreamteam.sharedream.YourDetailPage
 import com.dreamteam.sharedream.chat.MessageActivity
 import com.dreamteam.sharedream.databinding.FragmentPostDetailBinding
 import com.dreamteam.sharedream.home.HomeViewModel
+import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.MapViewFragment.Companion.READ_ONLY
 import com.dreamteam.sharedream.view.adapter.DetailBannerImgAdapter
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.Date
-
+import kotlin.math.log
 
 @Suppress("DEPRECATION")
 class PostDetailFragment : Fragment() {
@@ -39,6 +50,8 @@ class PostDetailFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
+
+    private val homeViewmodel: HomeViewModel by activityViewModels()
 
     private val currentPostInfo = mutableListOf<PostRcv>()
 
@@ -53,6 +66,7 @@ class PostDetailFragment : Fragment() {
         binding.detailpageTime.text = "${time(postRcv.timestamp)}"
         binding.detailTvItemState.text = postRcv.state
         stateIconChange()
+
     }
 
 
@@ -75,7 +89,6 @@ class PostDetailFragment : Fragment() {
 
             currentPostInfo.add(it)
             Log.d("xxxx", " detail Page PostInfo : $currentPostInfo")
-
             imgs.addAll(it.imgs)
 
             // 수정 버튼 visibility
@@ -147,7 +160,9 @@ class PostDetailFragment : Fragment() {
         val adapter = DetailBannerImgAdapter(imgs)
         viewPager.adapter = adapter
 
-
+        myPostFeedViewModel.myResponse.observe(viewLifecycleOwner){
+            Log.d("nyh", "onViewCreated: $it")
+        }
 
         return binding.root
     }
@@ -159,11 +174,6 @@ class PostDetailFragment : Fragment() {
 
         // 관심목록 추가 시 카운트에 반영
         myPostFeedViewModel.likeUserChangeResult.observe(viewLifecycleOwner) {
-            Log.d(
-                "nyh LifecycleState",
-                "Observer added in state: ${viewLifecycleOwner.lifecycle.currentState}"
-            )
-
             if (it[0].timestamp == currentPostInfo[0].timestamp) {
                 Log.d("xxxx", " 일치 ?: ${it[0].timestamp == currentPostInfo[0].timestamp} ")
                 Log.d("xxxx", " 전체 LiveData : ${it} 바뀐 Livedata ${it[0].likeUsers}")
@@ -203,7 +213,7 @@ class PostDetailFragment : Fragment() {
                         .addToBackStack(null).commit()
                 }
             } else {
-                ToastMsg.makeToast(requireContext(), "거래장소가 지정되지 않았습니다")
+                ToastMsg.makeToast(requireContext(),"거래장소가 지정되지 않았습니다")
             }
         }
 
@@ -217,27 +227,39 @@ class PostDetailFragment : Fragment() {
         binding.detailBtnAddFavorite.setOnClickListener {
             if (currentPostInfo[0].uid != Constants.currentUserUid) {
                 Util.showDialog(requireContext(), "관심 목록에 추가", "내 관심 목록에 추가하시겠습니까?") {
-                    myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
-                    myPostFeedViewModel.getTokenFromPost(currentPostInfo[0].documentId)
+
+                    // 현재 게시글 상태 확인하고 삭제되지 않은 게시글일 경우 관심목록에 추가
+                    myPostFeedViewModel.checkPostState(currentPostInfo[0].timestamp).addOnSuccessListener {
+
+                        myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
+                        myPostFeedViewModel.getTokenFromPost(currentPostInfo[0].documentId)
 
                     myPostFeedViewModel.myResponse.observe(viewLifecycleOwner) {
                         Log.d("nyh", "onViewCreated: $it")
                     }
 
-                    Log.d(
-                        "xxxx",
-                        " detail like btn clicked, post timestamp  =  ${currentPostInfo[0].timestamp}"
-                    )
+                        Log.d(
+                            "xxxx",
+                            " detail like btn clicked, post timestamp  =  ${currentPostInfo[0].timestamp}"
+                        )
+                    }.addOnFailureListener {
+                        ToastMsg.makeToast(requireContext(),"존재하지 않는 게시글 입니다")
+                    }
                 }
             } else {
-                ToastMsg.makeToast(requireContext(), "작성자는 북마크에 추가할 수 없습니다")
+                ToastMsg.makeToast(requireContext(),"작성자는 북마크에 추가할 수 없습니다")
             }
         }
 
         // 관심 목록 제거 버튼 클릭 이벤트
         binding.detailBtnSubFavorite.setOnClickListener {
+
             Util.showDialog(requireContext(), "관심 목록에서 제거", "내 관심 목록에서 게시글의 아이템을 제거하시겠습니까?") {
-                myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
+                myPostFeedViewModel.checkPostState(currentPostInfo[0].timestamp).addOnSuccessListener {
+                    myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
+                }.addOnFailureListener {
+                    ToastMsg.makeToast(requireContext(),"존재하지 않는 게시글 입니다")
+                }
             }
         }
 
@@ -248,7 +270,12 @@ class PostDetailFragment : Fragment() {
 
         // 채팅하기 버튼 클릭 이벤트 - 작성자와 채팅하기
         binding.detailChatButton.setOnClickListener {
-            getUserInformation()
+            myPostFeedViewModel.checkPostState(currentPostInfo[0].timestamp).addOnSuccessListener {
+                getUserInformation()
+            }.addOnFailureListener {
+                ToastMsg.makeToast(requireContext(),"존재하지 않는 게시글 입니다")
+            }
+
         }
 
 
