@@ -1,12 +1,15 @@
 package com.dreamteam.sharedream.chat
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -19,6 +22,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -62,6 +67,7 @@ class MessageActivity : AppCompatActivity() {
     private val postFeedViewModel =MyPostFeedViewModel()
     private val db = Firebase.firestore
     private val PICK_IMAGE_REQUEST = 1
+    private val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -196,9 +202,29 @@ class MessageActivity : AppCompatActivity() {
             plusLayout.visibility = View.GONE
         }
         imageButton.setOnClickListener {
-            openGallery()
+            externalImageAccess()
         }
 
+    }
+
+    private fun externalImageAccess() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){ // 13 이상일 경우 if문 실행
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE
+                )
+            } else {
+                openGallery()
+            }
+        }else{
+            openGallery()
+        }
     }
 
     private fun checkChatRoom() {
@@ -481,7 +507,7 @@ class MessageActivity : AppCompatActivity() {
                     val imageUrl = imageUri.toString()
                     Log.d("susu", "uploadImage: ${imageUrl}")
 
-                    sendMessageWithImage(imageUrl)
+                    sendMessageWithImage(imageUri)
                 }
                 .addOnFailureListener { exception ->
                     // 이미지 업로드 실패 시 처리
@@ -490,15 +516,29 @@ class MessageActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendMessageWithImage(imageUrl: String) {
-        val time = System.currentTimeMillis()
-        val dateFormat = SimpleDateFormat("MM월 dd일 hh:mm")
-        val realTime = dateFormat.format(Date(time)).toString()
+    private fun sendMessageWithImage(imageUri: Uri) {
+        val storageReference = storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
 
-        val comment = ChatModel.Comment(uid, "", realTime, imageUrl)
-        fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
-                .push().setValue(comment)
-        }
+        storageReference.putFile(imageUri)
+            .addOnSuccessListener { taskSnapshot ->
+                // 이미지 업로드 성공 시 처리
+                storageReference.downloadUrl.addOnSuccessListener { imageUrl ->
+                    val time = System.currentTimeMillis()
+                    val dateFormat = SimpleDateFormat("MM월 dd일 hh:mm")
+                    val realTime = dateFormat.format(Date(time)).toString()
+
+                    val comment = ChatModel.Comment(uid, "", realTime, imageUrl.toString())
+
+                    // Firebase에 채팅 메시지 저장
+                    fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
+                        .push().setValue(comment)
+                }
+            }
+            .addOnFailureListener { exception ->
+                // 이미지 업로드 실패 시 처리
+                Log.e("MessageActivity", "이미지 업로드 실패: ${exception.message}")
+            }
+    }
     }
 
 

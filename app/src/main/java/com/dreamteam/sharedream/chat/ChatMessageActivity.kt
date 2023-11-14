@@ -330,6 +330,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             profile.visibility = View.INVISIBLE
                             name.visibility = View.INVISIBLE
                         } else {
+                            // 이미지가 없으면 텍스트 메시지 표시
                             imageMessages.visibility = View.GONE
                             profile.visibility = View.INVISIBLE
                             name.visibility = View.INVISIBLE
@@ -411,6 +412,7 @@ class ChatMessageActivity : AppCompatActivity() {
                 binding.dialogBtn.setOnClickListener {
                     customDialogInterface.onDeleteBtnClicked()
                 }
+
             }
         }
     private fun openGallery() {
@@ -432,11 +434,8 @@ class ChatMessageActivity : AppCompatActivity() {
             val storageReference = storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
             storageReference.putFile(imageUri)
                 .addOnSuccessListener { taskSnapshot ->
-                    // 이미지 업로드 성공 시 처리
-                    val imageUrl = imageUri.toString()
-                    Log.d("susu", "uploadImage: ${imageUrl}")
 
-                    sendMessageWithImage(imageUrl)
+                    sendMessageWithImage(imageUri)
                 }
                 .addOnFailureListener { exception ->
                     // 이미지 업로드 실패 시 처리
@@ -445,15 +444,31 @@ class ChatMessageActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendMessageWithImage(imageUrl: String) {
-        val time = System.currentTimeMillis()
-        val dateFormat = SimpleDateFormat("MM월 dd일 hh:mm")
-        val realTime = dateFormat.format(Date(time)).toString()
+    private fun sendMessageWithImage(imageUri: Uri) {
+        val storageReference = storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
 
-        val comment = ChatModel.Comment(uid, "", realTime, imageUrl)
-        fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
-            .push().setValue(comment)
+        storageReference.putFile(imageUri)
+            .addOnSuccessListener { taskSnapshot ->
+                // 이미지 업로드 성공 시 처리
+                storageReference.downloadUrl.addOnSuccessListener { imageUrl ->
+                    val time = System.currentTimeMillis()
+                    val dateFormat = SimpleDateFormat("MM월 dd일 hh:mm")
+                    val realTime = dateFormat.format(Date(time)).toString()
+
+                    // 이미지 URL을 포함한 채팅 메시지 생성
+                    val comment = ChatModel.Comment(uid, "", realTime, imageUrl.toString())
+
+                    // Firebase에 채팅 메시지 저장
+                    fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
+                        .push().setValue(comment)
+                }
+            }
+            .addOnFailureListener { exception ->
+                // 이미지 업로드 실패 시 처리
+                Log.e("MessageActivity", "이미지 업로드 실패: ${exception.message}")
+            }
     }
+
     private fun getTokenFromUser() {
         val db = Firebase.firestore
         val postRef = destinationUid?.let { db.collection("UserData").document(it) }
