@@ -3,90 +3,97 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".NickNacmeCheckDialogFragment">
+    android:layout_height="match_parent"
+   >
 
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/suitesemibold"
+        android:gravity="center"
+        android:text="어플에서 사용할 닉네임을 정해주세요!"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.065"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="( 닉네임의 경우 한번 설정하시면 변경하실 수 없습니다.)"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintHeight_percent="0.055"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_nickName" />
+
+    <View
+        android:id="@+id/view8"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="1dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="17dp"
-            android:text="어플에서 사용할 닉네임을 정해주세요!"
-            android:textSize="25dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/suitesemibold"
-            app:layout_constraintHeight_percent="0.045" />
 
-        <TextView
-            android:id="@+id/textView25"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="17dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="( 닉네임의 경우 한번 설정하시면 변경하실 수 없습니다.)" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="@color/black" />
+    <EditText
+        android:id="@+id/edit_nickName"
+        android:layout_width="335dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/login_editbox"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="닉네임을 입력해 주세요."
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.055"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view8" />
 
-        <TextView
-            android:id="@+id/nickName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="40dp"
-            android:fontFamily="@font/suiteregular"
-            android:text="닉네임"
-            android:textSize="20sp"
-            app:layout_constraintHeight_percent="0.04" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/nickNameCreateBtn"
+        android:layout_width="333dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/loginbtn"
+        android:gravity="center"
+        android:layout_marginTop="80dp"
+        android:includeFontPadding="false"
+        android:text="로그인"
+        android:textColor="@color/white"
+        android:textSize="23sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.055"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView25" />
 
-        <EditText
-            android:id="@+id/edit_nickName"
-            android:layout_width="335dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="40dp"
-            android:background="@drawable/login_editbox"
-            android:paddingLeft="10dp"
-            android:ems="10"
-            android:inputType="text"
-            app:layout_constraintHeight_percent="0.055" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/nickNameCreateBtn"
-            android:layout_width="333dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="19dp"
-            android:layout_marginEnd="40dp"
-            android:background="@drawable/loginbtn"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:text="로그인"
-            android:textColor="@color/white"
-            android:textSize="23sp"
-            app:layout_constraintHeight_percent="0.055" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="30dp"
-            android:background="@color/black" />
-    </LinearLayout>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintHeight_percent="1"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nickNameCreateBtn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import coil.load
@@ -20,6 +21,10 @@ import com.dreamteam.sharedream.view.MyPostFeedFragment
 import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -101,6 +106,10 @@ class MyPageFragment : Fragment() {
 
         }
 
+        // 회원 탈퇴 버튼
+        binding.btnDeleteAccount.setOnClickListener {
+            deleteUserAccount()
+        }
         // 1:1 문의하기 버튼
         binding.btnInquiry.setOnClickListener {
             parentFragmentManager.beginTransaction().replace(R.id.frag_edit,InquiryFragment()).addToBackStack(null).commit()
@@ -156,13 +165,70 @@ class MyPageFragment : Fragment() {
     }
 
     private fun deleteUserAccount() {
-
         Util.showDialog(requireContext(), "회원 탈퇴", "회원 탈퇴 시 기존 정보를 다시 복구할 수 없습니다.") {
-            auth.signOut()
-            auth.currentUser!!.delete()
-            startActivity(Intent(activity, LogInActivity::class.java))
-            requireActivity().finish()
+            val currentUser = auth.currentUser
+            val userUID = currentUser?.uid.toString()
+            deleteUserData(userUID)
+            deleteChatting(userUID)
+            auth.currentUser!!.delete().addOnSuccessListener {
+                auth.signOut()
+                startActivity(Intent(activity, LogInActivity::class.java))
+                requireActivity().finish()
+            }.addOnFailureListener { e ->
+                Toast.makeText(requireContext(), "계정 삭제 오류: $e", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    private fun deleteUserData(UserUid: String) {
+        val firestore = FirebaseFirestore.getInstance()
+        val collectionReference = firestore.collection("UserData")
+        val documentRef = collectionReference.document(UserUid)
+
+        documentRef.delete().addOnSuccessListener {
+            Log.d("ffafas", UserUid)
+        }.addOnFailureListener { e ->
+            Log.e("ffafas", "사용자 데이터 삭제 오류: $e")
+        }
+
+        val collectionReference2=firestore.collection("Posts")
+        val documentRef2= collectionReference2.whereEqualTo("uid",UserUid)
+
+        documentRef2.get().addOnCompleteListener {task ->
+            if (task.isSuccessful){
+                for(document in task.result!!){
+                    document.reference.delete()
+                }
+            }else{
+                Toast.makeText(requireContext(),"문서처리 실패", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+    }
+
+    fun deleteChatting(uid: String) {
+        val database = FirebaseDatabase.getInstance()
+        val chattingRef = database.getReference("ChatRoom")
+
+        chattingRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (chatRoomSnapshot in dataSnapshot.children) {
+                    val usersSnapshot = chatRoomSnapshot.child("users")
+                    for (userUidSnapshot in usersSnapshot.children) {
+                        val userUid = userUidSnapshot.key
+                        if (userUid == uid) {
+                            chatRoomSnapshot.ref.removeValue()
+                            break
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                println("Error: $databaseError")
+            }
+        })
     }
 
     private fun signOut() {
