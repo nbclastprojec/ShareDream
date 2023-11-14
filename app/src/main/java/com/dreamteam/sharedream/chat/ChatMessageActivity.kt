@@ -1,9 +1,11 @@
 package com.dreamteam.sharedream.chat
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -19,6 +21,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -52,6 +56,7 @@ class ChatMessageActivity : AppCompatActivity() {
     private var document: String? = null
     private var myCustomDialog: MessageActivity.MyCustomDialog? = null
     private val PICK_IMAGE_REQUEST = 1
+    private val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -175,10 +180,28 @@ class ChatMessageActivity : AppCompatActivity() {
             plusLayout.visibility = View.GONE
         }
         imageButton.setOnClickListener {
-            openGallery()
+            externalImageAccess()
         }
 
     }
+
+    private fun externalImageAccess() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            openGallery()
+        }
+    }
+
+
     private fun checkChatRoom() {
         fireDatabase.child("ChatRoom").orderByChild("users/$uid").equalTo(true)
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -310,9 +333,10 @@ class ChatMessageActivity : AppCompatActivity() {
                         }?.addOnFailureListener { exception ->
                             Log.e("MessageActivity", "이미지 다운로드 실패: ${exception.message}")
                         }
-
                         if (comment.imageUrl?.isNotEmpty() == true) {
                             message.visibility = View.GONE
+                            Log.d("susu", "bind: ${comment.imageUrl} ")
+
                             Glide.with(itemView.context)
                                 .load(comment.imageUrl)
                                 .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
