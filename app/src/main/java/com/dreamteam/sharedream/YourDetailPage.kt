@@ -72,6 +72,7 @@ class YourDetailPage : Fragment() {
                         val timestamp = document.getTimestamp("timestamp")
                         val desc = document.getString("desc") ?: ""
                         val nickname = document.getString("nickname") ?: ""
+                        val likeUsers = document.get("likeUsers") as? List<String> ?: emptyList()
                         val deadline = document.getString("deadline")?:""
                         val imgs = document.get("imgs") as List<String>
                         val token =document.getString("token")?:""
@@ -89,7 +90,7 @@ class YourDetailPage : Fragment() {
                             emptyList()
                         }
 
-                        Log.d("asfas", imgUris.toString())
+                        Log.d("asfas", likeUsers.toString())
 
 
 
@@ -105,9 +106,9 @@ class YourDetailPage : Fragment() {
                                 desc,
                                 imgUris,
                                 nickname,
-                                listOf(),
+                                likeUsers,
                                 token,
-                                Timestamp.now(),
+                                timestamp,
                                 state,
                                 documentId,
                                 locationLatLng,

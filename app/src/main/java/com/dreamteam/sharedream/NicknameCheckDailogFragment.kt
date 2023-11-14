@@ -20,7 +20,11 @@ class NicknameCheckDailogFragment : DialogFragment() {
     private var _binding: FragmentNicknameCheckDailalogBinding? = null
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        isCancelable = false
 
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
