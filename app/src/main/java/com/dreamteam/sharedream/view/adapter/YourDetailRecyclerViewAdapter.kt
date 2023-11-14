@@ -8,6 +8,8 @@ import com.dreamteam.sharedream.databinding.FragmentYourDetailRecyclerViewBindin
 import com.dreamteam.sharedream.model.PostRcv
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -42,8 +44,11 @@ class YourDetailRecyclerViewAdapter : RecyclerView.Adapter<YourDetailRecyclerVie
         val item = itemList.getOrNull(position)
 
         if (item != null) {
+            val price=item.price
+            val format:NumberFormat=DecimalFormat("#,###")
+            val formatPrice=format.format(price).toString()
             holder.titleTextView.text = item.title
-            holder.priceTextView.text = item.price.toString()
+            holder.priceTextView.text = formatPrice+"원"
             holder.subtitleTextView.text = item.desc
             holder.endDateTextView.text = EndTime(item.endDate)
             holder.itemView.setOnClickListener {

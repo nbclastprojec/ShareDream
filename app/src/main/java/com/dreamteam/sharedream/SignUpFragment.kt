@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
@@ -33,11 +34,12 @@ import java.io.FileOutputStream
 
 
 class SignUpFragment : Fragment() {
-    private lateinit var binding: FragmentSignupBinding
+    private lateinit var binding:FragmentSignupBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var storage: FirebaseStorage
+    private lateinit var storage : FirebaseStorage
     private var checkcehckbox1 = false
     private var checkcehckbox2 = false
+    private var signUpListener: ListenerRegistration? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,15 +58,16 @@ class SignUpFragment : Fragment() {
 
         val personalAgree = PersonalAgree()
         personalAgree.setTargetFragment(this, 0)
-        binding = FragmentSignupBinding.inflate(inflater, container, false)
+        binding= FragmentSignupBinding.inflate(inflater,container,false)
         auth = FirebaseAuth.getInstance()
         binding.backButton.setOnClickListener {
-            val mainLogInMainFragment = LogInMainFragment()
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, mainLogInMainFragment)
+            val mainLogInMainFragment=LogInMainFragment()
+            val transaction=requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,mainLogInMainFragment)
             transaction.addToBackStack(null)
             transaction.commit()
         }
+
 
         binding.agree1.setOnClickListener {
             val agreeDialog = AgreeFragment()
@@ -126,7 +129,6 @@ class SignUpFragment : Fragment() {
         }
         return true
     }
-
     private fun isValidPassword(password: String): Boolean {
         val pattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{7,}\$".toRegex()
         return pattern.matches(password)
@@ -142,6 +144,9 @@ class SignUpFragment : Fragment() {
                 checkId(id)
             } else {
                 binding.editEmail.error = "이미 등록된 이메일 주소입니다."
+
+
+
             }
         }.addOnFailureListener { e ->
 
@@ -150,57 +155,35 @@ class SignUpFragment : Fragment() {
     }
 
 
-    fun special(text: String): Boolean {
-        val specialWord = setOf(
-            '!',
-            '@',
-            '#',
-            '$',
-            '%',
-            '^',
-            '&',
-            '*',
-            '(',
-            ')',
-            '_',
-            '-',
-            '<',
-            '>',
-            '=',
-            '+',
-            '?'
-        )//특수문자
-        return text.any {
-            it in specialWord//비밀번호 중 하나(any)라도 문자 안에 특수문자(speacialWord)가 포함되어있으면 true반환
+    fun special(text:String):Boolean{
+        val specialWord= setOf('!','@','#','$','%','^','&','*','(',')','_','-','<','>','=','+','?')//특수문자
+        return text.any{it in specialWord//비밀번호 중 하나(any)라도 문자 안에 특수문자(speacialWord)가 포함되어있으면 true반환
         }
 
     }
-
-    fun phone(text: String): Boolean {
-        return text.all { it.isDigit() }
+    fun phone(text: String):Boolean{
+        return text.all {it.isDigit()}
     }
-
     private fun checkId(id: String) {
         val firestore = FirebaseFirestore.getInstance()
         val UserData = firestore.collection("UserData")
-        UserData.whereEqualTo("id", id).addSnapshotListener { snapshots, b ->
+        signUpListener = UserData.whereEqualTo("id", id).addSnapshotListener { snapshots, b ->
             if (snapshots?.documents?.isEmpty() == true) {
                 Toast.makeText(requireContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
                 auth.signOut()
-                val loginFragment = LoginFragment()
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, loginFragment)
+                val loginFragment=LoginFragment()
+                val transaction=requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container,loginFragment)
                 transaction.addToBackStack(null)
                 transaction.commit()
 
-                Log.d("taskTest", "tastTest")
+                Log.d("taskTest","tastTest")
                 createAccount()
-            } else {
-                Log.d("taskTestTwo", "tastTest")
-                binding.eidtId.error = "중복된 아이디가 존재합니다."
+            }else{
+                Log.d("taskTestTwo","tastTest")
+                binding.eidtId.error="중복된 아이디가 존재합니다."
             }
         }
-    }
 
     private fun createAccount() {
         auth.createUserWithEmailAndPassword(
@@ -220,6 +203,28 @@ class SignUpFragment : Fragment() {
 
                         Constants.currentUserUid = auth.currentUser!!.uid
                         Log.d("xxxx", "createAccount: ${Constants.currentUserUid}")
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        signUpListener?.remove()
+        signUpListener = null
+    }
+
+    private fun createAccount() {
+        auth.createUserWithEmailAndPassword(
+            binding.editEmail.text.toString(),
+            binding.editPassword.text.toString()
+        ).addOnCompleteListener {
+            if (it.isSuccessful) {
+                val user = auth.currentUser
+                val uid = user?.uid
+                val firestore = FirebaseFirestore.getInstance()
+                val userCollection = firestore.collection("UserData")
+                val userDocument = userCollection.document(uid ?: "")
+                Constants.currentUserUid = auth.currentUser!!.uid
+                Log.d("xxxx", "createAccount: ${Constants.currentUserUid}")
 
 
                         val userData = hashMapOf(
@@ -280,10 +285,8 @@ class SignUpFragment : Fragment() {
         outputStream.flush()
         outputStream.close()
 
-
         return Uri.fromFile(file)
     }
-
     private fun updateCheckBox() {
         if (checkcehckbox1 && checkcehckbox2) {
             binding.checkBox.isChecked = true

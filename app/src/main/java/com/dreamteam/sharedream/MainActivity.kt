@@ -16,6 +16,7 @@ import com.dreamteam.sharedream.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.dreamteam.sharedream.home.HomeAdapter
+import com.dreamteam.sharedream.home.HomeFragment
 import com.dreamteam.sharedream.home.Search.SeachFragment
 import com.dreamteam.sharedream.model.UserData
 import com.google.firebase.auth.FirebaseAuth
@@ -112,4 +113,6 @@ class MainActivity : AppCompatActivity() {
         Log.e("YMC", "nyh MainActivity onNewIntent")
         super.onNewIntent(intent)
     }
+
+
 }
