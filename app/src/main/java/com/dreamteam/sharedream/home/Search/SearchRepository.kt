@@ -87,6 +87,7 @@ class SearchRepository {
 
         }
     }
+
     private fun convertPostToPostRcv(
         post: Post,
         querySnapshot: QuerySnapshot,
@@ -143,5 +144,27 @@ class SearchRepository {
                     }
                 }
             }
+    }
+
+    fun findCityPost(locationKeyword: String, callback: (List<PostRcv>) -> Unit) {
+        val postCollection = firestore.collection("Posts")
+
+        // query 객체 만들고 get으로 가져오기
+        postCollection.whereArrayContains("locationKeyword", locationKeyword)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val searchList = mutableListOf<PostRcv>()
+
+                // for문으로 data를 searchList에 넣어주고 adapter로 전달하기
+                for (i in querySnapshot.documents) {
+                    val data = i.toObject(Post::class.java)
+                    data?.let {
+                        convertPostToPostRcv(it, querySnapshot, searchList, callback)
+                    }
+                }
+                searchList.sortByDescending { it.price }
+                callback(searchList)
+            }
+
     }
 }

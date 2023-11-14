@@ -34,4 +34,9 @@ class SearchViewModel : ViewModel() {
     fun resetSelectedPost() {
         _selectedPost.value = null
     }
+    fun findCity(locationKeyword: String){
+        searchRepository.findCityPost(locationKeyword){ results ->
+            _searchResults.value = results
+        }
+    }
 }

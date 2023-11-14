@@ -255,7 +255,7 @@ class MapViewFragment(private val state:String) : Fragment(), OnMapReadyCallback
                 { address ->
                     if (address.size != 0) {
                         addressResult =
-                            address[0].getAddressLine(0).replace("대한민국", "").replace("KR", "")
+                            address[0].getAddressLine(0).replace(Regex("대한민국|KR|특별시|광역시|자치시"),"")
                         Log.d("xxxx", "getAddress 33 ↑ : ${address}")
 
                         binding.mapTvAddress.text = addressResult
@@ -276,7 +276,9 @@ class MapViewFragment(private val state:String) : Fragment(), OnMapReadyCallback
                         _locationInfo = LocationData(
                             LatLng(latitude, longitude),
                             addressResult,
-                            locationCityInfo
+                            locationCityInfo.map { before ->
+                                before.replace(Regex("대한민국|KR|특별시|광역시|자치시"),"")
+                            }
                         )
                         Log.d("xxxx", "location Info 33↑ Change: $locationInfo")
                     }
@@ -286,7 +288,7 @@ class MapViewFragment(private val state:String) : Fragment(), OnMapReadyCallback
                 if (address.size > 0) {
                     val currentLocationAddress = address[0].getAddressLine(0)
                         .toString()
-                    addressResult = currentLocationAddress.replace("대한민국", "")
+                    addressResult = currentLocationAddress.replace(Regex("대한민국|KR|특별시|광역시|자치시"),"")
 
                     binding.mapTvAddress.text = addressResult
 
