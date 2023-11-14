@@ -460,34 +460,41 @@ class MessageActivity : AppCompatActivity() {
                             val body = NotificationBody(token, data)
                             Log.d("nyh", "getTokenFromPost: send value of body $body")
                             postFeedViewModel.sendNotification(body)
-//                            val profile = postFeedViewModel.downloadCurrentProfileImg(Constants.currentUserUid!!)
-//                            val profileImageUrl = profile
-//                            Log.d("nyh", "getTokenFromUser profileImageUrl: $profileImageUrl")
-//                            Log.d("nyh", "getTokenFromUser profile: $profile")
-                            val notiLIst = hashMapOf(
-                                "title" to notificationTitle,
-                                "body" to notificationBody,
-                                "nickname" to userId,
-                                "uid" to destinationUid,
-                                "time" to Timestamp.now(),
-//                                "profileImageUrl" to profileImageUrl
-                            )
-                            db.collection("notifyChatList")
-                                .add(notiLIst)
-                                .addOnSuccessListener { task ->
-                                    val myDocuId = task.id
-                                    val updatedData = mapOf("myDocuId" to myDocuId)
-                                    Log.d("nyh", "getTokenFromPost:docuId $myDocuId")
-                                    db.collection("notifyChatList")
-                                        .document(myDocuId)
-                                        .update(updatedData)
-                                        .addOnSuccessListener {
-                                        }
-                                    Log.d("nyh", "getTokenFromPost: $task")
-                                }
-                            Log.d("nyh", "getTokenFromPost: token = $token")
-                            Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
 
+                            storage.reference.child("ProfileImg").child("$uid").downloadUrl
+                                .addOnSuccessListener { image ->
+                                    val profile = image
+
+                                    val profileImageUrl = profile
+                                    Log.d(
+                                        "nyh","getTokenFromUser profileImageUrl: $profileImageUrl"
+                                    )
+                                    Log.d("nyh", "getTokenFromUser profile: $profile")
+                                    val notiLIst = hashMapOf(
+                                        "title" to notificationTitle,
+                                        "body" to notificationBody,
+                                        "nickname" to userId,
+                                        "uid" to destinationUid,
+                                        "time" to Timestamp.now(),
+                                        "profileImageUrl" to profileImageUrl
+                                    )
+                                    db.collection("notifyChatList")
+                                        .add(notiLIst)
+                                        .addOnSuccessListener { task ->
+                                            val myDocuId = task.id
+                                            val updatedData = mapOf("myDocuId" to myDocuId)
+                                            Log.d("nyh", "getTokenFromPost:docuId $myDocuId")
+                                            db.collection("notifyChatList")
+                                                .document(myDocuId)
+                                                .update(updatedData)
+                                                .addOnSuccessListener {
+                                                }
+                                            Log.d("nyh", "getTokenFromPost: $task")
+                                        }
+                                    Log.d("nyh", "getTokenFromPost: token = $token")
+                                    Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
+
+                                }
                         }
                     } else {
                         Log.d("nyh", "getTokenFromPost: elsefail")
