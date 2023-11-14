@@ -113,7 +113,6 @@ class AlarmFragment : Fragment() {
         viewModel.notiData.observe(viewLifecycleOwner) { notiList ->
             notiList?.let {
                 viewModel.getNotiList()
-                Log.d("nyh", "onViewCreated notiList: $notiList")
                 alarmadapter.setData(notiList)
                 alarmadapter.notifyDataSetChanged()
             }
@@ -121,7 +120,6 @@ class AlarmFragment : Fragment() {
         viewModel.notiChatData.observe(viewLifecycleOwner) { notiChatList ->
             notiChatList?.let{
                 viewModel.getChatNotiList()
-                Log.d("nyh", "onViewCreated: $notiChatList")
                 alarmadapter.setChatData(notiChatList)
                 alarmadapter.notifyDataSetChanged()
             }

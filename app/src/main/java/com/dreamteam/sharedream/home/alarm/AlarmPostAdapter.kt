@@ -40,13 +40,11 @@ class AlarmPostAdapter(
     fun setData(data: List<AlarmPost?>) {
         alarmItem = data
         notifyDataSetChanged()
-        Log.d("nyh", "setData: $data")
     }
 
     fun setChatData(data: List<AlarmChatData?>) {
         chatItems = data
         notifyDataSetChanged()
-        Log.d("nyh", "setChatData: $data")
     }
 
     @Suppress("DEPRECATION")
@@ -103,14 +101,15 @@ class AlarmPostAdapter(
         }
 
         @SuppressLint("NotifyDataSetChanged")
-        private fun deleteItem() {
-            val post = alarmItem[position]
-            if (post != null) {
+        private fun deleteItem(position: Int) {
+            if (position < alarmItem.size) {
+                val post = alarmItem[position] ?: return
                 val myDocuId = post.myDocuId
 
-                if (alarmItem is MutableList) {
-                    (alarmItem as MutableList).removeAt(position)
-                }
+                val mutableAlarmItem = alarmItem.toMutableList()
+                mutableAlarmItem.removeAt(position)
+                alarmItem = mutableAlarmItem
+
                 notifyItemRemoved(position)
 
                 val db = Firebase.firestore
@@ -127,20 +126,22 @@ class AlarmPostAdapter(
                     }
             }
         }
-
         init {
             binding.btnDelete.setOnClickListener {
-                deleteItem()
+                Log.d("nyh", "deleteItem: ")
+                deleteItem(adapterPosition)
             }
         }
     }
 
+    @Suppress("DEPRECATION")
     inner class AlarmChatHolder(val binding: MyalarmBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         val alarmImage = binding.imageTrade
         val alarmTitle = binding.txtTradeTitle
         val alarmNickname = binding.notinickname
+        val alarmbody = binding.txtBody
         val alarmTime = binding.txtTime
 
         fun bind(chatPost: AlarmChatData, timestamp: Timestamp) {
@@ -175,6 +176,7 @@ class AlarmPostAdapter(
                 }
             alarmTime.text = result
             alarmTitle.text = chatPost.title
+            alarmbody.text = "님께서 채팅을 보냈습니다."
             alarmNickname.text = chatPost.nickname
 
             if (chatPost.profileImageUrl?.isNotEmpty() == true) {
@@ -186,43 +188,42 @@ class AlarmPostAdapter(
         }
 
         @SuppressLint("NotifyDataSetChanged")
-        private fun deleteItem() {
-            val post = alarmItem[position]
-            if (post != null) {
-                val myDocuId = post.myDocuId
+        private fun deleteItem(position: Int) {
+            val chatPosition = position - alarmItem.size
+            if (chatPosition < chatItems.size) {
+                val post = chatItems[position] ?: return
+                    val myDocuId = post.myDocuId
 
-                if (alarmItem is MutableList) {
-                    (alarmItem as MutableList).removeAt(position)
+                val mutableChatItems = chatItems.toMutableList()
+                mutableChatItems.removeAt(chatPosition)
+                chatItems = mutableChatItems
+
+                    notifyItemRemoved(position)
+
+                    val db = Firebase.firestore
+                    if (myDocuId != null) {
+                        db.collection("notifyChatList")
+                            .document(myDocuId)
+                            .delete()
+                            .addOnSuccessListener {
+                                notifyDataSetChanged()
+                                Log.d("nyh", "deleteItem: 삭제완료")
+                                Log.d("nyh", "deleteItem: $myDocuId")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("nyh", "deleteItem: $e")
+                            }
+                    }
                 }
-                notifyItemRemoved(position)
-
-                val db = Firebase.firestore
-                db.collection("notifyChatList")
-                    .document(myDocuId)
-                    .delete()
-                    .addOnSuccessListener {
-                        notifyDataSetChanged()
-                        Log.d("nyh", "deleteItem: 삭제완료")
-                        Log.d("nyh", "deleteItem: $myDocuId")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.e("nyh", "deleteItem: $e")
-                    }
-            }
         }
 
         init {
             binding.btnDelete.setOnClickListener {
-                deleteItem()
+                Log.d("nyh chat", "deleteItem: ")
+                deleteItem(adapterPosition)
             }
         }
-
     }
-
-
-//    override fun getItemViewType(position: Int): Int {
-//        return datas[position].type
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

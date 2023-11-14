@@ -498,34 +498,42 @@ class ChatMessageActivity : AppCompatActivity() {
                             )
                             val body = NotificationBody(token, data)
                             Log.d("nyh chatmessageActivity", "getTokenFromPost: send value of body $body")
+                            postFeedViewModel.sendNotification(body)
 
-                            lifecycleScope.launch {
-                                sendNotification(body)
-                            }
+                            storage.reference.child("ProfileImg").child("$uid").downloadUrl
+                                .addOnSuccessListener { image ->
+                                    val profile = image
 
-                            val notiLIst = hashMapOf(
-                                "title" to notificationTitle,
-                                "body" to notificationBody,
-                                "nickname" to userId,
-                                "uid" to destinationUid,
-                                "time" to Timestamp.now(),
-                            )
-                            db.collection("notifyChatList")
-                                .add(notiLIst)
-                                .addOnSuccessListener { task ->
-                                    val myDocuId = task.id
-                                    val updatedData = mapOf("myDocuId" to myDocuId)
-                                    Log.d("nyh chatmessageActivity", " getTokenFromPost: docuId $myDocuId")
+                                    val profileImageUrl = profile
+                                    Log.d(
+                                        "nyh","getTokenFromUser profileImageUrl: $profileImageUrl"
+                                    )
+                                    Log.d("nyh", "getTokenFromUser profile: $profile")
+                                    val notiLIst = hashMapOf(
+                                        "title" to notificationTitle,
+                                        "body" to notificationBody,
+                                        "nickname" to userId,
+                                        "uid" to destinationUid,
+                                        "time" to Timestamp.now(),
+                                        "profileImageUrl" to profileImageUrl
+                                    )
                                     db.collection("notifyChatList")
-                                        .document(myDocuId)
-                                        .update(updatedData)
-                                        .addOnSuccessListener {
-                                            Log.d("nyh", "getTokenFromPost:sucussss $myDocuId")
+                                        .add(notiLIst)
+                                        .addOnSuccessListener { task ->
+                                            val myDocuId = task.id
+                                            val updatedData = mapOf("myDocuId" to myDocuId)
+                                            Log.d("nyh", "getTokenFromPost:docuId $myDocuId")
+                                            db.collection("notifyChatList")
+                                                .document(myDocuId)
+                                                .update(updatedData)
+                                                .addOnSuccessListener {
+                                                }
+                                            Log.d("nyh", "getTokenFromPost: $task")
                                         }
-                                }
-                            Log.d("nyh chatmessageActivity", "getTokenFromPost: token = $token")
-                            Log.d("nyh chatmessageActivity", "getTokenFromPost: suc title =$notificationTitle")
+                                    Log.d("nyh", "getTokenFromPost: token = $token")
+                                    Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
 
+                                }
                         }
                     } else {
                         Log.d("nyh chatmessageActivity", "getTokenFromPost: elsefail")
@@ -535,15 +543,6 @@ class ChatMessageActivity : AppCompatActivity() {
                 }
         }
 
-    }
-    private suspend fun sendNotification(notification: NotificationBody) {
-        val myResponse: MutableLiveData<Response<ResponseBody>> = MutableLiveData()
-        try {
-            myResponse.value = FcmRetrofitInstance.fcmApi.sendNotification(notification)
-            Log.d("nyh chatmessageActivity", "sendNotification chat Repochat: $notification")
-        } catch (e: Exception) {
-            Log.e("nyh chatmessageActivity", "Failed to send FCM message: ${e.message}")
-        }
     }
 }
 
