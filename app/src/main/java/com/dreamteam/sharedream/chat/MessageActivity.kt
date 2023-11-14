@@ -536,7 +536,6 @@ class MessageActivity : AppCompatActivity() {
                     val dateFormat = SimpleDateFormat("MM월 dd일 hh:mm")
                     val realTime = dateFormat.format(Date(time)).toString()
 
-                    // 이미지 URL을 포함한 채팅 메시지 생성
                     val comment = ChatModel.Comment(uid, "", realTime, imageUrl.toString())
 
                     // Firebase에 채팅 메시지 저장
