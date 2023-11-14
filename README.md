@@ -34,25 +34,25 @@
     <td>
   <a href="https://github.com/yoonhee-nam">
       <img src = "https://avatars.githubusercontent.com/u/126261375?v=4(https://github.com/yoonhee-nam" alt="남윤희님 깃허브" title="깃허브로 이동" width="150" height="150">
-    <p>남윤희님<a href="링크 URL">깃허브 이동</a></p>
+    <p>남윤희님<a href="https://github.com/yoonhee-nam">깃허브 이동</a></p>
   </a>
       </td>
     <td>
     <a href="https://github.com/suuen">
       <img src = "https://avatars.githubusercontent.com/u/75050483?v=4(https://github.com/suuen" alt="황수연님 깃허브" title="깃허브로 이동" width="150" height="150" >
-    <p>황수연님<a href="링크 URL">깃허브 이동</a></p>
+    <p>황수연님<a href="https://github.com/suuen">깃허브 이동</a></p>
   </a>
       </td>
         <td>
     <a href="https://github.com/1231234qr312">
       <img src = "https://avatars.githubusercontent.com/u/137616115?v=4(https://github.com/1231234qr312" alt="우재훈님 깃허브" title="깃허브로 이동" width="150" height="150" >
-    <p>우재훈님<a href="링크 URL">깃허브 이동</a></p>
+    <p>우재훈님<a href="https://github.com/1231234qr312">깃허브 이동</a></p>
   </a>
       </td>
             <td>
     <a href="https://github.com/dydrkfl078">
       <img src = "https://avatars.githubusercontent.com/u/134401368?v=4(https://github.com/dydrkfl078" alt="이용준님 깃허브" title="깃허브로 이동" width="150" height="150" >
-    <p>이용준님<a href="링크 URL">깃허브 이동</a></p>
+    <p>이용준님<a href="https://github.com/dydrkfl078">깃허브 이동</a></p>
   </a>
       </td>
     </tr>
