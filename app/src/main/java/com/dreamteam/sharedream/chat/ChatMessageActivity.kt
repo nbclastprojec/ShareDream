@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -29,9 +30,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.dreamteam.sharedream.R
+import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.ActivityChatBinding
 import com.dreamteam.sharedream.databinding.ChatDialogBinding
 import com.dreamteam.sharedream.databinding.ChatItemBinding
+import com.dreamteam.sharedream.model.NotificationBody
+import com.dreamteam.sharedream.viewmodel.MyPostFeedViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -39,6 +44,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
@@ -56,6 +62,7 @@ class ChatMessageActivity : AppCompatActivity() {
     private var document: String? = null
     private var myCustomDialog: MessageActivity.MyCustomDialog? = null
     private val PICK_IMAGE_REQUEST = 1
+    private val postFeedViewModel = MyPostFeedViewModel()
     private val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,11 +128,13 @@ class ChatMessageActivity : AppCompatActivity() {
                                 .child("comments").push().setValue(comment)
                             editText.text = null
                         }, 1000L)
+                        getTokenFromUser()
 
                     }
                 } else {
                     fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
                         .push().setValue(comment)
+                    getTokenFromUser()
                     editText.text = null
 
                 }
@@ -180,12 +189,14 @@ class ChatMessageActivity : AppCompatActivity() {
             plusLayout.visibility = View.GONE
         }
         imageButton.setOnClickListener {
+
             externalImageAccess()
         }
 
     }
 
     private fun externalImageAccess() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){ // 13 이상일 경우 if문 실행
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_EXTERNAL_STORAGE
@@ -199,6 +210,9 @@ class ChatMessageActivity : AppCompatActivity() {
         } else {
             openGallery()
         }
+     }else{
+        openGallery()
+    }
     }
 
 
@@ -439,6 +453,63 @@ class ChatMessageActivity : AppCompatActivity() {
         val comment = ChatModel.Comment(uid, "", realTime, imageUrl)
         fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
             .push().setValue(comment)
+    }
+    private fun getTokenFromUser() {
+        val db = Firebase.firestore
+        val postRef = destinationUid?.let { db.collection("UserData").document(it) }
+
+        if (postRef != null) {
+            postRef
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+
+                        val token = documentSnapshot.getString("token")
+                        if (token != null) {
+                            val userId =Constants.currentUserInfo?.nickname
+                            val notificationTitle= ""
+                            val notificationBody = "${userId}님이 채팅을 보냈어요!"
+                            Log.d("nyh", "getTokenFromUser useId: $userId")
+                            Log.d("nyh", "getTokenFromUser: token: $token")
+                            //
+                            val data = NotificationBody.NotificationData(
+                                notificationTitle!!, notificationBody,userId!!
+                            )
+                            val body = NotificationBody(token, data)
+                            Log.d("nyh", "getTokenFromPost: send value of body $body")
+                            postFeedViewModel.sendNotification(body)
+
+                            val notiLIst = hashMapOf(
+                                "title" to notificationTitle,
+                                "nickname" to userId,
+                                "uid" to destinationUid,
+                                "time" to Timestamp.now(),
+                            )
+                            db.collection("notifyChatList")
+                                .add(notiLIst)
+                                .addOnSuccessListener { task ->
+                                    val myDocuId = task.id
+                                    val updatedData = mapOf("myDocuId" to myDocuId)
+                                    Log.d("nyh", "getTokenFromPost: $task")
+                                    db.collection("notifyList")
+                                        .document(myDocuId)
+                                        .update(updatedData)
+                                        .addOnSuccessListener {
+                                        }
+                                    Log.d("nyh", "getTokenFromPost: $task")
+                                }
+                            Log.d("nyh", "getTokenFromPost: token = $token")
+                            Log.d("nyh", "getTokenFromPost: suc title =$notificationTitle")
+
+                        }
+                    } else {
+                        Log.d("nyh", "getTokenFromPost: elsefail")
+                    }
+                }.addOnFailureListener {
+                    Log.d("nyh", "getTokenFromPost: failurfail")
+                }
+        }
+
     }
 }
 

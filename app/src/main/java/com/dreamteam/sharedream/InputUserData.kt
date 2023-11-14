@@ -3,6 +3,7 @@ package com.dreamteam.sharedream
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,10 +16,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 
 class InputUserData : Fragment() {
     private lateinit var binding:FragmentInputUserDataBinding
     private lateinit var auth:FirebaseAuth
+    var token = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +37,8 @@ class InputUserData : Fragment() {
             if (check()) {
                 val nickname = binding.editNickName.text.toString()
                 val number = binding.editNumber.text.toString()
-                getInformation(number, nickname)
+                getInformation(number, nickname,token)
+                Log.d("nyh", "onCreateView: $token")
             }
         }
         binding.agree1.setOnClickListener{
@@ -46,46 +50,57 @@ class InputUserData : Fragment() {
             agreeDialog.show(requireActivity().supportFragmentManager,"Agree2")
         }
 
-
-
-
         return binding.root
     }
-    fun getInformation(number: String, nickname: String) {
+    fun getInformation(number: String, nickname: String, token: String) {
         val currentUser = FirebaseAuth.getInstance().currentUser
 
-        if (currentUser != null) {
-            val uid = currentUser.uid
-            val email = currentUser.email
-            val index = email?.indexOf("@")
-            val id = if (index != null && index >= 0) {
-                email.substring(0, index)
-            } else {
-                Toast.makeText(requireContext(),"이메일 확인오류",Toast.LENGTH_SHORT).show()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+
+                Log.d("nyh", "getInformation:token $token")
+
+                if (currentUser != null) {
+                    val token = task.result
+                    val uid = currentUser.uid
+                    val email = currentUser.email
+                    val index = email?.indexOf("@")
+                    val id = if (index != null && index >= 0) {
+                        email.substring(0, index)
+                        Log.d("nyh", "getInformation:token $token")
+
+                    } else {
+                        Toast.makeText(requireContext(), "이메일 확인오류", Toast.LENGTH_SHORT).show()
+                    }
+
+                    val userData = hashMapOf(
+                        "email" to email,
+                        "number" to number,
+                        "nickname" to nickname,
+                        "id" to id,
+                        "token" to token
+
+                    )
+
+                    val db = FirebaseFirestore.getInstance()
+                    val userCollection = db.collection("UserData")
+                    val document = userCollection.document(uid)
+
+                    document.set(userData)
+                        .addOnSuccessListener {
+                            val intent = Intent(requireContext(), MainActivity::class.java)
+                            startActivity(intent)
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(requireContext(), "데이터 저장 실패: $e", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                } else {
+                    Toast.makeText(requireContext(), "Input Error", Toast.LENGTH_SHORT).show()
+                }
             }
-
-            val userData = hashMapOf(
-                "email" to email,
-                "number" to number,
-                "nickname" to nickname,
-                "id" to id
-
-            )
-
-            val db = FirebaseFirestore.getInstance()
-            val userCollection = db.collection("UserData")
-            val document = userCollection.document(uid)
-
-            document.set(userData)
-                .addOnSuccessListener {
-                    val intent = Intent(requireContext(), MainActivity::class.java)
-                    startActivity(intent)
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(requireContext(), "데이터 저장 실패: $e", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(requireContext(), "Input Error", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener {e ->
+            Log.d("nyh", "getInformation: fail $e ")
         }
     }
     @SuppressLint("SuspiciousIndentation")

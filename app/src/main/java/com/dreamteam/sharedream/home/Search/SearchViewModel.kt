@@ -3,16 +3,16 @@ package com.dreamteam.sharedream.home.Search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dreamteam.sharedream.model.Post
+import com.dreamteam.sharedream.model.PostRcv
 
 class SearchViewModel : ViewModel() {
     private val searchRepository = SearchRepository()
 
-    private val _searchResults = MutableLiveData<List<Post>>()
-    val searchResults: LiveData<List<Post>> = _searchResults
+    private val _searchResults = MutableLiveData<List<PostRcv>>()
+    val searchResults: LiveData<List<PostRcv>> = _searchResults
 
-    private val _selectedPost = MutableLiveData<Post?>()
-    val selectedPost: LiveData<Post?> = _selectedPost
+    private val _selectedPost = MutableLiveData<PostRcv?>()
+    val selectedPost: LiveData<PostRcv?> = _selectedPost
     fun performSearch(title: String) {
         searchRepository.searchTitle(title) { results ->
             _searchResults.value = results
@@ -28,7 +28,7 @@ class SearchViewModel : ViewModel() {
             _searchResults.value = results
         }
     }
-    fun onPostClicked(post: Post) {
+    fun onPostClicked(post: PostRcv) {
         _selectedPost.value = post
     }
     fun resetSelectedPost() {

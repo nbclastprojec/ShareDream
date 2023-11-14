@@ -16,6 +16,7 @@ import com.dreamteam.sharedream.databinding.FragmentHomeBinding
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.NicknameCheckDailogFragment
 import com.dreamteam.sharedream.Util.ToastMsg
 import com.dreamteam.sharedream.adapter.PostClick

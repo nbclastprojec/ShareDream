@@ -2,9 +2,9 @@ package com.dreamteam.sharedream.model
 
 import android.net.Uri
 import com.google.firebase.Timestamp
+import java.io.Serializable
 
 data class PostRcv(
-
     val uid: String,
     val title: String,
     val price: Long,
@@ -23,7 +23,7 @@ data class PostRcv(
     val locationKeyword : List<String>,
     val endDate:String,
 
-) {
+) : Serializable {
     constructor() : this(
         "",
         "",

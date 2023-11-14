@@ -83,13 +83,10 @@
 
     <ImageView
         android:id="@+id/btn_delete"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="40dp"
         app:layout_constraintBottom_toBottomOf="@+id/txt_tradeTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/txt_time"
+        app:layout_constraintEnd_toEndOf="@+id/txt_time"
         app:layout_constraintTop_toTopOf="@+id/cardview"
         app:srcCompat="@drawable/trashcan" />
 </androidx.constraintlayout.widget.ConstraintLayout>

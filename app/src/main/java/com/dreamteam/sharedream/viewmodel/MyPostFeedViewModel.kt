@@ -509,8 +509,6 @@ class MyPostFeedViewModel : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTokenFromPost(postId: String) {
-
-
         val postRef = db.collection("Posts").document(postId)
 
         postRef
@@ -530,22 +528,24 @@ class MyPostFeedViewModel : ViewModel() {
                         val body = NotificationBody(token, data)
                         Log.d("nyh", "getTokenFromPost: send value of body $body")
                         sendNotification(body)
+                        val documentId = currentPost.value?.documentId
 
                         val notiLIst = hashMapOf(
                             "title" to notificationTitle,
                             "nickname" to userId,
                             "uid" to currentPost.value?.uid,
                             "imgs" to currentPost.value?.imgs,
-                            "time" to Timestamp.now()
+                            "time" to Timestamp.now(),
+                            "documentId" to documentId
                         )
                         db.collection("notifyList")
                             .add(notiLIst)
                             .addOnSuccessListener { task ->
-                                val documentId = task.id
-                                val updatedData = mapOf("documentId" to documentId)
+                                val myDocuId = task.id
+                                val updatedData = mapOf("myDocuId" to myDocuId)
                                 Log.d("nyh", "getTokenFromPost: $task")
                                 db.collection("notifyList")
-                                    .document(documentId)
+                                    .document(myDocuId)
                                     .update(updatedData)
                                     .addOnSuccessListener {
                                         Log.d("nyh", "getTokenFromPost: $documentId")
@@ -571,6 +571,7 @@ class MyPostFeedViewModel : ViewModel() {
             Log.d("nyh", "sendNotification postViewmodel :$notification")
         }
     }
+
 
     // 디테일 페이지에서 관심목록, 채팅 상호작용 시 해당 게시물이 삭제된 상태인지 확인
     fun checkPostState(timestamp: Timestamp):Task<QuerySnapshot> {

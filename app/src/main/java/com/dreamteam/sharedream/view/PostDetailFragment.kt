@@ -40,7 +40,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.math.log
@@ -56,20 +55,13 @@ class PostDetailFragment : Fragment() {
 
     private val currentPostInfo = mutableListOf<PostRcv>()
 
-
-    private var destinationUid: String? = null
-
-
-
-    private val decimalFormat = DecimalFormat("#,###")
-
     private fun detailPageInfoChange(postRcv: PostRcv) {
         binding.detailId.text = postRcv.nickname
         binding.detailAddress.text = postRcv.address
         binding.detailpageTitle.text = postRcv.title
         binding.detailpageCategory.text = postRcv.category
         binding.detailpageExplain.text = postRcv.desc
-        binding.detailMoney.text = "${decimalFormat.format(postRcv.price)} 원"
+        binding.detailMoney.text = "${postRcv.price} 원"
         binding.detailTvLikeCount.text = "${postRcv.likeUsers.size}"
         binding.detailpageTime.text = "${time(postRcv.timestamp)}"
         binding.detailTvItemState.text = postRcv.state
@@ -84,7 +76,7 @@ class PostDetailFragment : Fragment() {
     ): View? {
         _binding = FragmentPostDetailBinding.inflate(inflater, container, false)
 
-        val imgs = mutableListOf<Uri>()
+        var imgs = mutableListOf<Uri>()
         myPostFeedViewModel.currentPost.observe(viewLifecycleOwner) {
             detailPageInfoChange(it)
 
@@ -111,6 +103,40 @@ class PostDetailFragment : Fragment() {
             } else {
                 binding.detailBtnSubFavorite.visibility = View.GONE
             }
+        }
+        val post = arguments?.getSerializable("post") as PostRcv?
+
+        if (post != null) {
+            currentPostInfo.clear()
+            currentPostInfo.add(post)
+
+            binding.detailId.text = post.nickname
+            binding.detailAddress.text = post.address
+            binding.detailpageTitle.text = post.title
+            binding.detailpageCategory.text = post.category
+            binding.detailpageExplain.text = post.desc
+            binding.detailMoney.text = "${post.price} 원"
+            binding.detailTvLikeCount.text = "${post.likeUsers.size}"
+            binding.detailpageTime.text = time(post.timestamp)
+            imgs = post.imgs.toMutableList()
+
+
+            myPostFeedViewModel.downloadCurrentProfileImg(post.uid)
+            if (post.uid == Constants.currentUserUid) {
+                binding.detailBtnEditPost.visibility = View.VISIBLE
+            } else {
+                binding.detailBtnEditPost.visibility = View.GONE
+            }
+
+            // 관심 목록에 있는 아이템의 경우 아이콘 변경 및 관심 목록 제거 버튼 표시
+            if (post.likeUsers.contains(Constants.currentUserUid)) {
+                binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
+                binding.detailBtnSubFavorite.visibility = View.VISIBLE
+            } else {
+                binding.detailLike.setImageResource(R.drawable.like)
+                binding.detailBtnSubFavorite.visibility = View.GONE
+            }
+
         }
 
         // 게시물 수정 시 디테일 페이지 View 업데이트
@@ -208,9 +234,9 @@ class PostDetailFragment : Fragment() {
                         myPostFeedViewModel.addOrSubFavoritePost(currentPostInfo[0].timestamp)
                         myPostFeedViewModel.getTokenFromPost(currentPostInfo[0].documentId)
 
-                        myPostFeedViewModel.myResponse.observe(viewLifecycleOwner){
-                            Log.d("nyh", "onViewCreated: $it")
-                        }
+                    myPostFeedViewModel.myResponse.observe(viewLifecycleOwner) {
+                        Log.d("nyh", "onViewCreated: $it")
+                    }
 
                         Log.d(
                             "xxxx",
@@ -252,47 +278,20 @@ class PostDetailFragment : Fragment() {
 
         }
 
-        val post = arguments?.getSerializable("post") as Post?
 
-
-        if (post != null) {
-            binding.detailId.text = post.nickname
-            binding.detailId.text = post.nickname
-            binding.detailAddress.text = post.address
-            binding.detailpageTitle.text = post.title
-            binding.detailpageCategory.text = post.category
-            binding.detailpageExplain.text = post.desc
-            binding.detailMoney.text = "${decimalFormat.format(post.price)} 원"
-            binding.detailTvLikeCount.text = "${post.likeUsers.size}"
-            binding.detailpageTime.text = time(post.timestamp)
-
-            myPostFeedViewModel.downloadCurrentProfileImg(post.uid)
-
-            if (post.uid == Constants.currentUserUid) {
-                binding.detailBtnEditPost.visibility = View.VISIBLE
-            } else {
-                binding.detailBtnEditPost.visibility = View.GONE
-            }
-
-            // 관심 목록에 있는 아이템의 경우 아이콘 변경 및 관심 목록 제거 버튼 표시
-            if (post.likeUsers.contains(Constants.currentUserUid)) {
-                binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
-                binding.detailBtnSubFavorite.visibility = View.VISIBLE
-            } else {
-                binding.detailLike.setImageResource(R.drawable.like)
-                binding.detailBtnSubFavorite.visibility = View.GONE
-            }
-
-        }
         binding.datailProfile.setOnClickListener {
-            val yourDetailFragment=YourDetailPage()
-            val transaction=requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frag_edit,yourDetailFragment)
+            val yourDetailFragment = YourDetailPage()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frag_edit, yourDetailFragment)
                 .addToBackStack(null)
                 .commit()
         }
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
     private fun stateIconChange() {
@@ -382,7 +381,7 @@ class PostDetailFragment : Fragment() {
 
 
     private fun startMessageActivity(documnetUid: String) {
-       val intent = Intent(requireContext(), MessageActivity::class.java)
+        val intent = Intent(requireContext(), MessageActivity::class.java)
         intent.putExtra("documnetUid", documnetUid)
         Log.d("susu", "startMessageActivity: ${documnetUid}")
         startActivity(intent)

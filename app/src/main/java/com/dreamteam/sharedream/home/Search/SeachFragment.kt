@@ -15,9 +15,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.MyPageFragment
 import com.dreamteam.sharedream.R
-import com.dreamteam.sharedream.Util.Constants
 import com.dreamteam.sharedream.databinding.FragmentSeachBinding
-import com.dreamteam.sharedream.model.Post
+import com.dreamteam.sharedream.model.PostRcv
 import com.dreamteam.sharedream.view.PostDetailFragment
 
 
@@ -27,7 +26,6 @@ class SeachFragment : Fragment() {
     private lateinit var searchadapter: SeachAdapter
     private lateinit var binding: FragmentSeachBinding
     private lateinit var mContext: Context
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -49,10 +47,28 @@ class SeachFragment : Fragment() {
 
         val searchEdit = binding.editTextSearch
 
-
         searchadapter = SeachAdapter(mContext, object : SeachAdapter.OnItemClickListener {
-            override fun onItemClick(post: Post) {
+            override fun onItemClick(post: PostRcv) {
                 searchViewModel.onPostClicked(post)
+                searchViewModel.selectedPost.observe(viewLifecycleOwner) { selectedPost ->
+                    if (selectedPost != null) {
+                        // PostDetailFragment로 이동
+                        val postDetailFragment = PostDetailFragment()
+
+                        // Post 객체를 Bundle에 추가하여 PostDetailFragment로 전달
+                        val args = Bundle()
+                        args.putSerializable("post", selectedPost)
+                        postDetailFragment.arguments = args
+                        Log.d("nyh", "onViewCreated: 전달하는 args $args")
+
+                        val transaction = parentFragmentManager.beginTransaction()
+                        transaction.replace(R.id.frag_edit, postDetailFragment)
+                        transaction.addToBackStack(null)
+                        transaction.commit()
+                        // 선택된 Post를 초기화
+                        searchViewModel.resetSelectedPost()
+                    }
+                }
             }
         })
         binding.searchRecycler.layoutManager =
@@ -66,10 +82,8 @@ class SeachFragment : Fragment() {
         searchEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
-
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
-
             override fun afterTextChanged(p0: Editable?) {
                 //검색어 입력 후 searchTitle 실행
                 val query = p0.toString()
@@ -107,32 +121,9 @@ class SeachFragment : Fragment() {
                     2 -> searchViewModel.sortSearchLowPrice("")
                 }
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {
-
             }
-        }
 
-
-        searchViewModel.selectedPost.observe(viewLifecycleOwner) { selectedPost ->
-            if (selectedPost != null) {
-                // PostDetailFragment로 이동
-                val postDetailFragment = PostDetailFragment()
-
-                // Post 객체를 Bundle에 추가하여 PostDetailFragment로 전달
-                val args = Bundle()
-                args.putSerializable("post", selectedPost)
-                postDetailFragment.arguments = args
-                Log.d("nyh", "onViewCreated: 전달하는 args $args")
-
-                val transaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.frag_edit, postDetailFragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
-
-                // 선택된 Post를 초기화
-                searchViewModel.resetSelectedPost()
-            }
         }
 
         binding.button2.setOnClickListener {

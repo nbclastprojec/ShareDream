@@ -103,7 +103,6 @@ class ChatFragment : Fragment() {
                             chatModel.clear()
                             for (data in snapshot.children){
                                 chatModel.add(data.getValue<ChatModel>()!!)
-
                             }
                             notifyDataSetChanged()
                         }
@@ -111,7 +110,6 @@ class ChatFragment : Fragment() {
                 )
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
 
             val itemBinding = ChattingroomItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return ViewHolder(itemBinding)
@@ -127,14 +125,11 @@ class ChatFragment : Fragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             var destinationUid: String? = null
 
-
-
             for (user in chatModel[position].users.keys) {
                 if (!user.equals(uid)) {
                     destinationUid = user
                     Log.d("susu", "onBindViewHolder: ${destinationUid}")
                     destinationUsers.add(destinationUid)
-
                     firestore.collection("UserData").document(destinationUid)
                     .get()
                         .addOnSuccessListener { documents ->
@@ -144,12 +139,10 @@ class ChatFragment : Fragment() {
                                 holder.tittle.text = name
 
                             Log.d("susu", "name: ${name}")
-
                         }
                         .addOnFailureListener { exception ->
                             Log.d("susu", "Error getting documents: $exception")
                         }
-
                     val storageReference = destinationUid?.let { storage.reference.child("ProfileImg").child(it) }
                     storageReference?.downloadUrl?.addOnSuccessListener { uri ->
                         Glide.with(holder.itemView.context)
@@ -159,7 +152,6 @@ class ChatFragment : Fragment() {
                         Log.e("ChatFragment", "이미지 다운로드 실패: ${exception.message}")
                     }
                 }
-
             }
 
 

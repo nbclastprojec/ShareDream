@@ -4,7 +4,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.dreamteam.sharedream.Util.FcmRetrofitInstance
-import com.dreamteam.sharedream.model.MessageDTO
 import com.dreamteam.sharedream.model.NotificationBody
 import com.dreamteam.sharedream.model.Post
 import com.dreamteam.sharedream.model.PostRcv
