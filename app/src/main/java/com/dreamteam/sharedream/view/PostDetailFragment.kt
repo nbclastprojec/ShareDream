@@ -133,7 +133,7 @@ class PostDetailFragment : Fragment() {
                 binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
                 binding.detailBtnSubFavorite.visibility = View.VISIBLE
             } else {
-                binding.detailLike.setImageResource(R.drawable.like)
+                binding.detailLike.setImageResource(R.drawable.icn_bookmark)
                 binding.detailBtnSubFavorite.visibility = View.GONE
             }
 
@@ -188,7 +188,7 @@ class PostDetailFragment : Fragment() {
                     binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
                 } else {
                     binding.detailBtnSubFavorite.visibility = View.GONE
-                    binding.detailLike.setImageResource(R.drawable.like)
+                    binding.detailLike.setImageResource(R.drawable.icn_bookmark)
                 }
             }
         }
@@ -278,7 +278,7 @@ class PostDetailFragment : Fragment() {
 
         }
 
-        val post = arguments?.getSerializable("post") as Post?
+        val post = arguments?.getSerializable("post") as PostRcv?
 
         if (post != null) {
             binding.detailId.text = post.nickname
@@ -304,7 +304,7 @@ class PostDetailFragment : Fragment() {
                 binding.detailLike.setImageResource(R.drawable.icn_clicked_bookmark)
                 binding.detailBtnSubFavorite.visibility = View.VISIBLE
             } else {
-                binding.detailLike.setImageResource(R.drawable.like)
+                binding.detailLike.setImageResource(R.drawable.icn_bookmark)
                 binding.detailBtnSubFavorite.visibility = View.GONE
             }
 
