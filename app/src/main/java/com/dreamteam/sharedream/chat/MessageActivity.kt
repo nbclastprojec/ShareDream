@@ -164,7 +164,6 @@ class MessageActivity : AppCompatActivity() {
         fireDatabase.child("ChatRoom").orderByChild("users/$uid").equalTo(true)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
-
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -357,7 +356,7 @@ class MessageActivity : AppCompatActivity() {
                                 "uid" to uid,
                                 "time" to Timestamp.now(),
                             )
-                            db.collection("notifyList")
+                            db.collection("notifyChatList")
                                 .add(notiLIst)
                                 .addOnSuccessListener { task ->
                                     val myDocuId = task.id

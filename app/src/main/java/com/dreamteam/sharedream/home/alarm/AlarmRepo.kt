@@ -3,6 +3,7 @@ package com.dreamteam.sharedream.home.alarm
 import AlarmPost
 import android.util.Log
 import com.dreamteam.sharedream.Util.Constants
+import com.dreamteam.sharedream.chat.Chatting
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -32,6 +33,28 @@ class AlarmRepo {
                 callback(alarmList)
             }.addOnFailureListener { exception ->
                 Log.d("nyh", "getMyalarm fail : $exception")
+            }
+    }
+    fun getMyChatalarm(callback: (List<Chatting>) -> Unit) {
+        val postCollection = db.collection("notifyChatList")
+        //query 객체 만들고 get으로 가져오기
+        postCollection.whereEqualTo("uid", Constants.currentUserUid)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val chatList = mutableListOf<Chatting>()
+
+                //for문으로 data를 searchList에 넣어주고 adapter로 전달하기
+
+                for (i in querySnapshot.documents) {
+                    val data = i.toObject(Chatting::class.java)
+                    data?.let {
+                        chatList.add(it)
+                        Log.d("nyh", "getMyalarm: $chatList")
+                    }
+                }
+                callback(chatList)
+            }.addOnFailureListener { e ->
+                Log.d("nyh", "getMyalarm fail : $e")
             }
     }
 }

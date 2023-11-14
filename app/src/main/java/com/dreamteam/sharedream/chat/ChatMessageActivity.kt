@@ -58,11 +58,7 @@ class ChatMessageActivity : AppCompatActivity() {
         val store = FirebaseFirestore.getInstance()
         val intentDestinationUid = intent.getStringExtra("destinationUid").toString()
 
-
        destinationUid = intentDestinationUid
-
-
-
 
         store.collection("UserData").document(destinationUid!!)
             .get()
@@ -82,8 +78,6 @@ class ChatMessageActivity : AppCompatActivity() {
         val backbtn = binding.backButtonChat
 
         setContentView(view)
-
-
 
         uid = Firebase.auth.currentUser?.uid.toString()
         recyclerView = binding.chatRecycleView
@@ -106,13 +100,11 @@ class ChatMessageActivity : AppCompatActivity() {
                                 .child("comments").push().setValue(comment)
                             editText.text = null
                         }, 1000L)
-
                     }
                 } else {
                     fireDatabase.child("ChatRoom").child(chatRoomuid.toString()).child("comments")
                         .push().setValue(comment)
                     editText.text = null
-
                 }
             }else {
                 Toast.makeText(this,"메세지를 입력하세요.",Toast.LENGTH_LONG).show()
@@ -134,14 +126,12 @@ class ChatMessageActivity : AppCompatActivity() {
                     roomOut()
                     myCustomDialog?.dismiss()
                 }
-
                 override fun onCancelBtnClicked() {
                     myCustomDialog?.dismiss()
                 }
             })
             myCustomDialog.show()
         }
-
     }
     private fun checkChatRoom() {
         fireDatabase.child("ChatRoom").orderByChild("users/$uid").equalTo(true)

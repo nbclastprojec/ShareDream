@@ -1,6 +1,7 @@
 package com.dreamteam.sharedream.home.alarm
 
 import AlarmPost
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -32,6 +33,7 @@ class AlarmFragment : Fragment() {
     val storage = Firebase.storage
 
     private lateinit var alarmadapter: AlarmPostAdapter
+    private lateinit var alarmchatAdapter: AlarmAdapter2
     private lateinit var binding: FragmentAlarmBinding
     private lateinit var mContext: Context
     private val viewModel: AlarmViewModel by activityViewModels()
@@ -49,6 +51,7 @@ class AlarmFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -108,6 +111,11 @@ class AlarmFragment : Fragment() {
             LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         binding.alarmRecycler.adapter = alarmadapter
 
+        binding.alarmRecycler.layoutManager =
+            LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        binding.alarmRecycler.adapter = alarmchatAdapter
+
+
         viewModel.notiData.observe(viewLifecycleOwner) { notiList ->
             notiList?.let {
                 Log.d("nyh", "onViewCreated notiList: $notiList")
@@ -115,15 +123,16 @@ class AlarmFragment : Fragment() {
                 alarmadapter.notifyDataSetChanged()
             }
         }
+        viewModel.notiChatData.observe(viewLifecycleOwner) { notiChatList ->
+            notiChatList?.let{
+                Log.d("nyh", "onViewCreated: $notiChatList")
+                alarmchatAdapter.setData(notiChatList)
+                alarmchatAdapter.notifyDataSetChanged()
+            }
+        }
         viewModel.getNotiList()
-
-
-        // 여기서 더 이상 중복 observe가 없음
+        viewModel.getChatNotiList()
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
 
     private fun convertPostToPostRcv(
         post: Post,

@@ -15,11 +15,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "578483592134-507d6eoesvq43vm2pm67rbm3jhs53md7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dreamteam.sharedream",
+            "certificate_hash": "cd5dc60873a3ca8a6f1723d8cde14e8515f3515b"
+          }
+        },
+        {
           "client_id": "578483592134-b7bqscok3c67oieon96nh951lbcgjc02.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dreamteam.sharedream",
             "certificate_hash": "6c681de19b36c02973835dc5330e969e19ef10b6"
+          }
+        },
+        {
+          "client_id": "578483592134-dcosmbk1ji8bqrufkvtmcrf3jts6rqq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dreamteam.sharedream",
+            "certificate_hash": "157696baa9ce14f6b936b12a3a57b9bcf8a1d434"
           }
         },
         {

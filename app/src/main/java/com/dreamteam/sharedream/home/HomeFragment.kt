@@ -12,11 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dreamteam.sharedream.R
 import com.dreamteam.sharedream.databinding.FragmentHomeBinding
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.dreamteam.sharedream.NicknameCheckDailogFragment
 import com.dreamteam.sharedream.Util.ToastMsg
 import com.dreamteam.sharedream.adapter.PostClick
@@ -48,7 +45,6 @@ class HomeFragment : Fragment() {
 
     private val myPostFeedViewModel: MyPostFeedViewModel by activityViewModels()
     private val categoryViewModel: CategoryViewModel by activityViewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -190,6 +186,7 @@ class HomeFragment : Fragment() {
             binding.homeRecycle.scrollToPosition(scrollPosition)
         }
     }
+
     fun setupRcv() {
         myPostFeedViewModel.postResult.observe(viewLifecycleOwner) { posts ->
             binding.homeRecycle.apply {
@@ -204,6 +201,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     fun checkNickName(uid: String) {
         val fireStore = FirebaseFirestore.getInstance()
         val UserData = fireStore.collection("UserData")
@@ -221,7 +219,7 @@ class HomeFragment : Fragment() {
                     }
                 }
             } else {
-                ToastMsg.makeToast(requireContext(),"닉네임 설정이 올바르지 않습니다.")
+                ToastMsg.makeToast(requireContext(), "닉네임 설정이 올바르지 않습니다.")
             }
         }
     }
