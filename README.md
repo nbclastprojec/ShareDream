@@ -29,11 +29,11 @@
 # Contributors
 <br>
 
-<table>
+<table border="10">
   <tr>
     <td>
   <a href="https://github.com/yoonhee-nam">
-      <img src = "https://avatars.githubusercontent.com/u/126261375?v=4(https://github.com/yoonhee-nam" alt="남윤희님 깃허브" title="깃허브로 이동" width="150" height="150">
+      <img src = "https://avatars.githubusercontent.com/u/126261375?v=4" alt="남윤희님 깃허브" title="깃허브로 이동" width="150" height="150">
     <p>남윤희님<a href="https://github.com/yoonhee-nam">깃허브 이동</a></p>
   </a>
       </td>
@@ -45,7 +45,7 @@
       </td>
         <td>
     <a href="https://github.com/1231234qr312">
-      <img src = "https://avatars.githubusercontent.com/u/137616115?v=4(https://github.com/1231234qr312" alt="우재훈님 깃허브" title="깃허브로 이동" width="150" height="150" >
+      <img src = "https://avatars.githubusercontent.com/u/137616115?v=4(https://github.com/1231234qr312" alt="우재훈님 깃허브" title="깃허브로 이동" width="100%" height="150" >
     <p>우재훈님<a href="https://github.com/1231234qr312">깃허브 이동</a></p>
   </a>
       </td>
