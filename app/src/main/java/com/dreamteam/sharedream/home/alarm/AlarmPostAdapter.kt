@@ -22,20 +22,23 @@ import java.util.Date
 
 
 class AlarmPostAdapter(
-    private val context: Context,
-    private val itemClickListener: AlarmPostAdapter.OnItemClickListener
+    private val context: Context
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val TYPE_ALARM = 0
     private val TYPE_CHAT = 1
 
-    private var alarmItem: List<AlarmPost?> = emptyList()
-    private var chatItems: List<AlarmChatData?> = emptyList()
+    var alarmItem: List<AlarmPost?> = emptyList()
+    var chatItems: List<AlarmChatData?> = emptyList()
 
-    interface OnItemClickListener {
-        fun onAlarmItemClick(post: AlarmPost)
-    }
+    var onAlarmItemClickListener: ((AlarmPost) -> Unit)? = null
+    var onAlarmItemDeleteClickListener: ((position: Int) -> Unit)? = null
+    var onChatItemDeleteClickListener: ((position: Int) -> Unit)? = null
+
+//    interface OnItemClickListener {
+//        fun onAlarmItemClick(post: AlarmPost)
+//    }
 
     fun setData(data: List<AlarmPost?>) {
         alarmItem = data
@@ -96,7 +99,15 @@ class AlarmPostAdapter(
             }
 
             binding.root.setOnClickListener {
-                itemClickListener.onAlarmItemClick(post)
+                onAlarmItemClickListener?.invoke(post)
+            }
+
+            binding.btnDelete.setOnClickListener {
+                Log.d("nyh", "deleteItem:alarm deletebtn ")
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onAlarmItemDeleteClickListener?.invoke(position)
+                }
             }
         }
 
@@ -106,31 +117,29 @@ class AlarmPostAdapter(
                 val post = alarmItem[position] ?: return
                 val myDocuId = post.myDocuId
 
-                val mutableAlarmItem = alarmItem.toMutableList()
-                mutableAlarmItem.removeAt(position)
-                alarmItem = mutableAlarmItem
 
-                notifyItemRemoved(position)
 
                 val db = Firebase.firestore
                 db.collection("notifyList")
                     .document(myDocuId)
                     .delete()
                     .addOnSuccessListener {
-                        notifyDataSetChanged()
                         Log.d("nyh", "deleteItem: 삭제완료")
                         Log.d("nyh", "deleteItem: $myDocuId")
+                        val mutableAlarmItem = alarmItem.toMutableList()
+                        mutableAlarmItem.removeAt(position)
+                        alarmItem = mutableAlarmItem
+
+                        notifyItemRemoved(position)
                     }
                     .addOnFailureListener { e ->
                         Log.e("nyh", "deleteItem: $e")
                     }
             }
         }
+
         init {
-            binding.btnDelete.setOnClickListener {
-                Log.d("nyh", "deleteItem: ")
-                deleteItem(adapterPosition)
-            }
+
         }
     }
 
@@ -185,6 +194,13 @@ class AlarmPostAdapter(
             } else {
                 alarmImage.setImageResource(R.drawable.profile_circle)
             }
+            binding.btnDelete.setOnClickListener {
+                Log.d("nyh chat", "deleteItem: chat delete btn")
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onChatItemDeleteClickListener?.invoke(position)
+                }
+            }
         }
 
         @SuppressLint("NotifyDataSetChanged")
@@ -192,36 +208,33 @@ class AlarmPostAdapter(
             val chatPosition = position - alarmItem.size
             if (chatPosition < chatItems.size) {
                 val post = chatItems[position] ?: return
-                    val myDocuId = post.myDocuId
+                val myDocuId = post.myDocuId
 
-                val mutableChatItems = chatItems.toMutableList()
-                mutableChatItems.removeAt(chatPosition)
-                chatItems = mutableChatItems
 
-                    notifyItemRemoved(position)
 
-                    val db = Firebase.firestore
-                    if (myDocuId != null) {
-                        db.collection("notifyChatList")
-                            .document(myDocuId)
-                            .delete()
-                            .addOnSuccessListener {
-                                notifyDataSetChanged()
-                                Log.d("nyh", "deleteItem: 삭제완료")
-                                Log.d("nyh", "deleteItem: $myDocuId")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.e("nyh", "deleteItem: $e")
-                            }
-                    }
+                val db = Firebase.firestore
+                if (myDocuId != null) {
+                    db.collection("notifyChatList")
+                        .document(myDocuId)
+                        .delete()
+                        .addOnSuccessListener {
+                            Log.d("nyh", "deleteItem: 삭제완료")
+                            Log.d("nyh", "deleteItem: $myDocuId")
+                            val mutableChatItems = chatItems.toMutableList()
+                            mutableChatItems.removeAt(chatPosition)
+                            chatItems = mutableChatItems
+                            notifyItemRemoved(position)
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("nyh", "deleteItem: $e")
+                        }
+
                 }
+            }
         }
 
         init {
-            binding.btnDelete.setOnClickListener {
-                Log.d("nyh chat", "deleteItem: ")
-                deleteItem(adapterPosition)
-            }
+
         }
     }
 
@@ -256,10 +269,9 @@ class AlarmPostAdapter(
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (position < alarmItem.size) {
-            (holder as AlarmHolder).bind(alarmItem[position]!!, alarmItem[position]!!.timestamp)
-        } else {
-            (holder as AlarmChatHolder).bind(
+        when(getItemViewType(position)){
+            TYPE_ALARM ->  (holder as AlarmHolder).bind(alarmItem[position]!!, alarmItem[position]!!.timestamp)
+            TYPE_CHAT ->  (holder as AlarmChatHolder).bind(
                 chatItems[position - alarmItem.size]!!,
                 chatItems[position - alarmItem.size]!!.timestamp
             )

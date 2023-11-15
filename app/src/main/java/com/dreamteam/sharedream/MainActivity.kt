@@ -54,13 +54,13 @@ class MainActivity : AppCompatActivity() {
         homeAdapter = HomeAdapter(this)
         val viewPager: ViewPager2 = binding.viewPager
         val tabLayout: TabLayout = binding.tabLayout
+        viewPager.isUserInputEnabled = false
 
 
         val viewpagerFragmentAdapter = ViewPagerAdapter(this)
         viewPager.adapter = viewpagerFragmentAdapter
 
         val tabTitles = listOf("교환하기", "내소식")
-
         TabLayoutMediator(
             tabLayout,
             viewPager,
