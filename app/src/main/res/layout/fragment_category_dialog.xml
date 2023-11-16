@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="0dp">
 
@@ -272,11 +271,12 @@
         android:id="@+id/max50000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:clickable="true"
         android:text="30,000~50,000원"
         android:textColor="@color/black"
-        android:layout_marginStart="10dp"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/view30000"
         app:layout_constraintTop_toTopOf="@+id/max10000" />
 

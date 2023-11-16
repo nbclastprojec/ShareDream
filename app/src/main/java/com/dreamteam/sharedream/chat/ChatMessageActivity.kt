@@ -326,6 +326,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             layoutMain.gravity = Gravity.RIGHT
                             profile.visibility = View.INVISIBLE
                             name.visibility = View.INVISIBLE
+                            time.gravity= Gravity.RIGHT
                         } else {
                             // 이미지가 없으면 텍스트 메시지 표시
                             imageMessages.visibility = View.GONE
@@ -333,6 +334,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             name.visibility = View.INVISIBLE
                             message.setBackgroundResource(R.drawable.chatmine)
                             layoutMain.gravity = Gravity.RIGHT
+                            time.gravity= Gravity.RIGHT
                         }
                     }else {
                         val storageReference =
@@ -358,6 +360,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             name.text = chat?.name
                             destination.visibility = View.VISIBLE
                             name.visibility = View.VISIBLE
+                            time.gravity= Gravity.LEFT
                             layoutMain.gravity = Gravity.LEFT
                         } else {
                             imageMessages.visibility = View.GONE
@@ -365,6 +368,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             name.text = chat?.name
                             destination.visibility = View.VISIBLE
                             name.visibility = View.VISIBLE
+                            time.gravity= Gravity.LEFT
                             layoutMain.gravity = Gravity.LEFT
                         }
                     }
