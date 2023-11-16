@@ -336,7 +336,7 @@ class MessageActivity : AppCompatActivity() {
                             message.visibility = View.GONE
                             Glide.with(itemView.context)
                                 .load(comment.imageUrl)
-                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                                 .into(imageMessages)
                             imageMessages.visibility = View.VISIBLE
                             message.setBackgroundResource(R.drawable.chatmine)
@@ -358,7 +358,7 @@ class MessageActivity : AppCompatActivity() {
                         storageReference?.downloadUrl?.addOnSuccessListener { uri ->
                             Glide.with(itemView.context)
                                 .load(uri)
-                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                                 .into(profile)
                         }?.addOnFailureListener { exception ->
                             Log.e("MessageActivity", "이미지 다운로드 실패: ${exception.message}")
@@ -368,7 +368,7 @@ class MessageActivity : AppCompatActivity() {
                             message.visibility = View.GONE
                             Glide.with(itemView.context)
                                 .load(comment.imageUrl)
-                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                                 .into(imageMessages)
                             imageMessages.visibility = View.VISIBLE
                             message.setBackgroundResource(R.drawable.chat_other)
