@@ -84,7 +84,7 @@
     <ImageView
         android:id="@+id/btn_delete"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/txt_tradeTitle"
         app:layout_constraintEnd_toEndOf="@+id/txt_time"
         app:layout_constraintTop_toTopOf="@+id/cardview"

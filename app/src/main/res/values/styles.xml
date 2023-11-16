@@ -14,4 +14,13 @@
     <style name="TabLayoutTextStyle">
         <item name="android:textSize">18sp</item>
     </style>
+<!--    <style name="SpinnerDivideStyle">-->
+<!--        <item name="dividerColor">@color/gray700</item>-->
+<!--        <item name="android:dividerHeight">20dp</item>-->
+
+<!--    </style>-->
+
+<!--    <style name="SpinnerTheme" parent="Theme.AppCompat">-->
+<!--        <item name="android:dropDownListViewStyle">@style/SpinnerDivideStyle</item>-->
+<!--    </style>-->
 </resources>

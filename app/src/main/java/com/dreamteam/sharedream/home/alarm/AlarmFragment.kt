@@ -54,57 +54,21 @@ class AlarmFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        alarmadapter = AlarmPostAdapter(mContext, object : AlarmPostAdapter.OnItemClickListener {
-            override fun onAlarmItemClick(post: AlarmPost) {
-                viewModel.onPostClicked(post)
-                viewModel.selectedPost.observe(viewLifecycleOwner) { selectedPost ->
-                    Log.d("nyh", "onItemClick: docuId = ${selectedPost?.documentId}")
-                    if (selectedPost != null) {
-                        val docuId = selectedPost.documentId
-                        Log.d("nyh", "onItemClick: docuId = $docuId")
-                        db.collection("Posts").whereEqualTo("documentId", docuId)
-                            .get()
-                            .addOnSuccessListener { querySnapshot ->
-                                val detailList = mutableListOf<PostRcv>()
+        alarmadapter = AlarmPostAdapter(mContext)
 
-                                for (i in querySnapshot.documents) {
-                                    val data = i.toObject(Post::class.java)
-                                    data?.let {
-                                        convertPostToPostRcv(
-                                            it,
-                                            querySnapshot,
-                                            detailList
-                                        ) { convertedData ->
-                                            if (convertedData.isNotEmpty()) {
-                                                val selectedPost =
-                                                    convertedData.firstOrNull { it.documentId == docuId }
-                                                if (selectedPost != null) {
-                                                    val postDetailFragment = PostDetailFragment()
+        alarmadapter.onAlarmItemClickListener = { post ->
+            onAlarmItemClick(post)
+        }
+        alarmadapter.onAlarmItemDeleteClickListener = { position ->
+            onDeleteAlarmItem(position)
+        }
 
-                                                    // Post 객체를 Bundle에 추가하여 PostDetailFragment로 전달
-                                                    val args = Bundle()
-                                                    args.putSerializable("post", selectedPost)
-                                                    postDetailFragment.arguments = args
-                                                    Log.d("nyh", "onViewCreated: 전달하는 args $args")
+        alarmadapter.onChatItemDeleteClickListener = { position ->
+            onDeleteChatItem(position)
+        }
 
-                                                    val transaction =
-                                                        parentFragmentManager.beginTransaction()
-                                                    transaction.replace(
-                                                        R.id.frag_edit,
-                                                        postDetailFragment
-                                                    )
-                                                    transaction.addToBackStack(null)
-                                                    transaction.commit()
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                    }
-                }
-            }
-        })
+
+
 
         binding.alarmRecycler.layoutManager =
             LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
@@ -126,6 +90,56 @@ class AlarmFragment : Fragment() {
         }
         viewModel.getNotiList()
         viewModel.getChatNotiList()
+    }
+
+    private fun onAlarmItemClick(post: AlarmPost) {
+        viewModel.onPostClicked(post)
+        viewModel.selectedPost.observe(viewLifecycleOwner) { selectedPost ->
+            Log.d("nyh", "onItemClick: docuId = ${selectedPost?.documentId}")
+            if (selectedPost != null) {
+                val docuId = selectedPost.documentId
+                Log.d("nyh", "onItemClick: docuId = $docuId")
+                db.collection("Posts").whereEqualTo("documentId", docuId)
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        val detailList = mutableListOf<PostRcv>()
+
+                        for (i in querySnapshot.documents) {
+                            val data = i.toObject(Post::class.java)
+                            data?.let {
+                                convertPostToPostRcv(
+                                    it,
+                                    querySnapshot,
+                                    detailList
+                                ) { convertedData ->
+                                    if (convertedData.isNotEmpty()) {
+                                        val selectedPost =
+                                            convertedData.firstOrNull { it.documentId == docuId }
+                                        if (selectedPost != null) {
+                                            val postDetailFragment = PostDetailFragment()
+
+                                            // Post 객체를 Bundle에 추가하여 PostDetailFragment로 전달
+                                            val args = Bundle()
+                                            args.putSerializable("post", selectedPost)
+                                            postDetailFragment.arguments = args
+                                            Log.d("nyh", "onViewCreated: 전달하는 args $args")
+
+                                            val transaction =
+                                                parentFragmentManager.beginTransaction()
+                                            transaction.replace(
+                                                R.id.frag_edit,
+                                                postDetailFragment
+                                            )
+                                            transaction.addToBackStack(null)
+                                            transaction.commit()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+            }
+        }
     }
 
     private fun convertPostToPostRcv(
@@ -185,4 +199,57 @@ class AlarmFragment : Fragment() {
                 }
             }
     }
+    private fun onDeleteAlarmItem(position: Int) {
+        if (position < alarmadapter.alarmItem.size) {
+            val post = alarmadapter.alarmItem[position] ?: return
+            val myDocuId = post.myDocuId
+
+            val db = Firebase.firestore
+            db.collection("notifyList")
+                .document(myDocuId)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d("nyh", "deleteItem: 삭제완료")
+                    Log.d("nyh", "deleteItem: $myDocuId")
+
+                    val mutableAlarmItem = alarmadapter.alarmItem.toMutableList()
+                    mutableAlarmItem.removeAt(position)
+                    alarmadapter.alarmItem = mutableAlarmItem
+
+                    alarmadapter.notifyItemRemoved(position)
+                }
+                .addOnFailureListener { e ->
+                    Log.e("nyh", "deleteItem: $e")
+                }
+        }
+    }
+
+    private fun onDeleteChatItem(position: Int) {
+        val chatPosition = position - alarmadapter.alarmItem.size
+        if (chatPosition >= 0 && chatPosition < alarmadapter.chatItems.size) {
+            val chatItem = alarmadapter.chatItems[chatPosition] ?: return
+            val myDocuId = chatItem.myDocuId
+
+            val db = Firebase.firestore
+            if (myDocuId != null) {
+                db.collection("notifyChatList")
+                    .document(myDocuId)
+                    .delete()
+                    .addOnSuccessListener {
+                        Log.d("nyh", "deleteItem: 삭제완료")
+                        Log.d("nyh", "deleteItem: $myDocuId")
+
+                        val mutableChatItems = alarmadapter.chatItems.toMutableList()
+                        mutableChatItems.removeAt(chatPosition)
+                        alarmadapter.chatItems = mutableChatItems
+
+                        alarmadapter.notifyItemRemoved(position)
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("nyh", "deleteItem: $e")
+                    }
+            }
+        }
+    }
+
 }
