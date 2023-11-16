@@ -49,7 +49,6 @@ class InputUserData : Fragment() {
             val agreeDialog=PersonalAgree()
             agreeDialog.show(requireActivity().supportFragmentManager,"Agree2")
         }
-
         return binding.root
     }
     fun getInformation(number: String, nickname: String, token: String) {
@@ -68,18 +67,15 @@ class InputUserData : Fragment() {
                     val id = if (index != null && index >= 0) {
                         email.substring(0, index)
                         Log.d("nyh", "getInformation:token $token")
-
                     } else {
                         Toast.makeText(requireContext(), "이메일 확인오류", Toast.LENGTH_SHORT).show()
                     }
-
                     val userData = hashMapOf(
                         "email" to email,
                         "number" to number,
                         "nickname" to nickname,
                         "id" to id,
                         "token" to token
-
                     )
 
                     val db = FirebaseFirestore.getInstance()
@@ -114,7 +110,6 @@ class InputUserData : Fragment() {
              return false
 
 
-
         }else if (!nickname.matches(Regex("^[가-힣]*$"))) {
          binding.nickName.error="닉네임은 한글로만 이뤄져야해요. "
              return false
@@ -126,13 +121,6 @@ class InputUserData : Fragment() {
          } else{
              return true
          }
-
-
-
-
-
-
-
 
     }
     fun phone(text: String):Boolean{
