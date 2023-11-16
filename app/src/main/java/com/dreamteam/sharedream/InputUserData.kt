@@ -19,8 +19,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 
 class InputUserData : Fragment() {
-    private lateinit var binding:FragmentInputUserDataBinding
-    private lateinit var auth:FirebaseAuth
+    private lateinit var binding: FragmentInputUserDataBinding
+    private lateinit var auth: FirebaseAuth
     var token = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,26 +32,27 @@ class InputUserData : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding=FragmentInputUserDataBinding.inflate(inflater,container,false)
+        binding = FragmentInputUserDataBinding.inflate(inflater, container, false)
         binding.btnSignup.setOnClickListener {
             if (check()) {
                 val nickname = binding.editNickName.text.toString()
                 val number = binding.editNumber.text.toString()
-                getInformation(number, nickname,token)
+                getInformation(number, nickname, token)
                 Log.d("nyh", "onCreateView: $token")
             }
         }
-        binding.agree1.setOnClickListener{
-            val agreeDialog=AgreeFragment()
-            agreeDialog.show(requireActivity().supportFragmentManager,"Agree1")
+        binding.agree1.setOnClickListener {
+            val agreeDialog = AgreeFragment()
+            agreeDialog.show(requireActivity().supportFragmentManager, "Agree1")
         }
-        binding.agree2.setOnClickListener{
-            val agreeDialog=PersonalAgree()
-            agreeDialog.show(requireActivity().supportFragmentManager,"Agree2")
+        binding.agree2.setOnClickListener {
+            val agreeDialog = PersonalAgree()
+            agreeDialog.show(requireActivity().supportFragmentManager, "Agree2")
         }
 
         return binding.root
     }
+
     fun getInformation(number: String, nickname: String, token: String) {
         val currentUser = FirebaseAuth.getInstance().currentUser
 
@@ -64,14 +65,7 @@ class InputUserData : Fragment() {
                     val token = task.result
                     val uid = currentUser.uid
                     val email = currentUser.email
-                    val index = email?.indexOf("@")
-                    val id = if (index != null && index >= 0) {
-                        email.substring(0, index)
-                        Log.d("nyh", "getInformation:token $token")
-
-                    } else {
-                        Toast.makeText(requireContext(), "이메일 확인오류", Toast.LENGTH_SHORT).show()
-                    }
+                    val id = email
 
                     val userData = hashMapOf(
                         "email" to email,
@@ -99,44 +93,37 @@ class InputUserData : Fragment() {
                     Toast.makeText(requireContext(), "Input Error", Toast.LENGTH_SHORT).show()
                 }
             }
-        }.addOnFailureListener {e ->
+        }.addOnFailureListener { e ->
             Log.d("nyh", "getInformation: fail $e ")
         }
     }
+
     @SuppressLint("SuspiciousIndentation")
-    private fun check():Boolean {
-        val checkbox=binding.checkBox
+    private fun check(): Boolean {
+        val checkbox = binding.checkBox
         val nickname = binding.nickName.text.toString()
-        val number=binding.editNumber.text.toString()
+        val number = binding.editNumber.text.toString()
 
-         if (!phone(number)){
-            binding.editNumber.error="핸드폰 번호는 숫자로만 이루어져야 합니다."
-             return false
-
-
-
-        }else if (!nickname.matches(Regex("^[가-힣]*$"))) {
-         binding.nickName.error="닉네임은 한글로만 이뤄져야해요. "
-             return false
-        }
-
-        else if (!checkbox.isChecked) {
-            Toast.makeText(requireContext(),"약관동의를 체크해주세요.",Toast.LENGTH_SHORT).show()
+        if (!phone(number)) {
+            binding.editNumber.error = "핸드폰 번호는 숫자로만 이루어져야 합니다."
             return false
-         } else{
-             return true
-         }
 
 
-
-
-
-
+        } else if (!nickname.matches(Regex("^[가-힣]*$"))) {
+            binding.nickName.error = "닉네임은 한글로만 이뤄져야해요. "
+            return false
+        } else if (!checkbox.isChecked) {
+            Toast.makeText(requireContext(), "약관동의를 체크해주세요.", Toast.LENGTH_SHORT).show()
+            return false
+        } else {
+            return true
+        }
 
 
     }
-    fun phone(text: String):Boolean{
-        return text.all {it.isDigit()}
+
+    fun phone(text: String): Boolean {
+        return text.all { it.isDigit() }
     }
 
 
