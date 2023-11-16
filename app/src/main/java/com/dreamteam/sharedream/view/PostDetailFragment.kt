@@ -40,6 +40,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.math.log
@@ -56,12 +57,16 @@ class PostDetailFragment : Fragment() {
     private val currentPostInfo = mutableListOf<PostRcv>()
 
     private fun detailPageInfoChange(postRcv: PostRcv) {
+
+        val decimalFormat = DecimalFormat("#,###")
+        val formattedPrice = decimalFormat.format(postRcv.price)
+
         binding.detailId.text = postRcv.nickname
         binding.detailAddress.text = postRcv.address
         binding.detailpageTitle.text = postRcv.title
         binding.detailpageCategory.text = postRcv.category
         binding.detailpageExplain.text = postRcv.desc
-        binding.detailMoney.text = "${postRcv.price} 원"
+        binding.detailMoney.text = "${formattedPrice} 원"
         binding.detailTvLikeCount.text = "${postRcv.likeUsers.size}"
         binding.detailpageTime.text = "${time(postRcv.timestamp)}"
         binding.detailTvItemState.text = postRcv.state
@@ -109,13 +114,15 @@ class PostDetailFragment : Fragment() {
         if (post != null) {
             currentPostInfo.clear()
             currentPostInfo.add(post)
+            val decimalFormat = DecimalFormat("#,###")
+            val formattedPrice = decimalFormat.format(post.price)
 
             binding.detailId.text = post.nickname
             binding.detailAddress.text = post.address
             binding.detailpageTitle.text = post.title
             binding.detailpageCategory.text = post.category
             binding.detailpageExplain.text = post.desc
-            binding.detailMoney.text = "${post.price} 원"
+            binding.detailMoney.text = "${formattedPrice} 원"
             binding.detailTvLikeCount.text = "${post.likeUsers.size}"
             binding.detailpageTime.text = time(post.timestamp)
             imgs = post.imgs.toMutableList()
@@ -281,13 +288,15 @@ class PostDetailFragment : Fragment() {
         val post = arguments?.getSerializable("post") as PostRcv?
 
         if (post != null) {
+            val decimalFormat = DecimalFormat("#,###")
+            val formattedPrice = decimalFormat.format(post.price)
             binding.detailId.text = post.nickname
             binding.detailId.text = post.nickname
             binding.detailAddress.text = post.address
             binding.detailpageTitle.text = post.title
             binding.detailpageCategory.text = post.category
             binding.detailpageExplain.text = post.desc
-            binding.detailMoney.text = "${post.price} 원"
+            binding.detailMoney.text = "${formattedPrice} 원"
             binding.detailTvLikeCount.text = "${post.likeUsers.size}"
             binding.detailpageTime.text = time(post.timestamp)
 
