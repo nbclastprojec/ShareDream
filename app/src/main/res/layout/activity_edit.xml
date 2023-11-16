@@ -217,11 +217,10 @@
 
                 <TextView
                     android:id="@+id/edit_etv_address"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="34dp"
-                    android:layout_marginStart="20dp"
                     android:layout_marginTop="30dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginBottom="20dp"
                     android:background="@null"
                     android:fontFamily="sans-serif-medium"
@@ -232,7 +231,6 @@
                     android:textColorHint="@color/hint_color"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/calender"
-                    app:layout_constraintEnd_toStartOf="@+id/edit_btn_location_pick"
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintHorizontal_weight="0.72"
                     app:layout_constraintStart_toStartOf="parent"
@@ -240,7 +238,7 @@
 
                 <TextView
                     android:id="@+id/edit_btn_location_pick"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_marginEnd="20dp"
                     android:gravity="center_vertical"
@@ -250,7 +248,6 @@
                     app:layout_constraintBottom_toBottomOf="@+id/edit_etv_address"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="0.25"
-                    app:layout_constraintStart_toEndOf="@+id/edit_etv_address"
                     app:layout_constraintTop_toTopOf="@+id/edit_etv_address" />
 
 
