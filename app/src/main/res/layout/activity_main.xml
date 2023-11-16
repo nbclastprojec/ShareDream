@@ -65,7 +65,7 @@
                 android:layout_marginLeft="115dp"
                 android:layout_marginRight="50dp"
                 android:layout_marginTop="13dp"
-                android:background="@drawable/edit_searchbox"
+                android:background="@drawable/chat_file"
                 android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

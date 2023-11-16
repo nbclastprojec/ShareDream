@@ -91,7 +91,6 @@ class ChatMessageActivity : AppCompatActivity() {
 
         val plusButton = binding.plubtn
         val imageButton = binding.imageIc
-        val otherlistButoon = binding.otherListIc
         val otherlistLayout = binding.otherListLayout
         val backButtonOtherList = binding.backbuttonOtherlist
         val backButtonPlus = binding.backButtonPlus
@@ -177,16 +176,8 @@ class ChatMessageActivity : AppCompatActivity() {
             plusLayout.visibility = View.VISIBLE
         }
 
-        otherlistButoon.setOnClickListener {
-            imageButton.visibility = View.GONE
-            otherlistButoon.visibility = View.GONE
-            backButtonOtherList.visibility = View.VISIBLE
-            otherlistLayout.visibility = View.VISIBLE
-            backButtonPlus.visibility = View.GONE
-        }
         backButtonOtherList.setOnClickListener {
             otherlistLayout.visibility = View.GONE
-            otherlistButoon.visibility = View.VISIBLE
             imageButton.visibility = View.VISIBLE
             backButtonOtherList.visibility = View.GONE
             backButtonPlus.visibility = View.VISIBLE

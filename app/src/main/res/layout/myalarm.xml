@@ -8,7 +8,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardview"
-        android:layout_width="105dp"
+        android:layout_width="100dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
@@ -36,7 +36,7 @@
         android:fontFamily="sans-serif"
         android:text="교환을 희망하는 물건"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/cardview"
         app:layout_constraintTop_toTopOf="@+id/cardview" />
@@ -76,6 +76,7 @@
         android:id="@+id/txt_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:text="님이 좋아요를 눌렀습니다."
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/notinickname"
@@ -83,10 +84,12 @@
 
     <ImageView
         android:id="@+id/btn_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_tradeTitle"
+        android:layout_width="17dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="370dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="@+id/txt_time"
-        app:layout_constraintTop_toTopOf="@+id/cardview"
-        app:srcCompat="@drawable/trashcan" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_x" />
 </androidx.constraintlayout.widget.ConstraintLayout>

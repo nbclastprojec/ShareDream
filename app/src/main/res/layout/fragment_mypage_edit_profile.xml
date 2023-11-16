@@ -56,7 +56,7 @@
         <ImageView
             android:id="@+id/profile_image"
             android:layout_width="110dp"
-            android:layout_height="118dp"
+            android:layout_height="110dp"
             android:scaleType="centerCrop"
             android:src="@drawable/loading2" />
 
@@ -82,13 +82,14 @@
 
     <TextView
         android:id="@+id/profile_id"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_width="298dp"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/rounded"
-        android:fontFamily="@font/suitellight"
+        android:fontFamily="@font/notosans_light"
         android:gravity="center"
         android:text="나의 닉네임"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +103,7 @@
         android:layout_height="260dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/rounded"
-        android:fontFamily="@font/suitellight"
+        android:fontFamily="@font/notosans_regular"
         android:gravity="start"
         android:hint="안녕하세요"
         android:padding="10dp"
