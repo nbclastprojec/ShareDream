@@ -98,22 +98,22 @@ class MessageActivity : AppCompatActivity() {
         val plusLayout = binding.plusLayout
 
         val receivedDocumentId = intent.getStringExtra("documnetUid").toString()
-        Log.d("susu", "onCreate: ${receivedDocumentId}")
 
         val store = FirebaseFirestore.getInstance()
 
         document = receivedDocumentId
 
-        val UserData = store.collection("Posts").document(receivedDocumentId)
-        UserData.get()
+        val userData = store.collection("Posts").document(receivedDocumentId)
+        userData.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     val nickname = document.getString("nickname") // 닉네임
                     val postUseruid = document.getString("uid") // uid
-                    Log.d("susu", "onCreate: ${postUseruid}")
+
                     binding.chat.text = nickname
                     destinationUid = postUseruid
-                    Log.d("susu", "${postUseruid}")
+
+
                 } else {
                     Log.d("MessageActivity", "문서가 없는 예전글이에요.")
                 }
@@ -508,25 +508,13 @@ class MessageActivity : AppCompatActivity() {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
             val imageUri = data.data
-            uploadImage(imageUri)
+            if (imageUri != null) {
+                sendMessageWithImage(imageUri)
+            }
         }
     }
 
-    private fun uploadImage(imageUri: Uri?) {
-        if (imageUri != null) {
-            val storageReference =
-                storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
-            storageReference.putFile(imageUri)
-                .addOnSuccessListener { taskSnapshot ->
-                    // 이미지 업로드 성공 시 처리
-                    sendMessageWithImage(imageUri)
-                }
-                .addOnFailureListener { exception ->
-                    // 이미지 업로드 실패 시 처리
-                    Log.e("MessageActivity", "이미지 업로드 실패: ${exception.message}")
-                }
-        }
-    }
+
 
     private fun sendMessageWithImage(imageUri: Uri) {
         val storageReference =

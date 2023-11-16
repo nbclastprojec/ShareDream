@@ -423,21 +423,9 @@ class ChatMessageActivity : AppCompatActivity() {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
             val imageUri = data.data
-            uploadImage(imageUri)
-        }
-    }
-    private fun uploadImage(imageUri: Uri?) {
-        if (imageUri != null) {
-            val storageReference = storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
-            storageReference.putFile(imageUri)
-                .addOnSuccessListener { taskSnapshot ->
-
-                    sendMessageWithImage(imageUri)
-                }
-                .addOnFailureListener { exception ->
-                    // 이미지 업로드 실패 시 처리
-                    Log.e("MessageActivity", "이미지 업로드 실패: ${exception.message}")
-                }
+            if (imageUri != null) {
+                sendMessageWithImage(imageUri)
+            }
         }
     }
 

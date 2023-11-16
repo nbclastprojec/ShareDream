@@ -96,7 +96,6 @@ class ChatFragment : Fragment() {
                 .addListenerForSingleValueEvent(
                     object : ValueEventListener{
                         override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
                         }
 
                         override fun onDataChange(snapshot: DataSnapshot) {
