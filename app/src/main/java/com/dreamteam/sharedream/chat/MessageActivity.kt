@@ -341,11 +341,13 @@ class MessageActivity : AppCompatActivity() {
                             imageMessages.visibility = View.VISIBLE
                             message.setBackgroundResource(R.drawable.chatmine)
                             layoutMain.gravity = Gravity.RIGHT
+                            time.gravity= Gravity.RIGHT
                             profile.visibility = View.INVISIBLE
                             name.visibility = View.INVISIBLE
                         } else {
                             imageMessages.visibility = View.GONE
                             profile.visibility = View.INVISIBLE
+                            time.gravity= Gravity.RIGHT
                             name.visibility = View.INVISIBLE
                             message.setBackgroundResource(R.drawable.chatmine)
                             layoutMain.gravity = Gravity.RIGHT
@@ -373,6 +375,7 @@ class MessageActivity : AppCompatActivity() {
                             imageMessages.visibility = View.VISIBLE
                             message.setBackgroundResource(R.drawable.chat_other)
                             name.text = chat?.name
+                            time.gravity= Gravity.LEFT
                             destination.visibility = View.VISIBLE
                             name.visibility = View.VISIBLE
                             layoutMain.gravity = Gravity.LEFT
@@ -380,6 +383,7 @@ class MessageActivity : AppCompatActivity() {
                             imageMessages.visibility = View.GONE
                             message.setBackgroundResource(R.drawable.chat_other)
                             name.text = chat?.name
+                            time.gravity= Gravity.LEFT
                             destination.visibility = View.VISIBLE
                             name.visibility = View.VISIBLE
                             layoutMain.gravity = Gravity.LEFT

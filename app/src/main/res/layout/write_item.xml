@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingVertical="10dp"
-    android:paddingEnd="12dp">
+    android:paddingEnd="10dp"
+    android:layout_marginRight="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
@@ -141,8 +142,10 @@
         android:gravity="center|left"
         android:text="2023.10.11"
         android:textSize="12sp"
+        android:layout_marginLeft="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/write_price" />
 
     <TextView
         android:id="@+id/write_subtittle"
@@ -165,11 +168,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
+        android:layout_marginTop="5dp"
         android:fontFamily="sans-serif"
         android:text="1일 남음"
         android:textSize="13sp"
         app:layout_constraintBottom_toTopOf="@+id/write_page_date"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/write_price"
         app:layout_constraintTop_toBottomOf="@+id/write_subtittle" />
 
     <TextView
