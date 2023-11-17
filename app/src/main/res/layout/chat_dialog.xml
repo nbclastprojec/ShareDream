@@ -67,10 +67,10 @@
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:background="@drawable/chatting_me"
+            android:background="@drawable/loginbtn_2"
             android:fontFamily="sans-serif-light"
             android:text="취소"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatButton

@@ -75,9 +75,9 @@
 
     <TextView
         android:id="@+id/help_mail"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         android:fontFamily="@font/suitesemibold"
@@ -115,15 +115,15 @@
 
     <EditText
         android:id="@+id/help_etv_emailaddress"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginEnd="16dp"
         android:background="@null"
-        android:gravity="center_vertical"
         android:fontFamily="@font/suitellight"
-        android:hint="문의 답변을 수신받은 이메일을 입력해주세요"
-        android:maxLines="1"
+        android:gravity="center_vertical"
+        android:hint="문의답변을 수신받을 이메일을 입력해주세요"
         android:maxLength="22"
+        android:maxLines="1"
         android:textColorHint="#858484"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/help_mail"

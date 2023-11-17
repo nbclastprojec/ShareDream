@@ -319,13 +319,14 @@ class ChatMessageActivity : AppCompatActivity() {
                             message.visibility = View.GONE
                             Glide.with(itemView.context)
                                 .load(comment.imageUrl)
-                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                                 .into(imageMessages)
                             imageMessages.visibility = View.VISIBLE
                             message.setBackgroundResource(R.drawable.chatmine)
                             layoutMain.gravity = Gravity.RIGHT
                             profile.visibility = View.INVISIBLE
                             name.visibility = View.INVISIBLE
+                            time.gravity= Gravity.RIGHT
                         } else {
                             // 이미지가 없으면 텍스트 메시지 표시
                             imageMessages.visibility = View.GONE
@@ -333,6 +334,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             name.visibility = View.INVISIBLE
                             message.setBackgroundResource(R.drawable.chatmine)
                             layoutMain.gravity = Gravity.RIGHT
+                            time.gravity= Gravity.RIGHT
                         }
                     }else {
                         val storageReference =
@@ -340,7 +342,7 @@ class ChatMessageActivity : AppCompatActivity() {
                         storageReference?.downloadUrl?.addOnSuccessListener { uri ->
                             Glide.with(itemView.context)
                                 .load(uri)
-                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                                 .into(profile)
                         }?.addOnFailureListener { exception ->
                             Log.e("MessageActivity", "이미지 다운로드 실패: ${exception.message}")
@@ -358,6 +360,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             name.text = chat?.name
                             destination.visibility = View.VISIBLE
                             name.visibility = View.VISIBLE
+                            time.gravity= Gravity.LEFT
                             layoutMain.gravity = Gravity.LEFT
                         } else {
                             imageMessages.visibility = View.GONE
@@ -365,6 +368,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             name.text = chat?.name
                             destination.visibility = View.VISIBLE
                             name.visibility = View.VISIBLE
+                            time.gravity= Gravity.LEFT
                             layoutMain.gravity = Gravity.LEFT
                         }
                     }
@@ -423,21 +427,9 @@ class ChatMessageActivity : AppCompatActivity() {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
             val imageUri = data.data
-            uploadImage(imageUri)
-        }
-    }
-    private fun uploadImage(imageUri: Uri?) {
-        if (imageUri != null) {
-            val storageReference = storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
-            storageReference.putFile(imageUri)
-                .addOnSuccessListener { taskSnapshot ->
-
-                    sendMessageWithImage(imageUri)
-                }
-                .addOnFailureListener { exception ->
-                    // 이미지 업로드 실패 시 처리
-                    Log.e("MessageActivity", "이미지 업로드 실패: ${exception.message}")
-                }
+            if (imageUri != null) {
+                sendMessageWithImage(imageUri)
+            }
         }
     }
 
@@ -446,13 +438,12 @@ class ChatMessageActivity : AppCompatActivity() {
 
         storageReference.putFile(imageUri)
             .addOnSuccessListener { taskSnapshot ->
-                // 이미지 업로드 성공 시 처리
+
                 storageReference.downloadUrl.addOnSuccessListener { imageUrl ->
                     val time = System.currentTimeMillis()
                     val dateFormat = SimpleDateFormat("MM월 dd일 hh:mm")
                     val realTime = dateFormat.format(Date(time)).toString()
 
-                    // 이미지 URL을 포함한 채팅 메시지 생성
                     val comment = ChatModel.Comment(uid, "", realTime, imageUrl.toString())
 
                     // Firebase에 채팅 메시지 저장
@@ -461,7 +452,7 @@ class ChatMessageActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception ->
-                // 이미지 업로드 실패 시 처리
+
                 Log.e("MessageActivity", "이미지 업로드 실패: ${exception.message}")
             }
     }

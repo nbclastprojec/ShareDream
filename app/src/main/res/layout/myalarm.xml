@@ -45,8 +45,8 @@
         android:id="@+id/notinickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
         android:layout_marginTop="10dp"
+        android:fontFamily="sans-serif-medium"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/txt_tradeTitle"
@@ -86,10 +86,8 @@
         android:id="@+id/btn_delete"
         android:layout_width="17dp"
         android:layout_height="15dp"
-        android:layout_marginStart="370dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/txt_time"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txt_time"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_x" />
 </androidx.constraintlayout.widget.ConstraintLayout>

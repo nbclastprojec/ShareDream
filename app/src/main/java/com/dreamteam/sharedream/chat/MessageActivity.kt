@@ -98,22 +98,22 @@ class MessageActivity : AppCompatActivity() {
         val plusLayout = binding.plusLayout
 
         val receivedDocumentId = intent.getStringExtra("documnetUid").toString()
-        Log.d("susu", "onCreate: ${receivedDocumentId}")
 
         val store = FirebaseFirestore.getInstance()
 
         document = receivedDocumentId
 
-        val UserData = store.collection("Posts").document(receivedDocumentId)
-        UserData.get()
+        val userData = store.collection("Posts").document(receivedDocumentId)
+        userData.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     val nickname = document.getString("nickname") // 닉네임
                     val postUseruid = document.getString("uid") // uid
-                    Log.d("susu", "onCreate: ${postUseruid}")
+
                     binding.chat.text = nickname
                     destinationUid = postUseruid
-                    Log.d("susu", "${postUseruid}")
+
+
                 } else {
                     Log.d("MessageActivity", "문서가 없는 예전글이에요.")
                 }
@@ -336,16 +336,18 @@ class MessageActivity : AppCompatActivity() {
                             message.visibility = View.GONE
                             Glide.with(itemView.context)
                                 .load(comment.imageUrl)
-                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                                 .into(imageMessages)
                             imageMessages.visibility = View.VISIBLE
                             message.setBackgroundResource(R.drawable.chatmine)
                             layoutMain.gravity = Gravity.RIGHT
+                            time.gravity= Gravity.RIGHT
                             profile.visibility = View.INVISIBLE
                             name.visibility = View.INVISIBLE
                         } else {
                             imageMessages.visibility = View.GONE
                             profile.visibility = View.INVISIBLE
+                            time.gravity= Gravity.RIGHT
                             name.visibility = View.INVISIBLE
                             message.setBackgroundResource(R.drawable.chatmine)
                             layoutMain.gravity = Gravity.RIGHT
@@ -358,7 +360,7 @@ class MessageActivity : AppCompatActivity() {
                         storageReference?.downloadUrl?.addOnSuccessListener { uri ->
                             Glide.with(itemView.context)
                                 .load(uri)
-                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                                 .into(profile)
                         }?.addOnFailureListener { exception ->
                             Log.e("MessageActivity", "이미지 다운로드 실패: ${exception.message}")
@@ -368,11 +370,12 @@ class MessageActivity : AppCompatActivity() {
                             message.visibility = View.GONE
                             Glide.with(itemView.context)
                                 .load(comment.imageUrl)
-                                .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+                                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
                                 .into(imageMessages)
                             imageMessages.visibility = View.VISIBLE
                             message.setBackgroundResource(R.drawable.chat_other)
                             name.text = chat?.name
+                            time.gravity= Gravity.LEFT
                             destination.visibility = View.VISIBLE
                             name.visibility = View.VISIBLE
                             layoutMain.gravity = Gravity.LEFT
@@ -380,6 +383,7 @@ class MessageActivity : AppCompatActivity() {
                             imageMessages.visibility = View.GONE
                             message.setBackgroundResource(R.drawable.chat_other)
                             name.text = chat?.name
+                            time.gravity= Gravity.LEFT
                             destination.visibility = View.VISIBLE
                             name.visibility = View.VISIBLE
                             layoutMain.gravity = Gravity.LEFT
@@ -508,25 +512,13 @@ class MessageActivity : AppCompatActivity() {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
             val imageUri = data.data
-            uploadImage(imageUri)
+            if (imageUri != null) {
+                sendMessageWithImage(imageUri)
+            }
         }
     }
 
-    private fun uploadImage(imageUri: Uri?) {
-        if (imageUri != null) {
-            val storageReference =
-                storage.reference.child("ChatImages").child("${System.currentTimeMillis()}.jpg")
-            storageReference.putFile(imageUri)
-                .addOnSuccessListener { taskSnapshot ->
-                    // 이미지 업로드 성공 시 처리
-                    sendMessageWithImage(imageUri)
-                }
-                .addOnFailureListener { exception ->
-                    // 이미지 업로드 실패 시 처리
-                    Log.e("MessageActivity", "이미지 업로드 실패: ${exception.message}")
-                }
-        }
-    }
+
 
     private fun sendMessageWithImage(imageUri: Uri) {
         val storageReference =
