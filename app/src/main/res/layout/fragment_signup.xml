@@ -81,6 +81,8 @@
             android:background="@drawable/searchid"
             android:ems="10"
             android:paddingLeft="10dp"
+            android:hint=" 특수기호를 포함한 8자리 이상"
+            android:textColorHint="#D9D9D9"
             app:layout_constraintHeight_percent="0.055"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
