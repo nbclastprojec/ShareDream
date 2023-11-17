@@ -172,7 +172,7 @@
 
     <TextView
         android:id="@+id/detailpage_time"
-        android:layout_width="54dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="4dp"
@@ -383,13 +383,13 @@
         android:id="@+id/detailpage_explain"
         android:layout_width="367dp"
         android:layout_height="101dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/suitellight"
         android:text="집에서 쓰던 빗살무늬 토기 교환 원합니다. 구운지 얼마 안된 그릇이라 잘 안깨져요. 갓 잡은 물고기로 교환 받습니다. 언제든 연락주세요."
         android:textColor="#000000"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/detailpage_title"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/detailpage_time" />
 
 
