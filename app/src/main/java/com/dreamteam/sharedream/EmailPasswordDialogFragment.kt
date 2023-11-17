@@ -32,7 +32,7 @@ class EmailPasswordDialogFragment : DialogFragment() {
         
         binding.btnLogin.setOnClickListener {
             dismiss()
-            val intent= Intent(requireContext(),LogInMainFragment::class.java)
+            val intent= Intent(requireContext(),LogInActivity::class.java)
             startActivity(intent)
             
             
